@@ -6,12 +6,11 @@ defmodule Automata do
   alias Automata.Automaton
 
   def start(_type, _args) do
-    # TODO: do we want to autoload all the user-defined nodes from the nodes/ directory
-    # to build this structure? Or is there a better way?
+    # TODO: autoload all the user-defined nodes from the nodes/ directory
+    # to build this structure. Or is there a better way?
     nodes_config = [
-      [name: "Automaton1", mfa: {Automaton, :start_link, []}, size: 4],
-      [name: "Automaton2", mfa: {Automaton, :start_link, []}, size: 2],
-      [name: "Automaton3", mfa: {Automaton, :start_link, []}, size: 1]
+      [name: "ChildBehavior1", mfa: {ChildBehavior1, :start_link, []}],
+      [name: "ChildBehavior2", mfa: {ChildBehavior2, :start_link, []}]
     ]
 
     start_nodes(nodes_config)

@@ -87,7 +87,7 @@ defmodule Automaton.Behavior do
   @moduledoc """
     Actions are Behaviors that access information from the world and change the world.
     Initialization and shutdown require extra care:
-    init: receive extra parameters, fetch data from blackboard, make requests, etc..
+    on_init: receive extra parameters, fetch data from blackboard, make requests, etc..
     shutdown: free resources to not effect other actions
     Task Switching: on sucess, failure, interruption by more important task
   """
@@ -101,7 +101,7 @@ defmodule Automaton.Behavior do
   @callback reset() :: atom
   # make m_eStatus = :aborted
   @callback abort() :: atom
-  @callback termintated?() :: bool
+  @callback terminated?() :: bool
   @callback running?() :: bool
   @callback get_status() :: atom
 
@@ -111,39 +111,59 @@ defmodule Automaton.Behavior do
   # When you call use in your module, the __using__ macro is called.
   defmacro __using__(opts) do
     quote bind_quoted: [opts: opts] do
-      use GenServer
+      use GenServer, restart: :temporary, shutdown: 5000
       use DynamicSupervisor
-      @behaviour Automaton.Behavior
       @behaviour Automata.Composite
+      @behaviour Automaton.Behavior
 
       defmodule State do
         defstruct status: :bh_invalid,
                   children: []
       end
 
-      # def start_link([node_sup, node_config]) do
-      #   GenServer.start_link(__MODULE__, [node_sup, node_config], name: name(node_config[:name]))
-      # end
-      #
-      # def status(tree_name) do
-      #   GenServer.call(name(tree_name), :status)
-      # end
-      #
-      # #############
-      # # Callbacks #
-      # ############ j
-      #
-      # def init([node_sup, node_config]) when is_pid(node_sup) do
-      #   Process.flag(:trap_exit, true)
-      #   monitors = :ets.new(:monitors, [:private])
-      #   state = %State{node_sup: node_sup, monitors: monitors}
-      #
-      #   init(node_config, state)
-      # end
+      # Client API
+      def start_link(args) do
+        GenServer.start_link(__MODULE__, args)
+      end
+
+      def stop(pid) do
+        GenServer.call(pid, :stop)
+      end
+
+      def work_for(pid, duration) do
+        GenServer.cast(pid, {:work_for, duration})
+      end
+
+      # #######################
+      # # GenServer Callbacks #
+      # #######################
+      def init(arg) do
+        IO.inspect(["UserNode", arg], label: __MODULE__)
+
+        {:ok, arg}
+      end
+
+      def handle_call(:stop, _from, state) do
+        {:stop, :normal, :ok, state}
+      end
+
+      def handle_cast({:work_for, duration}, state) do
+        :timer.sleep(duration)
+        {:stop, :normal, state}
+      end
+
+      def child_spec do
+        %{
+          id: __MODULE__,
+          start: {__MODULE__, :start_link, []},
+          restart: :temporary,
+          shutdown: 5000,
+          type: :worker
+        }
+      end
 
       # BEHAVIOR INTERFACE
-      # should dynamically supervise user-defined ChildNode1-3
-      # and tick them at a frequency corresponding to their tick_freq
+      # should tick each subtree at a frequency corresponding to their tick_freq
       # TODO how to have status as state, external GenServer?
       @impl Automaton.Behavior
       def on_init(str) do
@@ -166,6 +186,9 @@ defmodule Automaton.Behavior do
         # return status, overidden by user
       end
 
+      # each subtree of the user-defined root node will be ticked recursively
+      # every update (at rate tick_freq) as we update the tree until we find
+      # the leaf node that is currently running (will be an action).
       def tick(status \\ :bh_invalid, arg \\ "stuff") do
         if status != :running, do: on_init(arg)
         status = update()
@@ -205,8 +228,13 @@ defmodule ChildBehavior1 do
     node_type: :selector,
 
     # the frequency of updates for this node(tree), in seconds
-    # 1ms
-    tick_freq: 0.001,
+    # 200ms
+    tick_freq: 0.2,
+
+    # custom OTP config options (defaults shown)
+    # shows running until max_restarts exhausted?
+    max_restart: 5,
+    max_time: 3600,
 
     # not included for execution nodes
     # list of child control/execution nodes

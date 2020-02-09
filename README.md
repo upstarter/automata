@@ -5,17 +5,26 @@
 
 ![](particles.gif)
 
-Spawn a set of concurrent, distributed, fault tolerant, and highly available intelligent agents for coordinated and/or uncoordinated action in one or many environments with no central point of failure. This project is Open Source.
+Spawn a set of concurrent, distributed, fault tolerant, and highly available
+intelligent agents for coordinated and/or uncoordinated action in one or many
+environments with no central point of failure. This project is Open Source.
 
 ##### This project is in the Alpha stage and not ready for production systems. We need Contributors to get to 1.0! Please join the [slack channel](https://join.slack.com/t/automata-org/shared_invite/enQtOTI5OTUyNTM5MDA5LTliZTM2NmI3OWI1YmM1ZjZjYzQ5OTFmM2JiNDFiMTE5OWJkYTIzZGI5YTVkZDM1YzdjMDQ3NDI2NGQ0ZmQ1Y2I) and/or reach out to [ericsteen1@gmail.com](mailto:ericsteen1@gmail.com) if interested!
 
 ## Implementation Overview
 
 ### Technology
- [Elixir](https://elixir-lang.org/) & [OTP](https://en.wikipedia.org/wiki/Open_Telecom_Platform) provide the primitives for robust concurrent, fault-tolerant, highly available, self-healing distributed systems.
+ [Elixir](https://elixir-lang.org/) & [OTP](https://en.wikipedia.org/wiki/Open_Telecom_Platform) provide the
+ primitives for robust concurrent, fault-tolerant, highly available,
+ self-healing distributed systems.
 
- [Behavior trees](https://en.wikipedia.org/wiki/Behavior_tree_(artificial_intelligence,_robotics_and_control)) are increasingly used in place of finite state machines (FSM's) and other AI control architectures due to improved properties of modularity, flexibility, reusability, and efficiency of implementation. To keep modules lean and keep the trees focused on actions, one potential approach is to utilize an external decision making system (finite state machine, decision tree, utility, stochastic, etc..) for all decision making, keeping nodes focused on actions.
-
+ [Behavior Trees](https://en.wikipedia.org/wiki/Behavior_tree_(artificial_intelligence,_robotics_and_control))
+ are increasingly used in place of finite state machines (FSM's) and other AI
+ control architectures due to improved properties of modularity, flexibility,
+ reusability, and efficiency of implementation. To keep modules lean and keep
+ the trees focused on actions, one potential approach is to utilize an external
+ decision making system (finite state machine, decision tree, utility,
+ stochastic, etc..) for all decision making, keeping nodes focused on actions.
 
 ### Requirements
 
@@ -98,16 +107,23 @@ A good place to start is in the [issues tracker](https://github.com/upstarter/au
 Please join the [slack channel](https://join.slack.com/t/automata-org/shared_invite/enQtOTI5OTUyNTM5MDA5LTliZTM2NmI3OWI1YmM1ZjZjYzQ5OTFmM2JiNDFiMTE5OWJkYTIzZGI5YTVkZDM1YzdjMDQ3NDI2NGQ0ZmQ1Y2I) and/or reach out to [ericsteen1@gmail.com](mailto:ericsteen1@gmail.com) if interested!
 
 ### Current Status
-The project is currently in the Research & Prototype Development phase. We are establishing the core concepts, requirements, practices, and standards for the healthy and fruitful governance of the project.  Join the conversation on [The Automata Project Slack Channel](https://join.slack.com/t/automata-org/shared_invite).
+The project is currently in the Research & Prototype Development phase. We are
+establishing the core concepts, requirements, practices, and standards for the
+healthy and fruitful governance of the project.  Join the conversation on [The
+Automata Project Slack Channel](https://join.slack.com/t/automata-org/shared_invite).
 
-Currently `Automata` is being developed as a single-node (machine) and single automaton system, but the architecture is in place to achieve the goal of a multi-node (full fault tolerance) and multi-automaton (hence the name, automata) distributed system in the not-too-distant future.
+Currently `Automata` is being developed as a single-node (machine) and single
+automaton system to keep things elementary to start, but the architecture is in place to achieve the goal of a
+multi-node (full fault tolerance) and multi-automaton (hence the name, automata)
+distributed system in the not-too-distant future.
 
 ### Engineering Standards & Best Practices
 Check the #dev or #testing channels on [slack]((https://join.slack.com/t/automata-org/shared_invite)) for questions/info.
 #### Design Standards
 1. Abstraction & Modularity are key. If its more than a 5-10 lines, put it in a unit Function, Module or Struct that is tested and named well (by its role in the context if possible, rather than its data type or random name).
 2. Meta-programming will be heavily used as this is a framework, but it is important to know where it is useful and where its not. It is wise not to overuse clever meta-programming magic (a common complaint about rails). If your not sure, ask. Or use the force Luke (if your a Jedi).
-3. If your not sure how to do something, rather than do a hack, put a skeleton in place and submit a PR so a more senior engineer can provide guidance.
+3. Use function pattern matching over Enum and other forms of enumeration as it is usually faster and cleaner.
+4. If your not sure how to do something, rather than do a hack, put a skeleton in place and submit a PR so a more senior engineer can provide guidance.
 
 #### Coding & PR Review Standards
 1. No shortcuts or Rush Jobs. Quality is job #1. We are creating something of very high quality, built to stand the test of time. If you don't know the best way to do something, ask a core team member, or reach out to the very helpful Elixir community. See the [list of resources](#help).
@@ -134,13 +150,22 @@ In Progress. Property Testing? Permutation Testing? Join the conversation on [Th
 
 #### High Level Overview
 
-##### The Automata supervision tree
+##### The Automata supervision tree(s)
 ![automata supervision tree diagram](sup_tree.png)
 
-There are 3 Layers in the "core" supervision tree below the Application supervisor. The terminal nodes of the "core" are the `AutomatonNodeSupervisor` which supervises the user-defined behavior tree nodes with the help of its "brain" – the `AutomatonServer`. The `AutomatonServer` currently handles the bulk of the logic of the system, as it is responsible for parsing user-config, and starting and managing the user-defined nodes. It starts the user defined nodes as children of `AutomatonNodeSupervisor`, which is kept lean for fault tolerance purposes.
+There are 3 Layers in the supervision tree below the Application
+supervisor. The terminal nodes are the `AutomatonNodeSupervisor`
+which supervises the user-defined behavior tree nodes with the help of its
+"brain" – the `AutomatonServer`. The `AutomatonServer` currently handles the
+bulk of the logic of the system, as it is responsible for parsing user-config,
+and starting and managing the user-defined nodes. It starts the user defined
+nodes as children of `AutomatonNodeSupervisor`, which is kept lean for fault
+tolerance purposes.
 
 The following is a breakdown of roles and responsibilities in the system (corresponding to files in `lib/automata/core/`):
 
+###### The Core Supervision Tree (in `lib/core/`)
+This tree is the management & fault tolerance mechanism for the parsing and validation of user config, as well as controlling the instantiation of the user-defined behavior trees.
 - `Automata.Supervisor`
   - on application start, this supervisor process starts the `AutomataSupervisor` and it's corresponding `Server`. It is started with strategy `:one_for_one` to ensure that the `AutomatonSupervisor` is independently self-healing
 - `Automata.Server`
@@ -150,12 +175,16 @@ The following is a breakdown of roles and responsibilities in the system (corres
 - `AutomatonNodeSupervisor`
   - runs concurrently, independently, and with `restart: permanent`. This supervisor is the root of the user-defined behavior trees.
 - `AutomatonServer`
-  - this is the most complicated node as it parses and validates the user configuration and creates and manages the user-defined behavior tree nodes.
-- `Automaton`
-    - the user defined node (runs as placeholder, with it's replacement being developed in `core/control/behavior.ex`)
+  - this node parses and validates the user configuration and creates and manages OTP event callbacks of the user-defined behavior tree root node.
 
+###### The Control Supervision Tree (in `lib/core/control/`)
+This tree is the management & fault tolerance mechanism for the user-defined behavior tree(s).
 
-##### The Blackboard
+- `Automaton.Behavior`
+  - this is the most complicated node as it defines the user API and manages and
+  controls the operations of the user-defined behavior trees in a recursive fashion. There is potential to functionally decompose this module.
+
+###### The Blackboard
 
 - Global Blackboard
   - all nodes share this knowledge store
@@ -165,6 +194,11 @@ The following is a breakdown of roles and responsibilities in the system (corres
 
 
 ### API
+Users may create tree structures of arbitrary depth by defining their own custom
+modules in the nodes/ directory which `use Automata` as a macro. Then, by overriding the
+`update()` function and returning a status as one of `:running`, `:failure`, or
+`:success`, the `Automata` core system will manage the running of the Behavior Tree they have defined and handling restarting when unexpected errors occur based on their configured restart strategies.
+
 ```elixir
 defmodule MyNode do
   use Automaton.Behavior,
@@ -175,7 +209,12 @@ defmodule MyNode do
     node_type: :selector,
 
     # the frequency of updates for this node(tree), in seconds
-    tick_freq: 0.001, # 1ms
+    tick_freq: 0.2, # 200ms
+
+    # custom OTP config options (defaults shown)
+    # shows running until max_restarts exhausted
+    max_restart: 5,
+    max_time: 3600,
 
     # not included for execution nodes
     # list of child control/execution nodes
@@ -217,7 +256,9 @@ TODO: how to implement the above scenario.
 ###### Behavior Trees
 - [CraftAI BT Grammar Basics](https://www.craft.ai/blog/bt-101-behavior-trees-grammar-basics/)
 
-- [Behavior Tree Starter Kit](http://www.gameaipro.com/GameAIPro/GameAIPro_Chapter06_The_Behavior_Tree_Starter_Kit.pdf) and corresponding [provided source code](https://github.com/aigamedev/btsk) and in particular [this file](https://github.com/aigamedev/btsk/blob/master/BehaviorTree.cpp) which is a basic inspiration for user-defined nodes.
+- [Behavior Tree Starter Kit (BTSK)](http://www.gameaipro.com/GameAIPro/GameAIPro_Chapter06_The_Behavior_Tree_Starter_Kit.pdf) and corresponding [provided source code](https://github.com/aigamedev/btsk) and in particular [this file](https://github.com/aigamedev/btsk/blob/master/BehaviorTree.cpp) which is a basic inspiration for user-defined nodes.
+
+- [BTSK Video](https://www.youtube.com/watch?v=n4aREFb3SsU)
 
 - [Elixir Behavior Tree](https://github.com/jschomay/elixir-behavior-tree) and the corresponding [elixirconf talk](https://elixirforum.com/t/39-elixirconf-us-2018-behavior-trees-and-battleship-tapping-into-the-power-of-advanced-data-structures-jeff-schomay/16785)
 

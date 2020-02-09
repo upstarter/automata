@@ -3,17 +3,16 @@ defmodule Automata.AutomatonServer do
   use DynamicSupervisor
 
   defmodule State do
-    defstruct node_sup: nil,
-              worker_sup: nil,
+    defstruct automaton_sup: nil,
+              node_sup: nil,
               monitors: nil,
-              size: nil,
               workers: nil,
               name: nil,
               mfa: nil
   end
 
-  def start_link([node_sup, node_config]) do
-    GenServer.start_link(__MODULE__, [node_sup, node_config], name: name(node_config[:name]))
+  def start_link([automaton_sup, node_config]) do
+    GenServer.start_link(__MODULE__, [automaton_sup, node_config], name: name(node_config[:name]))
   end
 
   def status(tree_name) do
@@ -24,10 +23,10 @@ defmodule Automata.AutomatonServer do
   # Callbacks #
   ############ j
 
-  def init([node_sup, node_config]) when is_pid(node_sup) do
+  def init([automaton_sup, node_config]) when is_pid(automaton_sup) do
     Process.flag(:trap_exit, true)
     monitors = :ets.new(:monitors, [:private])
-    state = %State{node_sup: node_sup, monitors: monitors}
+    state = %State{automaton_sup: automaton_sup, monitors: monitors}
 
     init(node_config, state)
   end
@@ -40,10 +39,6 @@ defmodule Automata.AutomatonServer do
     init(rest, %{state | mfa: mfa})
   end
 
-  def init([{:size, size} | rest], state) do
-    init(rest, %{state | size: size})
-  end
-
   def init([], state) do
     send(self(), :start_node_supervisor)
     {:ok, state}
@@ -54,7 +49,7 @@ defmodule Automata.AutomatonServer do
   end
 
   def handle_call(:status, _from, %{workers: workers, monitors: monitors} = state) do
-    {:reply, {state, length(workers), :ets.info(monitors, :size)}, state}
+    {:reply, {state, length(workers)}, state}
   end
 
   def handle_call(_msg, _from, state) do
@@ -75,13 +70,13 @@ defmodule Automata.AutomatonServer do
 
   def handle_info(
         :start_node_supervisor,
-        state = %{node_sup: node_sup, name: name, mfa: mfa, size: size}
+        state = %{automaton_sup: automaton_sup, name: name, mfa: mfa}
       ) do
     spec = {Automata.NodeSupervisor, [[self(), mfa, name]]}
-    {:ok, worker_sup} = Supervisor.start_child(node_sup, spec)
+    {:ok, node_sup} = Supervisor.start_child(automaton_sup, spec)
 
-    workers = prepopulate(size, worker_sup)
-    {:noreply, %{state | worker_sup: worker_sup, workers: workers}}
+    workers = new_worker(node_sup, mfa)
+    {:noreply, %{state | node_sup: node_sup, workers: workers}}
   end
 
   def handle_info({:DOWN, ref, _, _, _}, state = %{monitors: monitors, workers: workers}) do
@@ -96,13 +91,13 @@ defmodule Automata.AutomatonServer do
     end
   end
 
-  def handle_info({:EXIT, worker_sup, reason}, state = %{worker_sup: worker_sup}) do
+  def handle_info({:EXIT, node_sup, reason}, state = %{node_sup: node_sup}) do
     {:stop, reason, state}
   end
 
   def handle_info(
         {:EXIT, pid, _reason},
-        state = %{monitors: monitors, workers: workers, worker_sup: worker_sup}
+        state = %{monitors: monitors, workers: workers, node_sup: node_sup, mfa: mfa}
       ) do
     case :ets.lookup(monitors, pid) do
       [{pid, ref}] ->
@@ -116,7 +111,7 @@ defmodule Automata.AutomatonServer do
         case Enum.member?(workers, pid) do
           true ->
             remaining_workers = workers |> Enum.reject(fn p -> p == pid end)
-            new_state = %{state | workers: [new_worker(worker_sup) | remaining_workers]}
+            new_state = %{state | workers: [new_worker(node_sup, mfa) | remaining_workers]}
             {:noreply, new_state}
 
           false ->
@@ -141,28 +136,20 @@ defmodule Automata.AutomatonServer do
     :"#{tree_name}Server"
   end
 
-  defp prepopulate(size, sup) do
-    prepopulate(size, sup, [])
+  defp start_nodes(node_sup) do
+    #
   end
 
-  defp prepopulate(size, _sup, workers) when size < 1 do
-    workers
-  end
-
-  defp prepopulate(size, sup, workers) do
-    prepopulate(size - 1, sup, [new_worker(sup) | workers])
-  end
-
-  defp new_worker(sup) do
-    spec = {Automata.Automaton, []}
+  defp new_worker(sup, {m, _f, a} = mfa) do
+    spec = {m, a}
     {:ok, worker} = DynamicSupervisor.start_child(sup, spec)
     true = Process.link(worker)
     worker
   end
 
   # NOTE: We use this when we have to queue up the consumer
-  defp new_worker(sup, from_pid) do
-    pid = new_worker(sup)
+  defp new_worker(sup, from_pid, mfa) do
+    pid = new_worker(sup, mfa)
     ref = Process.monitor(from_pid)
     {pid, ref}
   end
@@ -174,7 +161,7 @@ defmodule Automata.AutomatonServer do
 
   defp handle_worker_exit(pid, state) do
     %{
-      worker_sup: worker_sup,
+      node_sup: node_sup,
       workers: workers,
       monitors: monitors,
       overflow: overflow
