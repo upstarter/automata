@@ -37,10 +37,6 @@ defmodule Automata.Server do
     {:noreply, state}
   end
 
-  #####################
-  # Private Functions #
-  #####################
-
   def child_spec([nodes_config]) do
     %{
       id: __MODULE__,

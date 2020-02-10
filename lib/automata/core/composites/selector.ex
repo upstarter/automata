@@ -13,50 +13,6 @@ defmodule Automata.Composite.Selector do
     its children runs successfully. As long as its children are failing, it will
     keep on trying. If it runs out of children completely, it will return a
     failure status code.
-
-    class Selector (Task):
-      def run():
-        for c in children:
-          if c.run():
-            return True
-        return False
-
-    class Selector : public Composite
-    {
-    protected:
-        virtual ~Selector()
-        {
-        }
-
-        virtual void onInitialize()
-        {
-            m_Current = m_Children.begin();
-        }
-
-        virtual Status update()
-        {
-            // Keep going until a child behavior says its running.
-    		for (;;)
-            {
-                Status s = (*m_Current)->tick();
-
-                // If the child succeeds, or keeps running, do the same.
-                if (s != BH_FAILURE)
-                {
-                    return s;
-                }
-
-                // Hit the end of the array, it didn't end well...
-                if (++m_Current == m_Children.end())
-                {
-                    return BH_FAILURE;
-                }
-            }
-        }
-
-        Behaviors::iterator m_Current;
-    };
-
   """
   use Supervisor
 

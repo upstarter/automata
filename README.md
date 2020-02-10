@@ -22,9 +22,9 @@ environments with no central point of failure. This project is Open Source.
  are increasingly used in place of finite state machines (FSM's) and other AI
  control architectures due to improved properties of modularity, flexibility,
  reusability, and efficiency of implementation. To keep modules lean and keep
- the trees focused on actions, one potential approach is to utilize an external
- decision making system (finite state machine, decision tree, utility,
- stochastic, etc..) for all decision making, keeping nodes focused on actions.
+ the trees focused on actions, one approach is to utilize an external
+ decision making system (FSM, decision tree, utility,
+ stochastic, etc..) for all decision making, keeping nodes solidly focused on actions.
 
 ### Requirements
 
@@ -76,7 +76,7 @@ environments with no central point of failure. This project is Open Source.
 ### Applications
 - Trading Systems
 - Swarm Intelligence / Distributed Robotics
-- Intelligent agents with soft realtime multi-dimensional sensory, perception and intuition capabilities
+- Intelligent agents with soft realtime multi-dimensional sensory, perception, intuition, and action capabilities
 - Multi-Agent Reinforcement Learning
 - Mixture of Experts Deep Learning (python inter-op with [erlport](http://erlport.org/))
 - Blockchain Smart Contract Systems

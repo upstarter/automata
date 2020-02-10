@@ -9,8 +9,8 @@ defmodule Automata do
     # TODO: autoload all the user-defined nodes from the nodes/ directory
     # to build this structure. Or is there a better way?
     nodes_config = [
-      [name: "ChildBehavior1", mfa: {ChildBehavior1, :start_link, []}],
-      [name: "ChildBehavior2", mfa: {ChildBehavior2, :start_link, []}]
+      [name: "MockUserNode1", mfa: {MockUserNode1, :start_link, []}],
+      [name: "MockUserNode2", mfa: {MockUserNode2, :start_link, []}]
     ]
 
     start_nodes(nodes_config)
