@@ -93,30 +93,30 @@ defmodule Automaton.Behavior do
   """
 
   # Define behaviours which user modules have to implement, with type annotations
-  # TODO: move to included elixir behavior module? or leave here?
+  # TODO: move to included module? or leave here?
   @callback on_init([]) :: {:ok, term} | {:error, String.t()}
   @callback update() :: atom
   @callback on_terminate(atom) :: atom
-  # make m_eStatus = :invalid
   @callback reset() :: atom
-  # make m_eStatus = :aborted
-  @callback abort() :: atom
+  @callback abort() :: {:ok, term}
   @callback terminated?() :: bool
   @callback running?() :: bool
   @callback get_status() :: atom
 
-  # TODO: enum type for the status?
-  # invalid is for when status has not been initialized yet
-
   # When you call use in your module, the __using__ macro is called.
   defmacro __using__(opts) do
     quote bind_quoted: [opts: opts] do
-      use GenServer, restart: :temporary, shutdown: 5000
+      use GenServer
       use DynamicSupervisor
-      @behaviour Automata.Composite
+
+      if Enum.member?(Automata.Composite.composites(), opts[:node_type]) do
+        @behaviour Automata.Composite
+      end
+
       @behaviour Automaton.Behavior
 
       defmodule State do
+        # bh_invalid is for when status has not been initialized yet
         defstruct status: :bh_invalid,
                   children: []
       end
@@ -124,14 +124,6 @@ defmodule Automaton.Behavior do
       # Client API
       def start_link(args) do
         GenServer.start_link(__MODULE__, args)
-      end
-
-      def stop(pid) do
-        GenServer.call(pid, :stop)
-      end
-
-      def work_for(pid, duration) do
-        GenServer.cast(pid, {:work_for, duration})
       end
 
       # #######################
@@ -143,39 +135,11 @@ defmodule Automaton.Behavior do
         {:ok, arg}
       end
 
-      def handle_call(:stop, _from, state) do
-        {:stop, :normal, :ok, state}
-      end
-
-      def handle_cast({:work_for, duration}, state) do
-        :timer.sleep(duration)
-        {:stop, :normal, state}
-      end
-
-      def child_spec do
-        %{
-          id: __MODULE__,
-          start: {__MODULE__, :start_link, []},
-          restart: :temporary,
-          shutdown: 5000,
-          type: :worker
-        }
-      end
-
       # BEHAVIOR INTERFACE
-      # should tick each subtree at a frequency corresponding to their tick_freq
-      # TODO how to have status as state, external GenServer?
+      # should tick each subtree at a frequency corresponding to subtrees tick_freq
       @impl Automaton.Behavior
       def on_init(str) do
         IO.inspect(unquote(opts))
-
-        # {:ok, _tree_sup} =
-        #   DynamicSupervisor.start_child(
-        #     Automata.AutomataSupervisor,
-        #     {Automata.AutomatonSupervisor, [node_config]}
-        #   )
-        #
-        # nodes = prepopulate(size, node_sup)
 
         {:ok, "done with init " <> str}
       end
@@ -196,6 +160,23 @@ defmodule Automaton.Behavior do
         {:ok, status}
       end
 
+      if Enum.member?(Automata.Composite.composites(), opts[:node_type]) do
+        @impl Automata.Composite
+        def add_child(child) do
+          {:ok, []}
+        end
+
+        @impl Automata.Composite
+        def remove_children() do
+          {:ok, []}
+        end
+
+        @impl Automata.Composite
+        def clear_children() do
+          {:ok, []}
+        end
+      end
+
       @impl Automaton.Behavior
       def on_terminate(status) do
         {:ok, status}
@@ -211,6 +192,16 @@ defmodule Automaton.Behavior do
 
       @impl Automaton.Behavior
       def terminated?() do
+      end
+
+      def child_spec do
+        %{
+          id: __MODULE__,
+          start: {__MODULE__, :start_link, []},
+          restart: :temporary,
+          shutdown: 5000,
+          type: :worker
+        }
       end
 
       # Defoverridable makes the given functions in the current module overridable
@@ -248,5 +239,6 @@ defmodule ChildBehavior1 do
 end
 
 defmodule ChildBehavior2 do
-  use Automaton.Behavior
+  use Automaton.Behavior,
+    node_type: :execution
 end

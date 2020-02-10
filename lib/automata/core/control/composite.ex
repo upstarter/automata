@@ -47,4 +47,7 @@ defmodule Automata.Composite do
   @callback add_child() :: {:ok, list} | {:error, String.t()}
   @callback remove_child() :: {:ok, list} | {:error, String.t()}
   @callback clear_children :: {:ok, term} | {:error, String.t()}
+
+  @composites [:sequence, :selector]
+  def composites, do: @composites
 end

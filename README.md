@@ -102,7 +102,8 @@ environments with no central point of failure. This project is Open Source.
 - Senior Code Reviewers to ensure Quality
 - Willingness and motivation to learn it all
 
-A good place to start is in the [issues tracker](https://github.com/upstarter/automata/issues). Especially those labeled 'good first issue'.
+###### Where to get started contributing
+A good place to start is in the [project kanban](https://github.com/upstarter/automata/projects/1). Especially those threads labeled 'good first issue', 'testing', and/or 'documentation'.
 
 Please join the [slack channel](https://join.slack.com/t/automata-org/shared_invite/enQtOTI5OTUyNTM5MDA5LTliZTM2NmI3OWI1YmM1ZjZjYzQ5OTFmM2JiNDFiMTE5OWJkYTIzZGI5YTVkZDM1YzdjMDQ3NDI2NGQ0ZmQ1Y2I) and/or reach out to [ericsteen1@gmail.com](mailto:ericsteen1@gmail.com) if interested!
 
@@ -197,7 +198,7 @@ This tree is the management & fault tolerance mechanism for the user-defined beh
 Users may create tree structures of arbitrary depth by defining their own custom
 modules in the nodes/ directory which `use Automata` as a macro. Then, by overriding the
 `update()` function and returning a status as one of `:running`, `:failure`, or
-`:success`, the `Automata` core system will manage the running of the Behavior Tree they have defined and handling restarting when unexpected errors occur based on their configured restart strategies.
+`:success`, the `Automata` core system will manage the running of the Behavior Tree they have defined and handle restarting when unexpected errors occur based on their configured restart strategies.
 
 ```elixir
 defmodule MyNode do

@@ -136,10 +136,6 @@ defmodule Automata.AutomatonServer do
     :"#{tree_name}Server"
   end
 
-  defp start_nodes(node_sup) do
-    #
-  end
-
   defp new_worker(sup, {m, _f, a} = mfa) do
     spec = {m, a}
     {:ok, worker} = DynamicSupervisor.start_child(sup, spec)
