@@ -4,9 +4,9 @@ defmodule AutomataTest do
 
   test "greets the world" do
     nodes_config = [
-      [name: "Automaton1", mfa: {Automaton, :start_link, []}, size: 4],
-      [name: "Automaton2", mfa: {Automaton, :start_link, []}, size: 2],
-      [name: "Automaton3", mfa: {Automaton, :start_link, []}, size: 1]
+      [name: "MockUserNode1", mfa: {MockUserNode1, :start_link, []}],
+      [name: "MockUserNode2", mfa: {MockUserNode2, :start_link, []}],
+      [name: "MockUserNode3", mfa: {MockUserNode3, :start_link, []}]
     ]
 
     assert Automata.start_nodes(nodes_config)

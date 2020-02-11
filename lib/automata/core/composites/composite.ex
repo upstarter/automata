@@ -42,6 +42,8 @@ defmodule Automaton.Composite do
   def supervision_tree_each(node, fun) do
     fun.(node)
   end
+
+  TODO: min/max num children constraints?
   """
   # a composite is just an array of behaviors
   @callback add_child() :: {:ok, list} | {:error, String.t()}
@@ -53,90 +55,39 @@ defmodule Automaton.Composite do
 
   defmacro __using__(opts) do
     quote bind_quoted: [opts: opts] do
+      @behavior Automaton.Composite
+      defmodule State do
+        # bh_fresh is for when status has not been initialized
+        # yet or has been reset
+        defstruct m_status: :bh_fresh,
+                  # control is the parent, nil when fresh
+                  control: nil,
+                  m_children: opts[:children],
+                  m_current: nil
+      end
+
       case opts[:node_type] do
         :sequence ->
-          import Automaton.Composite.Sequence
+          use Automaton.Composite.Sequence
 
         :selector ->
-          @impl Automaton.Behavior
-          def on_init(str) do
-            IO.inspect(unquote(opts))
+          use Automaton.Composite.Selector
+      end
 
-            {:ok, "done with init " <> str}
-          end
+      # notifies listeners if this task status is not fresh
+      @impl Automaton.Composite
+      def add_child() do
+        {:ok, []}
+      end
 
-          @impl Automaton.Behavior
-          def update do
-            # Keep going until a child behavior says its running.
-            # Enum.each %State{} do
-            #    fn({field, value}) -> IO.puts(value)
-            # end
-            # {
-            #     Status s = (*m_Current)->tick();
-            #
-            #     // If the child succeeds, or keeps running, do the same.
-            #     if (s != BH_FAILURE)
-            #     {
-            #         return s;
-            #     }
-            #
-            #     // Hit the end of the array, it didn't end well...
-            #     if (++m_Current == m_Children.end())
-            #     {
-            #         return BH_FAILURE;
-            #     }
-            # }
-            IO.puts("update/0")
-            # return status, overidden by user
-          end
+      @impl Automaton.Composite
+      def remove_child() do
+        {:ok, nil}
+      end
 
-        _ ->
-          @impl Automaton.Behavior
-          def on_init(str) do
-            IO.inspect(unquote(opts))
-
-            {:ok, "done with init " <> str}
-          end
-
-          @impl Automaton.Behavior
-          def update do
-            # Keep going until a child behavior says its running.
-            # Enum.each %State{} do
-            #    fn({field, value}) -> IO.puts(value)
-            # end
-            # {
-            #     Status s = (*m_Current)->tick();
-            #
-            #     // If the child succeeds, or keeps running, do the same.
-            #     if (s != BH_FAILURE)
-            #     {
-            #         return s;
-            #     }
-            #
-            #     // Hit the end of the array, it didn't end well...
-            #     if (++m_Current == m_Children.end())
-            #     {
-            #         return BH_FAILURE;
-            #     }
-            # }
-            IO.puts("update/0")
-            # return status, overidden by user
-          end
-
-          @impl Automaton.Composite
-          def add_child(child) do
-            {:ok, []}
-          end
-
-          @impl Automaton.Composite
-          def remove_children() do
-            {:ok, []}
-          end
-
-          @impl Automaton.Composite
-          def clear_children() do
-            {:ok, []}
-          end
+      @impl Automaton.Composite
+      def clear_children() do
+        {:ok, nil}
       end
     end
   end

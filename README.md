@@ -58,27 +58,27 @@ environments with no central point of failure. This project is Open Source.
 
 ### Performance Features:
 - Concurrency
-  - News flash! The world is concurrent. For example: we see, hear, and move at the same time. Elixir concurrency is a first class citizen of it's design and makes it dead simple.
+  - News flash! The world is concurrent. For example: we see, hear, and move at the same time. Concurrency was a core factor in the design of the Elixir language and is dead simple to implement.
 - High availability
-  - Elixir is renowned for being capable of 99.9999999% uptime with relatively little effort.
+  - Elixir is renowned for being capable of 99.9999999% uptime (31 milliseconds/year of downtime) with relatively little effort. The main point of the Elixir model is an application that can be expected to run forever, as stated by the inventor — Joe Armstrong (RIP). Talk about unstoppable software!
 - Fault Tolerance
-  - OTP Supervision Trees provide strong guarantees for error recovery and self healing systems.
+  - OTP Supervision Trees and the "fail fast" principle provide strong guarantees for error recovery and self healing systems.
 - Scalability
-  -  Elixir can handle millions of processes (134 million +/-) utilizing all cores without breaking a sweat on a single machine, and easily distributes work onto multiple machines with its builtin distribution mechanisms and CRDT with libraries like [Horde](https://github.com/derekkraan/horde).
+  -  Elixir can handle millions of processes (134 million +/-) utilizing all cores without breaking a sweat on a single machine, and easily distributes work onto multiple machines with its builtin distribution mechanisms, and there is CRDT support with [Horde](https://github.com/derekkraan/horde).
   - Behavior trees provide value stream scalability (design/development and operations/testing).
 - Modularity
-  - Modular BT's allow the designer to hierarchically combine independently developed, tested, deployed, and reusable unit behaviors that provide more complex and interesting (and valuable) emergent properties in the large.
+  - Modular BT's allow the designer to hierarchically combine independently developed, tested, deployed, and reusable unit behaviors that provide more valuable emergent properties in the large.
 - Flexibility
   - A design goal of `Automata` is to allow high flexibility (supports many use cases)
 - Simplicity of Implementation
-  - Elixir's meta-programming capabilities facilitate very user-friendly API's so developers don't need to know the details of BT's or Automata Theory to get things done.
+  - Elixir's meta-programming facilities enable very user-friendly API's so developers don't need to know the details of BT's or Automata Theory to get things done.
 
 ### Applications
 - Trading Systems
 - Swarm Intelligence / Distributed Robotics
 - Intelligent agents with soft realtime multi-dimensional sensory, perception, intuition, and action capabilities
 - Multi-Agent Reinforcement Learning
-- Mixture of Experts Deep Learning (python inter-op with [erlport](http://erlport.org/))
+- Mixture of Experts Deep Learning Control Systems (python inter-op with [erlport](http://erlport.org/))
 - Blockchain Smart Contract Systems
 - Analytics Systems
 - Smart Home / IOT Systems
@@ -114,28 +114,32 @@ healthy and fruitful governance of the project.  Join the conversation on [The
 Automata Project Slack Channel](https://join.slack.com/t/automata-org/shared_invite).
 
 Currently `Automata` is being developed as a single-node (machine) and single
-automaton system to keep things elementary to start, but the architecture is in place to achieve the goal of a
+automaton system, but the architecture is in place to achieve the goal of a
 multi-node (full fault tolerance) and multi-automaton (hence the name, automata)
 distributed system in the not-too-distant future.
 
 ### Engineering Standards & Best Practices
 Check the #dev or #testing channels on [slack]((https://join.slack.com/t/automata-org/shared_invite)) for questions/info.
 #### Design Standards
-1. Abstraction & Modularity are key. If its more than a 5-10 lines, put it in a unit Function, Module or Struct that is tested and named well (by its role in the context if possible, rather than its data type or random name).
+1. Abstraction & Modularity are key. Spend the time and/or ask others to find the right abstraction. In terms of modularity, If its more than 10-20 lines, put it in a unit Function, Module or Struct that is tested and named well (by its role in the context if possible, rather than its data type or random name).
 2. Meta-programming will be heavily used as this is a framework, but it is important to know where it is useful and where its not. It is wise not to overuse clever meta-programming magic (a common complaint about rails). If your not sure, ask. Or use the force Luke (if your a Jedi).
 3. Use function pattern matching over Enum and other forms of enumeration as it is usually faster and cleaner.
 4. If your not sure how to do something, rather than do a hack, put a skeleton in place and submit a PR so a more senior engineer can provide guidance.
 
-#### Coding & PR Review Standards
-1. No shortcuts or Rush Jobs. Quality is job #1. We are creating something of very high quality, built to stand the test of time. If you don't know the best way to do something, ask a core team member, or reach out to the very helpful Elixir community. See the [list of resources](#help).
+#### Coding Standards
+1. Write defensively. Always think about what can go wrong, what will happen on invalid input, and what might fail, which will help you catch many bugs before they happen.
+
+#### PR Review Standards
+1. No shortcuts or Rush Jobs. Quality is job #1. We are creating something of very high quality, built to stand the test of time. Strive for 0% technical debt (the best kind of debt). Frameworks are poorly suited to “agile” practices, since they require foresight and a lot of generic capabilities. Today's emphasis on “agile” development is predicated on the developer's ignorance of what is required. Frameworks cannot be developed in that manner, since they are generic and devoid of ultimate functionality. They are all about potential, not actual end-user functionality. If you don't know the best way to do something, ask a core team member, or reach out to the very helpful Elixir community. See the [list of resources](#help).
 2. Code Reviews by core team members are required before merging and must be escalated if there is even the slightest concern of a design/logic flaw or incomplete testing. Imagine your building a rocket to mars and putting you and your family on it. Would you commmit that spaghetti code now?
 4. Every PR should have test coverage unless it is a trivial change or is approved by 2 core team members or designated reviewers.
-5. The Benevelant Dictator For Live ([BDFL](https://en.wikipedia.org/wiki/Benevolent_dictator_for_life)) — [upstarter](https://github.com/upstarter), is a major [stickler](https://dictionary.cambridge.org/us/dictionary/english/stickler) when it comes to architecture, design & code quality. Be warned. 😉
+5. The BD ([BDFL](https://en.wikipedia.org/wiki/Benevolent_dictator_for_life)) — [upstarter](https://github.com/upstarter), is a major [stickler](https://dictionary.cambridge.org/us/dictionary/english/stickler) when it comes to architecture, design, code quality, proper abstractions, and attention to detail. Be warned and feel entirely free to keep him informed of his failures to follow his own strict quality requirements. 😉
 
 
 #### Testing Standards
 In Progress. Property Testing? Permutation Testing? Join the conversation on [The Automata Project Slack Channel](https://join.slack.com/t/automata-org/shared_invite)
 
+1. Unit tests test the unit of behavior, not the unit of implementation. Changing the implementation, without changing the behavior or having to change any of your tests is the goal, although not always possible. So where possible, treat your test objects as black boxes, testing through the public API without calling private methods or tinkering with state.
 ##### <a name="help"></a>Where to ask for help:
 
 1. [The Automata Project Slack Channel](https://join.slack.com/t/automata-org/shared_invite/enQtOTI5OTUyNTM5MDA5LTliZTM2NmI3OWI1YmM1ZjZjYzQ5OTFmM2JiNDFiMTE5OWJkYTIzZGI5YTVkZDM1YzdjMDQ3NDI2NGQ0ZmQ1Y2I)
@@ -181,9 +185,11 @@ This tree is the management & fault tolerance mechanism for the parsing and vali
 ###### The Control Supervision Tree (in `lib/core/control/`)
 This tree is the management & fault tolerance mechanism for the user-defined behavior tree(s).
 
-- `Automaton.Behavior`
+- `Automaton.Node`
   - this is the most complicated node as it defines the user API and manages and
-  controls the operations of the user-defined behavior trees in a recursive fashion. There is potential to functionally decompose this module.
+  controls the operations of the user-defined behavior trees in a recursive fashion.
+- `Automaton.Behavior`
+  - this is  
 
 ###### The Blackboard
 
@@ -202,7 +208,7 @@ modules in the nodes/ directory which `use Automata` as a macro. Then, by overri
 
 ```elixir
 defmodule MyNode do
-  use Automaton.Behavior,
+  use Automaton.Node,
 
     # required
     # one of :sequence, :selector, :parallel, etc...
@@ -212,10 +218,6 @@ defmodule MyNode do
     # the frequency of updates for this node(tree), in seconds
     tick_freq: 0.2, # 200ms
 
-    # custom OTP config options (defaults shown)
-    # shows running until max_restarts exhausted
-    max_restart: 5,
-    max_time: 3600,
 
     # not included for execution nodes
     # list of child control/execution nodes
@@ -266,6 +268,8 @@ TODO: how to implement the above scenario.
 - [BT AI](https://github.com/libgdx/gdx-ai/wiki/Behavior-Trees)
 
 ###### The Blackboard
+- [Sharing Data in Actions](https://github.com/libgdx/gdx-ai/wiki/Behavior-Trees#using-data-for-inter-task-communication)
+
 - [BlackBoard Architectures](https://books.google.com/books?id=1OJ8EhvuPXAC&pg=PA459&lpg=PA459&dq=blackboard+game+ai&source=bl&ots=iVYGrf_Rzy&sig=ACfU3U31OOqst7Dd7z7fhiH9HoVwBjyVJQ&hl=en&sa=X&ved=2ahUKEwjvxqyR3LHnAhVMrp4KHSSfD4sQ6AEwDHoECAsQAQ#v=onepage&q=blackboard%20game%20ai&f=false)
 
 - [Blackboard Systems](http://gbbopen.org/papers/ai-expert.pdf)

@@ -1,4 +1,4 @@
-defmodule Automata.Composite.Selector do
+defmodule Automaton.Composite.Selector do
   @moduledoc """
     Selector Node (also known as Fallback)
 
@@ -14,24 +14,42 @@ defmodule Automata.Composite.Selector do
     keep on trying. If it runs out of children completely, it will return a
     failure status code.
   """
-  use Supervisor
+  alias Automaton.Composite
+  alias Automaton.Behavior
 
-  @name :selector
-  ## Client API
-  def start_link(opts \\ []) do
-    GenServer.start_link(__MODULE__, :ok, opts ++ [name: @name])
+  defmacro __using__(opts) do
+    quote do
+      @impl Behavior
+      def on_init(str) do
+        {:ok, "selector init " <> str}
+      end
+
+      @impl Behavior
+      def update do
+        # Keep going until a child behavior says its running.
+        # Enum.each %State{} do
+        #    fn({field, value}) -> IO.puts(value)
+        # end
+        # {
+        #     Status s = (*m_Current)->tick();
+        #
+        #     // If the child succeeds, or keeps running, do the same.
+        #     if (s != BH_FAILURE)
+        #     {
+        #         return s;
+        #     }
+        #
+        #     // Hit the end of the array, it didn't end well...
+        #     if (++m_Current == m_Children.end())
+        #     {
+        #         return BH_FAILURE;
+        #     }
+        # }
+        IO.puts("selector update/0")
+        # return status, overidden by user
+      end
+
+      ## Helper Functions
+    end
   end
-
-  def stop do
-    GenServer.cast(@name, :stop)
-  end
-
-  ## Callbacks
-  def init(:ok) do
-    IO.inspect(@name, label: __MODULE__)
-
-    {:ok, %{}}
-  end
-
-  ## Helper Functions
 end

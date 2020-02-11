@@ -1,16 +1,13 @@
-# An Automaton.Node (for use in User-Defined Node) is an abstract interface that can be activated, run,
-# and deactivated. Actions(Execution Nodes) provide specific implementations of
-# this interface. Branches in the tree can be thought of as high
-# level behaviors, heirarchically combining smaller behaviors to
-# provide more complex and interesting behaviors
-
 defmodule Automaton.Node do
   @moduledoc """
-    Actions are Behaviors that access information from the world and change the world.
+    This is the primary user control interface to the Automata system. The
+    configration parameters are used to inject the appropriate code into the
+    user-defined nodes based on their node_type and other options.
+
     Initialization and shutdown require extra care:
     on_init: receive extra parameters, fetch data from blackboard, make requests, etc..
     shutdown: free resources to not effect other actions
-    Task Switching: on sucess, failure, interruption by more important task
+    Task Switching: on success, failure, interruption by more important task
   """
 
   # When you call use in your module, the __using__ macro is called.
@@ -19,31 +16,16 @@ defmodule Automaton.Node do
       use GenServer
       use DynamicSupervisor
       use Automaton.Behavior
+      # TODO: tie in BlackBoards
+      # # global BB
+      # use Automata.Blackboard
+      # # individual node BB
+      # use Automaton.Blackboard
 
-      # composite or execution node?
-      # TODO move execution callbacks to module as well
       if Enum.member?(Automaton.Composite.composites(), opts[:node_type]) do
-        use Automaton.Composite, node_type: opts[:node_type]
-        @behaviour Automaton.Composite
+        use Automaton.Composite, node_type: opts[:node_type], children: opts[:children]
       else
-        def update do
-          IO.puts("update/0")
-          # return status, overidden by user
-        end
-
-        @impl Automaton.Behavior
-        def on_init(str) do
-          IO.inspect(unquote(opts))
-
-          {:ok, "done with init " <> str}
-        end
-      end
-
-      defmodule State do
-        # bh_invalid is for when status has not been initialized yet
-        defstruct m_status: :bh_invalid,
-                  m_children: opts[:children],
-                  m_current: nil
+        use Automaton.Action
       end
 
       # Client API
@@ -64,7 +46,7 @@ defmodule Automaton.Node do
       # each subtree of the user-defined root node will be ticked recursively
       # every update (at rate tick_freq) as we update the tree until we find
       # the leaf node that is currently running (will be an action).
-      def tick(status \\ :bh_invalid, arg \\ "stuff") do
+      def tick(status \\ :bh_fresh, arg \\ "stuff") do
         if status != :running, do: on_init(arg)
         status = update()
         if status != :running, do: on_terminate(status)
