@@ -6,6 +6,7 @@ defmodule Automaton.Behavior do
     behaviors, heirarchically combining smaller behaviors to provide more
     complex and interesting behaviors.
   """
+  alias Automaton.Behavior
   @callback on_init([]) :: {:ok, term} | {:error, String.t()}
   @callback update() :: atom
   @callback on_terminate(term) :: {:ok, term}
@@ -17,31 +18,31 @@ defmodule Automaton.Behavior do
 
   defmacro __using__(opts) do
     quote do
-      import Automaton.Behavior
-      @behaviour Automaton.Behavior
+      import Behavior
+      @behaviour Behavior
 
       # TODO: can/should we provide defaults for any of these or remove?
-      @impl Automaton.Behavior
+      @impl Behavior
       def on_terminate(status) do
         {:ok, status}
       end
 
-      @impl Automaton.Behavior
+      @impl Behavior
       def get_status() do
         {:ok, nil}
       end
 
-      @impl Automaton.Behavior
+      @impl Behavior
       def running?() do
         {:ok, nil}
       end
 
-      @impl Automaton.Behavior
+      @impl Behavior
       def terminated?() do
         {:ok, nil}
       end
 
-      @impl Automaton.Behavior
+      @impl Behavior
       def abort() do
         {:ok, nil}
       end

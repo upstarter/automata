@@ -13,18 +13,18 @@ environments with no central point of failure. This project is Open Source.
 
 ## Implementation Overview
 
-### Technology
+### Technologies
  [Elixir](https://elixir-lang.org/) & [OTP](https://en.wikipedia.org/wiki/Open_Telecom_Platform) provide the
  primitives for robust concurrent, fault-tolerant, highly available,
- self-healing distributed systems.
+ self-healing distributed systems. Based on the Actor model, a singular Elixir `Process` embodies all 3 essential elements of computation: processing, storage, communications. It does so using very lightweight, isolated processes, each with its own stack, heap, and communications facilities (mailbox). The Erlang VM (BEAM), with pre-emptive scheduling, acts somewhat as on operating system on top of an operating system. Preemption is good because it prevents bad processes from starving the rest of the system, even if it is a bit slower than other scheduler types.
 
  [Behavior Trees](https://en.wikipedia.org/wiki/Behavior_tree_(artificial_intelligence,_robotics_and_control))
  are increasingly used in place of finite state machines (FSM's) and other AI
  control architectures due to improved properties of modularity, flexibility,
- reusability, and efficiency of implementation. To keep modules lean and keep
- the trees focused on actions, one approach is to utilize an external
- decision making system (FSM, decision tree, utility,
- stochastic, etc..) for all decision making, keeping nodes solidly focused on actions.
+ reusability, and efficiency of implementation. They enable design/development scalability and efficiency.
+
+ [Utility AI](http://www.gameaipro.com/GameAIPro/GameAIPro_Chapter09_An_Introduction_to_Utility_Theory.pdf)
+ is used to keep the automata focused on actions by providing an external system for all decision making support. This significantly reduces the amount of logic/nodes required for an agent and takes the heavy mathematical workload off of action developers.
 
 ### Requirements
 
@@ -47,11 +47,11 @@ environments with no central point of failure. This project is Open Source.
     - Priority
   - Condition nodes
   - In-node Decorators
-  - Helper Nodes for accessing knowledge/messaging systems
+  - Helper Nodes for accessing utility AI systems
 
 - #### A Concurrent, Scalable Blackboard Knowledge System
-  - A global blackboard that can broadcast messages without being a central point of failure.
-  - Individual Node blackboards readable by all nodes, writeable by owning node
+  - A global blackboard that can coordinate automata without being a central point of failure.
+  - Individual automaton blackboards readable by all automata, writeable by owning automaton
   - ETS Implementation?
   - Potentially bringing the code to the data rather than the other way around.
 
@@ -60,7 +60,7 @@ environments with no central point of failure. This project is Open Source.
 - Concurrency
   - News flash! The world is concurrent. For example: we see, hear, and move at the same time. Concurrency was a core factor in the design of the Elixir language and is dead simple to implement.
 - High availability
-  - Elixir is renowned for being capable of 99.9999999% uptime (31 milliseconds/year of downtime) with relatively little effort. The main point of the Elixir model is an application that can be expected to run forever, as stated by the inventor — Joe Armstrong (RIP). Talk about unstoppable software!
+  - Elixir is capable of 99.9999999% uptime (31 milliseconds/year of downtime). The main point of the Elixir model is an application that can be expected to run forever, as stated by the inventor — Joe Armstrong (RIP). Talk about unstoppable software!
 - Fault Tolerance
   - OTP Supervision Trees and the "fail fast" principle provide strong guarantees for error recovery and self healing systems.
 - Scalability
@@ -71,7 +71,7 @@ environments with no central point of failure. This project is Open Source.
 - Flexibility
   - A design goal of `Automata` is to allow high flexibility (supports many use cases)
 - Simplicity of Implementation
-  - Elixir's meta-programming facilities enable very user-friendly API's so developers don't need to know the details of BT's or Automata Theory to get things done.
+  - Elixir's meta-programming facilities enable very user-friendly API's so developers don't need to know the details of BT's or Automata Theory to get things done, and BT's themselves lend efficiency via simplicity to the development value chain.
 
 ### Applications
 - Trading Systems
@@ -83,7 +83,7 @@ environments with no central point of failure. This project is Open Source.
 - Analytics Systems
 - Smart Home / IOT Systems
 - High-Speed Rail Systems (Japan has an ADS railway that learns)
-- Chatbots & Game AI's
+- Chatbot & Game AI's (esp. MMOG user backends)
 - QA Testing (BT's are particularly suited to combinatorial testing)
 - ? (choose your adventure)
 
@@ -107,6 +107,9 @@ A good place to start is in the [project kanban](https://github.com/upstarter/au
 
 Please join the [slack channel](https://join.slack.com/t/automata-org/shared_invite/enQtOTI5OTUyNTM5MDA5LTliZTM2NmI3OWI1YmM1ZjZjYzQ5OTFmM2JiNDFiMTE5OWJkYTIzZGI5YTVkZDM1YzdjMDQ3NDI2NGQ0ZmQ1Y2I) and/or reach out to [ericsteen1@gmail.com](mailto:ericsteen1@gmail.com) if interested!
 
+##### Open Items for Discussion
+1. Blackboard / Utility Decisioning System. Make optional and configurable? i.e.. allow users to set configure whether or not there is a blackboard / UDT for their BT's, and if so, allow multiple types (basic, etc..)
+
 ### Current Status
 The project is currently in the Research & Prototype Development phase. We are
 establishing the core concepts, requirements, practices, and standards for the
@@ -127,13 +130,14 @@ Check the #dev or #testing channels on [slack]((https://join.slack.com/t/automat
 4. If your not sure how to do something, rather than do a hack, put a skeleton in place and submit a PR so a more senior engineer can provide guidance.
 
 #### Coding Standards
-1. Write defensively. Always think about what can go wrong, what will happen on invalid input, and what might fail, which will help you catch many bugs before they happen.
+1. No shortcuts or Rush Jobs. Quality is job #1. We are creating something of very high quality, built to stand the test of time. Strive for 0% technical debt (the best kind of debt). Frameworks are poorly suited to “agile” practices, since they require foresight and a lot of generic capabilities. Today's emphasis on “agile” development is predicated on the developer's ignorance of what is required. Frameworks cannot be developed in that manner, since they are generic and devoid of ultimate functionality. They are all about potential, not actual end-user functionality. If you don't know the best way to do something, ask a core team member, or reach out to the very helpful Elixir community. See the [list of resources](#help).
+1. Always think about what can go wrong, what will happen on invalid input, and what might fail, which will help you catch many bugs before they happen.
 
 #### PR Review Standards
-1. No shortcuts or Rush Jobs. Quality is job #1. We are creating something of very high quality, built to stand the test of time. Strive for 0% technical debt (the best kind of debt). Frameworks are poorly suited to “agile” practices, since they require foresight and a lot of generic capabilities. Today's emphasis on “agile” development is predicated on the developer's ignorance of what is required. Frameworks cannot be developed in that manner, since they are generic and devoid of ultimate functionality. They are all about potential, not actual end-user functionality. If you don't know the best way to do something, ask a core team member, or reach out to the very helpful Elixir community. See the [list of resources](#help).
-2. Code Reviews by core team members are required before merging and must be escalated if there is even the slightest concern of a design/logic flaw or incomplete testing. Imagine your building a rocket to mars and putting you and your family on it. Would you commmit that spaghetti code now?
+
+1. Code Reviews by core team members are required before merging and must be escalated if there is even the slightest concern of a design/logic flaw or incomplete testing. Imagine your building a rocket to mars and putting you and your family on it. Would you commmit that spaghetti code now?
 4. Every PR should have test coverage unless it is a trivial change or is approved by 2 core team members or designated reviewers.
-5. The BD ([BDFL](https://en.wikipedia.org/wiki/Benevolent_dictator_for_life)) — [upstarter](https://github.com/upstarter), is a major [stickler](https://dictionary.cambridge.org/us/dictionary/english/stickler) when it comes to architecture, design, code quality, proper abstractions, and attention to detail. Be warned and feel entirely free to keep him informed of his failures to follow his own strict quality requirements. 😉
+5. The ([BD](https://en.wikipedia.org/wiki/Benevolent_dictator_for_life)) — [upstarter](https://github.com/upstarter), is a major [stickler](https://dictionary.cambridge.org/us/dictionary/english/stickler) when it comes to architecture, design, code quality, proper abstractions, and attention to detail. Be warned and feel entirely free to keep him informed of his failures to follow his own strict quality requirements. 😉
 
 
 #### Testing Standards
@@ -274,6 +278,13 @@ TODO: how to implement the above scenario.
 
 - [Blackboard Systems](http://gbbopen.org/papers/ai-expert.pdf)
 
+###### Utility AI
+- [Behavioral Mathematics](https://www.amazon.com/Behavioral-Mathematics-Game-AI-Applied/dp/1584506849/ref=sr_1_5?keywords=game+behavior+mathematics&qid=1581555478&sr=8-5)
+
+- [Utility AI Design Patterns](https://course.ccs.neu.edu/cs5150f13/readings/dill_designpatterns.pdf)
+
+###### Other
+- [Beliefs, Desires, Intentions(BDI) Architecture](https://en.wikipedia.org/wiki/Belief%E2%80%93desire%E2%80%93intention_software_model)
 
 ## Installation
 

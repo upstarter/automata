@@ -1,5 +1,6 @@
-defmodule Automata.Blackboard do
+defmodule Automaton.Blackboard do
   @moduledoc """
+    The Node Blackboard
     Blackboard Architectures
       A blackboard system isn’t a decision making tool in its own right. It is a
       mechanism for coordinating the actions of several decision makers. The

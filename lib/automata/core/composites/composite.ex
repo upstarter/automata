@@ -19,43 +19,22 @@ defmodule Automaton.Composite do
   The route from the top level to each leaf represents one course of action, and
   the behavior tree algorithm traverses among those courses of action in a
   left-to-right manner. In other words, it performs a depth-first traversal.
-
-  #TODO: best practice for DFS on supervision tree? One way to do it (sans tail-recursion):
-  @type node :: {
-    term() | :undefined,
-    child() | :restarting,
-    :worker | :supervisor,
-    :supervisor.modules()
-  }
-  @spec supervision_tree_each(
-    node(),
-    (node() -> any())
-  )
-
-  def supervision_tree_each({_, pid, :supervisor, _} = node, fun) when is_pid(pid) do
-    fun.(node)
-    pid
-    |> Supervisor.which_children()
-    |> Enum.each(&supervision_tree_each(&1, fun))
-  end
-
-  def supervision_tree_each(node, fun) do
-    fun.(node)
-  end
-
-  TODO: min/max num children constraints?
   """
+  alias Automaton.{Behavior, Composite, Action}
+  alias Automaton.Composite.{Sequence, Selector}
+
   # a composite is just an array of behaviors
   @callback add_child() :: {:ok, list} | {:error, String.t()}
   @callback remove_child() :: {:ok, list} | {:error, String.t()}
   @callback clear_children :: {:ok, term} | {:error, String.t()}
 
-  @composites [:sequence, :selector]
-  def composites, do: @composites
+  @types [:sequence, :selector]
+  def types, do: @types
 
   defmacro __using__(opts) do
     quote bind_quoted: [opts: opts] do
-      @behavior Automaton.Composite
+      @behavior Composite
+      # TODO: probably handle state somewhere else? GenServer linked to Node?
       defmodule State do
         # bh_fresh is for when status has not been initialized
         # yet or has been reset
@@ -68,24 +47,50 @@ defmodule Automaton.Composite do
 
       case opts[:node_type] do
         :sequence ->
-          use Automaton.Composite.Sequence
+          use Sequence
 
         :selector ->
-          use Automaton.Composite.Selector
+          use Selector
       end
 
+      # TODO: best practice for DFS on supervision tree? One way to do it (sans tail-recursion):
+      def update_tree do
+        # tick forever (or at configured tick_freq)
+        # For each tick
+        #   For each node in tree
+        #     node.tick # updates node(subtree)
+      end
+
+      #
+      # @spec supervision_tree_each(
+      #         node(),
+      #         (node() -> any())
+      #       )
+
+      # def supervision_tree_each({_, pid, :supervisor, _} = node, fun) when is_pid(pid) do
+      #   fun.(node)
+      #
+      #   pid
+      #   |> Supervisor.which_children()
+      #   |> Enum.each(&supervision_tree_each(&1, fun))
+      # end
+      #
+      # def supervision_tree_each(node, fun) do
+      #   fun.(node)
+      # end
+
       # notifies listeners if this task status is not fresh
-      @impl Automaton.Composite
+      @impl Composite
       def add_child() do
         {:ok, []}
       end
 
-      @impl Automaton.Composite
+      @impl Composite
       def remove_child() do
         {:ok, nil}
       end
 
-      @impl Automaton.Composite
+      @impl Composite
       def clear_children() do
         {:ok, nil}
       end

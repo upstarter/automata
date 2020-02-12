@@ -137,8 +137,8 @@ defmodule Automata.AutomatonServer do
   end
 
   defp new_worker(sup, {m, _f, a} = mfa) do
-    spec = {m, a}
-    {:ok, worker} = DynamicSupervisor.start_child(sup, spec)
+    IO.inspect([sup, m, a])
+    {:ok, worker} = DynamicSupervisor.start_child(sup, {m, a})
     true = Process.link(worker)
     worker
   end
@@ -159,8 +159,7 @@ defmodule Automata.AutomatonServer do
     %{
       node_sup: node_sup,
       workers: workers,
-      monitors: monitors,
-      overflow: overflow
+      monitors: monitors
     } = state
 
     # TODO

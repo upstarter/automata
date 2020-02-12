@@ -6,8 +6,8 @@ defmodule Automata do
   alias Automata.Automaton
 
   def start(_type, _args) do
-    # TODO: autoload all the user-defined nodes from the nodes/ directory
-    # to build this structure. Or is there a better way?
+    # TODO: recursively autoload all the user-defined nodes from the nodes/ directory tree
+    # to build this/a data structure to spawn the automata.
     nodes_config = [
       [name: "MockUserNode1", mfa: {MockUserNode1, :start_link, []}],
       [name: "MockUserNode2", mfa: {MockUserNode2, :start_link, []}]

@@ -1,31 +1,45 @@
 defmodule Automaton.Node do
   @moduledoc """
     This is the primary user control interface to the Automata system. The
-    configration parameters are used to inject the appropriate code into the
+    configration parameters are used to inject the appropriate modules into the
     user-defined nodes based on their node_type and other options.
 
+    Notes:
     Initialization and shutdown require extra care:
-    on_init: receive extra parameters, fetch data from blackboard, make requests, etc..
+    on_init: receive extra parameters, fetch data from blackboard/utility,  make requests, etc..
     shutdown: free resources to not effect other actions
-    Task Switching: on success, failure, interruption by more important task
+
+    Multi-Agent Systems
+      Proactive & Reactive agents
+      BDI architecture: Beliefs, Desires, Intentions
   """
+  # TODO: Is becoming somewhat of a "Central point of failure". Rather than
+  # injecting tons of code into a single process, we should probably link
+  # with some GenServer(s) to handle state, restart independently?
+
+  alias Automaton.{Behavior, Composite, Action}
 
   # When you call use in your module, the __using__ macro is called.
   defmacro __using__(opts) do
     quote bind_quoted: [opts: opts] do
       use GenServer
       use DynamicSupervisor
-      use Automaton.Behavior
+      use Behavior
       # TODO: tie in BlackBoards
       # # global BB
       # use Automata.Blackboard
       # # individual node BB
       # use Automaton.Blackboard
+      # TODO: tie in utility system(s) (user configured?) for decisioning
+      # global level
+      # use Automata.Utility
+      # node level
+      # use Automaton.Utility
 
-      if Enum.member?(Automaton.Composite.composites(), opts[:node_type]) do
-        use Automaton.Composite, node_type: opts[:node_type], children: opts[:children]
+      if Enum.member?(Composite.types(), opts[:node_type]) do
+        use Composite, node_type: opts[:node_type], children: opts[:children]
       else
-        use Automaton.Action
+        use Action
       end
 
       # Client API
@@ -67,6 +81,15 @@ defmodule Automaton.Node do
       # Private Functions #
       #####################
 
+      #####################
+      # typespec          #
+      #####################
+      # @type a_node :: {
+      #         term() | :undefined,
+      #         child() | :restarting,
+      #         :worker | :supervisor,
+      #         :supervisor.modules()
+      #       }
       # Defoverridable makes the given functions in the current module overridable
       defoverridable on_init: 1, update: 0, on_terminate: 1, tick: 2
     end
