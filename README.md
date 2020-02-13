@@ -96,7 +96,7 @@ environments with no central point of failure. This project is Open Source.
 
 - Elixir Design, Architecture & Coding Best Practices Expertise
 - AI, Cognitive Architecture & Behavior Tree Expertise
-- ETS, BlackBoard System Expertise
+- ETS, BlackBoard System, Utility AI Expertise
 - Test Coverage
 - Documentation
 - Senior Code Reviewers to ensure Quality
@@ -108,7 +108,7 @@ A good place to start is in the [project kanban](https://github.com/upstarter/au
 Please join the [slack channel](https://join.slack.com/t/automata-org/shared_invite/enQtOTI5OTUyNTM5MDA5LTliZTM2NmI3OWI1YmM1ZjZjYzQ5OTFmM2JiNDFiMTE5OWJkYTIzZGI5YTVkZDM1YzdjMDQ3NDI2NGQ0ZmQ1Y2I) and/or reach out to [ericsteen1@gmail.com](mailto:ericsteen1@gmail.com) if interested!
 
 ##### Open Items for Discussion
-1. Blackboard / Utility Decisioning System. Make optional and configurable? i.e.. allow users to set configure whether or not there is a blackboard / UDT for their BT's, and if so, allow multiple types (basic, etc..)
+1. Blackboard / Utility Decisioning System. Make optional and configurable? i.e.. allow users to set configure whether or not there is a blackboard / UDS for their BT's, and if so, allow multiple types (basic, etc..)
 
 ### Current Status
 The project is currently in the Research & Prototype Development phase. We are
@@ -193,7 +193,9 @@ This tree is the management & fault tolerance mechanism for the user-defined beh
   - this is the most complicated node as it defines the user API and manages and
   controls the operations of the user-defined behavior trees in a recursive fashion.
 - `Automaton.Behavior`
-  - this is  
+  - this is the interface (behaviour in elixir) that is implemented by all user-defined nodes
+- `Automaton.Action`
+  - this is the interface for action(execution) nodes — where the world is perceived and changed, reactively and proactively
 
 ###### The Blackboard
 
@@ -219,8 +221,9 @@ defmodule MyNode do
     # or type :execution for execution nodes (no children)
     node_type: :selector,
 
-    # the frequency of updates for this node(tree), in seconds
-    tick_freq: 0.2, # 200ms
+    # the frequency of updates for this node(subtree), in milliseconds
+    # the default is an infinite loop (0 ms)
+    tick_freq: 200, # 200ms
 
 
     # not included for execution nodes

@@ -26,4 +26,7 @@ defmodule Automaton.Utility do
   the weights of the options in the best category truly
   matter
   """
+
+  defmacro __using__(user_opts) do
+  end
 end

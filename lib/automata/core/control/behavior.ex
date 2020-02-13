@@ -1,13 +1,13 @@
 defmodule Automaton.Behavior do
   @moduledoc """
-    An Automaton.Behavior is an abstract interface that can be activated, run,
-    and deactivated. Actions(Execution Nodes) provide specific implementations
-    of this interface. Branches in the tree can be thought of as high level
-    behaviors, heirarchically combining smaller behaviors to provide more
-    complex and interesting behaviors.
+    An Automaton.Behavior is an abstract interface for actions, conditions, and
+    composites that can be activated, run, and deactivated. Actions(Execution
+    Nodes) provide specific implementations of this interface. Branches in the
+    tree can be thought of as high level behaviors, heirarchically combining
+    smaller behaviors to provide more complex and interesting behaviors.
   """
   alias Automaton.Behavior
-  @callback on_init([]) :: {:ok, term} | {:error, String.t()}
+  @callback on_init() :: {:ok, term} | {:error, String.t()}
   @callback update() :: atom
   @callback on_terminate(term) :: {:ok, term}
   @callback reset() :: atom
@@ -19,9 +19,39 @@ defmodule Automaton.Behavior do
   defmacro __using__(opts) do
     quote do
       import Behavior
+      use GenServer
       @behaviour Behavior
 
+      # TODO: best practice for DFS on supervision tree? One way to do it (sans tail-recursion):
+      def update_tree do
+        # tick forever (or at configured tick_freq)
+        # For each tick
+        #   For each node in tree
+        #     node.tick # updates node(subtree)
+      end
+
+      # should tick each subtree at a frequency corresponding to subtrees tick_freq
+      # each subtree of the user-defined root node will be ticked recursively
+      # every update (at rate tick_freq) as we update the tree until we find
+      # the leaf node that is currently running (will be an action).
+      def tick do
+        receive do
+        after
+          tick_freq ->
+            IO.puts("#{tick_freq} milliseconds elapsed")
+            # if status != :running, do: on_init
+            # status = update()
+            # if status != :running, do: on_terminate(status)
+            tick()
+        end
+      end
+
       # TODO: can/should we provide defaults for any of these or remove?
+      @impl Behavior
+      def on_init() do
+        {:ok, nil}
+      end
+
       @impl Behavior
       def on_terminate(status) do
         {:ok, status}

@@ -32,33 +32,15 @@ defmodule Automaton.Composite do
   def types, do: @types
 
   defmacro __using__(opts) do
-    quote bind_quoted: [opts: opts] do
+    quote bind_quoted: [user_opts: opts[:user_opts]] do
       @behavior Composite
-      # TODO: probably handle state somewhere else? GenServer linked to Node?
-      defmodule State do
-        # bh_fresh is for when status has not been initialized
-        # yet or has been reset
-        defstruct m_status: :bh_fresh,
-                  # control is the parent, nil when fresh
-                  control: nil,
-                  m_children: opts[:children],
-                  m_current: nil
-      end
 
-      case opts[:node_type] do
+      case user_opts[:node_type] do
         :sequence ->
           use Sequence
 
         :selector ->
           use Selector
-      end
-
-      # TODO: best practice for DFS on supervision tree? One way to do it (sans tail-recursion):
-      def update_tree do
-        # tick forever (or at configured tick_freq)
-        # For each tick
-        #   For each node in tree
-        #     node.tick # updates node(subtree)
       end
 
       #
@@ -81,8 +63,9 @@ defmodule Automaton.Composite do
 
       # notifies listeners if this task status is not fresh
       @impl Composite
-      def add_child() do
-        {:ok, []}
+      def add_child(child) do
+        # %State{children: children}
+        {:ok, nil}
       end
 
       @impl Composite
