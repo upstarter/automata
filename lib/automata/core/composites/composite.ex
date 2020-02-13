@@ -32,7 +32,8 @@ defmodule Automaton.Composite do
   def types, do: @types
 
   defmacro __using__(opts) do
-    quote bind_quoted: [opts: opts] do
+    quote bind_quoted: [user_opts: opts[:user_opts]] do
+      use GenServer
       @behavior Composite
       # TODO: probably handle state somewhere else? GenServer linked to Node?
       defmodule State do
@@ -41,11 +42,17 @@ defmodule Automaton.Composite do
         defstruct m_status: :bh_fresh,
                   # control is the parent, nil when fresh
                   control: nil,
-                  m_children: opts[:children],
+                  m_children: user_opts[:children] || [],
                   m_current: nil
       end
 
-      case opts[:node_type] do
+      # Client API
+      def start_link(args) do
+        GenServer.start_link(__MODULE__, args)
+        tick()
+      end
+
+      case user_opts[:node_type] do
         :sequence ->
           use Sequence
 
@@ -59,6 +66,24 @@ defmodule Automaton.Composite do
         # For each tick
         #   For each node in tree
         #     node.tick # updates node(subtree)
+      end
+
+      def tick do
+        IO.inspect(["user_opts", unquote(user_opts)])
+
+        receive do
+        after
+          tick_freq ->
+            IO.puts("#{tick_freq} milliseconds elapsed")
+            IO.puts("\n")
+
+            tick()
+        end
+      end
+
+      def tick_freq do
+        # default is infinite loop
+        unquote(user_opts[:tick_freq]) || 0
       end
 
       #
@@ -81,8 +106,9 @@ defmodule Automaton.Composite do
 
       # notifies listeners if this task status is not fresh
       @impl Composite
-      def add_child() do
-        {:ok, []}
+      def add_child(child) do
+        # %State{children: children}
+        {:ok, nil}
       end
 
       @impl Composite

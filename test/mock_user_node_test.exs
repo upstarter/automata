@@ -3,6 +3,7 @@ defmodule AutomataTest do
   doctest Automata
   # TODO: ex_spec for context, it BDD style, property testing
 
+  # TODO: how to put in shared context (for sharing across files)?
   setup_all do
     # TODO: Load user-configs into node_configs
     nodes_config = [

@@ -6,9 +6,8 @@ defmodule MockUserNode1 do
     # or type :execution for execution nodes (no children)
     node_type: :selector,
 
-    # the frequency of updates for this node(tree), in seconds
-    # 200ms
-    tick_freq: 0.2,
+    # the frequency of updates for this node(tree), in milliseconds
+    tick_freq: 1500,
 
     # not included for execution nodes
     # list of child control/execution nodes
@@ -23,7 +22,8 @@ end
 
 defmodule MockUserNode2 do
   use Automaton.Node,
-    node_type: :sequence
+    node_type: :sequence,
+    tick_freq: 3500
 
   def on_init(str) do
     {:ok, "overrides default Automaton.Composite.Selector.on_init/0"}

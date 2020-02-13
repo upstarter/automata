@@ -20,9 +20,8 @@ defmodule Automaton.Node do
   alias Automaton.{Behavior, Composite, Action}
 
   # When you call use in your module, the __using__ macro is called.
-  defmacro __using__(opts) do
-    quote bind_quoted: [opts: opts] do
-      use GenServer
+  defmacro __using__(user_opts) do
+    quote bind_quoted: [user_opts: user_opts] do
       use DynamicSupervisor
       use Behavior
       # TODO: tie in BlackBoards
@@ -36,15 +35,10 @@ defmodule Automaton.Node do
       # node level
       # use Automaton.Utility
 
-      if Enum.member?(Composite.types(), opts[:node_type]) do
-        use Composite, node_type: opts[:node_type], children: opts[:children]
+      if Enum.member?(Composite.types(), user_opts[:node_type]) do
+        use Composite, user_opts: user_opts
       else
         use Action
-      end
-
-      # Client API
-      def start_link(args) do
-        GenServer.start_link(__MODULE__, args)
       end
 
       # #######################
