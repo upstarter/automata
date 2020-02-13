@@ -5,7 +5,7 @@
 
 ![](particles.gif)
 
-Spawn a set of concurrent, distributed, fault tolerant, and highly available
+Spawn a [system](http://web.stanford.edu/class/ee380/Abstracts/190123.html) of concurrent, distributed, fault tolerant, and highly available
 intelligent agents for coordinated and/or uncoordinated action in one or many
 environments with no central point of failure. This project is Open Source.
 
