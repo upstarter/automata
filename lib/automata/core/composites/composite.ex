@@ -32,51 +32,55 @@ defmodule Automaton.Composite do
   def types, do: @types
 
   defmacro __using__(opts) do
-    quote bind_quoted: [user_opts: opts[:user_opts]] do
-      @behavior Composite
+    user_opts = opts[:user_opts]
 
+    a =
       case user_opts[:node_type] do
         :sequence ->
-          use Sequence
+          quote do: use(Sequence)
 
         :selector ->
-          use Selector
+          quote do: use(Selector)
       end
 
-      #
-      # @spec supervision_tree_each(
-      #         node(),
-      #         (node() -> any())
-      #       )
+    b =
+      quote bind_quoted: [user_opts: opts[:user_opts]] do
+        #
+        # @spec supervision_tree_each(
+        #         node(),
+        #         (node() -> any())
+        #       )
 
-      # def supervision_tree_each({_, pid, :supervisor, _} = node, fun) when is_pid(pid) do
-      #   fun.(node)
-      #
-      #   pid
-      #   |> Supervisor.which_children()
-      #   |> Enum.each(&supervision_tree_each(&1, fun))
-      # end
-      #
-      # def supervision_tree_each(node, fun) do
-      #   fun.(node)
-      # end
+        # def supervision_tree_each({_, pid, :supervisor, _} = node, fun) when is_pid(pid) do
+        #   fun.(node)
+        #
+        #   pid
+        #   |> Supervisor.which_children()
+        #   |> Enum.each(&supervision_tree_each(&1, fun))
+        # end
+        #
+        # def supervision_tree_each(node, fun) do
+        #   fun.(node)
+        # end
 
-      # notifies listeners if this task status is not fresh
-      @impl Composite
-      def add_child(child) do
-        # %State{children: children}
-        {:ok, nil}
+        # notifies listeners if this task status is not fresh
+        @impl Composite
+        def add_child(child) do
+          # %State{children: children}
+          {:ok, nil}
+        end
+
+        @impl Composite
+        def remove_child() do
+          {:ok, nil}
+        end
+
+        @impl Composite
+        def clear_children() do
+          {:ok, nil}
+        end
       end
 
-      @impl Composite
-      def remove_child() do
-        {:ok, nil}
-      end
-
-      @impl Composite
-      def clear_children() do
-        {:ok, nil}
-      end
-    end
+    [a, b]
   end
 end

@@ -15,9 +15,14 @@ defmodule MockUserNode1 do
     # and in parallel for type :parallel
     children: [ChildNode1, ChildNode2]
 
-  def update do
-    {:ok, "overrides default Automaton.Composite.Selector.update/0"}
-  end
+  # def on_init(state) do
+  #   IO.puts("not_running_if_called")
+  # end
+  #
+  # def update(state) do
+  #   {:ok, "overrides default Automaton.Composite.Selector.update/0"}
+  #   :running
+  # end
 end
 
 defmodule MockUserNode2 do
@@ -25,25 +30,30 @@ defmodule MockUserNode2 do
     node_type: :sequence,
     tick_freq: 3500
 
-  def on_init(str) do
-    {:ok, "overrides default Automaton.Composite.Selector.on_init/0"}
-  end
+  #
+  # def update(state) do
+  #   {:ok, "mockusernode2 update overrides Sequence update"}
+  # end
+  #
+  # def on_init(str) do
+  #   {:ok, "overrides default Automaton.Composite.Selector.on_init/0"}
+  # end
 end
 
 defmodule ChildNode1 do
   use Automaton.Node,
     node_type: :execution
 
-  def update do
-    {:ok, "child1 overrides default Automaton.Action.update/0"}
-  end
+  # def update(state) do
+  #   {:ok, "child1 overrides default Automaton.Action.update/0"}
+  # end
 end
 
 defmodule ChildNode2 do
   use Automaton.Node,
     node_type: :execution
 
-  def update do
-    {:ok, "child2 overrides default Automaton.Action.update/0"}
-  end
+  # def update(state) do
+  #   {:ok, "child2 overrides default Automaton.Action.update/0"}
+  # end
 end

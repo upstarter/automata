@@ -18,12 +18,15 @@ defmodule Automaton.Composite.Sequence do
   defmacro __using__(opts) do
     quote do
       @impl Behavior
-      def on_init(str) do
-        {:ok, "sequence init " <> str}
+      def on_init(state) do
+        IO.puts("INIT SEQUENCE")
+        {:ok, state}
       end
 
       @impl Behavior
-      def update do
+      def update(state) do
+        IO.puts("UPDATE SEQUENCE")
+
         # // Keep going until a child behavior says it's running.
         # for (;;)
         # {
@@ -43,6 +46,8 @@ defmodule Automaton.Composite.Sequence do
         # }
         IO.puts("sequence update/0")
         # return status, overidden by user
+        {:ok, "Sequence"}
+        :running
       end
     end
   end
