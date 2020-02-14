@@ -8,16 +8,16 @@ defmodule Automaton.Action do
   defmacro __using__(opts) do
     quote bind_quoted: [opts: opts] do
       @impl Behavior
-      def update(state) do
+      def update() do
         IO.inspect(["action node update/0"], label: __MODULE__)
         # return status, overidden by user
-        {:ok, state}
+        {:ok, "action node update/0"}
         :running
       end
 
       @impl Behavior
-      def on_init(str) do
-        {:ok, "action node on_init " <> str}
+      def on_init() do
+        {:ok, "action node on_init"}
       end
     end
   end

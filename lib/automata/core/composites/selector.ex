@@ -20,14 +20,14 @@ defmodule Automaton.Composite.Selector do
   defmacro __using__(opts) do
     quote do
       @impl Behavior
-      def on_init(state) do
+      def on_init() do
         IO.puts("INIT SELECTOR")
 
-        {:ok, state}
+        {:ok, nil}
       end
 
       @impl Behavior
-      def update(state) do
+      def update() do
         IO.puts("UPDATE SELECTOR")
 
         # Keep going until a child behavior says its running.

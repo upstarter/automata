@@ -2,7 +2,7 @@
 defmodule MockUserNode1 do
   use Automaton.Node,
     # required
-    # one of :sequence, :selector, :parallel, etc...
+    # one of :sequence, :selector, :parallel, :priority, etc...
     # or type :execution for execution nodes (no children)
     node_type: :selector,
 

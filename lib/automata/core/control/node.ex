@@ -20,48 +20,62 @@ defmodule Automaton.Node do
   alias Automaton.Utility, as: NodeUtility
 
   defmacro __using__(user_opts) do
-    a =
-      if Enum.member?(Composite.types(), user_opts[:node_type]) do
-        # IO.inspect(user_opts)
-
-        quote do
-          use DynamicSupervisor
-          use Composite, user_opts: unquote(user_opts)
-        end
-      else
-        quote do: use(Action)
-      end
-
-    b =
-      quote bind_quoted: [user_opts: user_opts] do
-        use Behavior, user_opts: user_opts
-
-        use GlobalBlackboard
-        use NodeBlackboard
-        use GlobalUtility
-        use NodeUtility
-
-        # @type a_node :: {
+    prepend =
+      quote do
+        # @type node :: {
         #         term() | :undefined,
         #         child() | :restarting,
         #         :worker | :supervisor,
         #         :supervisor.modules()
         #       }
 
+        # all nodes are behaviors
+        use Behavior, user_opts: unquote(user_opts)
+      end
+
+    # composite(control node) or action(execution node)?
+    node_type =
+      if Enum.member?(Composite.types(), user_opts[:node_type]) do
+        # if its a composite(control node), it supervises actions(execution nodes)
+        quote do
+          use DynamicSupervisor
+          use Composite, user_opts: unquote(user_opts)
+        end
+      else
+        # if its an action(execution) node, it is a supervised worker
+        quote do
+          use GenServer
+          use Action
+        end
+      end
+
+    # TODO: allow user to choose from behavior tree, utility AI, or both
+    # for the knowledge and decisioning system. Allow third-party strategies?
+    intel =
+      quote bind_quoted: [user_opts: user_opts] do
+        use GlobalBlackboard
+        use NodeBlackboard
+        use GlobalUtility
+        use NodeUtility
+      end
+
+    # extra stuff at end
+    append =
+      quote do
         def child_spec do
           %{
             id: __MODULE__,
             start: {__MODULE__, :start_link, []},
-            restart: :temporary,
+            restart: :transient,
             shutdown: 5000,
             type: :worker
           }
         end
 
         # Defoverridable makes the given functions in the current module overridable
-        defoverridable update: 1, tick: 1, on_init: 1, on_terminate: 1
+        defoverridable update: 0, tick: 1, on_init: 0, on_terminate: 1
       end
 
-    [a, b]
+    [prepend, node_type, intel, append]
   end
 end

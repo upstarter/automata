@@ -16,7 +16,7 @@ environments with no central point of failure. This project is Open Source.
 ### Technologies
  [Elixir](https://elixir-lang.org/) & [OTP](https://en.wikipedia.org/wiki/Open_Telecom_Platform) provide the
  primitives for robust concurrent, fault-tolerant, highly available,
- self-healing distributed systems. Based on the Actor model, a singular Elixir `Process` embodies all 3 essential elements of computation: processing, storage, communications. It does so using very lightweight, isolated processes, each with its own stack, heap, and communications facilities (mailbox). The Erlang VM (BEAM), with pre-emptive scheduling, acts somewhat as on operating system on top of an operating system. Preemption is good because it prevents bad processes from starving the rest of the system, even if it is a bit slower than other scheduler types.
+ self-healing distributed systems. Based on the Actor model, a singular Elixir `Process` embodies all 3 essential elements of computation: processing, storage, communications. It does so using very lightweight, isolated processes, each with its own stack, heap, and communications facilities (mailbox). The Erlang VM (BEAM), with pre-emptive scheduling, acts somewhat as on operating system on top of an operating system. Preemption is good because it prevents bad processes from starving the rest of the system, allowing for higher degrees of concurrency and better interactive performance, even if the context switching overhead makes it a bit slower than other scheduler types.
 
  [Behavior Trees](https://en.wikipedia.org/wiki/Behavior_tree_(artificial_intelligence,_robotics_and_control))
  are increasingly used in place of finite state machines (FSM's) and other AI
@@ -164,8 +164,8 @@ In Progress. Property Testing? Permutation Testing? Join the conversation on [Th
 
 There are 3 Layers in the supervision tree below the Application
 supervisor. The terminal nodes are the `AutomatonNodeSupervisor`
-which supervises the user-defined behavior tree nodes with the help of its
-"brain" – the `AutomatonServer`. The `AutomatonServer` currently handles the
+which supervise the user-defined behavior tree nodes with the help of their
+"brains" – the `AutomatonServer`. The `AutomatonServer` currently handles the
 bulk of the logic of the system, as it is responsible for parsing user-config,
 and starting and managing the user-defined nodes. It starts the user defined
 nodes as children of `AutomatonNodeSupervisor`, which is kept lean for fault
@@ -187,7 +187,7 @@ This tree is the management & fault tolerance mechanism for the parsing and vali
   - this node parses and validates the user configuration and creates and manages OTP event callbacks of the user-defined behavior tree root node.
 
 ###### The Control Supervision Tree (in `lib/core/control/`)
-This tree is the management & fault tolerance mechanism for the user-defined behavior tree(s).
+These are the management & fault tolerance mechanisms for the user-defined behavior tree(s).
 
 - `Automaton.Node`
   - this is the most complicated node as it defines the user API and manages and
@@ -201,16 +201,19 @@ This tree is the management & fault tolerance mechanism for the user-defined beh
 
 - Global Blackboard
   - all nodes share this knowledge store
-  - the automata will act upon seeing any data change in the global blackboard
+  - the automata will act upon seeing certain data changes in the global blackboard
 - Individual Node Blackboards
   - node blackboards use protected tables for knowledge sharing – all processes can read, one process has write access
+  - the automaton will act upon seeing certain data changes in the global blackboard
 
 
 ### API
 Users may create tree structures of arbitrary depth by defining their own custom
-modules in the nodes/ directory which `use Automata` as a macro. Then, by overriding the
-`update()` function and returning a status as one of `:running`, `:failure`, or
-`:success`, the `Automata` core system will manage the running of the Behavior Tree they have defined and handle restarting when unexpected errors occur based on their configured restart strategies.
+modules in the nodes/ directory which `use Automaton.Node` as a macro. Then, by
+overriding the `update()` function and returning a status as one of `:running`,
+`:failure`, or `:success`, the core system will manage the running of the
+Behavior Tree they have defined and handle restarting when unexpected errors
+occur based on their configured restart strategies.
 
 ```elixir
 defmodule MyNode do
@@ -227,16 +230,16 @@ defmodule MyNode do
 
 
     # not included for execution nodes
-    # list of child control/execution nodes
+    # list of child control/action(execution) nodes
     # these run in order for type :selector and :sequence nodes
-    # and in parallel for type :parallel
+    # and in parallel for type :parallel, and in dynamic priority for :priority
     children: [ChildNode1, ChildNode2, ChildNode3]
 
 
     # overrides update function defined in use macro
     # called every tick, returns current status
     def update do
-      # do stuff
+      # reactively and proactively change the world
       {:ok, status}
     end
 end

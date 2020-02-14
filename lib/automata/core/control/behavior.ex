@@ -7,8 +7,8 @@ defmodule Automaton.Behavior do
     smaller behaviors to provide more complex and interesting behaviors.
   """
   alias Automaton.Behavior
-  @callback on_init(term) :: {:ok, term} | {:error, String.t()}
-  @callback update(term) :: atom
+  @callback on_init() :: {:ok, term} | {:error, String.t()}
+  @callback update() :: atom
   @callback on_terminate(term) :: {:ok, term}
   @callback reset() :: atom
   @callback abort() :: {:ok, term}
@@ -19,8 +19,7 @@ defmodule Automaton.Behavior do
   defmacro __using__(opts) do
     quote bind_quoted: [user_opts: opts[:user_opts]] do
       import Behavior
-      use GenServer
-      @behaviour Behavior
+      # @behaviour Behavior
 
       # TODO: probably handle state somewhere else? GenServer linked to Node?
       defmodule State do
@@ -46,7 +45,7 @@ defmodule Automaton.Behavior do
         {:ok, nil}
       end
 
-      # TODO: best practice for DFS on supervision tree? One way to do it (sans tail-recursion):
+      # TODO: best practice for DFS on supervision tree? See Composite for one way (sans tail recursion)
       def update_tree do
         # tick forever (or at configured tick_freq)
         # For each tick
@@ -65,8 +64,8 @@ defmodule Automaton.Behavior do
         after
           tick_freq ->
             IO.puts("#{tick_freq} milliseconds elapsed")
-            if state.m_status != :running, do: on_init(state)
-            new_state = %State{m_status: update(state)}
+            if state.m_status != :running, do: on_init()
+            new_state = %State{m_status: update()}
             if new_state.m_status != :running, do: on_terminate(new_state.m_status)
             tick(new_state)
         end
