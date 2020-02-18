@@ -12,8 +12,7 @@ defmodule Automaton.Composite.Sequence do
     its children fails. As long as its children are succeeding, it will keep
     going. If it runs out of children, it will return in success.
   """
-  alias Automaton.Composite
-  alias Automaton.Behavior
+  alias Automaton.{Composite, Behavior}
 
   defmacro __using__(opts) do
     quote do
@@ -26,7 +25,7 @@ defmodule Automaton.Composite.Sequence do
       @impl Behavior
       def update() do
         IO.puts("UPDATE SEQUENCE")
-
+        IO.inspect(['SWEW'])
         # // Keep going until a child behavior says it's running.
         # for (;;)
         # {

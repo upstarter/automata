@@ -44,7 +44,7 @@ defmodule Automaton.Node do
       else
         # if its an action(execution) node, it is a supervised worker
         quote do
-          use GenServer
+          # use GenServer
           use Action
         end
       end

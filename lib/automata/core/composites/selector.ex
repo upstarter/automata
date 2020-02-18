@@ -14,8 +14,7 @@ defmodule Automaton.Composite.Selector do
     keep on trying. If it runs out of children completely, it will return a
     failure status code.
   """
-  alias Automaton.Composite
-  alias Automaton.Behavior
+  alias Automaton.{Composite, Behavior}
 
   defmacro __using__(opts) do
     quote do

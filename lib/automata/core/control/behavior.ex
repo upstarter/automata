@@ -18,6 +18,8 @@ defmodule Automaton.Behavior do
 
   defmacro __using__(opts) do
     quote bind_quoted: [user_opts: opts[:user_opts]] do
+      use GenServer
+
       import Behavior
       # @behaviour Behavior
 
@@ -43,6 +45,10 @@ defmodule Automaton.Behavior do
       def init(%State{} = state) do
         tick(state)
         {:ok, nil}
+      end
+
+      def handle_call(args) do
+        GenServer.start_link(__MODULE__, %State{})
       end
 
       # TODO: best practice for DFS on supervision tree? See Composite for one way (sans tail recursion)

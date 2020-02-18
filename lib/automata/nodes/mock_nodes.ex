@@ -4,7 +4,7 @@ defmodule MockUserNode1 do
     # required
     # one of :sequence, :selector, :parallel, :priority, etc...
     # or type :execution for execution nodes (no children)
-    node_type: :selector,
+    node_type: :sequence,
 
     # the frequency of updates for this node(tree), in milliseconds
     tick_freq: 1500,
@@ -27,7 +27,7 @@ end
 
 defmodule MockUserNode2 do
   use Automaton.Node,
-    node_type: :sequence,
+    node_type: :selector,
     tick_freq: 3500
 
   #
