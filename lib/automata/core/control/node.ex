@@ -53,7 +53,7 @@ defmodule Automaton.Node do
     # TODO: allow user to choose from behavior tree, utility AI, or both
     # for the knowledge and decisioning system. Allow third-party strategies?
     intel =
-      quote bind_quoted: [user_opts: user_opts] do
+      quote do
         use GlobalBlackboard
         use NodeBlackboard
         use GlobalUtility

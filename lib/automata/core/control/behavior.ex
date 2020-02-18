@@ -89,11 +89,12 @@ defmodule Automaton.Behavior do
 
       @impl Behavior
       # overriden by users
-      def on_init(state), do: nil
+      def on_init(state)
 
       # overriden by users
+
       @impl Behavior
-      def update(state), do: nil
+      def update(state)
 
       # overriden by users
       @impl Behavior

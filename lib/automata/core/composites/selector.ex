@@ -17,44 +17,60 @@ defmodule Automaton.Composite.Selector do
   alias Automaton.{Composite, Behavior}
 
   defmacro __using__(opts) do
-    # quote do
-    #   @impl Behavior
-    #   def on_init() do
-    #     IO.puts("INIT SELECTOR")
-    #
-    #     {:ok, nil}
-    #   end
-    #
-    #   @impl Behavior
-    #   def update() do
-    #     IO.puts("UPDATE SELECTOR")
-    #
-    #     # Keep going until a child behavior says its running.
-    #     # Enum.each %State{} do
-    #     #    fn({field, value}) -> IO.puts(value)
-    #     # end
-    #     # {
-    #     #     Status s = (*m_Current)->tick();
-    #     #
-    #     #     // If the child succeeds, or keeps running, do the same.
-    #     #     if (s != BH_FAILURE)
-    #     #     {
-    #     #         return s;
-    #     #     }
-    #     #
-    #     #     // Hit the end of the array, it didn't end well...
-    #     #     if (++m_Current == m_Children.end())
-    #     #     {
-    #     #         return BH_FAILURE;
-    #     #     }
-    #     # }
-    #     # IO.puts("selector update/0")
-    #     # # return status, overidden by user
-    #     # {:ok, state}
-    #     :running
-    #   end
-    #
-    #   ## Helper Functions
-    # end
+    quote do
+      @impl Behavior
+      def on_init(state) do
+        new_state = Map.put(state, :m_status, :running)
+        IO.inspect(["CALL ON_INIT(SEL)", state.m_status, new_state.m_status], label: __MODULE__)
+
+        {:reply, state, new_state}
+      end
+
+      @impl Behavior
+      def update(state) do
+        new_state = Map.put(state, :m_status, :running)
+        IO.inspect(["CALL UPDATE(SEL)", state.m_status, new_state.m_status], label: __MODULE__)
+
+        {:reply, state, new_state}
+      end
+
+      @impl Behavior
+      def on_terminate(status) do
+        IO.puts("ON_TERMINATE(SEL)")
+        {:ok, status}
+      end
+
+      #
+      #   @impl Behavior
+      #   def update() do
+      #     IO.puts("UPDATE SELECTOR")
+      #
+      #     # Keep going until a child behavior says its running.
+      #     # Enum.each %State{} do
+      #     #    fn({field, value}) -> IO.puts(value)
+      #     # end
+      #     # {
+      #     #     Status s = (*m_Current)->tick();
+      #     #
+      #     #     // If the child succeeds, or keeps running, do the same.
+      #     #     if (s != BH_FAILURE)
+      #     #     {
+      #     #         return s;
+      #     #     }
+      #     #
+      #     #     // Hit the end of the array, it didn't end well...
+      #     #     if (++m_Current == m_Children.end())
+      #     #     {
+      #     #         return BH_FAILURE;
+      #     #     }
+      #     # }
+      #     # IO.puts("selector update/0")
+      #     # # return status, overidden by user
+      #     # {:ok, state}
+      #     :running
+      #   end
+      #
+      #   ## Helper Functions
+    end
   end
 end
