@@ -15,39 +15,56 @@ defmodule Automaton.Composite.Sequence do
   alias Automaton.{Composite, Behavior}
 
   defmacro __using__(opts) do
+    IO.inspect(["SEQ", opts])
+
     quote do
       @impl Behavior
-      def on_init() do
-        IO.puts("INIT SEQUENCE")
-        {:ok, nil}
+      def on_init(state) do
+        new_state = Map.put(state, :m_status, :running)
+        IO.inspect(["CALL ON_INIT(SEQ)", state.m_status, new_state.m_status], label: __MODULE__)
+
+        {:reply, state, new_state}
       end
 
       @impl Behavior
-      def update() do
-        IO.puts("UPDATE SEQUENCE")
-        IO.inspect(['SWEW'])
-        # // Keep going until a child behavior says it's running.
-        # for (;;)
-        # {
-        #     Status s = (*m_CurrentChild)->tick();
-        #
-        #     // If the child fails, or keeps running, do the same.
-        #     if (s != BH_SUCCESS)
-        #     {
-        #         return s;
-        #     }
-        #
-        #     // Hit the end of the array, job done!
-        #     if (++m_CurrentChild == m_Children.end())
-        #     {
-        #         return BH_SUCCESS;
-        #     }
-        # }
-        IO.puts("sequence update/0")
-        # return status, overidden by user
-        {:ok, "Sequence"}
-        :running
+      def update(state) do
+        new_state = Map.put(state, :m_status, :running)
+        IO.inspect(["CALL UPDATE(SEQ)", state.m_status, new_state.m_status], label: __MODULE__)
+
+        {:reply, state, new_state}
       end
+
+      @impl Behavior
+      def on_terminate(status) do
+        IO.puts("ON_TERMINATE")
+        {:ok, status}
+      end
+
+      # @impl Behavior
+      # def update(state) do
+      #   IO.puts("UPDATE SEQUENCE")
+      #   IO.inspect(['SWEW'])
+      #   # // Keep going until a child behavior says it's running.
+      #   # for (;;)
+      #   # {
+      #   #     Status s = (*m_CurrentChild)->tick();
+      #   #
+      #   #     // If the child fails, or keeps running, do the same.
+      #   #     if (s != BH_SUCCESS)
+      #   #     {
+      #   #         return s;
+      #   #     }
+      #   #
+      #   #     // Hit the end of the array, job done!
+      #   #     if (++m_CurrentChild == m_Children.end())
+      #   #     {
+      #   #         return BH_SUCCESS;
+      #   #     }
+      #   # }
+      #   IO.puts("sequence update/0")
+      #   # return status, overidden by user
+      #   {:reply, state, state}
+      # end
     end
   end
 end

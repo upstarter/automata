@@ -32,6 +32,8 @@ defmodule Automaton.Composite do
   def types, do: @types
 
   defmacro __using__(opts) do
+    IO.inspect(["Yellow", opts])
+
     user_opts = opts[:user_opts]
 
     a =

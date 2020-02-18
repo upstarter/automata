@@ -7,53 +7,65 @@ defmodule MockUserNode1 do
     node_type: :sequence,
 
     # the frequency of updates for this node(tree), in milliseconds
-    tick_freq: 1500,
+    tick_freq: 3000,
 
     # not included for execution nodes
     # list of child control/execution nodes
     # these run in order for type :selector and :sequence nodes
     # and in parallel for type :parallel
     children: [ChildNode1, ChildNode2]
-
-  # def on_init(state) do
-  #   IO.puts("not_running_if_called")
-  # end
-  #
-  # def update(state) do
-  #   {:ok, "overrides default Automaton.Composite.Selector.update/0"}
-  #   :running
-  # end
 end
 
 defmodule MockUserNode2 do
   use Automaton.Node,
     node_type: :selector,
-    tick_freq: 3500
+    tick_freq: 6000
 
-  #
-  # def update(state) do
-  #   {:ok, "mockusernode2 update overrides Sequence update"}
-  # end
-  #
-  # def on_init(str) do
-  #   {:ok, "overrides default Automaton.Composite.Selector.on_init/0"}
-  # end
+  @impl Behavior
+  def on_init(state) do
+    new_state = Map.put(state, :m_status, :running)
+    IO.inspect(["CALL ON_INIT()", state.m_status, new_state.m_status], label: __MODULE__)
+
+    {:reply, state, new_state}
+  end
+
+  @impl Behavior
+  def update(state) do
+    new_state = Map.put(state, :m_status, :running)
+    IO.inspect(["CALL UPDATE()", state.m_status, new_state.m_status], label: __MODULE__)
+
+    {:reply, state, new_state}
+  end
+
+  @impl Behavior
+  def on_terminate(status) do
+    IO.puts("ON_TERMINATE")
+    {:ok, status}
+  end
 end
 
 defmodule ChildNode1 do
   use Automaton.Node,
     node_type: :execution
 
-  # def update(state) do
-  #   {:ok, "child1 overrides default Automaton.Action.update/0"}
-  # end
+  @impl Behavior
+  def update(state) do
+    new_state = Map.put(state, :m_status, :running)
+    IO.inspect(["CALL UPDATE()", state.m_status, new_state.m_status], label: __MODULE__)
+
+    {:reply, state, new_state}
+  end
 end
 
 defmodule ChildNode2 do
   use Automaton.Node,
     node_type: :execution
 
-  # def update(state) do
-  #   {:ok, "child2 overrides default Automaton.Action.update/0"}
-  # end
+  @impl Behavior
+  def update(state) do
+    new_state = Map.put(state, :m_status, :running)
+    IO.inspect(["CALL UPDATE()", state.m_status, new_state.m_status], label: __MODULE__)
+
+    {:reply, state, new_state}
+  end
 end

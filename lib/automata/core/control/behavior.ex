@@ -7,7 +7,7 @@ defmodule Automaton.Behavior do
     smaller behaviors to provide more complex and interesting behaviors.
   """
   alias Automaton.Behavior
-  @callback on_init() :: {:ok, term} | {:error, String.t()}
+  # @callback on_init() :: {:ok, term} | {:error, String.t()}
   @callback update() :: atom
   @callback on_terminate(term) :: {:ok, term}
   @callback reset() :: atom
@@ -18,8 +18,6 @@ defmodule Automaton.Behavior do
 
   defmacro __using__(opts) do
     quote bind_quoted: [user_opts: opts[:user_opts]] do
-      use GenServer
-
       import Behavior
       # @behaviour Behavior
 
@@ -30,26 +28,47 @@ defmodule Automaton.Behavior do
         defstruct m_status: :bh_fresh,
                   # control is the parent, nil when fresh
                   control: nil,
-                  m_children: user_opts[:children] || [],
+                  m_children: user_opts[:children] || nil,
                   m_current: nil
       end
 
       # Client API
+      @impl GenServer
       def start_link(args) do
-        GenServer.start_link(__MODULE__, %State{})
+        GenServer.start_link(__MODULE__, %State{}, name: __MODULE__)
+      end
+
+      @impl DynamicSupervisor
+      def start_link(args) do
+        DynamicSupervisor.start_link(__MODULE__, args, name: __MODULE__)
       end
 
       # #######################
       # # GenServer Callbacks #
       # #######################
+      @impl GenServer
       def init(%State{} = state) do
-        tick(state)
-        {:ok, nil}
+        send(self(), :tick)
+        {:ok, state}
       end
 
-      def handle_call(args) do
-        GenServer.start_link(__MODULE__, %State{})
+      @impl DynamicSupervisor
+      def init(state) do
+        {:ok, state}
       end
+
+      def handle_info(:tick, state) do
+        IO.puts("#{tick_freq} milliseconds elapsed")
+        if state.m_status != :running, do: on_init(state)
+        {:reply, state, new_state} = update(state)
+        if new_state.m_status != :running, do: on_terminate(new_state)
+        schedule_next()
+        {:noreply, new_state}
+      end
+
+      def schedule_next, do: Process.send_after(self(), :tick, tick_freq())
+
+      def tick, do: GenServer.call(__MODULE__, :tick)
 
       # TODO: best practice for DFS on supervision tree? See Composite for one way (sans tail recursion)
       def update_tree do
@@ -63,30 +82,23 @@ defmodule Automaton.Behavior do
       # each subtree of the user-defined root node will be ticked recursively
       # every update (at rate tick_freq) as we update the tree until we find
       # the leaf node that is currently running (will be an action).
-      def tick(state) do
-        IO.inspect(["tick state:", state])
-
-        receive do
-        after
-          tick_freq ->
-            IO.puts("#{tick_freq} milliseconds elapsed")
-            if state.m_status != :running, do: on_init()
-            new_state = %State{m_status: update()}
-            if new_state.m_status != :running, do: on_terminate(new_state.m_status)
-            tick(new_state)
-        end
-      end
-
       def tick_freq do
         # default of 0 is an infinite loop
         unquote(user_opts[:tick_freq]) || 0
       end
 
-      # TODO: can/should we provide defaults for any of these or remove?
       @impl Behavior
-      def on_terminate(status) do
-        {:ok, status}
-      end
+      # overriden by users
+      def on_init(state)
+
+      # overriden by users
+
+      @impl Behavior
+      def update(state)
+
+      # overriden by users
+      @impl Behavior
+      def on_terminate(status), do: nil
 
       @impl Behavior
       def get_status() do
