@@ -15,39 +15,39 @@ defmodule Automaton.Composite.Sequence do
   alias Automaton.{Composite, Behavior}
 
   defmacro __using__(opts) do
-    quote do
-      @impl Behavior
-      def on_init() do
-        IO.puts("INIT SEQUENCE")
-        {:ok, nil}
-      end
-
-      @impl Behavior
-      def update() do
-        IO.puts("UPDATE SEQUENCE")
-        IO.inspect(['SWEW'])
-        # // Keep going until a child behavior says it's running.
-        # for (;;)
-        # {
-        #     Status s = (*m_CurrentChild)->tick();
-        #
-        #     // If the child fails, or keeps running, do the same.
-        #     if (s != BH_SUCCESS)
-        #     {
-        #         return s;
-        #     }
-        #
-        #     // Hit the end of the array, job done!
-        #     if (++m_CurrentChild == m_Children.end())
-        #     {
-        #         return BH_SUCCESS;
-        #     }
-        # }
-        IO.puts("sequence update/0")
-        # return status, overidden by user
-        {:ok, "Sequence"}
-        :running
-      end
-    end
+    # quote do
+    #   @impl Behavior
+    #   def on_init() do
+    #     IO.puts("INIT SEQUENCE")
+    #     {:ok, nil}
+    #   end
+    #
+    #   @impl Behavior
+    #   def update() do
+    #     IO.puts("UPDATE SEQUENCE")
+    #     IO.inspect(['SWEW'])
+    #     # // Keep going until a child behavior says it's running.
+    #     # for (;;)
+    #     # {
+    #     #     Status s = (*m_CurrentChild)->tick();
+    #     #
+    #     #     // If the child fails, or keeps running, do the same.
+    #     #     if (s != BH_SUCCESS)
+    #     #     {
+    #     #         return s;
+    #     #     }
+    #     #
+    #     #     // Hit the end of the array, job done!
+    #     #     if (++m_CurrentChild == m_Children.end())
+    #     #     {
+    #     #         return BH_SUCCESS;
+    #     #     }
+    #     # }
+    #     IO.puts("sequence update/0")
+    #     # return status, overidden by user
+    #     {:ok, "Sequence"}
+    #     :running
+    #   end
+    # end
   end
 end

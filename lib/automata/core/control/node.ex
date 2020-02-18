@@ -39,12 +39,13 @@ defmodule Automaton.Node do
         # if its a composite(control node), it supervises actions(execution nodes)
         quote do
           use DynamicSupervisor
+          use GenServer
           use Composite, user_opts: unquote(user_opts)
         end
       else
         # if its an action(execution) node, it is a supervised worker
         quote do
-          # use GenServer
+          use GenServer
           use Action
         end
       end
@@ -73,7 +74,7 @@ defmodule Automaton.Node do
         end
 
         # Defoverridable makes the given functions in the current module overridable
-        defoverridable update: 0, tick: 1, on_init: 0, on_terminate: 1
+        defoverridable update: 1, on_init: 1, on_terminate: 1
       end
 
     [prepend, node_type, intel, append]
