@@ -10,7 +10,9 @@ defmodule Automata do
     # to build this/a data structure to spawn the automata.
     nodes_config = [
       [name: "MockUserNode1", mfa: {MockUserNode1, :start_link, []}],
-      [name: "MockUserNode2", mfa: {MockUserNode2, :start_link, []}]
+      [name: "MockUserNode2", mfa: {MockUserNode2, :start_link, []}],
+      [name: "ChildNode1", mfa: {ChildNode1, :start_link, []}],
+      [name: "ChildNode2", mfa: {ChildNode2, :start_link, []}]
     ]
 
     start_nodes(nodes_config)

@@ -47,6 +47,13 @@ defmodule Automaton.Composite do
 
     b =
       quote bind_quoted: [user_opts: opts[:user_opts]] do
+        def update_tree do
+          # tick forever (or at configured tick_freq)
+          # For each tick
+          #   For each node in tree
+          #     node.tick # updates node(subtree)
+        end
+
         #
         # @spec supervision_tree_each(
         #         node(),

@@ -15,54 +15,85 @@ defmodule Automaton.Composite.Sequence do
   alias Automaton.{Composite, Behavior}
 
   defmacro __using__(opts) do
-    quote do
-      @impl Behavior
-      def on_init(state) do
-        new_state = Map.put(state, :m_status, :running)
-        IO.inspect(["CALL ON_INIT(SEQ)", state.m_status, new_state.m_status], label: __MODULE__)
+    a =
+      quote do
+        @impl Behavior
+        def on_init(state) do
+          new_state = Map.put(state, :m_status, :failed)
+          IO.inspect(["CALL ON_INIT(SEQ)", state.m_status, new_state.m_status], label: __MODULE__)
 
-        {:reply, state, new_state}
+          {:reply, state, new_state}
+        end
+
+        @impl Behavior
+        def on_terminate(status) do
+          IO.puts("ON_TERMINATE")
+          {:ok, status}
+        end
+
+        @impl Behavior
+        def update(state) do
+          IO.puts("UPDATE SEQUENCE")
+
+          new_state =
+            if length(state.m_children) != 0 do
+              status = process_children(state)
+              %{state | m_status: status}
+            else
+              %{state | m_state: :bh_success}
+            end
+
+          # return status, overidden by user
+          {:reply, state, new_state}
+        end
+
+        def process_children(%{m_children: [current | remaining]} = state) do
+          # Keep going until a child behavior says it's running
+
+          # {:reply, old_state, new_state} = GenServer.call(current, :tick)
+          new_state = GenServer.call(current, :tick)
+          status = new_state.m_status
+          IO.inspect(["Updated Status in SEQ", status])
+
+          # IO.inspect(["Status", old_state, new_state])
+          # IO.inspect(status)
+          # // If the child fails, or keeps running, do the same.
+          # if (s != BH_SUCCESS)
+          # {
+          #     return s;
+          # }
+          if status != :bh_success do
+            IO.inspect(['NODE SUCCESS', current, remaining, state])
+            status
+          else
+            IO.inspect(['NODE NOT SUCCESS', current, remaining, state])
+            process_children(remaining)
+          end
+        end
+
+        def process_children(%{m_children: []} = state) do
+          # // Hit the end of the array, job done!
+          # if (++m_CurrentChild == m_Children.end())
+          # {
+          #     return BH_SUCCESS;
+          # }
+          if state.m_status == :bh_success do
+            state.m_status
+          end
+        end
+
+        def process_children(%{m_children: nil} = state) do
+          # // Hit the end of the array, job done!
+          # if (++m_CurrentChild == m_Children.end())
+          # {
+          #     return BH_SUCCESS;
+          # }
+          if state.m_status == :bh_success do
+            state.m_status
+          end
+        end
       end
 
-      @impl Behavior
-      def update(state) do
-        new_state = Map.put(state, :m_status, :running)
-        IO.inspect(["CALL UPDATE(SEQ)", state.m_status, new_state.m_status], label: __MODULE__)
-
-        {:reply, state, new_state}
-      end
-
-      @impl Behavior
-      def on_terminate(status) do
-        IO.puts("ON_TERMINATE")
-        {:ok, status}
-      end
-
-      # @impl Behavior
-      # def update(state) do
-      #   IO.puts("UPDATE SEQUENCE")
-      #   IO.inspect(['SWEW'])
-      #   # // Keep going until a child behavior says it's running.
-      #   # for (;;)
-      #   # {
-      #   #     Status s = (*m_CurrentChild)->tick();
-      #   #
-      #   #     // If the child fails, or keeps running, do the same.
-      #   #     if (s != BH_SUCCESS)
-      #   #     {
-      #   #         return s;
-      #   #     }
-      #   #
-      #   #     // Hit the end of the array, job done!
-      #   #     if (++m_CurrentChild == m_Children.end())
-      #   #     {
-      #   #         return BH_SUCCESS;
-      #   #     }
-      #   # }
-      #   IO.puts("sequence update/0")
-      #   # return status, overidden by user
-      #   {:reply, state, state}
-      # end
-    end
+    a
   end
 end

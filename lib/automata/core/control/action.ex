@@ -9,18 +9,15 @@ defmodule Automaton.Action do
     quote bind_quoted: [opts: opts] do
       @impl Behavior
       def on_init(state) do
-        new_state = Map.put(state, :m_status, :running)
+        IO.inspect(["CALL ON_INIT(ACTION)", state], label: __MODULE__)
 
-        IO.inspect(["CALL ON_INIT(ACTION)", state.m_status, new_state.m_status], label: __MODULE__)
-
-        {:reply, state, new_state}
+        {:reply, state, state}
       end
 
       @impl Behavior
       def update(state) do
         new_state = Map.put(state, :m_status, :running)
         IO.inspect(["CALL UPDATE(ACTION)", state.m_status, new_state.m_status], label: __MODULE__)
-        IO.inspect(state, label: __MODULE__)
 
         {:reply, state, new_state}
       end

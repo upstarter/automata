@@ -26,24 +26,24 @@ defmodule ChildNode1 do
   use Automaton.Node,
     node_type: :execution
 
-  @impl Behavior
-  def update(state) do
-    new_state = Map.put(state, :m_status, :running)
-    IO.inspect(["CALL UPDATE()", state.m_status, new_state.m_status], label: __MODULE__)
-
-    {:reply, state, new_state}
-  end
+  # @impl Behavior
+  # def update(state) do
+  #   new_state = Map.put(state, :m_status, :running)
+  #   IO.inspect(["CALL UPDATE()", state.m_status, new_state.m_status], label: __MODULE__)
+  #
+  #   {:reply, state, new_state}
+  # end
 end
 
 defmodule ChildNode2 do
   use Automaton.Node,
     node_type: :execution
 
-  @impl Behavior
-  def update(state) do
-    new_state = Map.put(state, :m_status, :running)
-    IO.inspect(["CALL UPDATE()", state.m_status, new_state.m_status], label: __MODULE__)
-
-    {:reply, state, new_state}
-  end
+  # @impl Behavior
+  # def update(state) do
+  #   new_state = Map.put(state, :m_status, :running)
+  #   IO.inspect(["CALL UPDATE()", state.m_status, new_state.m_status], label: __MODULE__)
+  #
+  #   {:reply, state, new_state}
+  # end
 end

@@ -7,8 +7,8 @@ defmodule Automaton.Behavior do
     smaller behaviors to provide more complex and interesting behaviors.
   """
   alias Automaton.Behavior
-  # @callback on_init() :: {:ok, term} | {:error, String.t()}
-  @callback update() :: atom
+  # @callback on_init(term) :: {:ok, term} | {:error, String.t()}
+  # @callback update(term) :: atom
   @callback on_terminate(term) :: {:ok, term}
   @callback reset() :: atom
   @callback abort() :: {:ok, term}
@@ -35,12 +35,12 @@ defmodule Automaton.Behavior do
       # Client API
       @impl GenServer
       def start_link(args) do
-        GenServer.start_link(__MODULE__, %State{}, name: __MODULE__)
+        GenServer.start_link(__MODULE__, %State{}, name: unquote(__MODULE__))
       end
 
       @impl DynamicSupervisor
       def start_link(args) do
-        DynamicSupervisor.start_link(__MODULE__, args, name: __MODULE__)
+        DynamicSupervisor.start_link(__MODULE__, args, name: unquote(__MODULE__))
       end
 
       # #######################
@@ -48,7 +48,6 @@ defmodule Automaton.Behavior do
       # #######################
       @impl GenServer
       def init(%State{} = state) do
-        send(self(), :tick)
         {:ok, state}
       end
 
@@ -57,31 +56,31 @@ defmodule Automaton.Behavior do
         {:ok, state}
       end
 
-      def handle_info(:tick, state) do
-        IO.puts("#{tick_freq} milliseconds elapsed")
-        if state.m_status != :running, do: on_init(state)
-        {:reply, state, new_state} = update(state)
-        if new_state.m_status != :running, do: on_terminate(new_state)
-        schedule_next()
-        {:noreply, new_state}
+      def handle_call(:tick, _from, state) do
+        {:reply, state, new_state} = tick(state)
       end
 
-      def schedule_next, do: Process.send_after(self(), :tick, tick_freq())
-
-      def tick, do: GenServer.call(__MODULE__, :tick)
-
-      # TODO: best practice for DFS on supervision tree? See Composite for one way (sans tail recursion)
-      def update_tree do
-        # tick forever (or at configured tick_freq)
-        # For each tick
-        #   For each node in tree
-        #     node.tick # updates node(subtree)
+      @impl GenServer
+      def handle_info(:scheduled_tick, state) do
+        tick(state)
+        {:noreply, state}
       end
+
+      def schedule_next, do: Process.send_after(self(), :scheduled_tick, tick_freq())
 
       # should tick each subtree at a frequency corresponding to subtrees tick_freq
       # each subtree of the user-defined root node will be ticked recursively
       # every update (at rate tick_freq) as we update the tree until we find
       # the leaf node that is currently running (will be an action).
+      def tick(state) do
+        IO.puts("TICK: #{tick_freq} milliseconds elapsed")
+        if state.m_status != :running, do: on_init(state)
+        {:reply, state, new_state} = update(state)
+        if new_state.m_status != :running, do: on_terminate(new_state)
+        schedule_next()
+        {:reply, state, new_state}
+      end
+
       def tick_freq do
         # default of 0 is an infinite loop
         unquote(user_opts[:tick_freq]) || 0
