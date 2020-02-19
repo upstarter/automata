@@ -35,12 +35,12 @@ defmodule Automaton.Behavior do
       # Client API
       @impl GenServer
       def start_link(args) do
-        GenServer.start_link(__MODULE__, %State{}, name: unquote(__MODULE__))
+        GenServer.start_link(__MODULE__, %State{}, name: __MODULE__)
       end
 
       @impl DynamicSupervisor
       def start_link(args) do
-        DynamicSupervisor.start_link(__MODULE__, args, name: unquote(__MODULE__))
+        DynamicSupervisor.start_link(__MODULE__, args, name: __MODULE__)
       end
 
       # #######################
@@ -57,7 +57,8 @@ defmodule Automaton.Behavior do
       end
 
       def handle_call(:tick, _from, state) do
-        {:reply, state, new_state} = tick(state)
+        rstate = %{state | m_status: :bh_success}
+        {:reply, state, new_state} = tick(rstate)
       end
 
       @impl GenServer
@@ -74,10 +75,16 @@ defmodule Automaton.Behavior do
       # the leaf node that is currently running (will be an action).
       def tick(state) do
         IO.puts("TICK: #{tick_freq} milliseconds elapsed")
-        if state.m_status != :running, do: on_init(state)
+        if state.m_status != :bh_running, do: on_init(state)
+
         {:reply, state, new_state} = update(state)
-        if new_state.m_status != :running, do: on_terminate(new_state)
-        schedule_next()
+
+        if new_state.m_status != :bh_running do
+          on_terminate(new_state)
+        else
+          schedule_next()
+        end
+
         {:reply, state, new_state}
       end
 
@@ -97,7 +104,7 @@ defmodule Automaton.Behavior do
 
       # overriden by users
       @impl Behavior
-      def on_terminate(status), do: nil
+      def on_terminate(status)
 
       @impl Behavior
       def get_status() do

@@ -19,29 +19,39 @@ defmodule Automaton.Composite.Sequence do
       quote do
         @impl Behavior
         def on_init(state) do
-          new_state = Map.put(state, :m_status, :failed)
-          IO.inspect(["CALL ON_INIT(SEQ)", state.m_status, new_state.m_status], label: __MODULE__)
+          new_state = Map.put(state, :m_status, :bh_running)
 
-          {:reply, state, new_state}
+          IO.inspect(["SEQ CALL ON_INIT(SEQ)", state.m_status, new_state.m_status],
+            label: __MODULE__
+          )
+
+          {:reply, new_state}
         end
 
         @impl Behavior
         def on_terminate(status) do
-          IO.puts("ON_TERMINATE")
+          IO.puts("SEQ ON_TERMINATE")
           {:ok, status}
         end
 
         @impl Behavior
         def update(state) do
-          IO.puts("UPDATE SEQUENCE")
+          IO.puts("SEQ UPDATE SEQUENCE")
 
           new_state =
-            if length(state.m_children) != 0 do
-              status = process_children(state)
-              %{state | m_status: status}
-            else
-              %{state | m_state: :bh_success}
+            case state.m_children do
+              nil ->
+                state
+
+              [] ->
+                %{state | m_state: :bh_success}
+
+              _children ->
+                status = process_children(state)
+                %{state | m_status: status}
             end
+
+          IO.inspect(["Updated Status in SEQ", new_state])
 
           # return status, overidden by user
           {:reply, state, new_state}
@@ -49,25 +59,22 @@ defmodule Automaton.Composite.Sequence do
 
         def process_children(%{m_children: [current | remaining]} = state) do
           # Keep going until a child behavior says it's running
+          child_state = GenServer.call(current, :tick)
 
-          # {:reply, old_state, new_state} = GenServer.call(current, :tick)
-          new_state = GenServer.call(current, :tick)
-          status = new_state.m_status
-          IO.inspect(["Updated Status in SEQ", status])
+          status = child_state.m_status
+          IO.inspect(["Process children in SEQ", status, child_state, state])
 
-          # IO.inspect(["Status", old_state, new_state])
-          # IO.inspect(status)
           # // If the child fails, or keeps running, do the same.
           # if (s != BH_SUCCESS)
           # {
           #     return s;
           # }
           if status != :bh_success do
-            IO.inspect(['NODE SUCCESS', current, remaining, state])
+            IO.inspect(['SEQ ACTION(CHILD) IS #{status}'])
             status
           else
-            IO.inspect(['NODE NOT SUCCESS', current, remaining, state])
-            process_children(remaining)
+            IO.inspect(['SEQ ACTION(CHILD) IS #{status}'])
+            process_children(%{state | m_children: remaining})
           end
         end
 
@@ -83,11 +90,6 @@ defmodule Automaton.Composite.Sequence do
         end
 
         def process_children(%{m_children: nil} = state) do
-          # // Hit the end of the array, job done!
-          # if (++m_CurrentChild == m_Children.end())
-          # {
-          #     return BH_SUCCESS;
-          # }
           if state.m_status == :bh_success do
             state.m_status
           end
