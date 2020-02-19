@@ -27,16 +27,16 @@ defmodule Automaton.Composite do
   @callback add_child() :: {:ok, list} | {:error, String.t()}
   @callback remove_child() :: {:ok, list} | {:error, String.t()}
   @callback clear_children :: {:ok, term} | {:error, String.t()}
+  @callback process_children :: Struct.t()
+  @callback terminal_status() :: atom
 
   @types [:sequence, :selector]
   def types, do: @types
 
   defmacro __using__(opts) do
-    IO.inspect(["Yellow", opts])
-
     user_opts = opts[:user_opts]
 
-    a =
+    prepend =
       case user_opts[:node_type] do
         :sequence ->
           quote do: use(Sequence)
@@ -45,32 +45,23 @@ defmodule Automaton.Composite do
           quote do: use(Selector)
       end
 
-    b =
+    control =
       quote bind_quoted: [user_opts: opts[:user_opts]] do
-        def update_tree do
-          # tick forever (or at configured tick_freq)
-          # For each tick
-          #   For each node in tree
-          #     node.tick # updates node(subtree)
+        def process_children(%{m_children: [current | remaining]} = state) do
+          {:reply, state, new_state} = current.tick(state)
+
+          status = new_state.m_status
+
+          if status != terminal_status() do
+            new_state
+          else
+            process_children(%{state | m_children: remaining})
+          end
         end
 
-        #
-        # @spec supervision_tree_each(
-        #         node(),
-        #         (node() -> any())
-        #       )
-
-        # def supervision_tree_each({_, pid, :supervisor, _} = node, fun) when is_pid(pid) do
-        #   fun.(node)
-        #
-        #   pid
-        #   |> Supervisor.which_children()
-        #   |> Enum.each(&supervision_tree_each(&1, fun))
-        # end
-        #
-        # def supervision_tree_each(node, fun) do
-        #   fun.(node)
-        # end
+        def process_children(%{m_children: []} = state) do
+          %{state | m_status: terminal_status()}
+        end
 
         # notifies listeners if this task status is not fresh
         @impl Composite
@@ -90,6 +81,6 @@ defmodule Automaton.Composite do
         end
       end
 
-    [a, b]
+    [prepend, control]
   end
 end

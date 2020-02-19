@@ -15,9 +15,12 @@ defmodule Automaton.Behavior do
   @callback terminated?() :: bool
   @callback running?() :: bool
   @callback get_status() :: atom
+  @callback tick_freq() :: integer()
 
   defmacro __using__(opts) do
-    quote bind_quoted: [user_opts: opts[:user_opts]] do
+    user_opts = opts[:user_opts]
+
+    quote bind_quoted: [user_opts: user_opts] do
       import Behavior
       # @behaviour Behavior
 
@@ -29,7 +32,8 @@ defmodule Automaton.Behavior do
                   # control is the parent, nil when fresh
                   control: nil,
                   m_children: user_opts[:children] || nil,
-                  m_current: nil
+                  m_current: nil,
+                  tick_freq: user_opts[:tick_freq] || 0
       end
 
       # Client API
@@ -57,24 +61,23 @@ defmodule Automaton.Behavior do
       end
 
       def handle_call(:tick, _from, state) do
-        rstate = %{state | m_status: :bh_success}
-        {:reply, state, new_state} = tick(rstate)
+        {:reply, state, new_state} = tick(state)
       end
 
       @impl GenServer
       def handle_info(:scheduled_tick, state) do
-        tick(state)
-        {:noreply, state}
+        {:reply, state, new_state} = tick(state)
+        {:noreply, new_state}
       end
 
-      def schedule_next, do: Process.send_after(self(), :scheduled_tick, tick_freq())
+      def schedule_next(freq), do: Process.send_after(self(), :scheduled_tick, freq)
 
       # should tick each subtree at a frequency corresponding to subtrees tick_freq
       # each subtree of the user-defined root node will be ticked recursively
       # every update (at rate tick_freq) as we update the tree until we find
       # the leaf node that is currently running (will be an action).
       def tick(state) do
-        IO.puts("TICK: #{tick_freq} milliseconds elapsed")
+        IO.inspect(["TICK: #{state.tick_freq}", state.m_children])
         if state.m_status != :bh_running, do: on_init(state)
 
         {:reply, state, new_state} = update(state)
@@ -82,15 +85,11 @@ defmodule Automaton.Behavior do
         if new_state.m_status != :bh_running do
           on_terminate(new_state)
         else
-          schedule_next()
+          # TODO: needs to be per control node
+          schedule_next(new_state.tick_freq)
         end
 
         {:reply, state, new_state}
-      end
-
-      def tick_freq do
-        # default of 0 is an infinite loop
-        unquote(user_opts[:tick_freq]) || 0
       end
 
       @impl Behavior
@@ -104,7 +103,7 @@ defmodule Automaton.Behavior do
 
       # overriden by users
       @impl Behavior
-      def on_terminate(status)
+      def on_terminate(new_state)
 
       @impl Behavior
       def get_status() do

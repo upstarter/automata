@@ -46,7 +46,7 @@ defmodule Automaton.Node do
         # if its an action(execution) node, it is a supervised worker
         quote do
           use GenServer
-          use Action
+          use Action, user_opts: unquote(user_opts)
         end
       end
 

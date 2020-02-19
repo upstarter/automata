@@ -20,57 +20,46 @@ defmodule Automaton.Composite.Selector do
     quote do
       @impl Behavior
       def on_init(state) do
-        new_state = Map.put(state, :m_status, :running)
-        IO.inspect(["CALL ON_INIT(SEL)", state.m_status, new_state.m_status], label: __MODULE__)
+        # if state.m_status == :bh_success do
+        #   IO.inspect(["SELECTOR SUCCESS!", state.m_status],
+        #     label: __MODULE__
+        #   )
+        # else
+        #   IO.inspect(["SELECTOR STATUS", state.m_status],
+        #     label: __MODULE__
+        #   )
+        # end
 
-        {:reply, state, new_state}
+        {:reply, state}
+      end
+
+      @impl Behavior
+      def on_terminate(state) do
+        status = state.m_status
+
+        case status do
+          :bh_running -> IO.inspect("TERMINATED SELECTOR RUNNING")
+          :bh_failure -> IO.inspect("TERMINATED SELECTOR FAILED")
+          :bh_success -> IO.inspect("TERMINATED SELECTOR SUCCEEDED")
+          :bh_abort -> IO.inspect("TERMINATED SELECTOR ABORTED")
+        end
+
+        {:ok, state}
       end
 
       @impl Behavior
       def update(state) do
-        new_state = Map.put(state, :m_status, :running)
-        IO.inspect(["CALL UPDATE(SEL)", state.m_status, new_state.m_status], label: __MODULE__)
+        new_state = process_children(state)
 
+        IO.inspect(["Children Processed in SEL update", new_state])
+
+        # return status, overidden by user
         {:reply, state, new_state}
       end
 
-      @impl Behavior
-      def on_terminate(status) do
-        IO.puts("ON_TERMINATE(SEL)")
-        {:ok, status}
+      def terminal_status do
+        :bh_failure
       end
-
-      #
-      #   @impl Behavior
-      #   def update() do
-      #     IO.puts("UPDATE SELECTOR")
-      #
-      #     # Keep going until a child behavior says its running.
-      #     # Enum.each %State{} do
-      #     #    fn({field, value}) -> IO.puts(value)
-      #     # end
-      #     # {
-      #     #     Status s = (*m_Current)->tick();
-      #     #
-      #     #     // If the child succeeds, or keeps running, do the same.
-      #     #     if (s != BH_FAILURE)
-      #     #     {
-      #     #         return s;
-      #     #     }
-      #     #
-      #     #     // Hit the end of the array, it didn't end well...
-      #     #     if (++m_Current == m_Children.end())
-      #     #     {
-      #     #         return BH_FAILURE;
-      #     #     }
-      #     # }
-      #     # IO.puts("selector update/0")
-      #     # # return status, overidden by user
-      #     # {:ok, state}
-      #     :running
-      #   end
-      #
-      #   ## Helper Functions
     end
   end
 end

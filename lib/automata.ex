@@ -11,8 +11,8 @@ defmodule Automata do
     nodes_config = [
       [name: "MockUserNode1", mfa: {MockUserNode1, :start_link, []}],
       [name: "MockUserNode2", mfa: {MockUserNode2, :start_link, []}],
-      [name: "ChildNode1", mfa: {ChildNode1, :start_link, []}],
-      [name: "ChildNode2", mfa: {ChildNode2, :start_link, []}]
+      [name: "ChildAction1", mfa: {ChildAction1, :start_link, []}],
+      [name: "ChildAction2", mfa: {ChildAction2, :start_link, []}]
     ]
 
     start_nodes(nodes_config)

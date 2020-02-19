@@ -137,7 +137,6 @@ defmodule Automata.AutomatonServer do
   end
 
   defp new_worker(sup, {m, _f, a} = mfa) do
-    IO.inspect([sup, m, a])
     {:ok, worker} = DynamicSupervisor.start_child(sup, {m, a})
     true = Process.link(worker)
     worker
