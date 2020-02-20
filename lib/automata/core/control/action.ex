@@ -14,10 +14,6 @@ defmodule Automaton.Action do
       BDI architecture: Beliefs, Desires, Intentions
   """
   alias Automaton.Behavior
-  alias Automata.Blackboard, as: GlobalBlackboard
-  alias Automaton.Blackboard, as: NodeBlackboard
-  alias Automata.Utility, as: GlobalUtility
-  alias Automaton.Utility, as: NodeUtility
 
   defmacro __using__(user_opts) do
     prepend =
@@ -60,16 +56,6 @@ defmodule Automaton.Action do
         def init([automaton_server, mfa, %State{} = state]) do
           {:ok, state}
         end
-      end
-
-    # TODO: allow user to choose from behavior tree, utility AI, or both
-    # for the knowledge and decisioning system. Allow third-party strategies?
-    intel =
-      quote do
-        use GlobalBlackboard
-        use NodeBlackboard
-        use GlobalUtility
-        use NodeUtility
       end
 
     control =
@@ -152,9 +138,9 @@ defmodule Automaton.Action do
         end
 
         # Defoverridable makes the given functions in the current module overridable
-        defoverridable update: 1, on_init: 1, on_terminate: 1
+        # defoverridable update: 1, on_init: 1, on_terminate: 1
       end
 
-    [prepend, node_type, intel, control, append]
+    [prepend, node_type, control, append]
   end
 end

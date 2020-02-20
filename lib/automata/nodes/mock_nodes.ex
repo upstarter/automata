@@ -26,7 +26,7 @@ end
 defmodule ChildAction1 do
   use Automaton.Action
 
-  # @impl Behavior
+  @impl Behavior
   def update(state) do
     new_state = Map.put(state, :m_status, :bh_running)
 
@@ -45,7 +45,7 @@ end
 defmodule ChildAction2 do
   use Automaton.Action
 
-  # @impl Behavior
+  @impl Behavior
   def update(state) do
     new_state = Map.put(state, :m_status, :bh_running)
 

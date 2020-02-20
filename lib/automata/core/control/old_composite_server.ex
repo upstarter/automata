@@ -1,7 +1,8 @@
-defmodule Automata.AutomatonServer do
+defmodule Automata.CompositeServer do
   use GenServer
 
   defmodule State do
+    # bh_fresh is for when status has not been initialized yet or has been reset
     defstruct automaton_sup: nil,
               node_sup: nil,
               monitors: nil,
@@ -75,7 +76,7 @@ defmodule Automata.AutomatonServer do
     {:ok, node_sup} = Supervisor.start_child(automaton_sup, spec)
 
     # workers = prepopulate(size, worker_sup)
-    workers = new_automaton(node_sup, mfa, name)
+    workers = new_worker(node_sup, mfa)
     {:noreply, %{state | node_sup: node_sup, workers: workers}}
   end
 
@@ -97,7 +98,7 @@ defmodule Automata.AutomatonServer do
 
   def handle_info(
         {:EXIT, pid, _reason},
-        state = %{monitors: monitors, workers: workers, node_sup: node_sup, mfa: mfa, name: name}
+        state = %{monitors: monitors, workers: workers, node_sup: node_sup, mfa: mfa}
       ) do
     case :ets.lookup(monitors, pid) do
       [{pid, ref}] ->
@@ -111,7 +112,7 @@ defmodule Automata.AutomatonServer do
         case Enum.member?(workers, pid) do
           true ->
             remaining_workers = workers |> Enum.reject(fn p -> p == pid end)
-            new_state = %{state | workers: [new_automaton(node_sup, mfa, name) | remaining_workers]}
+            new_state = %{state | workers: [new_worker(node_sup, mfa) | remaining_workers]}
             {:noreply, new_state}
 
           false ->
@@ -146,23 +147,23 @@ defmodule Automata.AutomatonServer do
   # end
   #
   # defp prepopulate(size, sup, workers) do
-  #   prepopulate(size - 1, sup, [new_automaton(sup) | workers])
+  #   prepopulate(size - 1, sup, [new_worker(sup) | workers])
   # end
 
-  defp new_automaton(node_sup, {m, _f, a} = mfa, name) do
+  defp new_worker(node_sup, {m, _f, a} = mfa) do
     # {:ok, worker} = DynamicSupervisor.start_child(node_sup, {m, a})
-    spec = {m, [[node_sup, mfa, name]]}
+    spec = {m, [[self(), mfa]]}
     {:ok, worker} = DynamicSupervisor.start_child(node_sup, spec)
     true = Process.link(worker)
     worker
   end
 
   # NOTE: We use this when we have to queue up the consumer
-  # defp new_automaton(sup, from_pid, mfa) do
-  #   pid = new_automaton(sup, mfa, nil)
-  #   ref = Process.monitor(from_pid)
-  #   {pid, ref}
-  # end
+  defp new_worker(sup, from_pid, mfa) do
+    pid = new_worker(sup, mfa)
+    ref = Process.monitor(from_pid)
+    {pid, ref}
+  end
 
   defp dismiss_worker(sup, pid) do
     true = Process.unlink(pid)

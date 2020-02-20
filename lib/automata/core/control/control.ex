@@ -14,11 +14,7 @@ defmodule Automaton.Control do
       BDI architecture: Beliefs, Desires, Intentions
   """
   alias Automaton.Behavior
-  alias Automaton.Composite
-  alias Automata.Blackboard, as: GlobalBlackboard
-  alias Automaton.Blackboard, as: NodeBlackboard
-  alias Automata.Utility, as: GlobalUtility
-  alias Automaton.Utility, as: NodeUtility
+  alias Automaton.CompositeServer
 
   defmacro __using__(user_opts) do
     prepend =
@@ -30,45 +26,18 @@ defmodule Automaton.Control do
         #         :supervisor.modules()
         #       }
 
-        # all nodes are GenServer's & Behavior's
-        use DynamicSupervisor
+        # all nodes are Behavior's
         use Behavior, user_opts: unquote(user_opts)
       end
 
     # composite(control node) or action(execution node)? if its a
-    # composite(control) node, the Automaton.NodeSupervisor supervises the
-    # configured behavior tree control(root) node, which runs all user
+    # composite(control) node, the Automaton.CompositeSupervisor supervises the
+    # this control(root) node, which runs all user
     # actions(which are GenServer workers ultimately supervised by
-    # Automaton.NodeSupervisor)
+    # Automaton.CompositeSupervisor)
     node_type =
       quote do
-        use Composite, user_opts: unquote(user_opts)
-      end
-
-    # TODO: allow user to choose from behavior tree, utility AI, or both
-    # for the knowledge and decisioning system. Allow third-party strategies?
-    intel =
-      quote do
-        use GlobalBlackboard
-        use NodeBlackboard
-        use GlobalUtility
-        use NodeUtility
-      end
-
-    otp =
-      quote do
-        # Client API
-        def start_link([[automaton_server, {_, _, _} = mfa]]) do
-          DynamicSupervisor.start_link(__MODULE__, [automaton_server, mfa], name: __MODULE__)
-        end
-
-        # #######################
-        # # GenServer Callbacks #
-        # #######################
-        def init([automaton_server, mfa]) do
-          IO.inspect([self(), automaton_server, mfa])
-          {:ok, %{}}
-        end
+        use CompositeServer, user_opts: unquote(user_opts)
       end
 
     control =
@@ -95,13 +64,6 @@ defmodule Automaton.Control do
         end
       end
 
-    # extra stuff at end
-    append =
-      quote do
-        # Defoverridable makes the given functions in the current module overridable
-        defoverridable update: 1, on_init: 1, on_terminate: 1
-      end
-
-    [prepend, node_type, intel, otp, control, append]
+    [prepend, node_type, control]
   end
 end
