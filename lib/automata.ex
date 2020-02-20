@@ -9,10 +9,8 @@ defmodule Automata do
     # TODO: recursively autoload all the user-defined nodes from the nodes/ directory tree
     # to build this/a data structure to spawn the automata.
     nodes_config = [
-      [name: "MockUserNode1", mfa: {MockUserNode1, :start_link, []}],
-      [name: "MockUserNode2", mfa: {MockUserNode2, :start_link, []}],
-      [name: "ChildAction1", mfa: {ChildAction1, :start_link, []}],
-      [name: "ChildAction2", mfa: {ChildAction2, :start_link, []}]
+      [name: "Automaton1", mfa: {MockSequence1, :start_link, []}],
+      [name: "Automaton2", mfa: {MockSelector1, :start_link, []}]
     ]
 
     start_nodes(nodes_config)

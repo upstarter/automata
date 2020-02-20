@@ -20,7 +20,7 @@ defmodule Automaton.Composite do
   the behavior tree algorithm traverses among those courses of action in a
   left-to-right manner. In other words, it performs a depth-first traversal.
   """
-  alias Automaton.{Behavior, Composite, Action}
+  alias Automaton.Composite
   alias Automaton.Composite.{Sequence, Selector}
 
   # a composite is just an array of behaviors
@@ -36,7 +36,7 @@ defmodule Automaton.Composite do
   defmacro __using__(opts) do
     user_opts = opts[:user_opts]
 
-    prepend =
+    imports =
       case user_opts[:node_type] do
         :sequence ->
           quote do: use(Sequence)
@@ -45,7 +45,40 @@ defmodule Automaton.Composite do
           quote do: use(Selector)
       end
 
-    control =
+    prepend =
+      quote do
+        @behaviour Composite
+      end
+
+    bh_tree_init =
+      quote do
+        @impl GenServer
+        def handle_call(:start_behavior_tree, _from, state) do
+          # IO.inspect(state)
+          start_children(state)
+
+          {:reply, state, state}
+        end
+
+        def start_children(%{m_children: [current | remaining]} = state) do
+          worker = new_worker({current, []})
+          worker_children = state.m_children
+          new_state = %{state | m_children: remaining, m_control: self()}
+          start_children(new_state)
+        end
+
+        def start_children(%{m_children: []} = state) do
+          state
+        end
+
+        defp new_worker({m, a} = ma) do
+          {:ok, worker} = GenServer.start_link(__MODULE__, {m, a})
+          true = Process.link(worker)
+          worker
+        end
+      end
+
+    bh_tree_control =
       quote bind_quoted: [user_opts: opts[:user_opts]] do
         def process_children(%{m_children: [current | remaining]} = state) do
           {:reply, state, new_state} = current.tick(state)
@@ -66,7 +99,6 @@ defmodule Automaton.Composite do
         # notifies listeners if this task status is not fresh
         @impl Composite
         def add_child(child) do
-          # %State{children: children}
           {:ok, nil}
         end
 
@@ -81,6 +113,6 @@ defmodule Automaton.Composite do
         end
       end
 
-    [prepend, control]
+    [imports, prepend, bh_tree_init, bh_tree_control]
   end
 end

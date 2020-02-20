@@ -21,7 +21,7 @@ defmodule Automata.AutomatonServer do
 
   #############
   # Callbacks #
-  ############ j
+  #############
 
   def init([automaton_sup, node_config]) when is_pid(automaton_sup) do
     Process.flag(:trap_exit, true)
@@ -72,9 +72,10 @@ defmodule Automata.AutomatonServer do
         :start_node_supervisor,
         state = %{automaton_sup: automaton_sup, name: name, mfa: mfa}
       ) do
-    spec = {Automata.NodeSupervisor, [[self(), mfa, name]]}
+    spec = {Automaton.NodeSupervisor, [[self(), mfa, name]]}
     {:ok, node_sup} = Supervisor.start_child(automaton_sup, spec)
 
+    # workers = prepopulate(size, worker_sup)
     workers = new_worker(node_sup, mfa)
     {:noreply, %{state | node_sup: node_sup, workers: workers}}
   end
@@ -136,8 +137,23 @@ defmodule Automata.AutomatonServer do
     :"#{tree_name}Server"
   end
 
-  defp new_worker(sup, {m, _f, a} = mfa) do
-    {:ok, worker} = DynamicSupervisor.start_child(sup, {m, a})
+  #
+  # defp prepopulate(size, sup) do
+  #   prepopulate(size, sup, [])
+  # end
+  #
+  # defp prepopulate(size, _sup, workers) when size < 1 do
+  #   workers
+  # end
+  #
+  # defp prepopulate(size, sup, workers) do
+  #   prepopulate(size - 1, sup, [new_worker(sup) | workers])
+  # end
+
+  defp new_worker(node_sup, {m, _f, a} = mfa) do
+    # {:ok, worker} = DynamicSupervisor.start_child(node_sup, {m, a})
+    spec = {m, [[self(), mfa]]}
+    {:ok, worker} = DynamicSupervisor.start_child(node_sup, spec)
     true = Process.link(worker)
     worker
   end

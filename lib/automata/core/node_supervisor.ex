@@ -1,4 +1,4 @@
-defmodule Automata.NodeSupervisor do
+defmodule Automaton.NodeSupervisor do
   use DynamicSupervisor
 
   def start_link([automaton_server, {_, _, _} = mfa, name]) do
