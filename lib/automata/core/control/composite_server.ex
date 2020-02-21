@@ -177,20 +177,20 @@ defmodule Automaton.CompositeServer do
 
     bh_tree_control =
       quote bind_quoted: [user_opts: opts[:user_opts]] do
-        def process_children(%{c_children: [current | remaining]} = state) do
+        def process_children(%{a_children: [current | remaining]} = state) do
           {:reply, state, new_state} = current.tick(state)
 
-          status = new_state.c_status
+          status = new_state.a_status
 
           if status != terminal_status() do
             new_state
           else
-            process_children(%{state | c_children: remaining})
+            process_children(%{state | a_children: remaining})
           end
         end
 
-        def process_children(%{c_children: []} = state) do
-          %{state | c_status: terminal_status()}
+        def process_children(%{a_children: []} = state) do
+          %{state | a_status: terminal_status()}
         end
 
         # notifies listeners if this task status is not fresh

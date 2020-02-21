@@ -36,11 +36,11 @@ defmodule Automaton.Action do
         defmodule State do
           # bh_fresh is for when status has not been initialized
           # yet or has been reset
-          defstruct m_status: :bh_fresh,
+          defstruct a_status: :bh_fresh,
                     # control is the parent, nil when fresh
                     control: nil,
-                    m_children: unquote(user_opts[:children]) || nil,
-                    m_current: nil,
+                    a_children: unquote(user_opts[:children]) || nil,
+                    a_current: nil,
                     tick_freq: unquote(user_opts[:tick_freq]) || 0
         end
 
@@ -69,13 +69,13 @@ defmodule Automaton.Action do
         # every update (at rate tick_freq) as we update the tree until we find
         # the leaf node that is currently running (will be an action).
         def tick(state) do
-          IO.inspect(["TICK: #{state.tick_freq}", state.m_children])
-          if state.m_status != :bh_running, do: on_init(state)
+          IO.inspect(["TICK: #{state.tick_freq}", state.a_children])
+          if state.a_status != :bh_running, do: on_init(state)
 
           {:reply, state, new_state} = update(state)
           IO.inspect(["Child state after update", state, new_state])
 
-          if new_state.m_status != :bh_running do
+          if new_state.a_status != :bh_running do
             on_terminate(new_state)
           else
             # TODO: needs to be per control node
@@ -100,12 +100,12 @@ defmodule Automaton.Action do
 
         @impl Behavior
         def on_init(state) do
-          if state.m_status == :bh_success do
-            IO.inspect(["SEQUENCE SUCCESS!", state.m_status],
+          if state.a_status == :bh_success do
+            IO.inspect(["SEQUENCE SUCCESS!", state.a_status],
               label: __MODULE__
             )
           else
-            IO.inspect(["SEQUENCE STATUS", state.m_status],
+            IO.inspect(["SEQUENCE STATUS", state.a_status],
               label: __MODULE__
             )
           end
@@ -115,7 +115,7 @@ defmodule Automaton.Action do
 
         @impl Behavior
         def on_terminate(state) do
-          status = state.m_status
+          status = state.a_status
 
           case status do
             :bh_running -> IO.inspect("TERMINATED SEQUENCE RUNNING")

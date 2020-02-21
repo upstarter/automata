@@ -47,12 +47,12 @@ defmodule Automaton.Control do
         # every update (at rate tick_freq) as we update the tree until we find
         # the leaf node that is currently running (will be an action).
         def tick(state) do
-          IO.inspect(["TICK: #{state.tick_freq}", state.m_children])
-          if state.m_status != :bh_running, do: on_init(state)
+          IO.inspect(["TICK: #{state.tick_freq}", state.a_children])
+          if state.a_status != :bh_running, do: on_init(state)
 
           {:reply, state, new_state} = update(state)
 
-          if new_state.m_status != :bh_running do
+          if new_state.a_status != :bh_running do
             on_terminate(new_state)
           end
 

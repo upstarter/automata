@@ -28,7 +28,7 @@ defmodule SequenceAction1 do
 
   @impl Behavior
   def update(state) do
-    new_state = Map.put(state, :m_status, :bh_running)
+    new_state = Map.put(state, :a_status, :bh_running)
 
     {:reply, state, new_state}
   end
@@ -47,7 +47,7 @@ defmodule SequenceAction2 do
 
   @impl Behavior
   def update(state) do
-    new_state = Map.put(state, :m_status, :bh_running)
+    new_state = Map.put(state, :a_status, :bh_running)
 
     {:reply, state, new_state}
   end
@@ -66,7 +66,7 @@ defmodule SelectorAction1 do
 
   @impl Behavior
   def update(state) do
-    new_state = Map.put(state, :m_status, :bh_running)
+    new_state = Map.put(state, :a_status, :bh_running)
 
     {:reply, state, new_state}
   end
@@ -85,7 +85,7 @@ defmodule SelectorAction2 do
 
   @impl Behavior
   def update(state) do
-    new_state = Map.put(state, :m_status, :bh_running)
+    new_state = Map.put(state, :a_status, :bh_running)
 
     {:reply, state, new_state}
   end

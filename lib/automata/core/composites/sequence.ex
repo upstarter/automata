@@ -19,12 +19,12 @@ defmodule Automaton.Composite.Sequence do
       quote do
         @impl Behavior
         def on_init(state) do
-          # if state.m_status == :bh_success do
-          #   IO.inspect(["SEQUENCE SUCCESS!", state.m_status],
+          # if state.a_status == :bh_success do
+          #   IO.inspect(["SEQUENCE SUCCESS!", state.a_status],
           #     label: __MODULE__
           #   )
           # else
-          #   IO.inspect(["SEQUENCE STATUS", state.m_status],
+          #   IO.inspect(["SEQUENCE STATUS", state.a_status],
           #     label: __MODULE__
           #   )
           # end
@@ -34,7 +34,7 @@ defmodule Automaton.Composite.Sequence do
 
         @impl Behavior
         def on_terminate(state) do
-          status = state.m_status
+          status = state.a_status
 
           case status do
             :bh_running -> IO.inspect("TERMINATED SEQUENCE RUNNING")
@@ -50,7 +50,7 @@ defmodule Automaton.Composite.Sequence do
         def update(state) do
           new_state = process_children(state)
 
-          IO.inspect(["FINAL SEQUENCE STATE", new_state.m_status])
+          IO.inspect(["FINAL SEQUENCE STATE", new_state.a_status])
 
           # return status, overidden by user
           {:reply, state, new_state}

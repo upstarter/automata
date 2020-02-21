@@ -20,12 +20,12 @@ defmodule Automaton.Composite.Selector do
     quote do
       @impl Behavior
       def on_init(state) do
-        # if state.m_status == :bh_success do
-        #   IO.inspect(["SELECTOR SUCCESS!", state.m_status],
+        # if state.a_status == :bh_success do
+        #   IO.inspect(["SELECTOR SUCCESS!", state.a_status],
         #     label: __MODULE__
         #   )
         # else
-        #   IO.inspect(["SELECTOR STATUS", state.m_status],
+        #   IO.inspect(["SELECTOR STATUS", state.a_status],
         #     label: __MODULE__
         #   )
         # end
@@ -35,7 +35,7 @@ defmodule Automaton.Composite.Selector do
 
       @impl Behavior
       def on_terminate(state) do
-        status = state.m_status
+        status = state.a_status
 
         case status do
           :bh_running -> IO.inspect("TERMINATED SELECTOR RUNNING")
