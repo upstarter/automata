@@ -45,15 +45,19 @@ defmodule Automaton.Action do
         end
 
         # Client API
-        def start_link([[automaton_server, {_, _, _} = mfa]]) do
-          GenServer.start_link(__MODULE__, [automaton_server, mfa, %State{}], name: __MODULE__)
+        def start_link([composite_sup, {_, _, _} = mfa, name]) do
+          new_name = to_string(name) <> "Action"
+
+          GenServer.start_link(__MODULE__, [composite_sup, mfa, %State{}],
+            name: String.to_atom(new_name)
+          )
         end
 
         # #######################
         # # GenServer Callbacks #
         # #######################
         @impl true
-        def init([automaton_server, mfa, %State{} = state]) do
+        def init([composite_sup, mfa, %State{} = state]) do
           {:ok, state}
         end
       end
@@ -127,15 +131,25 @@ defmodule Automaton.Action do
     # extra stuff at end
     append =
       quote do
-        def child_spec do
+        def child_spec([[composite_server, {m, _f, a}, name]] = args) do
           %{
-            id: __MODULE__,
-            start: {__MODULE__, :start_link, []},
+            id: to_string(name) <> "Action",
+            start: {__MODULE__, :start_link, args},
+            shutdown: 10000,
             restart: :transient,
-            shutdown: 5000,
             type: :worker
           }
         end
+
+        # def child_spec([[node_sup, {m, _f, a}, name]] = args) do
+        #   %{
+        #     id: to_string(name) <> "Server",
+        #     start: {__MODULE__, :start_link, args},
+        #     shutdown: 10000,
+        #     restart: :temporary,
+        #     type: :worker
+        #   }
+        # end
 
         # Defoverridable makes the given functions in the current module overridable
         # defoverridable update: 1, on_init: 1, on_terminate: 1

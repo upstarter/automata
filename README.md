@@ -28,7 +28,7 @@ environments with no central point of failure. This project is Open Source.
 
 ### Requirements
 
-#### A system is defined as an Autonomous decentralized system if the following 2 properties are satisfied:
+#### A system is defined as an Autonomous Decentralized System (ADS) if the following 2 properties are satisfied:
 
  1. Autonomous Controllability: Even if any subsystem fails, is repaired, and/or is newly added, the other subsystems can continue to manage themselves and function.
 
@@ -52,7 +52,6 @@ environments with no central point of failure. This project is Open Source.
 - #### A Concurrent, Scalable Blackboard Knowledge System
   - A global blackboard that can coordinate automata without being a central point of failure.
   - Individual automaton blackboards readable by all automata, writeable by owning automaton
-  - ETS Implementation?
   - Potentially bringing the code to the data rather than the other way around.
 
 
@@ -103,12 +102,12 @@ environments with no central point of failure. This project is Open Source.
 - Willingness and motivation to learn it all
 
 ###### Where to get started contributing
-A good place to start is in the [project kanban](https://github.com/upstarter/automata/projects/1). Especially those threads labeled 'good first issue', 'testing', and/or 'documentation'.
+A good place to start is in the [project kanban](https://github.com/upstarter/automata/projects/1). Especially those threads labeled 'good first issue', 'testing'.
 
 Please join the [slack channel](https://join.slack.com/t/automata-org/shared_invite/enQtOTI5OTUyNTM5MDA5LTliZTM2NmI3OWI1YmM1ZjZjYzQ5OTFmM2JiNDFiMTE5OWJkYTIzZGI5YTVkZDM1YzdjMDQ3NDI2NGQ0ZmQ1Y2I) and/or reach out to [ericsteen1@gmail.com](mailto:ericsteen1@gmail.com) if interested!
 
 ##### Open Items for Discussion
-1. Blackboard / Utility Decisioning System. Make optional and configurable? i.e.. allow users to set configure whether or not there is a blackboard / UDS for their BT's, and if so, allow multiple types (basic, etc..)
+1. Blackboard / Utility Decisioning Systems. Make optional and/or configurable? i.e.. allow users to set configuration for whether or not there is a blackboard / Utility Decisioning System for their BT's, and if so, allow multiple types (basic, etc..)
 
 ### Current Status
 The project is currently in the Research & Prototype Development phase. We are
@@ -162,12 +161,14 @@ In Progress. Property Testing? Permutation Testing? Join the conversation on [Th
 ##### The Automata supervision tree(s)
 ![automata supervision tree diagram](sup_tree.png)
 
-There are 3 Layers in the supervision tree below the Application
+There are 4 Layers in the supervision tree below the Application
 supervisor. The terminal nodes are the `AutomatonNodeSupervisor`
 which supervise the user-defined behavior tree nodes with the help of their
-"brains" – the `AutomatonServer`. The `AutomatonServer` currently handles the
-bulk of the logic of the system, as it is responsible for parsing user-config,
-and starting and managing the user-defined nodes. It starts the user defined
+"twin brains" – the `CompositeServer` and the `CompositeSupervisor`. The `CompositeServer` is the mastermind of the user-defined BT's, starting, stopping and generating and handling all OTP callback messages.
+
+ The `CompositeSupervisor` handles fault tolerance of user-defined BT nodes.
+
+. It starts the user defined
 nodes as children of `AutomatonNodeSupervisor`, which is kept lean for fault
 tolerance purposes.
 
@@ -193,9 +194,9 @@ These are the management & fault tolerance mechanisms for the user-defined behav
   - this is the most complicated node as it defines the user API and manages and
   controls the operations of the user-defined behavior trees in a recursive fashion.
 - `Automaton.Behavior`
-  - this is the interface (behaviour in elixir) that is implemented by all user-defined nodes
+  - this is the interface (behaviour in elixir) that is implemented by all user-defined nodes, providing the most general policy for BT-ness.
 - `Automaton.Action`
-  - this is the interface for action(execution) nodes — where the world is perceived and changed, reactively and proactively
+  - this is the interface for action(execution) nodes — where the world is changed, reactively and proactively
 
 ###### The Blackboard
 
@@ -291,6 +292,8 @@ TODO: how to implement the above scenario.
 
 ###### Other
 - [Beliefs, Desires, Intentions(BDI) Architecture](https://en.wikipedia.org/wiki/Belief%E2%80%93desire%E2%80%93intention_software_model)
+
+- [Entity, Component, System(ECS) Architecture](https://en.wikipedia.org/wiki/Entity_component_system) and [this](https://www.youtube.com/watch?v=7m37kKZ5ohA&t=336s) Empex talk.
 
 ## Installation
 

@@ -57,8 +57,12 @@ defmodule Automaton.CompositeServer do
         end
 
         # Client API
-        def start_link([[node_sup, {_, _, _} = mfa, name]]) do
-          GenServer.start_link(__MODULE__, [node_sup, mfa, %State{}, name], name: __MODULE__)
+        def start_link([node_sup, {_, _, _} = mfa, name]) do
+          new_name = to_string(name) <> "Server"
+
+          GenServer.start_link(__MODULE__, [node_sup, mfa, %State{}, name],
+            name: String.to_atom(new_name)
+          )
         end
 
         # #######################
@@ -77,60 +81,97 @@ defmodule Automaton.CompositeServer do
           }
 
           send(self(), :start_node_supervisor)
-          IO.inspect(['CompositeServer', String.to_atom("#{__MODULE__}"), name, self(), node_sup, mfa, state])
 
-          # send(self(), :start_children)
+          IO.inspect([
+            'CompositeServer',
+            name,
+            self(),
+            node_sup,
+            mfa,
+            state
+          ])
+
           {:ok, state}
         end
-
-        # def start_node_supervisor(node_sup, mfa, state) do
-        #   spec = {Automaton.CompositeSupervisor, [[self(), mfa, __MODULE__]]}
-        #   {:ok, bt_sup} = DynamicSupervisor.start_child(node_sup, spec)
-        #
-        #   {:noreply, %{state | c_control: bt_sup}}
-        # end
 
         def handle_info(
               :start_node_supervisor,
               state = %{c_node_sup: node_sup, c_mfa: mfa, c_name: name}
             ) do
-
           spec = {Automaton.CompositeSupervisor, [[self(), mfa, name]]}
-
           {:ok, composite_sup} = DynamicSupervisor.start_child(node_sup, spec)
-          IO.inspect(['Comp', self(), node_sup, spec])
+
+          IO.inspect(
+            log: 'Starting Children',
+            self: Process.info(self())[:registered_name],
+            node_sup: Process.info(node_sup)[:registered_name],
+            spec: spec
+          )
+
+          send(self(), :start_children)
 
           {:noreply, %{state | c_composite_sup: composite_sup}}
         end
 
-        # def start_children(%{c_children: [current | remaining]} = state) do
-        #   node = start_node(CompositeSupervisor, {current, :start_link, []})
-        #   new_state = %{state | c_children: remaining, c_control: __MODULE__}
-        #   IO.inspect(['Start BT', state, new_state, node])
-        #
-        #   start_children(new_state)
-        # end
-
         def handle_info(
               :start_children,
-              state = %{c_children: [current | remaining], c_node_sup: node_sup, c_mfa: mfa}
+              state = %{
+                c_children: [current | remaining],
+                c_node_sup: node_sup,
+                c_mfa: mfa,
+                c_name: name
+              }
             ) do
-          IO.inspect(['Start BT', state, node_sup])
+          IO.inspect(
+            log: 'Start CompositeSupervisor',
+            current: current,
+            children: state.c_children,
+            node_sup: Process.info(node_sup)[:registered_name]
+          )
 
-          node = start_node(CompositeSupervisor, {current, :start_link, []})
-          state = %{state | c_children: remaining}
-
-          send(self(), :start_children)
+          start_children(state)
           {:noreply, state}
         end
 
-        defp start_node(bt_sup, {m, _f, a} = mfa) do
-          # {:ok, worker} = DynamicSupervisor.start_child(bt_sup, {m, a})
+        def start_children(%{c_children: [current | remaining], c_mfa: mfa, c_name: name} = state) do
+          node =
+            start_node(
+              :"#{name}CompositeSupervisor",
+              {current, :start_link, [[self(), mfa, current]]}
+            )
 
-          spec = {m, [[self(), mfa]]}
-          {:ok, worker} = DynamicSupervisor.start_child(bt_sup, spec)
-          true = Process.link(worker)
-          worker
+          start_children(%{state | c_children: remaining})
+
+          IO.inspect(
+            log: 'CompositeSupervisor, starting remaining children...',
+            current: current,
+            mfa: mfa,
+            name: name,
+            self: Process.info(self())[:registered_name],
+            children: state.c_children,
+            remaining: remaining
+          )
+
+          {:reply, {:ok, node}, state}
+        end
+
+        def start_children(%{c_children: []} = state) do
+          IO.inspect(
+            log: 'End CompositeSupervisor, starting remaining children...',
+            children: state.c_children
+          )
+
+          {:reply, :ok, :ok}
+        end
+
+        # TODO: handle composite OR component function pattern matching logic
+        # type declaration flag passed in state for each composite, component(action, decorator, etc..)?
+        # or `m.composite?` and/or `m.component?` static flag to access on each module?
+        defp start_node(composite_sup, {m, _f, a} = mfa) do
+          spec = {m, a}
+          {:ok, composite} = DynamicSupervisor.start_child(composite_sup, spec)
+          true = Process.link(composite)
+          composite
         end
       end
 
@@ -172,18 +213,102 @@ defmodule Automaton.CompositeServer do
     # extra stuff at end
     append =
       quote do
-        def child_spec(opts) do
+        def handle_info(
+              {:DOWN, ref, _, _, _},
+              state = %{c_monitors: monitors, c_children: children}
+            ) do
+          case :ets.match(monitors, {:"$1", ref}) do
+            [[pid]] ->
+              true = :ets.delete(monitors, pid)
+              new_state = %{state | c_children: [pid | children]}
+              {:noreply, new_state}
+
+            [[]] ->
+              {:noreply, state}
+          end
+        end
+
+        def handle_info({:EXIT, node_sup, reason}, state = %{node_sup: node_sup}) do
+          {:stop, reason, state}
+        end
+
+        def handle_info(
+              {:EXIT, pid, _reason},
+              state = %{
+                c_monitors: monitors,
+                children: children,
+                c_node_sup: node_sup,
+                c_mfa: {m, f, a} = mfa,
+                c_name: name
+              }
+            ) do
+          case :ets.lookup(monitors, pid) do
+            [{pid, ref}] ->
+              true = Process.demonitor(ref)
+              true = :ets.delete(monitors, pid)
+              new_state = handle_worker_exit(pid, state)
+              {:noreply, new_state}
+
+            [] ->
+              # NOTE: child crashed, no monitor
+              case Enum.member?(children, pid) do
+                true ->
+                  remaining_children = children |> Enum.reject(fn p -> p == pid end)
+
+                  new_state = %{
+                    state
+                    | c_children: [
+                        start_node(node_sup, {m, :start_link, [[self(), mfa, name]]})
+                        | remaining_children
+                      ]
+                  }
+
+                  {:noreply, new_state}
+
+                false ->
+                  {:noreply, state}
+              end
+          end
+        end
+
+        def handle_info(_info, state) do
+          {:noreply, state}
+        end
+
+        def terminate(_reason, _state) do
+          :ok
+        end
+
+        #####################
+        # Private Functions #
+        #####################
+
+        defp name(tree_name) do
+          :"#{tree_name}Server"
+        end
+
+        defp handle_worker_exit(pid, state) do
           %{
-            id: __MODULE__,
-            start: {__MODULE__, :start_link, [opts]},
-            type: :worker,
-            restart: :permanent,
-            shutdown: 500
+            c_node_sup: node_sup,
+            c_children: children,
+            monitors: monitors
+          } = state
+
+          # TODO
+        end
+
+        def child_spec([[node_sup, {m, _f, a}, name]] = args) do
+          %{
+            id: to_string(name) <> "Server",
+            start: {__MODULE__, :start_link, args},
+            shutdown: 10000,
+            restart: :temporary,
+            type: :worker
           }
         end
 
         # Defoverridable makes the given functions in the current module overridable
-        # defoverridable update: 1, on_init: 1, on_terminate: 1
+        defoverridable update: 1, on_init: 1, on_terminate: 1
       end
 
     [imports, prepend, bh_tree_control, append]

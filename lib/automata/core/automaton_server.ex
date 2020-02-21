@@ -111,7 +111,12 @@ defmodule Automata.AutomatonServer do
         case Enum.member?(workers, pid) do
           true ->
             remaining_workers = workers |> Enum.reject(fn p -> p == pid end)
-            new_state = %{state | workers: [new_automaton(node_sup, mfa, name) | remaining_workers]}
+
+            new_state = %{
+              state
+              | workers: [new_automaton(node_sup, mfa, name) | remaining_workers]
+            }
+
             {:noreply, new_state}
 
           false ->
@@ -151,7 +156,7 @@ defmodule Automata.AutomatonServer do
 
   defp new_automaton(node_sup, {m, _f, a} = mfa, name) do
     # {:ok, worker} = DynamicSupervisor.start_child(node_sup, {m, a})
-    spec = {m, [[node_sup, mfa, name]]}
+    spec = {m, [[node_sup, mfa, m]]}
     {:ok, worker} = DynamicSupervisor.start_child(node_sup, spec)
     true = Process.link(worker)
     worker
