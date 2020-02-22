@@ -48,8 +48,9 @@ defmodule Automaton.Composite.Sequence do
 
         @impl Behavior
         def update(state) do
+          IO.puts("YOOO")
           new_state = process_children(state)
-
+          IO.puts("Yoo2")
           IO.inspect(["FINAL SEQUENCE STATE", new_state.a_status])
 
           # return status, overidden by user

@@ -34,20 +34,26 @@ defmodule Automaton do
     cn_types = ComponentServer.types()
     nt = user_opts[:node_type]
 
-    IO.inspect(["NTNT", nt, cn_types, c_types])
-
     # TODO: for the love of god, find the elixir way to do this..
     node_type =
-      if Enum.member?(c_types, nt) do
-        IO.puts("LKJLKJLKJLJ")
-        quote do: use(CompositeServer, user_opts: unquote(user_opts))
-      else
-        if Enum.member?(cn_types, nt) do
+      cond do
+        Enum.member?(c_types, nt) ->
+          quote do: use(CompositeServer, user_opts: unquote(user_opts))
+
+        Enum.member?(cn_types, nt) ->
           quote do: use(ComponentServer, user_opts: unquote(user_opts))
-        else
-          raise "UserInitError"
-        end
       end
+
+    # if Enum.member?(c_types, nt) do
+    #   IO.puts("LKJLKJLKJLJ")
+    #   quote do: use(CompositeServer, user_opts: unquote(user_opts))
+    # else
+    #   if Enum.member?(cn_types, nt) do
+    #     quote do: use(ComponentServer, user_opts: unquote(user_opts))
+    #   else
+    #     raise "UserInitError"
+    #   end
+    # end
 
     control =
       quote do

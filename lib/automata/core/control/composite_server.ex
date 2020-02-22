@@ -190,9 +190,6 @@ defmodule Automaton.CompositeServer do
           {:reply, :ok, state}
         end
 
-        # TODO: handle composite OR component function pattern matching logic
-        # type declaration flag passed in state for each composite, component(action, decorator, etc..)?
-        # or `m.composite?` and/or `m.component?` static flag to access on each module?
         defp start_node(composite_sup, {m, _f, a} = mfa) do
           IO.inspect(
             log: "Starting child #{m}}",
@@ -201,8 +198,6 @@ defmodule Automaton.CompositeServer do
           )
 
           {:ok, composite} = DynamicSupervisor.start_child(composite_sup, {m, a})
-
-          # info = Process.info(m)[:registered_name]
 
           IO.inspect(
             log: "Started child...",
@@ -221,12 +216,23 @@ defmodule Automaton.CompositeServer do
           {:reply, state, new_state} = current.tick(state)
 
           status = new_state.a_status
+          new_state = %{state | a_status: status}
 
           if status != terminal_status() do
             new_state
           else
             process_children(%{state | children: remaining})
           end
+        end
+
+        # handle selector termination: kill whole subtree
+        def process_children(%{a_status: :bh_failed} = state) do
+          state
+        end
+
+        # handle sequence termination: after retries kill subtree
+        def process_children(%{a_status: :bh_success} = state) do
+          state
         end
 
         def process_children(%{children: []} = state) do

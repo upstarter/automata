@@ -19,8 +19,6 @@ defmodule Automaton.ComponentServer do
 
     a_types = ComponentServer.types()
     nt = user_opts[:node_type]
-    IO.inspect(["COMPONENT SERVER", user_opts, __MODULE__, __ENV__.context_modules])
-    if Enum.member?(a_types, nt), do: IO.puts("HHHAAAAALLLLLL")
 
     node_type =
       if Enum.member?(a_types, nt) do

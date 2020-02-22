@@ -5,7 +5,7 @@ defmodule Automata.AutomatonServer do
     defstruct automaton_sup: nil,
               node_sup: nil,
               monitors: nil,
-              workers: nil,
+              automaton: nil,
               name: nil,
               mfa: nil
   end
@@ -47,16 +47,16 @@ defmodule Automata.AutomatonServer do
     init(rest, state)
   end
 
-  def handle_call(:status, _from, %{workers: workers, monitors: monitors} = state) do
-    {:reply, {state, length(workers)}, state}
+  def handle_call(:status, _from, %{automaton: automaton, monitors: monitors} = state) do
+    {:reply, {state, length(automaton)}, state}
   end
 
   def handle_call(_msg, _from, state) do
     {:reply, {:error, :invalid_message}, :ok, state}
   end
 
-  def handle_cast({:failed, worker}, %{monitors: monitors} = state) do
-    case :ets.lookup(monitors, worker) do
+  def handle_cast({:failed, automaton}, %{monitors: monitors} = state) do
+    case :ets.lookup(monitors, automaton) do
       [{pid, ref}] ->
         true = Process.demonitor(ref)
         true = :ets.delete(monitors, pid)
@@ -74,16 +74,16 @@ defmodule Automata.AutomatonServer do
     spec = {Automaton.NodeSupervisor, [[self(), mfa, name]]}
     {:ok, node_sup} = Supervisor.start_child(automaton_sup, spec)
 
-    # workers = prepopulate(size, worker_sup)
-    workers = new_automaton(node_sup, mfa, name)
-    {:noreply, %{state | node_sup: node_sup, workers: workers}}
+    # automaton = prepopulate(size, automaton_sup)
+    automaton = new_automaton(node_sup, mfa, name)
+    {:noreply, %{state | node_sup: node_sup, automaton: [automaton]}}
   end
 
-  def handle_info({:DOWN, ref, _, _, _}, state = %{monitors: monitors, workers: workers}) do
+  def handle_info({:DOWN, ref, _, _, _}, state = %{monitors: monitors, automaton: automaton}) do
     case :ets.match(monitors, {:"$1", ref}) do
       [[pid]] ->
         true = :ets.delete(monitors, pid)
-        new_state = %{state | workers: [pid | workers]}
+        new_state = %{state | automaton: [pid | automaton]}
         {:noreply, new_state}
 
       [[]] ->
@@ -97,24 +97,30 @@ defmodule Automata.AutomatonServer do
 
   def handle_info(
         {:EXIT, pid, _reason},
-        state = %{monitors: monitors, workers: workers, node_sup: node_sup, mfa: mfa, name: name}
+        state = %{
+          monitors: monitors,
+          automaton: automaton,
+          node_sup: node_sup,
+          mfa: mfa,
+          name: name
+        }
       ) do
     case :ets.lookup(monitors, pid) do
       [{pid, ref}] ->
         true = Process.demonitor(ref)
         true = :ets.delete(monitors, pid)
-        new_state = handle_worker_exit(pid, state)
+        new_state = handle_automaton_exit(pid, state)
         {:noreply, new_state}
 
       [] ->
         # NOTE: Worker crashed, no monitor
-        case Enum.member?(workers, pid) do
+        case Enum.member?(automaton, pid) do
           true ->
-            remaining_workers = workers |> Enum.reject(fn p -> p == pid end)
+            remaining_automaton = automaton |> Enum.reject(fn p -> p == pid end)
 
             new_state = %{
               state
-              | workers: [new_automaton(node_sup, mfa, name) | remaining_workers]
+              | automaton: [new_automaton(node_sup, mfa, name) | remaining_automaton]
             }
 
             {:noreply, new_state}
@@ -146,21 +152,21 @@ defmodule Automata.AutomatonServer do
   #   prepopulate(size, sup, [])
   # end
   #
-  # defp prepopulate(size, _sup, workers) when size < 1 do
-  #   workers
+  # defp prepopulate(size, _sup, automaton) when size < 1 do
+  #   automaton
   # end
   #
-  # defp prepopulate(size, sup, workers) do
-  #   prepopulate(size - 1, sup, [new_automaton(sup) | workers])
+  # defp prepopulate(size, sup, automaton) do
+  #   prepopulate(size - 1, sup, [new_automaton(sup) | automaton])
   # end
 
   defp new_automaton(node_sup, {m, _f, a} = mfa, name) do
-    # {:ok, worker} = DynamicSupervisor.start_child(node_sup, {m, a})
+    # {:ok, automaton} = DynamicSupervisor.start_child(node_sup, {m, a})
     spec = {m, [[node_sup, mfa, m]]}
     IO.inspect(spec)
-    {:ok, worker} = DynamicSupervisor.start_child(node_sup, spec)
-    true = Process.link(worker)
-    worker
+    {:ok, automaton} = DynamicSupervisor.start_child(node_sup, spec)
+    true = Process.link(automaton)
+    automaton
   end
 
   # NOTE: We use this when we have to queue up the consumer
@@ -170,15 +176,15 @@ defmodule Automata.AutomatonServer do
   #   {pid, ref}
   # end
 
-  defp dismiss_worker(sup, pid) do
+  defp dismiss_automaton(sup, pid) do
     true = Process.unlink(pid)
     DynamicSupervisor.terminate_child(sup, pid)
   end
 
-  defp handle_worker_exit(pid, state) do
+  defp handle_automaton_exit(pid, state) do
     %{
       node_sup: node_sup,
-      workers: workers,
+      automaton: automaton,
       monitors: monitors
     } = state
 

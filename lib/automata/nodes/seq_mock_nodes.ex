@@ -24,12 +24,12 @@ defmodule SeqComposite1 do
     tick_freq: 5_000,
     children: [SeqAction2, SeqAction3]
 
-  @impl Behavior
-  def update(state) do
-    new_state = Map.put(state, :a_status, :bh_running)
-
-    {:reply, state, new_state}
-  end
+  # @impl Behavior
+  # def update(state) do
+  #   new_state = Map.put(state, :a_status, :bh_running)
+  #
+  #   {:reply, state, new_state}
+  # end
 
   # def status do
   #   case :rand.uniform(3) do
