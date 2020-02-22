@@ -32,14 +32,13 @@ defmodule Automaton.Action do
 
     node_type =
       quote do
-        # TODO: probably handle state somewhere else? GenServer linked to Node?
         defmodule State do
-          # bh_fresh is for when status has not been initialized
-          # yet or has been reset
+          # bh_fresh is for when status has not been
+          # initialized yet or has been reset
           defstruct a_status: :bh_fresh,
                     # control is the parent, nil when fresh
                     control: nil,
-                    a_children: unquote(user_opts[:children]) || nil,
+                    children: nil,
                     a_current: nil,
                     tick_freq: unquote(user_opts[:tick_freq]) || 0
         end
@@ -64,40 +63,6 @@ defmodule Automaton.Action do
 
     control =
       quote do
-        # should tick each subtree at a frequency corresponding to subtrees tick_freq
-        # each subtree of the user-defined root node will be ticked recursively
-        # every update (at rate tick_freq) as we update the tree until we find
-        # the leaf node that is currently running (will be an action).
-        def tick(state) do
-          IO.inspect(["TICK: #{state.tick_freq}", state.a_children])
-          if state.a_status != :bh_running, do: on_init(state)
-
-          {:reply, state, new_state} = update(state)
-          IO.inspect(["Child state after update", state, new_state])
-
-          if new_state.a_status != :bh_running do
-            on_terminate(new_state)
-          else
-            # TODO: needs to be per control node
-            schedule_next(new_state.tick_freq)
-          end
-
-          {:reply, state, new_state}
-        end
-
-        def schedule_next(freq), do: Process.send_after(self(), :scheduled_tick, freq)
-
-        @impl GenServer
-        def handle_call(:tick, _from, state) do
-          {:reply, state, new_state} = tick(state)
-        end
-
-        @impl GenServer
-        def handle_info(:scheduled_tick, state) do
-          {:reply, state, new_state} = tick(state)
-          {:noreply, new_state}
-        end
-
         @impl Behavior
         def on_init(state) do
           if state.a_status == :bh_success do
@@ -140,16 +105,6 @@ defmodule Automaton.Action do
             type: :worker
           }
         end
-
-        # def child_spec([[node_sup, {m, _f, a}, name]] = args) do
-        #   %{
-        #     id: to_string(name) <> "Server",
-        #     start: {__MODULE__, :start_link, args},
-        #     shutdown: 10000,
-        #     restart: :temporary,
-        #     type: :worker
-        #   }
-        # end
 
         # Defoverridable makes the given functions in the current module overridable
         # defoverridable update: 1, on_init: 1, on_terminate: 1

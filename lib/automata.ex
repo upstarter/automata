@@ -3,14 +3,16 @@ defmodule Automata do
 
   """
   use Application
-  alias Automata.Automaton
 
   def start(_type, _args) do
     # TODO: recursively autoload all the user-defined nodes from the nodes/ directory tree
-    # to build this/a data structure to spawn the automata.
+    # to build the data structure of root nodes needed to spawn the automata.
+
+    # USER DEFINED BT ROOT(CompositeServer) NODES (AUTOMATA — each being an AUTOMATON)
+    # these are started specifically in `lib/automaton_server.ex`
     nodes_config = [
-      [name: "Automaton1", mfa: {MockSequence1, :start_link, []}],
-      [name: "Automaton2", mfa: {MockSelector1, :start_link, []}]
+      [name: "Automaton1", mfa: {MockSequence1, :start_link, []}]
+      # [name: "Automaton2", mfa: {MockSelector1, :start_link, []}]
     ]
 
     start_nodes(nodes_config)

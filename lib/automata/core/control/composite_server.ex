@@ -10,7 +10,6 @@ defmodule Automaton.CompositeServer do
   left-to-right manner. In other words, it performs a depth-first traversal.
   """
   alias Automaton.CompositeServer
-  alias Automaton.CompositeSupervisor
   alias Automaton.Composite.{Sequence, Selector}
 
   # a composite is just an array of behaviors
@@ -19,7 +18,7 @@ defmodule Automaton.CompositeServer do
   @callback clear_children :: {:ok, term} | {:error, String.t()}
   @callback terminal_status() :: atom
 
-  @types [:sequence, :selector]
+  @types [:sequence, :selector, :parallel, :priority]
   def types, do: @types
 
   defmacro __using__(opts) do
@@ -46,7 +45,7 @@ defmodule Automaton.CompositeServer do
           defstruct c_composite_sup: nil,
                     c_node_sup: nil,
                     c_monitors: nil,
-                    c_children: unquote(user_opts[:children]) || nil,
+                    children: unquote(user_opts[:children]),
                     c_status: :bh_fresh,
                     # control is the parent, nil when fresh
                     c_control: nil,
@@ -68,7 +67,7 @@ defmodule Automaton.CompositeServer do
         # #######################
         # # GenServer Callbacks #
         # #######################
-        # TODO: Move all this out or make this the CompositeServer
+        @impl true
         def init([node_sup, {m, _, _} = mfa, state, name]) do
           Process.flag(:trap_exit, true)
           monitors = :ets.new(:monitors, [:private])
@@ -83,7 +82,7 @@ defmodule Automaton.CompositeServer do
           send(self(), :start_node_supervisor)
 
           IO.inspect([
-            'CompositeServer',
+            "[INIT] CompositeServer",
             name,
             self(),
             node_sup,
@@ -98,13 +97,20 @@ defmodule Automaton.CompositeServer do
               :start_node_supervisor,
               state = %{c_node_sup: node_sup, c_mfa: mfa, c_name: name}
             ) do
+          IO.inspect(
+            log: "[POST_INIT PRE]",
+            self: Process.info(self())[:registered_name],
+            node_sup: Process.info(node_sup)[:registered_name]
+          )
+
           spec = {Automaton.CompositeSupervisor, [[self(), mfa, name]]}
           {:ok, composite_sup} = DynamicSupervisor.start_child(node_sup, spec)
 
           IO.inspect(
-            log: 'Starting Children',
+            log: "[POST_INIT PRE] Starting Children",
             self: Process.info(self())[:registered_name],
             node_sup: Process.info(node_sup)[:registered_name],
+            comp_sup: Process.info(composite_sup)[:registered_name],
             spec: spec
           )
 
@@ -116,60 +122,94 @@ defmodule Automaton.CompositeServer do
         def handle_info(
               :start_children,
               state = %{
-                c_children: [current | remaining],
+                children: [current | remaining],
                 c_node_sup: node_sup,
                 c_mfa: mfa,
                 c_name: name
               }
             ) do
           IO.inspect(
-            log: 'Start CompositeSupervisor',
+            log: "Start Children",
             current: current,
-            children: state.c_children,
+            children: state.children,
             node_sup: Process.info(node_sup)[:registered_name]
           )
 
           start_children(state)
+
           {:noreply, state}
         end
 
-        def start_children(%{c_children: [current | remaining], c_mfa: mfa, c_name: name} = state) do
-          node =
-            start_node(
-              :"#{name}CompositeSupervisor",
-              {current, :start_link, [[self(), mfa, current]]}
-            )
-
-          start_children(%{state | c_children: remaining})
-
+        def start_children(
+              %{
+                children: [current | remaining],
+                c_mfa: {m, f, a} = mfa,
+                c_name: name,
+                c_composite_sup: composite_sup
+              } = state
+            ) do
           IO.inspect(
-            log: 'CompositeSupervisor, starting remaining children...',
+            log:
+              "#{Process.info(composite_sup)[:registered_name]} starting child #{
+                IO.inspect(current)
+              }",
             current: current,
             mfa: mfa,
             name: name,
-            self: Process.info(self())[:registered_name],
-            children: state.c_children,
+            self: "#{Process.info(self())[:registered_name]}",
+            children: state.children,
+            remaining: remaining
+          )
+
+          node =
+            start_node(
+              :"#{name}CompositeSupervisor",
+              {current, :start_link, [[composite_sup, {current, :start_link, a}, :"#{current}"]]}
+            )
+
+          start_children(%{state | children: remaining})
+
+          IO.inspect(
+            log: "#{Process.info(composite_sup)[:registered_name]} started child #{current}.",
+            current: current,
+            mfa: mfa,
+            name: name,
+            self: "#{Process.info(self())[:registered_name]}",
             remaining: remaining
           )
 
           {:reply, {:ok, node}, state}
         end
 
-        def start_children(%{c_children: []} = state) do
+        def start_children(%{children: []} = state) do
           IO.inspect(
-            log: 'End CompositeSupervisor, starting remaining children...',
-            children: state.c_children
+            log: "End CompositeSupervisor",
+            children: state.children
           )
 
-          {:reply, :ok, :ok}
+          {:reply, :ok, state}
         end
 
         # TODO: handle composite OR component function pattern matching logic
         # type declaration flag passed in state for each composite, component(action, decorator, etc..)?
         # or `m.composite?` and/or `m.component?` static flag to access on each module?
         defp start_node(composite_sup, {m, _f, a} = mfa) do
-          spec = {m, a}
-          {:ok, composite} = DynamicSupervisor.start_child(composite_sup, spec)
+          IO.inspect(
+            log: "Starting child #{m}}",
+            comp_sup: composite_sup,
+            mfa: mfa
+          )
+
+          {:ok, composite} = DynamicSupervisor.start_child(composite_sup, {m, a})
+
+          # info = Process.info(m)[:registered_name]
+
+          IO.inspect(
+            log: "Started child...",
+            comp: Process.info(composite)[:registered_name],
+            mfa: {m, a}
+          )
+
           true = Process.link(composite)
           composite
         end
@@ -177,7 +217,7 @@ defmodule Automaton.CompositeServer do
 
     bh_tree_control =
       quote bind_quoted: [user_opts: opts[:user_opts]] do
-        def process_children(%{a_children: [current | remaining]} = state) do
+        def process_children(%{children: [current | remaining]} = state) do
           {:reply, state, new_state} = current.tick(state)
 
           status = new_state.a_status
@@ -185,11 +225,11 @@ defmodule Automaton.CompositeServer do
           if status != terminal_status() do
             new_state
           else
-            process_children(%{state | a_children: remaining})
+            process_children(%{state | children: remaining})
           end
         end
 
-        def process_children(%{a_children: []} = state) do
+        def process_children(%{children: []} = state) do
           %{state | a_status: terminal_status()}
         end
 
@@ -215,12 +255,12 @@ defmodule Automaton.CompositeServer do
       quote do
         def handle_info(
               {:DOWN, ref, _, _, _},
-              state = %{c_monitors: monitors, c_children: children}
+              state = %{c_monitors: monitors, children: children}
             ) do
           case :ets.match(monitors, {:"$1", ref}) do
             [[pid]] ->
               true = :ets.delete(monitors, pid)
-              new_state = %{state | c_children: [pid | children]}
+              new_state = %{state | children: [pid | children]}
               {:noreply, new_state}
 
             [[]] ->
@@ -246,7 +286,7 @@ defmodule Automaton.CompositeServer do
             [{pid, ref}] ->
               true = Process.demonitor(ref)
               true = :ets.delete(monitors, pid)
-              new_state = handle_worker_exit(pid, state)
+              new_state = handle_child_exit(pid, state)
               {:noreply, new_state}
 
             [] ->
@@ -257,7 +297,7 @@ defmodule Automaton.CompositeServer do
 
                   new_state = %{
                     state
-                    | c_children: [
+                    | children: [
                         start_node(node_sup, {m, :start_link, [[self(), mfa, name]]})
                         | remaining_children
                       ]
@@ -275,6 +315,7 @@ defmodule Automaton.CompositeServer do
           {:noreply, state}
         end
 
+        @impl true
         def terminate(_reason, _state) do
           :ok
         end
@@ -287,10 +328,10 @@ defmodule Automaton.CompositeServer do
           :"#{tree_name}Server"
         end
 
-        defp handle_worker_exit(pid, state) do
+        defp handle_child_exit(pid, state) do
           %{
             c_node_sup: node_sup,
-            c_children: children,
+            children: children,
             monitors: monitors
           } = state
 

@@ -57,7 +57,7 @@ environments with no central point of failure. This project is Open Source.
 
 ### Performance Features:
 - Concurrency
-  - News flash! The world is concurrent. For example: we see, hear, and move at the same time. Concurrency was a core factor in the design of the Elixir language and is dead simple to implement.
+  - The world is concurrent. For example: we see, hear, and move at the same time. Many global financial instruments are fluctuating at this instance. Concurrency was a core factor in the design of the Elixir language and is simple to implement.
 - High availability
   - Elixir is capable of 99.9999999% uptime (31 milliseconds/year of downtime). The main point of the Elixir model is an application that can be expected to run forever, as stated by the inventor — Joe Armstrong (RIP). Talk about unstoppable software!
 - Fault Tolerance
@@ -79,6 +79,7 @@ environments with no central point of failure. This project is Open Source.
 - Multi-Agent Reinforcement Learning
 - Mixture of Experts Deep Learning Control Systems (python inter-op with [erlport](http://erlport.org/))
 - Blockchain Smart Contract Systems
+- A mega-constellation of satellites
 - Analytics Systems
 - Smart Home / IOT Systems
 - High-Speed Rail Systems (Japan has an ADS railway that learns)
@@ -162,13 +163,17 @@ In Progress. Property Testing? Permutation Testing? Join the conversation on [Th
 ![automata supervision tree diagram](sup_tree.png)
 
 There are 4 Layers in the supervision tree below the Application
-supervisor. The terminal nodes are the `AutomatonNodeSupervisor`
-which supervise the user-defined behavior tree nodes with the help of their
-"twin brains" – the `CompositeServer` and the `CompositeSupervisor`. The `CompositeServer` is the mastermind of the user-defined BT's, starting, stopping and generating and handling all OTP callback messages.
+supervisor.
+
+The terminal system control supervisor is the `AutomatonNodeSupervisor`
+which supervises the user-defined behavior tree nodes with the help of its children —
+the "brains and braun", which are the `CompositeServer` and the `CompositeSupervisor`. The `CompositeServer` is the mastermind of the user-defined BT's, starting, stopping the user-defined nodes as children of `CompositeSupervisor` and generating and handling all resulting OTP callbacks and other messages.
+
+When the system starts, the root nodes configured in `lib/automata.ex` each become a `GenServer` behind the scenes. These nodes start and add children to `CompositeSupervisor`. The children are started as either OTP `DyanmicSupervisor`'s (for composite nodes, each with its own sup/server combo) or `GenServer`'s (for action nodes).
 
  The `CompositeSupervisor` handles fault tolerance of user-defined BT nodes.
 
-. It starts the user defined
+It starts the user defined
 nodes as children of `AutomatonNodeSupervisor`, which is kept lean for fault
 tolerance purposes.
 
