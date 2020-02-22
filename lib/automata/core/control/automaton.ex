@@ -62,13 +62,13 @@ defmodule Automaton do
         # every update (at rate tick_freq) as we update the tree until we find
         # the leaf node that is currently running (will be an action).
         def tick(state) do
-          IO.inspect(["TICK: #{state.tick_freq}", state])
+          IO.inspect(["[AUTOMATON][TICK] freq: #{state.tick_freq}", state])
           if state.status != :bh_running, do: on_init(state)
 
-          IO.inspect(["Child state before update", state])
+          IO.inspect(["[AUTOMATON][TICK] updating node", state])
 
           {:reply, state, new_state} = update(state)
-          IO.inspect(["Child state after update", state, new_state])
+          IO.inspect(["[AUTOMATON][TICK] node updated", state, new_state])
 
           if new_state.status != :bh_running do
             on_terminate(new_state)
@@ -81,7 +81,10 @@ defmodule Automaton do
         end
 
         def schedule_next(freq) do
-          IO.inspect(log: "Scheduling next tick..", self: Process.info(self())[:registered_name])
+          IO.inspect(
+            log: "[AUTOMATON] SCHEDULING NEXT TICK",
+            self: Process.info(self())[:registered_name]
+          )
 
           Process.send_after(self(), :scheduled_tick, freq)
         end

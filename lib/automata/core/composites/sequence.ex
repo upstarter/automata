@@ -54,7 +54,7 @@ defmodule Automaton.Composite.Sequence do
 
           newer_state = process_children(state)
 
-          IO.inspect(["Children Processed in SEQ update", state])
+          IO.inspect(["[SEQ update] SEQUENCE UPDATED", state])
 
           # return status, overidden by user
           {:reply, state, newer_state}

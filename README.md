@@ -79,7 +79,9 @@ environments with no central point of failure. This project is Open Source.
 - Multi-Agent Reinforcement Learning
 - Mixture of Experts Deep Learning Control Systems (python inter-op with [erlport](http://erlport.org/))
 - Blockchain Smart Contract Systems
-- A mega-constellation of satellites
+- A Mega-constellation of satellites
+- 3D Printing and Factory Automation
+- Massively Inconsistent Robust Ontologies (MIRO)
 - Analytics Systems
 - Smart Home / IOT Systems
 - High-Speed Rail Systems (Japan has an ADS railway that learns)
@@ -107,8 +109,9 @@ A good place to start is in the [project kanban](https://github.com/upstarter/au
 
 Please join the [slack channel](https://join.slack.com/t/automata-org/shared_invite/enQtOTI5OTUyNTM5MDA5LTliZTM2NmI3OWI1YmM1ZjZjYzQ5OTFmM2JiNDFiMTE5OWJkYTIzZGI5YTVkZDM1YzdjMDQ3NDI2NGQ0ZmQ1Y2I) and/or reach out to [ericsteen1@gmail.com](mailto:ericsteen1@gmail.com) if interested!
 
-##### Open Items for Discussion
-1. Blackboard / Utility Decisioning Systems. Make optional and/or configurable? i.e.. allow users to set configuration for whether or not there is a blackboard / Utility Decisioning System for their BT's, and if so, allow multiple types (basic, etc..)
+##### Open Items / TODO
+1. Define protocols / data flows between control processes with a [contract checker](https://www.youtube.com/watch?v=rQIE22e0cW8) between all (cc is also an anti-corruption layer? A.K.A. embedded schema).
+1. Blackboard Knowledge & Utility AI Decisioning Systems.
 
 ### Current Status
 The project is currently in the Research & Prototype Development phase. We are

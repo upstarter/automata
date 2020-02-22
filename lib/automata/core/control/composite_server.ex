@@ -42,16 +42,16 @@ defmodule Automaton.CompositeServer do
         defmodule State do
           # bh_fresh is for when status has not been initialized
           # yet or has been reset
-          defstruct composite_sup: nil,
-                    node_sup: nil,
-                    c_monitors: nil,
+          defstruct status: :bh_fresh,
                     children: unquote(user_opts[:children]),
-                    c_workers: [],
-                    status: :bh_fresh,
+                    composite_sup: nil,
+                    node_sup: nil,
                     # control is the parent, nil when fresh
-                    c_control: nil,
-                    c_current: nil,
+                    control: nil,
+                    current: nil,
                     tick_freq: unquote(user_opts[:tick_freq]) || 0,
+                    c_workers: [],
+                    c_monitors: nil,
                     c_mfa: nil,
                     c_name: __MODULE__
         end
@@ -81,35 +81,37 @@ defmodule Automaton.CompositeServer do
               c_name: name
           }
 
-          send(self(), :start_node_supervisor)
+          send(self(), :start_composite_supervisor)
 
           IO.inspect([
-            "[INIT] CompositeServer",
+            "[C_SERVER][init] set data flow, started node_sup",
             name,
             self(),
             node_sup,
             mfa,
-            state
+            state,
+            new_state
           ])
 
           {:ok, new_state}
         end
 
         def handle_info(
-              :start_node_supervisor,
+              :start_composite_supervisor,
               state = %{node_sup: node_sup, c_mfa: mfa, c_name: name}
             ) do
           IO.inspect(
-            log: "[POST_INIT PRE]",
+            log: "[C_SERVER][start_composite_supervisor] pre-start composite_sup",
             self: Process.info(self())[:registered_name],
             node_sup: Process.info(node_sup)[:registered_name]
           )
 
           spec = {Automaton.CompositeSupervisor, [[self(), mfa, name]]}
           {:ok, composite_sup} = DynamicSupervisor.start_child(node_sup, spec)
+          new_state = %{state | composite_sup: composite_sup}
 
           IO.inspect(
-            log: "[POST_INIT PRE] Starting Children",
+            log: "[C_SERVER][POST_INIT PRE] started composite_sup, starting children...",
             self: Process.info(self())[:registered_name],
             node_sup: Process.info(node_sup)[:registered_name],
             comp_sup: Process.info(composite_sup)[:registered_name],
@@ -118,23 +120,21 @@ defmodule Automaton.CompositeServer do
 
           send(self(), :start_children)
 
-          {:noreply, %{state | composite_sup: composite_sup}}
+          {:noreply, new_state}
         end
 
         def handle_info(
               :start_children,
               state = %{
                 children: [current | remaining],
-                node_sup: node_sup,
                 c_mfa: mfa,
                 c_name: name
               }
             ) do
           IO.inspect(
-            log: "Start Children",
+            log: "[C_SERVER] Start Children",
             current: current,
-            children: state.children,
-            node_sup: Process.info(node_sup)[:registered_name]
+            children: state.children
           )
 
           {:reply, :ok, new_state} = start_children(state)
@@ -152,7 +152,7 @@ defmodule Automaton.CompositeServer do
             ) do
           IO.inspect(
             log:
-              "#{Process.info(composite_sup)[:registered_name]} starting child #{
+              "[C_SERVER][start_children] #{Process.info(composite_sup)[:registered_name]} starting child #{
                 IO.inspect(current)
               }",
             current: current,
@@ -176,7 +176,10 @@ defmodule Automaton.CompositeServer do
           {:reply, :ok, new_state} = start_children(%{new_state | children: remaining})
 
           IO.inspect(
-            log: "#{Process.info(composite_sup)[:registered_name]} started child #{current}.",
+            log:
+              "[C_SERVER] #{Process.info(composite_sup)[:registered_name]} started child #{
+                current
+              }.",
             current: current,
             mfa: mfa,
             name: name,
@@ -189,7 +192,7 @@ defmodule Automaton.CompositeServer do
 
         defp start_node(composite_sup, {m, _f, a} = mfa) do
           IO.inspect(
-            log: "Starting child #{m}}",
+            log: "[C_SERVER] Starting child #{m}}",
             comp_sup: composite_sup,
             mfa: mfa
           )
@@ -197,7 +200,7 @@ defmodule Automaton.CompositeServer do
           {:ok, composite} = DynamicSupervisor.start_child(composite_sup, {m, a})
 
           IO.inspect(
-            log: "Started child...",
+            log: "[C_SERVER] Started child...",
             comp: Process.info(composite)[:registered_name],
             mfa: {m, a}
           )
@@ -208,7 +211,7 @@ defmodule Automaton.CompositeServer do
 
         def start_children(%{children: []} = state) do
           IO.inspect(
-            log: "End CompositeSupervisor",
+            log: "[C_SERVER] End CompositeSupervisor",
             children: state.children,
             state: state
           )
@@ -220,9 +223,9 @@ defmodule Automaton.CompositeServer do
     bh_tree_control =
       quote bind_quoted: [user_opts: opts[:user_opts]] do
         def process_children(%{children: [current | remaining]} = state) do
-          IO.inspect(log: "Processing children..", curr: state)
+          IO.inspect(log: "[C_SERVER] Processing children..", curr: state)
           {:reply, state, new_state} = GenServer.call(current, :tick)
-          IO.inspect(log: "Ticked #{current}", curr: state)
+          IO.inspect(log: "[C_SERVER] Ticked #{current}", curr: state)
 
           status = new_state.status
 

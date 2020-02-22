@@ -11,7 +11,7 @@ defmodule Automaton.ComponentServer do
 
   # a component is just a behavior
 
-  @types [:action]
+  @types [:action, :decorator]
   def types, do: @types
 
   defmacro __using__(opts) do
