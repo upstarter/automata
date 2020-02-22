@@ -42,15 +42,16 @@ defmodule Automaton.CompositeServer do
         defmodule State do
           # bh_fresh is for when status has not been initialized
           # yet or has been reset
-          defstruct c_composite_sup: nil,
-                    c_node_sup: nil,
+          defstruct composite_sup: nil,
+                    node_sup: nil,
                     c_monitors: nil,
                     children: unquote(user_opts[:children]),
-                    c_status: :bh_fresh,
+                    c_workers: [],
+                    status: :bh_fresh,
                     # control is the parent, nil when fresh
                     c_control: nil,
                     c_current: nil,
-                    c_tick_freq: unquote(user_opts[:tick_freq]) || 0,
+                    tick_freq: unquote(user_opts[:tick_freq]) || 0,
                     c_mfa: nil,
                     c_name: __MODULE__
         end
@@ -72,11 +73,12 @@ defmodule Automaton.CompositeServer do
           Process.flag(:trap_exit, true)
           monitors = :ets.new(:monitors, [:private])
 
-          state = %State{
-            c_node_sup: node_sup,
-            c_mfa: mfa,
-            c_monitors: monitors,
-            c_name: name
+          new_state = %{
+            state
+            | node_sup: node_sup,
+              c_mfa: mfa,
+              c_monitors: monitors,
+              c_name: name
           }
 
           send(self(), :start_node_supervisor)
@@ -90,12 +92,12 @@ defmodule Automaton.CompositeServer do
             state
           ])
 
-          {:ok, state}
+          {:ok, new_state}
         end
 
         def handle_info(
               :start_node_supervisor,
-              state = %{c_node_sup: node_sup, c_mfa: mfa, c_name: name}
+              state = %{node_sup: node_sup, c_mfa: mfa, c_name: name}
             ) do
           IO.inspect(
             log: "[POST_INIT PRE]",
@@ -116,14 +118,14 @@ defmodule Automaton.CompositeServer do
 
           send(self(), :start_children)
 
-          {:noreply, %{state | c_composite_sup: composite_sup}}
+          {:noreply, %{state | composite_sup: composite_sup}}
         end
 
         def handle_info(
               :start_children,
               state = %{
                 children: [current | remaining],
-                c_node_sup: node_sup,
+                node_sup: node_sup,
                 c_mfa: mfa,
                 c_name: name
               }
@@ -135,9 +137,9 @@ defmodule Automaton.CompositeServer do
             node_sup: Process.info(node_sup)[:registered_name]
           )
 
-          start_children(state)
+          {:reply, :ok, new_state} = start_children(state)
 
-          {:noreply, state}
+          {:noreply, new_state}
         end
 
         def start_children(
@@ -145,7 +147,7 @@ defmodule Automaton.CompositeServer do
                 children: [current | remaining],
                 c_mfa: {m, f, a} = mfa,
                 c_name: name,
-                c_composite_sup: composite_sup
+                composite_sup: composite_sup
               } = state
             ) do
           IO.inspect(
@@ -161,13 +163,17 @@ defmodule Automaton.CompositeServer do
             remaining: remaining
           )
 
+          # recursing tree, starts current node
           node =
             start_node(
               :"#{name}CompositeSupervisor",
               {current, :start_link, [[composite_sup, {current, :start_link, a}, :"#{current}"]]}
             )
 
-          start_children(%{state | children: remaining})
+          # TODO: I know appending is slow, is there a better way, use a set
+          # for now until allowing duplicates?
+          new_state = %{state | c_workers: state.c_workers ++ [current]}
+          {:reply, :ok, new_state} = start_children(%{new_state | children: remaining})
 
           IO.inspect(
             log: "#{Process.info(composite_sup)[:registered_name]} started child #{current}.",
@@ -178,16 +184,7 @@ defmodule Automaton.CompositeServer do
             remaining: remaining
           )
 
-          {:reply, {:ok, node}, state}
-        end
-
-        def start_children(%{children: []} = state) do
-          IO.inspect(
-            log: "End CompositeSupervisor",
-            children: state.children
-          )
-
-          {:reply, :ok, state}
+          {:reply, :ok, new_state}
         end
 
         defp start_node(composite_sup, {m, _f, a} = mfa) do
@@ -208,15 +205,26 @@ defmodule Automaton.CompositeServer do
           true = Process.link(composite)
           composite
         end
+
+        def start_children(%{children: []} = state) do
+          IO.inspect(
+            log: "End CompositeSupervisor",
+            children: state.children,
+            state: state
+          )
+
+          {:reply, :ok, state}
+        end
       end
 
     bh_tree_control =
       quote bind_quoted: [user_opts: opts[:user_opts]] do
         def process_children(%{children: [current | remaining]} = state) do
-          {:reply, state, new_state} = current.tick(state)
+          IO.inspect(log: "Processing children..", curr: state)
+          {:reply, state, new_state} = GenServer.call(current, :tick)
+          IO.inspect(log: "Ticked #{current}", curr: state)
 
-          status = new_state.a_status
-          new_state = %{state | a_status: status}
+          status = new_state.status
 
           if status != terminal_status() do
             new_state
@@ -225,18 +233,19 @@ defmodule Automaton.CompositeServer do
           end
         end
 
-        # handle selector termination: kill whole subtree
-        def process_children(%{a_status: :bh_failed} = state) do
-          state
-        end
-
-        # handle sequence termination: after retries kill subtree
-        def process_children(%{a_status: :bh_success} = state) do
-          state
-        end
+        #
+        # # handle selector termination: kill whole subtree
+        # def process_children(%{status: :bh_failed} = state) do
+        #   state
+        # end
+        #
+        # # handle sequence termination: after retries kill subtree
+        # def process_children(%{status: :bh_success} = state) do
+        #   state
+        # end
 
         def process_children(%{children: []} = state) do
-          %{state | a_status: terminal_status()}
+          state
         end
 
         # notifies listeners if this task status is not fresh
@@ -283,7 +292,7 @@ defmodule Automaton.CompositeServer do
               state = %{
                 c_monitors: monitors,
                 children: children,
-                c_node_sup: node_sup,
+                node_sup: node_sup,
                 c_mfa: {m, f, a} = mfa,
                 c_name: name
               }
@@ -336,7 +345,7 @@ defmodule Automaton.CompositeServer do
 
         defp handle_child_exit(pid, state) do
           %{
-            c_node_sup: node_sup,
+            node_sup: node_sup,
             children: children,
             monitors: monitors
           } = state

@@ -35,11 +35,11 @@ defmodule Automaton.Action do
         defmodule State do
           # bh_fresh is for when status has not been
           # initialized yet or has been reset
-          defstruct a_status: :bh_fresh,
+          defstruct status: :bh_fresh,
                     # control is the parent, nil when fresh
                     control: nil,
                     children: nil,
-                    a_current: nil,
+                    current: nil,
                     tick_freq: unquote(user_opts[:tick_freq]) || 0
         end
 
@@ -63,14 +63,21 @@ defmodule Automaton.Action do
 
     control =
       quote do
+        @impl Behaviour
+        def update(state) do
+          IO.inspect(["Action Processed in Action#update", state])
+
+          {:reply, state, state}
+        end
+
         @impl Behavior
         def on_init(state) do
-          if state.a_status == :bh_success do
-            IO.inspect(["SEQUENCE SUCCESS!", state.a_status],
+          if state.status == :bh_success do
+            IO.inspect(["SEQUENCE SUCCESS!", state.status],
               label: __MODULE__
             )
           else
-            IO.inspect(["SEQUENCE STATUS", state.a_status],
+            IO.inspect(["SEQUENCE STATUS", state.status],
               label: __MODULE__
             )
           end
@@ -80,7 +87,7 @@ defmodule Automaton.Action do
 
         @impl Behavior
         def on_terminate(state) do
-          status = state.a_status
+          status = state.status
 
           case status do
             :bh_running -> IO.inspect("TERMINATED SEQUENCE RUNNING")

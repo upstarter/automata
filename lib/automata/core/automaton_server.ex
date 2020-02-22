@@ -76,7 +76,7 @@ defmodule Automata.AutomatonServer do
 
     # automaton = prepopulate(size, automaton_sup)
     automaton = new_automaton(node_sup, mfa, name)
-    {:noreply, %{state | node_sup: node_sup, automaton: [automaton]}}
+    {:noreply, %{state | node_sup: node_sup, automaton: automaton}}
   end
 
   def handle_info({:DOWN, ref, _, _, _}, state = %{monitors: monitors, automaton: automaton}) do

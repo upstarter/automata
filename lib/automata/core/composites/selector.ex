@@ -20,12 +20,12 @@ defmodule Automaton.Composite.Selector do
     quote do
       @impl Behavior
       def on_init(state) do
-        # if state.a_status == :bh_success do
-        #   IO.inspect(["SELECTOR SUCCESS!", state.a_status],
+        # if state.status == :bh_success do
+        #   IO.inspect(["SELECTOR SUCCESS!", state.status],
         #     label: __MODULE__
         #   )
         # else
-        #   IO.inspect(["SELECTOR STATUS", state.a_status],
+        #   IO.inspect(["SELECTOR STATUS", state.status],
         #     label: __MODULE__
         #   )
         # end
@@ -35,7 +35,7 @@ defmodule Automaton.Composite.Selector do
 
       @impl Behavior
       def on_terminate(state) do
-        status = state.a_status
+        status = state.status
 
         case status do
           :bh_running -> IO.inspect("TERMINATED SELECTOR RUNNING")
@@ -47,14 +47,14 @@ defmodule Automaton.Composite.Selector do
         {:ok, state}
       end
 
-      @impl Behavior
+      @impl Behaviour
       def update(state) do
-        new_state = process_children(state)
-
-        IO.inspect(["Children Processed in SEL update", new_state])
+        IO.puts("Pre SEL update")
+        # new_state = process_children(state)
+        IO.inspect(["Children Processed in SEL update", state])
 
         # return status, overidden by user
-        {:reply, state, new_state}
+        {:reply, state, state}
       end
 
       def terminal_status do

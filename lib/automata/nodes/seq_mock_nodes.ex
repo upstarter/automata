@@ -8,7 +8,7 @@ defmodule MockSequence1 do
     node_type: :sequence,
 
     # the frequency of updates for this node(tree), in milliseconds
-    tick_freq: 10_000,
+    tick_freq: 7_000,
 
     # not included for execution nodes
     # list of child control/execution nodes
@@ -21,12 +21,12 @@ end
 defmodule SeqComposite1 do
   use Automaton,
     node_type: :sequence,
-    tick_freq: 5_000,
+    tick_freq: 3_500,
     children: [SeqAction2, SeqAction3]
 
   # @impl Behavior
   # def update(state) do
-  #   new_state = Map.put(state, :a_status, :bh_running)
+  #   new_state = Map.put(state, :status, :bh_running)
   #
   #   {:reply, state, new_state}
   # end
@@ -44,12 +44,12 @@ defmodule SeqAction1 do
   use Automaton,
     node_type: :action
 
-  @impl Behavior
-  def update(state) do
-    new_state = Map.put(state, :a_status, :bh_running)
-
-    {:reply, state, new_state}
-  end
+  # @impl Behavior
+  # def update(state) do
+  #   new_state = Map.put(state, :status, :bh_running)
+  #
+  #   {:reply, state, new_state}
+  # end
 
   # def status do
   #   case :rand.uniform(3) do
@@ -64,12 +64,12 @@ defmodule SeqAction2 do
   use Automaton,
     node_type: :action
 
-  @impl Behavior
-  def update(state) do
-    new_state = Map.put(state, :a_status, :bh_failed)
-
-    {:reply, state, new_state}
-  end
+  # @impl Behavior
+  # def update(state) do
+  #   new_state = Map.put(state, :status, :bh_running)
+  #
+  #   {:reply, state, new_state}
+  # end
 
   # def status do
   #   case :rand.uniform(3) do
@@ -84,12 +84,12 @@ defmodule SeqAction3 do
   use Automaton,
     node_type: :action
 
-  @impl Behavior
-  def update(state) do
-    new_state = Map.put(state, :a_status, :bh_running)
-
-    {:reply, state, new_state}
-  end
+  # @impl Behavior
+  # def update(state) do
+  #   new_state = Map.put(state, :status, :bh_running)
+  #
+  #   {:reply, state, new_state}
+  # end
 
   # def status do
   #   case :rand.uniform(3) do
@@ -104,12 +104,12 @@ defmodule SeqAction4 do
   use Automaton,
     node_type: :action
 
-  @impl Behavior
-  def update(state) do
-    new_state = Map.put(state, :a_status, :bh_running)
-
-    {:reply, state, new_state}
-  end
+  # @impl Behavior
+  # def update(state) do
+  #   new_state = Map.put(state, :status, :bh_running)
+  #
+  #   {:reply, state, new_state}
+  # end
 
   # def status do
   #   case :rand.uniform(3) do

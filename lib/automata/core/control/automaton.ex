@@ -62,13 +62,15 @@ defmodule Automaton do
         # every update (at rate tick_freq) as we update the tree until we find
         # the leaf node that is currently running (will be an action).
         def tick(state) do
-          IO.inspect(["TICK: #{state.tick_freq}", state.children])
-          if state.a_status != :bh_running, do: on_init(state)
+          IO.inspect(["TICK: #{state.tick_freq}", state])
+          if state.status != :bh_running, do: on_init(state)
+
+          IO.inspect(["Child state before update", state])
 
           {:reply, state, new_state} = update(state)
           IO.inspect(["Child state after update", state, new_state])
 
-          if new_state.a_status != :bh_running do
+          if new_state.status != :bh_running do
             on_terminate(new_state)
           else
             # TODO: needs to be per control node
@@ -78,7 +80,11 @@ defmodule Automaton do
           {:reply, state, new_state}
         end
 
-        def schedule_next(freq), do: Process.send_after(self(), :scheduled_tick, freq)
+        def schedule_next(freq) do
+          IO.inspect(log: "Scheduling next tick..", self: Process.info(self())[:registered_name])
+
+          Process.send_after(self(), :scheduled_tick, freq)
+        end
 
         @impl GenServer
         def handle_call(:tick, _from, state) do
