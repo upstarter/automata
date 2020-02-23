@@ -14,21 +14,32 @@ defmodule MockSequence1 do
     # list of child control/execution nodes
     # these run in order for type :selector and :sequence nodes
     # and in parallel for type :parallel
-    # children: [SeqComposite1, SeqAction1]
-    children: [SeqComposite1, SeqAction1]
+    # children: [SeqComposite1, Seq1]
+    children: [SeqComposite1, Seq3, Seq4]
 end
 
 defmodule SeqComposite1 do
   use Automaton,
     node_type: :sequence,
     tick_freq: 3_500,
-    children: [SeqAction2, SeqAction3]
+    children: [Seq1, Seq2]
+
+  # def status do
+  #   case :rand.uniform(3) do
+  #     1 -> :bh_success
+  #     2 -> :bh_failure
+  #     3 -> :bh_running
+  #   end
+  # end
+end
+
+defmodule Seq1 do
+  use Automaton,
+    node_type: :action
 
   # @impl Behavior
   # def update(state) do
-  #   new_state = Map.put(state, :status, :bh_running)
-  #
-  #   {:reply, state, new_state}
+  #   :bh_running
   # end
 
   # def status do
@@ -40,15 +51,13 @@ defmodule SeqComposite1 do
   # end
 end
 
-defmodule SeqAction1 do
+defmodule Seq2 do
   use Automaton,
     node_type: :action
 
   # @impl Behavior
   # def update(state) do
-  #   new_state = Map.put(state, :status, :bh_running)
-  #
-  #   {:reply, state, new_state}
+  #   :bh_running
   # end
 
   # def status do
@@ -60,15 +69,13 @@ defmodule SeqAction1 do
   # end
 end
 
-defmodule SeqAction2 do
+defmodule Seq3 do
   use Automaton,
     node_type: :action
 
   # @impl Behavior
   # def update(state) do
-  #   new_state = Map.put(state, :status, :bh_running)
-  #
-  #   {:reply, state, new_state}
+  #   :bh_running
   # end
 
   # def status do
@@ -80,35 +87,13 @@ defmodule SeqAction2 do
   # end
 end
 
-defmodule SeqAction3 do
+defmodule Seq4 do
   use Automaton,
     node_type: :action
 
   # @impl Behavior
   # def update(state) do
-  #   new_state = Map.put(state, :status, :bh_running)
-  #
-  #   {:reply, state, new_state}
-  # end
-
-  # def status do
-  #   case :rand.uniform(3) do
-  #     1 -> :bh_success
-  #     2 -> :bh_failure
-  #     3 -> :bh_running
-  #   end
-  # end
-end
-
-defmodule SeqAction4 do
-  use Automaton,
-    node_type: :action
-
-  # @impl Behavior
-  # def update(state) do
-  #   new_state = Map.put(state, :status, :bh_running)
-  #
-  #   {:reply, state, new_state}
+  #   :bh_running
   # end
 
   # def status do

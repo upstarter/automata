@@ -11,22 +11,22 @@ defmodule Automaton.ComponentServer do
 
   # a component is just a behavior
 
-  @types [:action, :decorator]
+  @types [:action, :decorator, :condition]
   def types, do: @types
 
   defmacro __using__(opts) do
     user_opts = opts[:user_opts]
 
     a_types = ComponentServer.types()
-    nt = user_opts[:node_type]
+    node_type = user_opts[:node_type]
 
-    node_type =
-      if Enum.member?(a_types, nt) do
+    control =
+      if Enum.member?(a_types, node_type) do
         quote do
           use(Action, user_opts: unquote(user_opts))
         end
       end
 
-    [node_type]
+    [control]
   end
 end

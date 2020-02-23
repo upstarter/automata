@@ -12,10 +12,11 @@ defmodule Automaton.Behavior do
   alias Automaton.Utility, as: NodeUtility
 
   @callback on_init(term) :: {:ok, term, term} | {:error, String.t()}
-  @callback update(term) :: {:reply, term, term}
+  @callback update(term) :: atom
   @callback on_terminate(term) :: {:ok, term}
   @callback reset() :: atom
   @callback abort() :: {:ok, term}
+  @callback aborted?() :: bool
   @callback terminated?() :: bool
   @callback running?() :: bool
   @callback get_status() :: atom
@@ -45,29 +46,78 @@ defmodule Automaton.Behavior do
       @impl Behavior
       def on_terminate(new_state)
 
-      @impl Behavior
-      def get_status() do
-        {:ok, nil}
+      def set_status(pid, status) do
+        GenServer.call(pid, :do_status, status)
+      end
+
+      # Creates a new process and does a request to
+      # itself.
+      defp set_status(from, state, status) do
+        pid = self()
+
+        spawn_link(fn ->
+          result = GenServer.call(pid, :do_status, [state, status])
+          GenServer.reply(from, result)
+        end)
+      end
+
+      def handle_call(:do_status, _from, [state, status]) do
+        {:reply, :ok, %{state | status: status}}
+      end
+
+      def handle_call(:set_status, from, [state, status]) do
+        # Handles set_status and the reply to from.
+        set_status(from, state, status)
+        # Returns nothing to the client, but unblocks the
+        # server to get more requests.
+        {:noreply, state}
       end
 
       @impl Behavior
-      def running?() do
-        {:ok, nil}
+      def handle_call(:get_status, _from, state) do
+        {:reply, state.status, state}
       end
 
       @impl Behavior
-      def terminated?() do
-        {:ok, nil}
+      def handle_call(:set_running, _from, state) do
+        {:reply, :ok, %{state | status: :bh_running}}
       end
 
       @impl Behavior
-      def reset() do
-        {:ok, nil}
+      def handle_call(:succeed, _from, state) do
+        {:reply, :ok, %{state | status: :bh_success}}
       end
 
       @impl Behavior
-      def abort() do
-        {:ok, nil}
+      def handle_call(:fail, _from, state) do
+        {:reply, :ok, %{state | status: :bh_failure}}
+      end
+
+      @impl Behavior
+      def handle_call(:running?, _from, state) do
+        {:reply, state.status == :bh_running, state}
+      end
+
+      @impl Behavior
+      def handle_call(:aborted?, _from, state) do
+        {:reply, state.status == :bh_aborted, state}
+      end
+
+      @impl Behavior
+      def handle_call(:terminated?, _from, state) do
+        status = state.status
+        {:reply, status == :bh_success || status == :bh_failure, state}
+      end
+
+      @impl Behavior
+      def handle_call(:abort, _from, state) do
+        on_terminate(state)
+        {:reply, true, %{state | status: :bh_aborted}}
+      end
+
+      @impl Behavior
+      def handle_call(:reset, _from, state) do
+        {:reply, true, %{state | status: :bh_invalid}}
       end
     end
   end

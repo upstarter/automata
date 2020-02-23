@@ -81,7 +81,7 @@ environments with no central point of failure. This project is Open Source.
 - Blockchain Smart Contract Systems
 - A Mega-constellation of satellites
 - 3D Printing and Factory Automation
-- Massively Inconsistent Robust Ontologies (MIRO)
+- Massive Inconsistency Robust Ontologies (MIRO)
 - Analytics Systems
 - Smart Home / IOT Systems
 - High-Speed Rail Systems (Japan has an ADS railway that learns)
@@ -168,11 +168,19 @@ In Progress. Property Testing? Permutation Testing? Join the conversation on [Th
 There are 4 Layers in the supervision tree below the Application
 supervisor.
 
-The terminal system control supervisor is the `AutomatonNodeSupervisor`
-which supervises the user-defined behavior tree nodes with the help of its children —
-the "brains and braun", which are the `CompositeServer` and the `CompositeSupervisor`. The `CompositeServer` is the mastermind of the user-defined BT's, starting, stopping the user-defined nodes as children of `CompositeSupervisor` and generating and handling all resulting OTP callbacks and other messages.
+The terminal abstract system control supervisor is the `AutomatonNodeSupervisor`
+which supervises the user-defined behavior tree root nodes which become its children when started —
+they are the "brains and braun", which are the `CompositeServer` and the `CompositeSupervisor`.
 
-When the system starts, the root nodes configured in `lib/automata.ex` each become a `GenServer` behind the scenes. These nodes start and add children to `CompositeSupervisor`. The children are started as either OTP `DyanmicSupervisor`'s (for composite nodes, each with its own sup/server combo) or `GenServer`'s (for action nodes).
+The `CompositeServer` is the "mastermind" of the user-defined BT's, starting, stopping, and handling messages from the user-defined nodes as children of `CompositeSupervisor`.
+
+When the system starts, each root node configured in `lib/automata.ex` is started and run as a `GenServer`. These root nodes start and add their children to their own `CompositeSupervisor` since they are `CompositeServer`'s.
+
+The children are started as either OTP `DyanmicSupervisor`'s (for composite nodes, each with its own `CompositeSupervisor` & `CompositeServer`).  Every node in the tree is a child of a composite as the root is always a `CompositeServer`.
+
+When the control system encounters and starts a `CompositeServer` node (sequence, selector, etc..), the current `CompositeSupervisor` supervises the node as a `CompositeServer` & `CompositeSupervisor` pair via the `CompositeServer`.
+
+When the control system encounters and starts a `ComponentServer` node (action, decorator, etc..), the current `CompositeSupervisor` supervises that single node as a `GenServer`.
 
  The `CompositeSupervisor` handles fault tolerance of user-defined BT nodes.
 

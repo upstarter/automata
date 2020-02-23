@@ -8,10 +8,6 @@ defmodule Automaton.Action do
     Initialization and shutdown require extra care:
     on_init: receive extra parameters, fetch data from blackboard/utility,  make requests, etc..
     shutdown: free resources to not effect other actions
-
-    Multi-Agent Systems
-      Proactive & Reactive agents
-      BDI architecture: Beliefs, Desires, Intentions
   """
   alias Automaton.Behavior
 
@@ -40,7 +36,8 @@ defmodule Automaton.Action do
                     control: nil,
                     children: nil,
                     current: nil,
-                    tick_freq: unquote(user_opts[:tick_freq]) || 0
+                    tick_freq: unquote(user_opts[:tick_freq]) || 2500,
+                    workers: nil
         end
 
         # Client API
@@ -63,40 +60,62 @@ defmodule Automaton.Action do
 
     control =
       quote do
-        @impl Behaviour
-        def update(state) do
-          IO.inspect(["Action Processed in Action#update", state])
-
-          {:reply, state, state}
-        end
-
         @impl Behavior
         def on_init(state) do
-          if state.status == :bh_success do
-            IO.inspect(["SEQUENCE SUCCESS!", state.status],
-              label: __MODULE__
-            )
-          else
-            IO.inspect(["SEQUENCE STATUS", state.status],
-              label: __MODULE__
-            )
+          case state.status do
+            :bh_success ->
+              IO.inspect(["on_init status", state.status, state.workers],
+                label: Process.info(self)[:registered_name]
+              )
+
+            _ ->
+              IO.inspect(["on_init status", state.status, state.workers],
+                label: Process.info(self)[:registered_name]
+              )
           end
 
-          {:reply, state}
+          state
         end
 
         @impl Behavior
-        def on_terminate(state) do
-          status = state.status
-
+        def on_terminate(status) do
           case status do
-            :bh_running -> IO.inspect("TERMINATED SEQUENCE RUNNING")
-            :bh_failure -> IO.inspect("TERMINATED SEQUENCE FAILED")
-            :bh_success -> IO.inspect("TERMINATED SEQUENCE SUCCEEDED")
-            :bh_aborted -> IO.inspect("TERMINATED SEQUENCE ABORTED")
+            :bh_running ->
+              IO.inspect("TERMINATED — RUNNING", label: Process.info(self)[:registered_name])
+
+            :bh_failure ->
+              IO.inspect("TERMINATED — FAILED", label: Process.info(self)[:registered_name])
+
+            :bh_success ->
+              IO.inspect("TERMINATED — SUCCEEDED",
+                label: Process.info(self)[:registered_name]
+              )
+
+            :bh_aborted ->
+              IO.inspect("TERMINATED — ABORTED", label: Process.info(self)[:registered_name])
+
+            :bh_fresh ->
+              IO.inspect("TERMINATED — FRESH???", label: Process.info(self)[:registered_name])
           end
 
-          {:ok, state}
+          status
+        end
+
+        #
+        @impl Behaviour
+        def update(state) do
+          status = :bh_running
+
+          IO.inspect(
+            [
+              log: "updating root action",
+              status: state.status
+            ],
+            label: Process.info(self)[:registered_name]
+          )
+
+          # return status, overidden by user
+          status
         end
       end
 
@@ -107,14 +126,14 @@ defmodule Automaton.Action do
           %{
             id: to_string(name) <> "Action",
             start: {__MODULE__, :start_link, args},
-            shutdown: 10000,
+            shutdown: 10_000,
             restart: :transient,
             type: :worker
           }
         end
 
         # Defoverridable makes the given functions in the current module overridable
-        # defoverridable update: 1, on_init: 1, on_terminate: 1
+        defoverridable update: 1, on_init: 1, on_terminate: 1
       end
 
     [prepend, node_type, control, append]

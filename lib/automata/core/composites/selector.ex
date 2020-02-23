@@ -19,24 +19,25 @@ defmodule Automaton.Composite.Selector do
   defmacro __using__(opts) do
     quote do
       @impl Behavior
+      @impl Behavior
       def on_init(state) do
-        # if state.status == :bh_success do
-        #   IO.inspect(["SELECTOR SUCCESS!", state.status],
-        #     label: __MODULE__
-        #   )
-        # else
-        #   IO.inspect(["SELECTOR STATUS", state.status],
-        #     label: __MODULE__
-        #   )
-        # end
+        case state.status do
+          :bh_success ->
+            IO.inspect(["on_init status", state.status, state.workers],
+              label: Process.info(self)[:registered_name]
+            )
 
-        {:reply, state}
+          _ ->
+            IO.inspect(["on_init status", state.status, state.workers],
+              label: Process.info(self)[:registered_name]
+            )
+        end
+
+        state
       end
 
       @impl Behavior
-      def on_terminate(state) do
-        status = state.status
-
+      def on_terminate(status) do
         case status do
           :bh_running -> IO.inspect("TERMINATED SELECTOR RUNNING")
           :bh_failure -> IO.inspect("TERMINATED SELECTOR FAILED")
@@ -44,20 +45,31 @@ defmodule Automaton.Composite.Selector do
           :bh_abort -> IO.inspect("TERMINATED SELECTOR ABORTED")
         end
 
-        {:ok, state}
+        {:ok, status}
       end
 
-      @impl Behaviour
-      def update(state) do
-        IO.puts("Pre SEL update")
-        # new_state = process_children(state)
-        IO.inspect(["Children Processed in SEL update", state])
+      @impl Behavior
+      def update(%{workers: workers} = state) do
+        {worker, status} =
+          Enum.reduce_while(workers, {nil, nil}, fn w, acc ->
+            # IO.inspect(log: "[#{Process.info(self)[:registered_name]}] ticking..", curr: state, w: Process.info(w))
 
-        # return status, overidden by user
-        {:reply, state, state}
+            status = GenServer.call(w, :tick)
+
+            IO.inspect(
+              log: "[#{Process.info(self)[:registered_name]}] Ticked",
+              w: w,
+              status: status
+            )
+
+            if status != continue_status(), do: {:halt, {w, status}}, else: {:cont, {w, status}}
+          end)
+
+        IO.inspect(log: "Child Status!!!", status: status, worker: worker)
+        status
       end
 
-      def terminal_status do
+      def continue_status do
         :bh_failure
       end
     end

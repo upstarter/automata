@@ -32,18 +32,20 @@ defmodule Automaton do
     # nodes) as children of Automaton.CompositeSupervisor)
     c_types = CompositeServer.types()
     cn_types = ComponentServer.types()
-    nt = user_opts[:node_type]
+    allowed_node_types = c_types ++ cn_types
+    node_type = user_opts[:node_type]
+    unless Enum.member?(allowed_node_types, node_type), do: raise("NodeTypeError")
 
-    # TODO: for the love of god, find the elixir way to do this..
     node_type =
       cond do
-        Enum.member?(c_types, nt) ->
+        Enum.member?(c_types, node_type) ->
           quote do: use(CompositeServer, user_opts: unquote(user_opts))
 
-        Enum.member?(cn_types, nt) ->
+        Enum.member?(cn_types, node_type) ->
           quote do: use(ComponentServer, user_opts: unquote(user_opts))
       end
 
+    # TODO: for the love of god, find the elixir way to do this..
     # if Enum.member?(c_types, nt) do
     #   IO.puts("LKJLKJLKJLJ")
     #   quote do: use(CompositeServer, user_opts: unquote(user_opts))
@@ -58,45 +60,57 @@ defmodule Automaton do
     control =
       quote do
         # should tick each subtree at a frequency corresponding to subtrees tick_freq
-        # each subtree of the user-defined root node will be ticked recursively
+        # each subtree of the user-defined composite node will be ticked
         # every update (at rate tick_freq) as we update the tree until we find
         # the leaf node that is currently running (will be an action).
         def tick(state) do
-          IO.inspect(["[AUTOMATON][TICK] freq: #{state.tick_freq}", state])
-          if state.status != :bh_running, do: on_init(state)
+          new_state = if state.status != :bh_running, do: on_init(state), else: state
 
-          IO.inspect(["[AUTOMATON][TICK] updating node", state])
+          # IO.inspect([
+          #   "[#{Process.info(self)[:registered_name]}][tick] updating node...",
+          #   Process.info(self)[:registered_name]
+          # ])
 
-          {:reply, state, new_state} = update(state)
-          IO.inspect(["[AUTOMATON][TICK] node updated", state, new_state])
+          status = update(new_state)
 
-          if new_state.status != :bh_running do
-            on_terminate(new_state)
+          if status != :bh_running do
+            on_terminate(status)
           else
-            # TODO: needs to be per control node
-            schedule_next(new_state.tick_freq)
+            schedule_next_tick(new_state.tick_freq)
           end
 
-          {:reply, state, new_state}
-        end
-
-        def schedule_next(freq) do
           IO.inspect(
-            log: "[AUTOMATON] SCHEDULING NEXT TICK",
-            self: Process.info(self())[:registered_name]
+            [
+              "tick",
+              state.tick_freq,
+              state.status,
+              status
+            ],
+            label: Process.info(self)[:registered_name]
           )
 
-          Process.send_after(self(), :scheduled_tick, freq)
+          IO.puts("\n")
+          [status, new_state]
+        end
+
+        def schedule_next_tick(ms_delay) do
+          # IO.inspect(
+          #   log: "[#{Process.info(self)[:registered_name]}] SCHEDULING NEXT TICK",
+          #   self: Process.info(self())[:registered_name]
+          # )
+
+          Process.send_after(self(), :scheduled_tick, ms_delay)
         end
 
         @impl GenServer
         def handle_call(:tick, _from, state) do
-          {:reply, state, new_state} = tick(state)
+          [status, new_state] = tick(state)
+          {:reply, status, state}
         end
 
         @impl GenServer
         def handle_info(:scheduled_tick, state) do
-          {:reply, state, new_state} = tick(state)
+          [status, new_state] = tick(state)
           {:noreply, new_state}
         end
       end
