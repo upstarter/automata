@@ -15,14 +15,14 @@ defmodule MockSequence1 do
     # these run in order for type :selector and :sequence nodes
     # and in parallel for type :parallel
     # children: [SeqComposite1, Seq1]
-    children: [SeqComposite1, Seq3, Seq4]
+    children: [Seq1, Seq2, SeqComposite1]
 end
 
 defmodule SeqComposite1 do
   use Automaton,
     node_type: :sequence,
     tick_freq: 3_500,
-    children: [Seq1, Seq2]
+    children: [Seq3, Seq4]
 
   # def status do
   #   case :rand.uniform(3) do
@@ -37,10 +37,10 @@ defmodule Seq1 do
   use Automaton,
     node_type: :action
 
-  # @impl Behavior
-  # def update(state) do
-  #   :bh_running
-  # end
+  @impl Behavior
+  def update(state) do
+    :bh_success
+  end
 
   # def status do
   #   case :rand.uniform(3) do
@@ -55,10 +55,10 @@ defmodule Seq2 do
   use Automaton,
     node_type: :action
 
-  # @impl Behavior
-  # def update(state) do
-  #   :bh_running
-  # end
+  @impl Behavior
+  def update(state) do
+    :bh_success
+  end
 
   # def status do
   #   case :rand.uniform(3) do
@@ -73,11 +73,12 @@ defmodule Seq3 do
   use Automaton,
     node_type: :action
 
-  # @impl Behavior
-  # def update(state) do
-  #   :bh_running
-  # end
+  @impl Behavior
+  def update(state) do
+    :bh_success
+  end
 
+  #
   # def status do
   #   case :rand.uniform(3) do
   #     1 -> :bh_success
@@ -91,10 +92,10 @@ defmodule Seq4 do
   use Automaton,
     node_type: :action
 
-  # @impl Behavior
-  # def update(state) do
-  #   :bh_running
-  # end
+  @impl Behavior
+  def update(state) do
+    :bh_success
+  end
 
   # def status do
   #   case :rand.uniform(3) do

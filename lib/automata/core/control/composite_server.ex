@@ -52,7 +52,7 @@ defmodule Automaton.CompositeServer do
                     node_type: unquote(user_opts[:node_type]),
                     # control is the parent, nil when fresh
                     control: nil,
-                    tick_freq: unquote(user_opts[:tick_freq]) || 5000,
+                    tick_freq: unquote(user_opts[:tick_freq]) || 1000,
                     c_monitors: nil,
                     c_mfa: nil
         end
@@ -111,8 +111,6 @@ defmodule Automaton.CompositeServer do
         def handle_info(:start_children, state) do
           {:reply, :ok, new_state} = start_children(state)
 
-          send(self(), :update)
-
           {:noreply, new_state}
         end
 
@@ -156,6 +154,8 @@ defmodule Automaton.CompositeServer do
             workers: workers
             # self: "#{Process.info(self())[:registered_name]}"
           )
+
+          send(self(), :update)
 
           {:reply, :ok, new_state}
         end

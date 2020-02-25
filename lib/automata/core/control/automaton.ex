@@ -82,7 +82,6 @@ defmodule Automaton do
           IO.inspect(
             [
               "tick",
-              state.tick_freq,
               state.status,
               status
             ],
@@ -105,7 +104,7 @@ defmodule Automaton do
         @impl GenServer
         def handle_call(:tick, _from, state) do
           [status, new_state] = tick(state)
-          {:reply, status, state}
+          {:reply, status, new_state}
         end
 
         @impl GenServer

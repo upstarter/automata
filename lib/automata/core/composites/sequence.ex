@@ -66,51 +66,57 @@ defmodule Automaton.Composite.Sequence do
           status
         end
 
-        def check_status(workers) do
-          Enum.find_value(workers, fn w ->
-            # new_status = GenServer.call(w, :tick)
+        def tick_workers(workers) do
+          Enum.reduce_while(workers, :ok, fn w, acc ->
+            new_status = GenServer.call(w, :tick)
 
-            new_status = :bh_success
-
-            # new_status = tick(state)
+            # new_status = :bh_success
 
             IO.inspect(
               [
-                log: "update sequence",
+                log: "ticked worker",
                 new_status: new_status,
                 worker: Process.info(w)[:registered_name]
               ],
               label: Process.info(self)[:registered_name]
             )
 
+            # If the child fails, or keeps running, do the same.
             if new_status != continue_status() do
               # TODO handle failures, aborts
-              {:ok, {w, new_status}}
+              {:halt, {w, new_status}}
             else
-              {:final, {w, new_status}}
+              # last worker state was success
+              {:cont, {w, new_status}}
             end
           end)
         end
 
-        def status_check(workers) do
-          case check_status(workers) do
+        def check_status(workers) do
+          case tick_workers(workers) do
             # TODO error handling, retries, etc..
-            nil -> {:error, :bh_running}
-            {:ok, {w, status}} -> {:ok, status}
-            {:final, {w, status}} -> {:final, status}
+            nil -> {:error, :worker_not_found}
+            {w, status} -> {:found, status}
+            {w, :bh_success} -> {:success, :bh_success}
+            {w, :bh_running} -> {:success, :bh_running}
           end
         end
 
         @impl Behavior
         def update(%{workers: workers} = state) do
-          IO.inspect(workers)
+          IO.inspect([
+            "checking workers",
+            Enum.map(workers, fn w -> Process.info(w)[:registered_name] end)
+          ])
+
+          checked_status = check_status(workers)
+          IO.inspect(["checked", checked_status])
 
           status =
-            case status_check(workers) do
-              {:error, :bh_running} -> :bh_running
-              {:ok, status} -> status
-              {:final, :bh_success} -> :bh_success
-              {:final, :bh_failure} -> :bh_failure
+            case checked_status do
+              {:found, status} -> status
+              {:success, :bh_success} -> :bh_success
+              {:error, :worker_not_found} -> :error
             end
 
           IO.inspect(

@@ -36,7 +36,7 @@ defmodule Automaton.Action do
                     control: nil,
                     children: nil,
                     current: nil,
-                    tick_freq: unquote(user_opts[:tick_freq]) || 2500,
+                    tick_freq: unquote(user_opts[:tick_freq]) || 500,
                     workers: nil
         end
 
@@ -105,14 +105,7 @@ defmodule Automaton.Action do
         @impl Behaviour
         def update(state) do
           status = :bh_running
-
-          IO.inspect(
-            [
-              log: "updating root action",
-              status: state.status
-            ],
-            label: Process.info(self)[:registered_name]
-          )
+          IO.inspect("Action Updated", label: Process.info(self)[:registered_name])
 
           # return status, overidden by user
           status
