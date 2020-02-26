@@ -53,8 +53,8 @@ defmodule Automaton.CompositeServer do
                     # control is the parent, nil when fresh
                     control: nil,
                     tick_freq: unquote(user_opts[:tick_freq]) || 1000,
-                    c_monitors: nil,
-                    c_mfa: nil
+                    monitors: nil,
+                    mfa: nil
         end
       end
 
@@ -80,8 +80,8 @@ defmodule Automaton.CompositeServer do
           new_state = %{
             state
             | node_sup: node_sup,
-              c_mfa: mfa,
-              c_monitors: monitors,
+              mfa: mfa,
+              monitors: monitors,
               name: name
           }
 
@@ -97,7 +97,7 @@ defmodule Automaton.CompositeServer do
 
         def handle_info(
               :start_composite_supervisor,
-              state = %{node_sup: node_sup, c_mfa: mfa, name: name}
+              state = %{node_sup: node_sup, mfa: mfa, name: name}
             ) do
           spec = {Automaton.CompositeSupervisor, [[self(), mfa, name]]}
           {:ok, composite_sup} = DynamicSupervisor.start_child(node_sup, spec)
@@ -121,7 +121,7 @@ defmodule Automaton.CompositeServer do
         def start_children(
               %{
                 children: children,
-                c_mfa: {m, f, a} = mfa,
+                mfa: {m, f, a} = mfa,
                 name: name,
                 composite_sup: composite_sup
               } = state
@@ -195,7 +195,7 @@ defmodule Automaton.CompositeServer do
       quote do
         def handle_info(
               {:DOWN, ref, _, _, _},
-              state = %{c_monitors: monitors, children: children}
+              state = %{monitors: monitors, children: children}
             ) do
           case :ets.match(monitors, {:"$1", ref}) do
             [[pid]] ->
@@ -215,10 +215,10 @@ defmodule Automaton.CompositeServer do
         def handle_info(
               {:EXIT, pid, _reason},
               state = %{
-                c_monitors: monitors,
+                monitors: monitors,
                 children: children,
                 node_sup: node_sup,
-                c_mfa: {m, f, a} = mfa,
+                mfa: {m, f, a} = mfa,
                 name: name
               }
             ) do

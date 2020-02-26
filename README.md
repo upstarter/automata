@@ -16,7 +16,7 @@ environments with no central point of failure. This project is Open Source.
 ### Technologies
  [Elixir](https://elixir-lang.org/) & [OTP](https://en.wikipedia.org/wiki/Open_Telecom_Platform) provide the
  primitives for robust concurrent, fault-tolerant, highly available,
- self-healing distributed systems. Based on the Actor model, a singular Elixir `Process` embodies all 3 essential elements of computation: processing, storage, communications. It does so using very lightweight, isolated processes, each with its own stack, heap, and communications facilities (mailbox). The Erlang VM (BEAM), with pre-emptive scheduling, acts somewhat as on operating system on top of an operating system. Preemption is good because it prevents bad processes from starving the rest of the system, allowing for higher degrees of concurrency and better interactive performance, even if the context switching overhead makes it a bit slower than other scheduler types.
+ self-healing distributed systems. Based on the Actor model, a singular Elixir `Process` embodies all 3 essential elements of computation: processing, storage, communications. It does so using very lightweight, isolated processes, each with its own stack, heap, and communications facilities (mailbox). The Erlang VM (BEAM), with pre-emptive scheduling, acts somewhat as on operating system on top of an operating system. Pre-emption is good because it prevents bad processes from starving the rest of the system, allowing for higher degrees of concurrency and better interactive performance, even if the context switching overhead makes it a bit slower than other scheduler types.
 
  [Behavior Trees](https://en.wikipedia.org/wiki/Behavior_tree_(artificial_intelligence,_robotics_and_control))
  are increasingly used in place of finite state machines (FSM's) and other AI
@@ -57,7 +57,7 @@ environments with no central point of failure. This project is Open Source.
 
 ### Performance Features:
 - Concurrency
-  - The world is concurrent. For example: we see, hear, and move at the same time. Many global financial instruments are fluctuating at this instance. Concurrency was a core factor in the design of the Elixir language and is simple to implement.
+  - The world is concurrent. For example: we see, hear, and move at the same time. Many global financial instruments are fluctuating at this instance. Concurrency was a core factor in the design of the Elixir language, making it easy to reason about and debug.
 - High availability
   - Elixir is capable of 99.9999999% uptime (31 milliseconds/year of downtime). The main point of the Elixir model is an application that can be expected to run forever, as stated by the inventor — Joe Armstrong (RIP). Talk about unstoppable software!
 - Fault Tolerance
@@ -74,6 +74,7 @@ environments with no central point of failure. This project is Open Source.
 
 ### Applications
 - Trading Systems
+- Patient Monitoring & Care Systems
 - Swarm Intelligence / Distributed Robotics
 - Intelligent agents with soft realtime multi-dimensional sensory, perception, intuition, and action capabilities
 - Multi-Agent Reinforcement Learning
@@ -115,21 +116,21 @@ Please join the [slack channel](https://join.slack.com/t/automata-org/shared_inv
 
 ### Current Status
 The project is currently in the Research & Prototype Development phase. We are
-establishing the core concepts, requirements, practices, and standards for the
+establishing the core requirements, practices, and standards for the
 healthy and fruitful governance of the project.  Join the conversation on [The
 Automata Project Slack Channel](https://join.slack.com/t/automata-org/shared_invite).
 
 Currently `Automata` is being developed as a single-node (machine) and single
 automaton system, but the architecture is in place to achieve the goal of a
 multi-node (full fault tolerance) and multi-automaton (hence the name, automata)
-distributed system in the not-too-distant future.
+distributed system.
 
 ### Engineering Standards & Best Practices
 Check the #dev or #testing channels on [slack]((https://join.slack.com/t/automata-org/shared_invite)) for questions/info.
 #### Design Standards
-1. Abstraction & Modularity are key. Spend the time and/or ask others to find the right abstraction. In terms of modularity, If its more than 10-20 lines, put it in a unit Function, Module or Struct that is tested and named well (by its role in the context if possible, rather than its data type or random name).
+1. Abstraction & Modularity are key. Spend the time and/or [Ask on the Slack Channel](https://join.slack.com/t/automata-org/shared_invite) to find the right abstraction. In terms of modularity, If its more than 10-20 lines, put it in a unit Function, Module or Struct that is tested and named well (by its role in the context if possible, rather than its data type or random name).
 2. Meta-programming will be heavily used as this is a framework, but it is important to know where it is useful and where its not. It is wise not to overuse clever meta-programming magic (a common complaint about rails). If your not sure, ask. Or use the force Luke (if your a Jedi).
-3. Use function pattern matching over Enum and other forms of enumeration as it is usually faster and cleaner.
+3. Use function pattern matching over for other types of enumeration wherever possible as this is a first-principle in Elixir systems.
 4. If your not sure how to do something, rather than do a hack, put a skeleton in place and submit a PR so a more senior engineer can provide guidance.
 
 #### Coding Standards
@@ -172,7 +173,7 @@ The terminal abstract system control supervisor is the `AutomatonNodeSupervisor`
 which supervises the user-defined behavior tree root nodes which become its children when started —
 they are the "brains and braun", which are the `CompositeServer` and the `CompositeSupervisor`.
 
-The `CompositeServer` is the "mastermind" of the user-defined BT's, starting, stopping, and handling messages from the user-defined nodes as children of `CompositeSupervisor`.
+The `CompositeServer` is the "mastermind" of the user-defined BT's, starting, stopping, and handling messages from the user-defined nodes as children of `CompositeSupervisor`. All nodes are components of a composite as root control nodes should always have children, of which some are `CompositeServer`'s', and some are `ActionServer`'s'.
 
 When the system starts, each root node configured in `lib/automata.ex` is started and run as a `GenServer`. These root nodes start and add their children to their own `CompositeSupervisor` since they are `CompositeServer`'s.
 

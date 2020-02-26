@@ -102,14 +102,14 @@ defmodule Automaton.Action do
         end
 
         #
-        @impl Behaviour
-        def update(state) do
-          status = :bh_running
-          IO.inspect("Action Updated", label: Process.info(self)[:registered_name])
-
-          # return status, overidden by user
-          status
-        end
+        # @impl Behaviour
+        # def update(state) do
+        #   status = :bh_running
+        #   IO.inspect("Action Updated", label: Process.info(self)[:registered_name])
+        #
+        #   # return status, overidden by user
+        #   status
+        # end
       end
 
     # extra stuff at end

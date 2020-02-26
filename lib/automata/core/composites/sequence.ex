@@ -70,24 +70,23 @@ defmodule Automaton.Composite.Sequence do
           Enum.reduce_while(workers, :ok, fn w, acc ->
             new_status = GenServer.call(w, :tick)
 
-            # new_status = :bh_success
+            # IO.inspect(
+            #   [
+            #     log: "ticked worker",
+            #     new_status: new_status,
+            #     worker: Process.info(w)[:registered_name]
+            #   ],
+            #   label: Process.info(self)[:registered_name]
+            # )
 
-            IO.inspect(
-              [
-                log: "ticked worker",
-                new_status: new_status,
-                worker: Process.info(w)[:registered_name]
-              ],
-              label: Process.info(self)[:registered_name]
-            )
-
+            # TODO handle failures, aborts
             # If the child fails, or keeps running, do the same.
-            if new_status != continue_status() do
-              # TODO handle failures, aborts
-              {:halt, {w, new_status}}
-            else
-              # last worker state was success
-              {:cont, {w, new_status}}
+            cond do
+              new_status == :bh_running ->
+                {:cont, {w, :bh_running}}
+
+              new_status != :bh_success ->
+                {:halt, {w, new_status}}
             end
           end)
         end
@@ -98,7 +97,7 @@ defmodule Automaton.Composite.Sequence do
             nil -> {:error, :worker_not_found}
             {w, status} -> {:found, status}
             {w, :bh_success} -> {:success, :bh_success}
-            {w, :bh_running} -> {:success, :bh_running}
+            {w, :bh_running} -> {:halt, :bh_running}
           end
         end
 
@@ -133,10 +132,6 @@ defmodule Automaton.Composite.Sequence do
         @impl Behavior
         def update(%{workers: []} = state) do
           state
-        end
-
-        def continue_status do
-          :bh_success
         end
       end
   end

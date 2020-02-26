@@ -11,7 +11,7 @@ defmodule Automata do
     # USER DEFINED BT ROOT(CompositeServer) NODES (AUTOMATA — each being an AUTOMATON)
     # these are started specifically in `lib/automaton_server.ex`
     nodes_config = [
-      [name: "Automaton1", mfa: {MockSequence1, :start_link, []}]
+      [name: "Automaton1", mfa: {MockSeq1, :start_link, []}]
       # [name: "Automaton2", mfa: {MockSelector1, :start_link, []}]
     ]
 
