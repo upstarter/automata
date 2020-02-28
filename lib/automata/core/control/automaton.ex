@@ -82,7 +82,7 @@ defmodule Automaton do
           IO.inspect(
             [
               DateTime.now!("Etc/UTC") |> DateTime.to_time(),
-              "tick",
+              "ticked",
               state.status,
               status
             ],

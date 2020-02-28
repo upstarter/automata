@@ -17,61 +17,125 @@ defmodule Automaton.Composite.Selector do
   alias Automaton.{Composite, Behavior}
 
   defmacro __using__(opts) do
-    quote do
-      @impl Behavior
-      @impl Behavior
-      def on_init(state) do
-        case state.status do
-          :bh_success ->
-            IO.inspect(["on_init status", state.status, state.workers],
-              label: Process.info(self)[:registered_name]
-            )
+    a =
+      quote do
+        @impl Behavior
+        def on_init(state) do
+          case state.status do
+            :bh_success ->
+              IO.inspect(["on_init status", state.status, state.workers],
+                label: Process.info(self)[:registered_name]
+              )
 
-          _ ->
-            IO.inspect(["on_init status", state.status, state.workers],
-              label: Process.info(self)[:registered_name]
-            )
+            _ ->
+              nil
+              # IO.inspect(["on_init status", state.status, state.workers],
+              #   label: Process.info(self)[:registered_name]
+              # )
+          end
+
+          state
         end
 
-        state
-      end
+        @impl Behavior
+        def on_terminate(status) do
+          case status do
+            :bh_running ->
+              IO.inspect("on_terminate SELECTOR RUNNING",
+                label: Process.info(self)[:registered_name]
+              )
 
-      @impl Behavior
-      def on_terminate(status) do
-        case status do
-          :bh_running -> IO.inspect("TERMINATED SELECTOR RUNNING")
-          :bh_failure -> IO.inspect("TERMINATED SELECTOR FAILED")
-          :bh_success -> IO.inspect("TERMINATED SELECTOR SUCCEEDED")
-          :bh_abort -> IO.inspect("TERMINATED SELECTOR ABORTED")
+            :bh_failure ->
+              IO.inspect("on_terminate SELECTOR FAILED",
+                label: Process.info(self)[:registered_name]
+              )
+
+            :bh_success ->
+              IO.inspect(["on_terminate SELECTOR SUCCEEDED"],
+                label: Process.info(self)[:registered_name]
+              )
+
+            :bh_aborted ->
+              IO.inspect("on_terminate SELECTOR ABORTED",
+                label: Process.info(self)[:registered_name]
+              )
+
+            :bh_fresh ->
+              IO.inspect("on_terminate SELECTOR FRESH",
+                label: Process.info(self)[:registered_name]
+              )
+          end
+
+          status
         end
 
-        {:ok, status}
-      end
-
-      @impl Behavior
-      def update(%{workers: workers} = state) do
-        {worker, status} =
-          Enum.reduce_while(workers, {nil, nil}, fn w, acc ->
-            # IO.inspect(log: "[#{Process.info(self)[:registered_name]}] ticking..", curr: state, w: Process.info(w))
-
+        def tick_workers(workers) do
+          Enum.reduce_while(workers, :ok, fn w, acc ->
             status = GenServer.call(w, :tick)
 
-            IO.inspect(
-              log: "[#{Process.info(self)[:registered_name]}] Ticked",
-              w: w,
-              status: status
-            )
+            # IO.inspect(
+            #   [
+            #     log: "ticked worker",
+            #     status: status,
+            #     worker: Process.info(w)[:registered_name]
+            #   ],
+            #   label: Process.info(self)[:registered_name]
+            # )
 
-            if status != continue_status(), do: {:halt, {w, status}}, else: {:cont, {w, status}}
+            # TODO handle failures, aborts
+            # If the child fails, or keeps running, do the same.
+            cond do
+              status == :bh_running ->
+                {:cont, {w, :bh_running}}
+
+              status != :bh_failure ->
+                {:halt, {w, status}}
+            end
           end)
+        end
 
-        IO.inspect(log: "Child Status!!!", status: status, worker: worker)
-        status
-      end
+        def check_status(workers) do
+          case tick_workers(workers) do
+            # TODO error handling, retries, etc..
+            nil -> {:error, :worker_not_found}
+            {w, status} -> {:found, status}
+            {w, :bh_success} -> {:success, :bh_success}
+            {w, :bh_running} -> {:halt, :bh_running}
+          end
+        end
 
-      def continue_status do
-        :bh_failure
+        @impl Behavior
+        def update(%{workers: workers} = state) do
+          IO.inspect([
+            "checking workers",
+            Enum.map(workers, fn w -> Process.info(w)[:registered_name] end)
+          ])
+
+          checked_status = check_status(workers)
+          IO.inspect(["checked", checked_status])
+
+          status =
+            case checked_status do
+              {:found, status} -> status
+              {:success, :bh_success} -> :bh_success
+              {:error, :worker_not_found} -> :error
+            end
+
+          IO.inspect(
+            [
+              log: "updated workers",
+              status: status
+            ],
+            label: Process.info(self)[:registered_name]
+          )
+
+          status
+        end
+
+        @impl Behavior
+        def update(%{workers: []} = state) do
+          state
+        end
       end
-    end
   end
 end

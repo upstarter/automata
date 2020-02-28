@@ -26,9 +26,10 @@ defmodule Automaton.Composite.Sequence do
               )
 
             _ ->
-              IO.inspect(["on_init status", state.status, state.workers],
-                label: Process.info(self)[:registered_name]
-              )
+              nil
+              # IO.inspect(["on_init status", state.status, state.workers],
+              #   label: Process.info(self)[:registered_name]
+              # )
           end
 
           state
@@ -68,12 +69,12 @@ defmodule Automaton.Composite.Sequence do
 
         def tick_workers(workers) do
           Enum.reduce_while(workers, :ok, fn w, acc ->
-            new_status = GenServer.call(w, :tick)
+            status = GenServer.call(w, :tick)
 
             # IO.inspect(
             #   [
             #     log: "ticked worker",
-            #     new_status: new_status,
+            #     status: status,
             #     worker: Process.info(w)[:registered_name]
             #   ],
             #   label: Process.info(self)[:registered_name]
@@ -82,11 +83,11 @@ defmodule Automaton.Composite.Sequence do
             # TODO handle failures, aborts
             # If the child fails, or keeps running, do the same.
             cond do
-              new_status == :bh_running ->
+              status == :bh_running ->
                 {:cont, {w, :bh_running}}
 
-              new_status != :bh_success ->
-                {:halt, {w, new_status}}
+              status != :bh_success ->
+                {:halt, {w, status}}
             end
           end)
         end

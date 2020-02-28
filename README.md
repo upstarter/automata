@@ -1,5 +1,5 @@
 
-#  ⦿	| Automata | ⦿	⦿ 	⦿	⦿	⦿ ⦿   ⦿	⦿
+#  ⦿	| Automata | ⦿	⦿ 	⦿	⦿
 
 ### An AI control architecture framework for building autonomous decentralized systems ([ADS](https://en.wikipedia.org/wiki/Autonomous_decentralized_system)).
 
@@ -16,7 +16,7 @@ environments with no central point of failure. This project is Open Source.
 ### Technologies
  [Elixir](https://elixir-lang.org/) & [OTP](https://en.wikipedia.org/wiki/Open_Telecom_Platform) provide the
  primitives for robust concurrent, fault-tolerant, highly available,
- self-healing distributed systems. Based on the Actor model, a singular Elixir `Process` embodies all 3 essential elements of computation: processing, storage, communications. It does so using very lightweight, isolated processes, each with its own stack, heap, and communications facilities (mailbox). The Erlang VM (BEAM), with pre-emptive scheduling, acts somewhat as on operating system on top of an operating system. Pre-emption is good because it prevents bad processes from starving the rest of the system, allowing for higher degrees of concurrency and better interactive performance, even if the context switching overhead makes it a bit slower than other scheduler types.
+ self-healing distributed systems. Based on the Actor model, a singular Elixir `Process` embodies all 3 essential elements of computation: processing, storage, communications. It does so using very lightweight, isolated processes, each with its own stack, heap, and communications facilities (mailbox), and garbage collector. The Erlang VM (BEAM), with pre-emptive scheduling, acts somewhat as on operating system on top of an operating system. Pre-emption is good because it prevents bad processes from starving the rest of the system, allowing for higher degrees of concurrency and better interactive performance.
 
  [Behavior Trees](https://en.wikipedia.org/wiki/Behavior_tree_(artificial_intelligence,_robotics_and_control))
  are increasingly used in place of finite state machines (FSM's) and other AI
@@ -235,7 +235,7 @@ occur based on their configured restart strategies.
 
 ```elixir
 defmodule MyNode do
-  use Automaton.Node,
+  use Automaton,
 
     # required
     # one of :sequence, :selector, :parallel, etc...
@@ -251,7 +251,7 @@ defmodule MyNode do
     # list of child control/action(execution) nodes
     # these run in order for type :selector and :sequence nodes
     # and in parallel for type :parallel, and in dynamic priority for :priority
-    children: [ChildNode1, ChildNode2, ChildNode3]
+    children: [ChildAction1, ChildSequence1, ChildAction2]
 
 
     # overrides update function defined in use macro

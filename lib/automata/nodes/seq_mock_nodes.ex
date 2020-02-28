@@ -1,4 +1,5 @@
 # user-defined actions
+require Integer
 
 defmodule MockSeq1 do
   use Automaton,
@@ -31,7 +32,15 @@ defmodule Seq1 do
 
   @impl Behavior
   def update(state) do
-    :bh_running
+    IO.puts("WithinTimeWindow?")
+    now = DateTime.now!("Etc/UTC") |> DateTime.to_time()
+    min = now.minute
+
+    if Integer.is_odd(min) do
+      :bh_success
+    else
+      :bh_running
+    end
   end
 end
 
@@ -41,7 +50,16 @@ defmodule Seq2 do
 
   @impl Behavior
   def update(state) do
-    :bh_running
+    IO.puts("MA Crossover?")
+    now = DateTime.now!("Etc/UTC") |> DateTime.to_time()
+    min = now.minute
+    sec = now.second
+
+    if Integer.is_odd(min) && sec <= 30 do
+      :bh_success
+    else
+      :bh_running
+    end
   end
 end
 
@@ -51,7 +69,16 @@ defmodule Seq3 do
 
   @impl Behavior
   def update(state) do
-    :bh_running
+    IO.puts("Exit Position 1")
+    now = DateTime.now!("Etc/UTC") |> DateTime.to_time()
+    min = now.minute
+    sec = now.second
+
+    if Integer.is_odd(min) && sec <= 15 do
+      :bh_success
+    else
+      :bh_running
+    end
   end
 end
 
@@ -61,6 +88,8 @@ defmodule Seq4 do
 
   @impl Behavior
   def update(state) do
-    :bh_running
+    IO.puts("Enter Position 2")
+
+    :bh_success
   end
 end

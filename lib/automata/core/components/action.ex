@@ -69,9 +69,10 @@ defmodule Automaton.Action do
               )
 
             _ ->
-              IO.inspect(["on_init status", state.status, state.workers],
-                label: Process.info(self)[:registered_name]
-              )
+              nil
+              # IO.inspect(["on_init status", state.status, state.workers],
+              #   label: Process.info(self)[:registered_name]
+              # )
           end
 
           state
