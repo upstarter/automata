@@ -4,8 +4,7 @@ defmodule Automaton.ComponentServer do
   then the Composite it is a child of decides whether to continue through its
   children or whether to stop there and then and return a value.
   """
-  alias Automaton.ComponentServer
-  alias Automaton.Action
+  alias Automaton.{ComponentServer, Action}
 
   # alias Automaton.Decorator
 

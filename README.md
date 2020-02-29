@@ -120,11 +120,6 @@ establishing the core requirements, practices, and standards for the
 healthy and fruitful governance of the project.  Join the conversation on [The
 Automata Project Slack Channel](https://join.slack.com/t/automata-org/shared_invite).
 
-Currently `Automata` is being developed as a single-node (machine) and single
-automaton system, but the architecture is in place to achieve the goal of a
-multi-node (full fault tolerance) and multi-automaton (hence the name, automata)
-distributed system.
-
 ### Engineering Standards & Best Practices
 Check the #dev or #testing channels on [slack]((https://join.slack.com/t/automata-org/shared_invite)) for questions/info.
 #### Design Standards

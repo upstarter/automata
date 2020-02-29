@@ -21,7 +21,7 @@ end
 
 defmodule SeqComposite1 do
   use Automaton,
-    node_type: :sequence,
+    node_type: :selector,
     tick_freq: 3_500,
     children: [Seq3, Seq4]
 end
@@ -36,11 +36,7 @@ defmodule Seq1 do
     now = DateTime.now!("Etc/UTC") |> DateTime.to_time()
     min = now.minute
 
-    if Integer.is_odd(min) do
-      :bh_success
-    else
-      :bh_running
-    end
+    :bh_running
   end
 end
 
@@ -55,11 +51,7 @@ defmodule Seq2 do
     min = now.minute
     sec = now.second
 
-    if Integer.is_odd(min) && sec <= 30 do
-      :bh_success
-    else
-      :bh_running
-    end
+    :bh_running
   end
 end
 
@@ -74,11 +66,7 @@ defmodule Seq3 do
     min = now.minute
     sec = now.second
 
-    if Integer.is_odd(min) && sec <= 15 do
-      :bh_success
-    else
-      :bh_running
-    end
+    :bh_running
   end
 end
 
@@ -90,6 +78,6 @@ defmodule Seq4 do
   def update(state) do
     IO.puts("Enter Position 2")
 
-    :bh_success
+    :bh_running
   end
 end

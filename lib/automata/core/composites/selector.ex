@@ -70,7 +70,7 @@ defmodule Automaton.Composite.Selector do
         end
 
         def tick_workers(workers) do
-          Enum.reduce_while(workers, :ok, fn w, acc ->
+          Enum.reduce_while(workers, :ok, fn w, _acc ->
             status = GenServer.call(w, :tick)
 
             # IO.inspect(
@@ -95,6 +95,7 @@ defmodule Automaton.Composite.Selector do
         end
 
         def check_status(workers) do
+          # TODO: delegate tick_workers to dangerous work error capturing wrapper
           case tick_workers(workers) do
             # TODO error handling, retries, etc..
             nil -> {:error, :worker_not_found}
