@@ -107,10 +107,10 @@ defmodule Automaton.Composite.Selector do
 
         @impl Behavior
         def update(%{workers: workers} = state) do
-          IO.inspect([
-            "checking workers",
-            Enum.map(workers, fn w -> Process.info(w)[:registered_name] end)
-          ])
+          # IO.inspect([
+          #   "checking workers",
+          #   Enum.map(workers, fn w -> Process.info(w)[:registered_name] end)
+          # ])
 
           checked_status = check_status(workers)
           IO.inspect(["checked", checked_status])
@@ -122,13 +122,14 @@ defmodule Automaton.Composite.Selector do
               {:error, :worker_not_found} -> :error
             end
 
-          IO.inspect(
-            [
-              log: "updated workers",
-              status: status
-            ],
-            label: Process.info(self)[:registered_name]
-          )
+          # 
+          # IO.inspect(
+          #   [
+          #     log: "updated workers",
+          #     status: status
+          #   ],
+          #   label: Process.info(self)[:registered_name]
+          # )
 
           status
         end

@@ -9,9 +9,9 @@ defmodule Automaton do
     on_init: receive extra parameters, fetch data from blackboard/utility,  make requests, etc..
     shutdown: free resources to not effect other actions
 
-    Multi-Agent Systems
-      Proactive & Reactive agents
-      BDI architecture: Beliefs, Desires, Intentions
+    TODO: store any currently processing nodes so they can be ticked directly
+    within the behaviour tree engine rather than per tick traversal of the entire
+    tree. Zipper Tree?
   """
   alias Automaton.Behavior
   alias Automaton.CompositeServer
@@ -24,12 +24,6 @@ defmodule Automaton do
         use Behavior, user_opts: unquote(user_opts)
       end
 
-    # composite(control node) or action(execution node)? if its a
-    # composite(control) node, the Automaton.CompositeSupervisor supervises this
-    # control(root) node, which runs all user nodes(which are GenServer workers
-    # that start and add children(composite or component) to a
-    # CompositeSupervisor(for composite nodes) or run the GenServer(for action
-    # nodes) as children of Automaton.CompositeSupervisor)
     c_types = CompositeServer.types()
     cn_types = ComponentServer.types()
     allowed_node_types = c_types ++ cn_types
@@ -45,24 +39,8 @@ defmodule Automaton do
           quote do: use(ComponentServer, user_opts: unquote(user_opts))
       end
 
-    # TODO: for the love of god, find the elixir way to do this..
-    # if Enum.member?(c_types, nt) do
-    #   IO.puts("LKJLKJLKJLJ")
-    #   quote do: use(CompositeServer, user_opts: unquote(user_opts))
-    # else
-    #   if Enum.member?(cn_types, nt) do
-    #     quote do: use(ComponentServer, user_opts: unquote(user_opts))
-    #   else
-    #     raise "UserInitError"
-    #   end
-    # end
-
     control =
       quote do
-        # should tick each subtree at a frequency corresponding to subtrees tick_freq
-        # each subtree of the user-defined composite node will be ticked
-        # every update (at rate tick_freq) as we update the tree until we find
-        # the leaf node that is currently running (will be an action).
         def tick(state) do
           new_state = if state.status != :bh_running, do: on_init(state), else: state
 
@@ -79,17 +57,17 @@ defmodule Automaton do
             schedule_next_tick(new_state.tick_freq)
           end
 
-          IO.inspect(
-            [
-              DateTime.now!("Etc/UTC") |> DateTime.to_time(),
-              "ticked",
-              state.status,
-              status
-            ],
-            label: Process.info(self)[:registered_name]
-          )
+          # IO.inspect(
+          #   [
+          #     DateTime.now!("Etc/UTC") |> DateTime.to_time(),
+          #     "ticked",
+          #     state.status,
+          #     status
+          #   ],
+          #   label: Process.info(self)[:registered_name]
+          # )
 
-          IO.puts("\n")
+          # IO.puts("\n")
           [status, new_state]
         end
 

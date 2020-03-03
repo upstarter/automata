@@ -9,21 +9,21 @@ defmodule MockSeq1 do
     node_type: :sequence,
 
     # the frequency of updates for this node(tree), in milliseconds
-    tick_freq: 7_000,
+    tick_freq: 10_000,
 
     # not included for execution nodes
     # list of child control/execution nodes
     # these run in order for type :selector and :sequence nodes
     # and in parallel for type :parallel
     # children: [SeqComposite1, Seq1]
-    children: [Seq1, Seq2, SeqComposite1]
+    children: [Seq1, SeqComposite1, Seq4]
 end
 
 defmodule SeqComposite1 do
   use Automaton,
-    node_type: :selector,
-    tick_freq: 3_500,
-    children: [Seq3, Seq4]
+    node_type: :sequence,
+    tick_freq: 5_000,
+    children: [Seq2, Seq3]
 end
 
 defmodule Seq1 do
@@ -32,9 +32,8 @@ defmodule Seq1 do
 
   @impl Behavior
   def update(state) do
-    IO.puts("WithinTimeWindow?")
-    now = DateTime.now!("Etc/UTC") |> DateTime.to_time()
-    min = now.minute
+    IO.puts("Seq1#update")
+    :timer.sleep(3000)
 
     :bh_running
   end
@@ -46,10 +45,8 @@ defmodule Seq2 do
 
   @impl Behavior
   def update(state) do
-    IO.puts("MA Crossover?")
-    now = DateTime.now!("Etc/UTC") |> DateTime.to_time()
-    min = now.minute
-    sec = now.second
+    IO.puts("Seq2#update")
+    :timer.sleep(3000)
 
     :bh_running
   end
@@ -61,10 +58,8 @@ defmodule Seq3 do
 
   @impl Behavior
   def update(state) do
-    IO.puts("Exit Position 1")
-    now = DateTime.now!("Etc/UTC") |> DateTime.to_time()
-    min = now.minute
-    sec = now.second
+    IO.puts("Seq3#update")
+    :timer.sleep(3000)
 
     :bh_running
   end
@@ -76,7 +71,8 @@ defmodule Seq4 do
 
   @impl Behavior
   def update(state) do
-    IO.puts("Enter Position 2")
+    IO.puts("Seq4#update")
+    :timer.sleep(3000)
 
     :bh_running
   end

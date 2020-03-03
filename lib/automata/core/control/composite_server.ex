@@ -87,11 +87,6 @@ defmodule Automaton.CompositeServer do
 
           send(self(), :start_composite_supervisor)
 
-          IO.inspect([
-            "[#{Process.info(self)[:registered_name]}][init] set data flow, started node_sup",
-            name
-          ])
-
           {:ok, new_state}
         end
 
@@ -147,13 +142,13 @@ defmodule Automaton.CompositeServer do
 
           new_state = %{state | workers: workers}
 
-          IO.inspect(
-            log: "[#{Process.info(self)[:registered_name]}] started children.",
-            mfa: mfa,
-            name: name,
-            workers: workers
-            # self: "#{Process.info(self())[:registered_name]}"
-          )
+          # IO.inspect(
+          #   log: "[#{Process.info(self)[:registered_name]}] started children.",
+          #   mfa: mfa,
+          #   name: name,
+          #   workers: workers
+          #   # self: "#{Process.info(self())[:registered_name]}"
+          # )
 
           send(self(), :update)
 
@@ -163,11 +158,11 @@ defmodule Automaton.CompositeServer do
         defp start_node(composite_sup, {m, _f, a} = mfa) do
           {:ok, node} = DynamicSupervisor.start_child(composite_sup, {m, a})
 
-          IO.inspect(
-            log: "[#{Process.info(self)[:registered_name]}][start_node] Started child...",
-            comp: Process.info(node)[:registered_name],
-            mfa: {m, a}
-          )
+          # IO.inspect(
+          #   log: "[#{Process.info(self)[:registered_name]}][start_node] Started child...",
+          #   comp: Process.info(node)[:registered_name],
+          #   mfa: {m, a}
+          # )
 
           true = Process.link(node)
           node
@@ -190,7 +185,6 @@ defmodule Automaton.CompositeServer do
         end
       end
 
-    # extra stuff at end
     append =
       quote do
         def handle_info(

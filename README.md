@@ -62,7 +62,7 @@ environments with no central point of failure. This project is Open Source.
   - Elixir is capable of 99.9999999% uptime (31 milliseconds/year of downtime). The main point of the Elixir model is an application that can be expected to run forever, as stated by the inventor — Joe Armstrong (RIP). Talk about unstoppable software!
 - Fault Tolerance
   - OTP Supervision Trees and the "fail fast" principle provide strong guarantees for error recovery and self healing systems.
-- Scalability
+- Scalability & Distribution
   -  Elixir can handle millions of processes (134 million +/-) utilizing all cores without breaking a sweat on a single machine, and easily distributes work onto multiple machines with its builtin distribution mechanisms, and there is CRDT support with [Horde](https://github.com/derekkraan/horde).
   - Behavior trees provide value stream scalability (design/development and operations/testing).
 - Modularity
@@ -168,7 +168,7 @@ The terminal abstract system control supervisor is the `AutomatonNodeSupervisor`
 which supervises the user-defined behavior tree root nodes which become its children when started —
 they are the "brains and braun", which are the `CompositeServer` and the `CompositeSupervisor`.
 
-The `CompositeServer` is the "mastermind" of the user-defined BT's, starting, stopping, and handling messages from the user-defined nodes as children of `CompositeSupervisor`. All nodes are components of a composite as root control nodes should always have children, of which some are `CompositeServer`'s', and some are `ActionServer`'s'.
+The `CompositeServer` is the "mastermind" of the user-defined BT's, starting, stopping, and handling messages from the user-defined nodes as children of `CompositeSupervisor`. All nodes are components of a composite as root control nodes should always have children, of which some are `CompositeServer`'s, and some are `ActionServer`'s.
 
 When the system starts, each root node configured in `lib/automata.ex` is started and run as a `GenServer`. These root nodes start and add their children to their own `CompositeSupervisor` since they are `CompositeServer`'s.
 
@@ -222,35 +222,32 @@ These are the management & fault tolerance mechanisms for the user-defined behav
 
 ### API
 Users may create tree structures of arbitrary depth by defining their own custom
-modules in the nodes/ directory which `use Automaton.Node` as a macro. Then, by
+modules in the nodes/ directory which `use Automaton` as a macro. Then, by
 overriding the `update()` function and returning a status as one of `:running`,
 `:failure`, or `:success`, the core system will manage the running of the
 Behavior Tree they have defined and handle restarting when unexpected errors
 occur based on their configured restart strategies.
 
 ```elixir
-defmodule MyNode do
+defmodule MyAutomaton do
   use Automaton,
 
     # required
-    # one of :sequence, :selector, :parallel, etc...
-    # or type :execution for execution nodes (no children)
+    # one of :sequence, :selector, :parallel, :action (no children), etc...
     node_type: :selector,
 
     # the frequency of updates for this node(subtree), in milliseconds
-    # the default is an infinite loop (0 ms)
+    # the default is 0 ms, essentially an infinite loop
     tick_freq: 200, # 200ms
 
 
     # not included for execution nodes
     # list of child control/action(execution) nodes
     # these run in order for type :selector and :sequence nodes
-    # and in parallel for type :parallel, and in dynamic priority for :priority
+    # and in parallel for type :parallel, and in some user-defined dynamic order for :priority
     children: [ChildAction1, ChildSequence1, ChildAction2]
 
-
-    # overrides update function defined in use macro
-    # called every tick, returns current status
+    # called every tick, must return status
     def update do
       # reactively and proactively change the world
       {:ok, status}
@@ -268,15 +265,20 @@ TODO: how to implement the above scenario.
 
 #### Where to read about the technologies underlying `Automata`:
 
+###### Theoretical
+[Multi-Agent Online Planning with Communication](file:///Users/ericsteen/Downloads/Multi-agent_online_planning_with_communi.pdf)
+[Dec-POMPDP](https://arxiv.org/pdf/1301.3836.pdf)
+[Dec-POSMDP](https://arxiv.org/pdf/1502.06030.pdf)
+
 ###### The core architecture
 - [The Elixir and OTP Guidebook](https://www.manning.com/books/the-little-elixir-and-otp-guidebook). old but very good
 
 - [Elixir in Action, Second Edition](https://www.manning.com/books/elixir-in-action-second-edition). new and very good
 
 ###### Libraries & Tooling (Still in Discussion)
-- [libcluster](https://github.com/bitwalker/libcluster)
-- [swarm](https://github.com/bitwalker/swarm)
 - [Horde](https://github.com/derekkraan/horde)
+- [swarm](https://github.com/bitwalker/swarm)
+- [libcluster](https://github.com/bitwalker/libcluster)
 
 
 ###### Behavior Trees
