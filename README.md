@@ -202,9 +202,8 @@ This tree is the management & fault tolerance mechanism for the parsing and vali
 ###### The Control Supervision Tree (in `lib/core/control/`)
 These are the management & fault tolerance mechanisms for the user-defined behavior tree(s).
 
-- `Automaton.Node`
-  - this is the most complicated node as it defines the user API and manages and
-  controls the operations of the user-defined behavior trees in a recursive fashion.
+- `Automaton`
+  - this is the root abstraction of a user-defined node, injecting the necessary code into the users' node module based on their configured values.
 - `Automaton.Behavior`
   - this is the interface (behaviour in elixir) that is implemented by all user-defined nodes, providing the most general policy for BT-ness.
 - `Automaton.Action`
@@ -226,7 +225,7 @@ modules in the nodes/ directory which `use Automaton` as a macro. Then, by
 overriding the `update()` function and returning a status as one of `:running`,
 `:failure`, or `:success`, the core system will manage the running of the
 Behavior Tree they have defined and handle restarting when unexpected errors
-occur based on their configured restart strategies.
+occur based on their configured options, as shown below.
 
 ```elixir
 defmodule MyAutomaton do
@@ -265,17 +264,12 @@ TODO: how to implement the above scenario.
 
 #### Where to read about the technologies underlying `Automata`:
 
-###### Theoretical
-[Multi-Agent Online Planning with Communication](file:///Users/ericsteen/Downloads/Multi-agent_online_planning_with_communi.pdf)
-[Dec-POMPDP](https://arxiv.org/pdf/1301.3836.pdf)
-[Dec-POSMDP](https://arxiv.org/pdf/1502.06030.pdf)
-
 ###### The core architecture
 - [The Elixir and OTP Guidebook](https://www.manning.com/books/the-little-elixir-and-otp-guidebook). old but very good
 
 - [Elixir in Action, Second Edition](https://www.manning.com/books/elixir-in-action-second-edition). new and very good
 
-###### Libraries & Tooling (Still in Discussion)
+###### Libraries & Tooling (WIP)
 - [Horde](https://github.com/derekkraan/horde)
 - [swarm](https://github.com/bitwalker/swarm)
 - [libcluster](https://github.com/bitwalker/libcluster)
@@ -303,6 +297,14 @@ TODO: how to implement the above scenario.
 - [Behavioral Mathematics](https://www.amazon.com/Behavioral-Mathematics-Game-AI-Applied/dp/1584506849/ref=sr_1_5?keywords=game+behavior+mathematics&qid=1581555478&sr=8-5)
 
 - [Utility AI Design Patterns](https://course.ccs.neu.edu/cs5150f13/readings/dill_designpatterns.pdf)
+
+###### Theoretical
+[Multi-Agent Online Planning with Communication](https://www.aaai.org/ocs/index.php/ICAPS/ICAPS09/paper/viewFile/729/1129)
+
+[The Complexity of Decentralized Control of Markov Decision Processes (Dec-POMPDP)](https://arxiv.org/pdf/1301.3836.pdf)
+
+[Decentralized Control of Partially Observable Markov Decision
+Processes using Belief Space Macro-actions (Dec-POSMDP)](https://arxiv.org/pdf/1502.06030.pdf)
 
 ###### Other
 - [Beliefs, Desires, Intentions(BDI) Architecture](https://en.wikipedia.org/wiki/Belief%E2%80%93desire%E2%80%93intention_software_model)

@@ -45,7 +45,7 @@ defmodule Automaton.CompositeServer do
           defstruct name: nil,
                     status: :bh_fresh,
                     children: unquote(user_opts[:children]),
-                    # the running children process pids
+                    # the running children pids
                     workers: [],
                     composite_sup: nil,
                     node_sup: nil,
@@ -106,6 +106,8 @@ defmodule Automaton.CompositeServer do
         def handle_info(:start_children, state) do
           {:reply, :ok, new_state} = start_children(state)
 
+          if unquote(user_opts[:root]) == true, do: send(self, :update)
+
           {:noreply, new_state}
         end
 
@@ -121,16 +123,6 @@ defmodule Automaton.CompositeServer do
                 composite_sup: composite_sup
               } = state
             ) do
-          # IO.inspect(
-          #   log: "[#{Process.info(self)[:registered_name]}][start_children] Starting node...",
-          #   current: current,
-          #   mfa: mfa,
-          #   name: name,
-          #   self: "#{Process.info(self())[:registered_name]}",
-          #   children: state.children,
-          #   remaining: remaining
-          # )
-
           # start all the children
           workers =
             Enum.map(children, fn child ->
@@ -142,27 +134,11 @@ defmodule Automaton.CompositeServer do
 
           new_state = %{state | workers: workers}
 
-          # IO.inspect(
-          #   log: "[#{Process.info(self)[:registered_name]}] started children.",
-          #   mfa: mfa,
-          #   name: name,
-          #   workers: workers
-          #   # self: "#{Process.info(self())[:registered_name]}"
-          # )
-
-          send(self(), :update)
-
           {:reply, :ok, new_state}
         end
 
         defp start_node(composite_sup, {m, _f, a} = mfa) do
           {:ok, node} = DynamicSupervisor.start_child(composite_sup, {m, a})
-
-          # IO.inspect(
-          #   log: "[#{Process.info(self)[:registered_name]}][start_node] Started child...",
-          #   comp: Process.info(node)[:registered_name],
-          #   mfa: {m, a}
-          # )
 
           true = Process.link(node)
           node

@@ -53,8 +53,8 @@ defmodule Automaton do
 
           if status != :bh_running do
             on_terminate(status)
-          else
-            schedule_next_tick(new_state.tick_freq)
+            # else
+            #   schedule_next_tick(new_state.tick_freq)
           end
 
           # IO.inspect(

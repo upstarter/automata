@@ -15,107 +15,92 @@ defmodule Automaton.Composite.Sequence do
   alias Automaton.{Composite, Behavior}
 
   defmacro __using__(opts) do
-    a =
-      quote do
-        @impl Behavior
-        def on_init(state) do
-          case state.status do
-            :bh_success ->
-              IO.inspect(["on_init status", state.status, state.workers],
-                label: Process.info(self)[:registered_name]
-              )
+    quote do
+      @impl Behavior
+      def update(%{workers: workers} = state) do
+        {w, status} = tick_workers(workers)
 
-            _ ->
-              nil
-              # IO.inspect(["on_init status", state.status, state.workers],
-              #   label: Process.info(self)[:registered_name]
-              # )
-          end
+        IO.inspect(
+          [
+            "ticked composite",
+            status
+          ],
+          label: Process.info(self)[:registered_name]
+        )
 
-          state
-        end
-
-        @impl Behavior
-        def on_terminate(status) do
-          case status do
-            :bh_running ->
-              IO.inspect("on_terminate SEQUENCE RUNNING",
-                label: Process.info(self)[:registered_name]
-              )
-
-            :bh_failure ->
-              IO.inspect("on_terminate SEQUENCE FAILED",
-                label: Process.info(self)[:registered_name]
-              )
-
-            :bh_success ->
-              IO.inspect(["on_terminate SEQUENCE SUCCEEDED"],
-                label: Process.info(self)[:registered_name]
-              )
-
-            :bh_aborted ->
-              IO.inspect("on_terminate SEQUENCE ABORTED",
-                label: Process.info(self)[:registered_name]
-              )
-
-            :bh_fresh ->
-              IO.inspect("on_terminate SEQUENCE FRESH",
-                label: Process.info(self)[:registered_name]
-              )
-          end
-
-          status
-        end
-
-        def tick_workers(workers) do
-          Enum.reduce_while(workers, :ok, fn w, _acc ->
-            status = GenServer.call(w, :tick, 20_000)
-
-            # IO.inspect(
-            #   [
-            #     log: "ticked worker",
-            #     status: status,
-            #     worker: Process.info(w)[:registered_name]
-            #   ],
-            #   label: Process.info(self)[:registered_name]
-            # )
-
-            # TODO handle failures, aborts
-            # If the child fails, or keeps running, do the same.
-            cond do
-              status == :bh_running ->
-                IO.puts("CONT")
-
-                IO.inspect([Process.info(self)[:registered_name], status])
-                {:cont, {w, :bh_running}}
-
-              status != :bh_success ->
-                IO.puts("HALT")
-                IO.inspect([Process.info(self)[:registered_name], status])
-
-                {:halt, {w, status}}
-            end
-          end)
-        end
-
-        @impl Behavior
-        def update(%{workers: workers} = state) do
-          # IO.inspect(["checked", checked_status])
-
-          # TODO error handling, retries, etc..
-          {w, status} = tick_workers(workers)
-
-          #
-          # IO.inspect(
-          #   [
-          #     log: "updated workers",
-          #     status: status
-          #   ],
-          #   label: Process.info(self)[:registered_name]
-          # )
-
-          status
-        end
+        status
       end
+
+      def tick_workers(workers) do
+        Enum.reduce_while(workers, :ok, fn w, _acc ->
+          # IO.inspect(workers)
+          status = GenServer.call(w, :tick)
+
+          # If the child fails, or keeps running, do the same.
+          cond do
+            status == :bh_running ->
+              # IO.puts("CONT")
+              # IO.inspect([Process.info(w)[:registered_name], status])
+              # IO.inspect([Process.info(self)[:registered_name], status])
+              {:cont, {w, :bh_running}}
+
+            status != :bh_success ->
+              # IO.puts("HALT")
+              # IO.inspect([Process.info(w)[:registered_name], status])
+              # IO.inspect([Process.info(self)[:registered_name], status])
+              {:halt, {w, status}}
+          end
+        end)
+      end
+
+      @impl Behavior
+      def on_init(state) do
+        case state.status do
+          :bh_success ->
+            IO.inspect(["on_init status", state.status, state.workers],
+              label: Process.info(self)[:registered_name]
+            )
+
+          _ ->
+            IO.inspect(["on_init status", state.status, state.workers],
+              label: Process.info(self)[:registered_name]
+            )
+        end
+
+        state
+      end
+
+      @impl Behavior
+      def on_terminate(status) do
+        case status do
+          :bh_running ->
+            IO.inspect("on_terminate SEQUENCE RUNNING",
+              label: Process.info(self)[:registered_name]
+            )
+
+          :bh_failure ->
+            IO.inspect("on_terminate SEQUENCE FAILED",
+              label: Process.info(self)[:registered_name]
+            )
+
+          :bh_success ->
+            IO.inspect(["on_terminate SEQUENCE SUCCEEDED"],
+              label: Process.info(self)[:registered_name]
+            )
+
+          :bh_aborted ->
+            IO.inspect("on_terminate SEQUENCE ABORTED",
+              label: Process.info(self)[:registered_name]
+            )
+
+          :bh_fresh ->
+            IO.inspect("on_terminate SEQUENCE FRESH",
+              label: Process.info(self)[:registered_name]
+            )
+        end
+
+        status
+      end
+    end
   end
 end
