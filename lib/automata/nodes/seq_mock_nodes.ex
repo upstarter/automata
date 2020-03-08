@@ -10,7 +10,7 @@ defmodule MockSeq1 do
     node_type: :sequence,
 
     # the frequency of updates for this node(tree), in milliseconds
-    tick_freq: 5000,
+    tick_freq: 2000,
 
     # not included for action nodes
     # list of child control/execution nodes
@@ -23,7 +23,7 @@ end
 defmodule SeqComposite1 do
   use Automaton,
     node_type: :sequence,
-    tick_freq: 5000,
+    tick_freq: 2000,
     children: [Seq2, Seq3]
 end
 
@@ -34,6 +34,7 @@ defmodule Seq1 do
   @impl Behavior
   def update(state) do
     IO.puts("Seq1#update")
+    System.cmd("say", ["1"])
     :timer.sleep(2000)
 
     :bh_running
@@ -47,6 +48,7 @@ defmodule Seq2 do
   @impl Behavior
   def update(state) do
     IO.puts("Seq2#update")
+    System.cmd("say", ["2"])
     :timer.sleep(2000)
 
     :bh_running
@@ -60,6 +62,7 @@ defmodule Seq3 do
   @impl Behavior
   def update(state) do
     IO.puts("Seq3#update")
+    System.cmd("say", ["3"])
     :timer.sleep(2000)
 
     :bh_running
@@ -73,6 +76,7 @@ defmodule Seq4 do
   @impl Behavior
   def update(state) do
     IO.puts("Seq4#update")
+    System.cmd("say", ["4"])
     :timer.sleep(2000)
 
     :bh_running

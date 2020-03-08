@@ -1,7 +1,7 @@
 defmodule Automaton.Action do
   @moduledoc """
-    An action is a leaf in the tree which reactively and proactively changes
-    the world in which it operates.
+    An action is a leaf in the tree.
+    It operates on the world as a component of a control node.
   """
   alias Automaton.Behavior
 
@@ -30,7 +30,7 @@ defmodule Automaton.Action do
                     control: nil,
                     children: nil,
                     current: nil,
-                    tick_freq: unquote(user_opts[:tick_freq]) || 500,
+                    tick_freq: unquote(user_opts[:tick_freq]) || 2000,
                     workers: nil
         end
 

@@ -52,7 +52,7 @@ defmodule Automaton.CompositeServer do
                     node_type: unquote(user_opts[:node_type]),
                     # control is the parent, nil when fresh
                     control: nil,
-                    tick_freq: unquote(user_opts[:tick_freq]) || 1000,
+                    tick_freq: unquote(user_opts[:tick_freq]) || 2000,
                     monitors: nil,
                     mfa: nil
         end

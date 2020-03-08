@@ -1,14 +1,15 @@
 defmodule AutomataTest do
   use ExUnit.Case, async: true
   doctest Automata
+
   # TODO: ex_spec for context, it BDD style, property testing
 
   setup_all do
     # TODO: Load user-configs into node_configs
     nodes_config = [
-      [name: "MockUserNode1", mfa: {MockUserNode1, :start_link, []}],
-      [name: "MockUserNode2", mfa: {MockUserNode2, :start_link, []}],
-      [name: "MockUserNode3", mfa: {MockUserNode3, :start_link, []}]
+      [name: "MockSeq1", mfa: {MockSeq1, :start_link, []}],
+      [name: "MockSeq2", mfa: {MockSeq2, :start_link, []}],
+      [name: "MockSeq3", mfa: {MockSeq3, :start_link, []}]
     ]
 
     [nodes_config: nodes_config]

@@ -112,13 +112,6 @@ Please join the [slack channel](https://join.slack.com/t/automata-org/shared_inv
 
 ##### Open Items / TODO
 1. Define protocols / data flows between control processes with a [contract checker](https://www.youtube.com/watch?v=rQIE22e0cW8) between all (cc is also an anti-corruption layer? A.K.A. embedded schema).
-1. Blackboard Knowledge & Utility AI Decisioning Systems.
-
-### Current Status
-The project is currently in the Research & Prototype Development phase. We are
-establishing the core requirements, practices, and standards for the
-healthy and fruitful governance of the project.  Join the conversation on [The
-Automata Project Slack Channel](https://join.slack.com/t/automata-org/shared_invite).
 
 ### Engineering Standards & Best Practices
 Check the #dev or #testing channels on [slack]((https://join.slack.com/t/automata-org/shared_invite)) for questions/info.
@@ -136,7 +129,7 @@ Check the #dev or #testing channels on [slack]((https://join.slack.com/t/automat
 
 1. Code Reviews by core team members are required before merging and must be escalated if there is even the slightest concern of a design/logic flaw or incomplete testing. Imagine your building a rocket to mars and putting you and your family on it. Would you commmit that spaghetti code now?
 4. Every PR should have test coverage unless it is a trivial change or is approved by 2 core team members or designated reviewers.
-5. The ([BD](https://en.wikipedia.org/wiki/Benevolent_dictator_for_life)) — [upstarter](https://github.com/upstarter), is a major [stickler](https://dictionary.cambridge.org/us/dictionary/english/stickler) when it comes to architecture, design, code quality, proper abstractions, and attention to detail. Be warned and feel entirely free to keep him informed of his failures to follow his own strict quality requirements. 😉
+5. The ([BD](https://en.wikipedia.org/wiki/Benevolent_dictator_for_life)) — [upstarter](https://github.com/upstarter), is a major [stickler](https://dictionary.cambridge.org/us/dictionary/english/stickler) when it comes to architecture, design, code quality, accuracy, comprehensiveness. Be warned and feel entirely free to keep him informed of his failures to follow the strict quality requirements. 😉
 
 
 #### Testing Standards
@@ -278,7 +271,7 @@ TODO: how to implement the above scenario.
 ###### Behavior Trees
 - [CraftAI BT Grammar Basics](https://www.craft.ai/blog/bt-101-behavior-trees-grammar-basics/)
 
-- [Behavior Tree Starter Kit (BTSK)](http://www.gameaipro.com/GameAIPro/GameAIPro_Chapter06_The_Behavior_Tree_Starter_Kit.pdf) and corresponding [provided source code](https://github.com/aigamedev/btsk) and in particular [this file](https://github.com/aigamedev/btsk/blob/master/BehaviorTree.cpp) which is a basic inspiration for user-defined nodes.
+- [Behavior Tree Starter Kit (BTSK)](http://www.gameaipro.com/GameAIPro/GameAIPro_Chapter06_The_Behavior_Tree_Starter_Kit.pdf) and corresponding [provided source code](https://github.com/aigamedev/btsk) and in particular [this file](https://github.com/aigamedev/btsk/blob/master/BehaviorTree.cpp).
 
 - [BTSK Video](https://www.youtube.com/watch?v=n4aREFb3SsU)
 
@@ -309,7 +302,7 @@ Processes using Belief Space Macro-actions (Dec-POSMDP)](https://arxiv.org/pdf/1
 ###### Other
 - [Beliefs, Desires, Intentions(BDI) Architecture](https://en.wikipedia.org/wiki/Belief%E2%80%93desire%E2%80%93intention_software_model)
 
-- [Entity, Component, System(ECS) Architecture](https://en.wikipedia.org/wiki/Entity_component_system) and [this](https://www.youtube.com/watch?v=7m37kKZ5ohA&t=336s) Empex talk.
+- [Entity, Component, System(ECS) Architecture](https://en.wikipedia.org/wiki/Entity_component_system) and [this](https://www.youtube.com/watch?v=7m37kKZ5ohA&t=336s) excellent Empex talk.
 
 ## Installation
 
