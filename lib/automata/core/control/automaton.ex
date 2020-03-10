@@ -53,9 +53,9 @@ defmodule Automaton do
 
           if status != :bh_running do
             on_terminate(status)
-          else
-            IO.inspect(new_state.tick_freq)
-            schedule_next_tick(new_state.tick_freq)
+            # else
+            #   IO.inspect(new_state.tick_freq)
+            #   schedule_next_tick(new_state.tick_freq)
           end
 
           # IO.inspect(
@@ -85,8 +85,6 @@ defmodule Automaton do
         @impl GenServer
         def handle_info(:scheduled_tick, state) do
           [status, new_state] = tick(state)
-
-          # [status, new_state] = GenServer.call(self, :tick, 10_000)
 
           {:noreply, new_state}
         end

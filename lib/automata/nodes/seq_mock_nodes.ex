@@ -34,7 +34,6 @@ defmodule Seq1 do
   @impl Behavior
   def update(state) do
     IO.puts("Seq1#update")
-    System.cmd("say", ["1"])
     :timer.sleep(2000)
 
     :bh_running
@@ -48,7 +47,6 @@ defmodule Seq2 do
   @impl Behavior
   def update(state) do
     IO.puts("Seq2#update")
-    System.cmd("say", ["2"])
     :timer.sleep(2000)
 
     :bh_running
@@ -62,7 +60,6 @@ defmodule Seq3 do
   @impl Behavior
   def update(state) do
     IO.puts("Seq3#update")
-    System.cmd("say", ["3"])
     :timer.sleep(2000)
 
     :bh_running
@@ -76,7 +73,6 @@ defmodule Seq4 do
   @impl Behavior
   def update(state) do
     IO.puts("Seq4#update")
-    System.cmd("say", ["4"])
     :timer.sleep(2000)
 
     :bh_running
