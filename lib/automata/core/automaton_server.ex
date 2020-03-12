@@ -147,19 +147,6 @@ defmodule Automata.AutomatonServer do
     :"#{tree_name}Server"
   end
 
-  #
-  # defp prepopulate(size, sup) do
-  #   prepopulate(size, sup, [])
-  # end
-  #
-  # defp prepopulate(size, _sup, automaton) when size < 1 do
-  #   automaton
-  # end
-  #
-  # defp prepopulate(size, sup, automaton) do
-  #   prepopulate(size - 1, sup, [new_automaton(sup) | automaton])
-  # end
-
   defp new_automaton(node_sup, {m, _f, a} = mfa, name) do
     # {:ok, automaton} = DynamicSupervisor.start_child(node_sup, {m, a})
     spec = {m, [[node_sup, mfa, m]]}
@@ -168,13 +155,6 @@ defmodule Automata.AutomatonServer do
     true = Process.link(automaton)
     automaton
   end
-
-  # NOTE: We use this when we have to queue up the consumer
-  # defp new_automaton(sup, from_pid, mfa) do
-  #   pid = new_automaton(sup, mfa, nil)
-  #   ref = Process.monitor(from_pid)
-  #   {pid, ref}
-  # end
 
   defp dismiss_automaton(sup, pid) do
     true = Process.unlink(pid)

@@ -44,11 +44,6 @@ defmodule Automaton do
         def tick(state) do
           new_state = if state.status != :bh_running, do: on_init(state), else: state
 
-          # IO.inspect([
-          #   "[#{Process.info(self)[:registered_name]}][tick] updating node...",
-          #   Process.info(self)[:registered_name]
-          # ])
-
           status = update(new_state)
 
           if status != :bh_running do
@@ -58,17 +53,6 @@ defmodule Automaton do
             #   schedule_next_tick(new_state.tick_freq)
           end
 
-          # IO.inspect(
-          #   [
-          #     DateTime.now!("Etc/UTC") |> DateTime.to_time(),
-          #     "ticked",
-          #     state.status,
-          #     status
-          #   ],
-          #   label: Process.info(self)[:registered_name]
-          # )
-
-          # IO.puts("\n")
           [status, new_state]
         end
 

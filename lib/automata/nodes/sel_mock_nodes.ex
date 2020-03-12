@@ -3,27 +3,26 @@ require Integer
 
 defmodule MockSel1 do
   use Automaton,
+    root: true,
     # required
     # one of :sequence, :selector, :parallel, :priority, etc...
-    # or type :execution for execution nodes (no children)
-    node_type: :sequence,
+    # or type :action for action nodes (no children)
+    node_type: :selector,
 
     # the frequency of updates for this node(tree), in milliseconds
-    tick_freq: 7_000,
+    tick_freq: 2000,
 
-    # not included for execution nodes
-    # list of child control/execution nodes
-    # these run in order for type :selector and :sequence nodes
-    # and in parallel for type :parallel
-    # children: [SelComposite1, Sel1]
-    children: [Sel1, Sel2, SelComposite1]
+    # not included for action nodes list of child control/execution nodes
+    # these run in order for type :selector and :selector nodes and in parallel for
+    # type :parallel
+    children: [Sel1, SelComposite1, Sel4]
 end
 
 defmodule SelComposite1 do
   use Automaton,
-    node_type: :sequence,
-    tick_freq: 3_500,
-    children: [Sel3, Sel4]
+    node_type: :selector,
+    tick_freq: 2000,
+    children: [Sel2, Sel3]
 end
 
 defmodule Sel1 do
@@ -32,15 +31,10 @@ defmodule Sel1 do
 
   @impl Behavior
   def update(state) do
-    IO.puts("WithinTimeWindow?")
-    now = DateTime.now!("Etc/UTC") |> DateTime.to_time()
-    min = now.minute
+    IO.puts("Sel1#update")
+    :timer.sleep(2000)
 
-    if Integer.is_odd(min) do
-      :bh_success
-    else
-      :bh_running
-    end
+    :bh_running
   end
 end
 
@@ -50,16 +44,10 @@ defmodule Sel2 do
 
   @impl Behavior
   def update(state) do
-    IO.puts("MA Crossover?")
-    now = DateTime.now!("Etc/UTC") |> DateTime.to_time()
-    min = now.minute
-    sec = now.second
+    IO.puts("Sel2#update")
+    :timer.sleep(2000)
 
-    if Integer.is_odd(min) && sec <= 30 do
-      :bh_success
-    else
-      :bh_running
-    end
+    :bh_running
   end
 end
 
@@ -69,16 +57,10 @@ defmodule Sel3 do
 
   @impl Behavior
   def update(state) do
-    IO.puts("Exit Position 1")
-    now = DateTime.now!("Etc/UTC") |> DateTime.to_time()
-    min = now.minute
-    sec = now.second
+    IO.puts("Sel3#update")
+    :timer.sleep(2000)
 
-    if Integer.is_odd(min) && sec <= 15 do
-      :bh_success
-    else
-      :bh_running
-    end
+    :bh_running
   end
 end
 
@@ -88,8 +70,9 @@ defmodule Sel4 do
 
   @impl Behavior
   def update(state) do
-    IO.puts("Enter Position 2")
+    IO.puts("Sel4#update")
+    :timer.sleep(2000)
 
-    :bh_success
+    :bh_running
   end
 end

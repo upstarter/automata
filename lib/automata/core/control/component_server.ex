@@ -6,10 +6,6 @@ defmodule Automaton.ComponentServer do
   """
   alias Automaton.{ComponentServer, Action}
 
-  # alias Automaton.Decorator
-
-  # a component is just a behavior
-
   @types [:action, :decorator, :condition]
   def types, do: @types
 

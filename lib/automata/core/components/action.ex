@@ -1,20 +1,13 @@
 defmodule Automaton.Action do
   @moduledoc """
     An action is a leaf in the tree.
-    It operates on the world as a component of a control node.
+    It operates on the world as a component of a composite(control) node.
   """
   alias Automaton.Behavior
 
   defmacro __using__(user_opts) do
     prepend =
       quote do
-        # @type node :: {
-        #         term() | :undefined,
-        #         child() | :restarting,
-        #         :worker | :supervisor,
-        #         :supervisor.modules()
-        #       }
-
         # all nodes are GenServer's & Behavior's
         use GenServer
         use Behavior

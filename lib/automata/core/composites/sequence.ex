@@ -33,11 +33,10 @@ defmodule Automaton.Composite.Sequence do
 
       def tick_workers(workers) do
         Enum.reduce_while(workers, :ok, fn w, _acc ->
-          # IO.inspect(workers)
           status = GenServer.call(w, :tick, 10_000)
 
-          # If the child fails, or keeps running, do the same.
           cond do
+            # If the child fails, or keeps running, do the same.
             status == :bh_running ->
               # IO.puts("CONT")
               # IO.inspect([Process.info(w)[:registered_name], status])

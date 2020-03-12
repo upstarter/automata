@@ -10,7 +10,7 @@ intelligent agents for coordinated and/or uncoordinated action in one or many
 environments with no central point of failure. This project is Open Source.
 
 ## Project Mission & Summary
-The Automata Project will be a comprehensive framework for Artificial Intelligence Control Architects. It will combine the state-of-the-art AI control techniques with the latest research in autonomous decentralized systems.
+The Automata Project is a comprehensive framework for Artificial Intelligence Control Architects. It combines the state-of-the-art AI control techniques with the latest research in autonomous decentralized systems.
 
 ##### This project is in the Alpha stage and not ready for production systems. We need Contributors to get to 1.0. We are eager for your contributions and very happy you found yourself here! Please join the [slack channel](https://join.slack.com/t/automata-project/shared_invite/zt-cnroo0qs-rhziMz4CjzcVRaIYPc1Pmg) and/or reach out to [ericsteen1@gmail.com](mailto:ericsteen1@gmail.com) if interested or with any questions. Here are our [contributing guidelines](https://github.com/upstarter/automata/blob/master/CONTRIBUTING.md).
 

@@ -12,11 +12,9 @@ defmodule MockSeq1 do
     # the frequency of updates for this node(tree), in milliseconds
     tick_freq: 2000,
 
-    # not included for action nodes
-    # list of child control/execution nodes
-    # these run in order for type :selector and :sequence nodes
-    # and in parallel for type :parallel
-    # children: [SeqComposite1, Seq1]
+    # not included for action nodes list of child control/execution nodes
+    # these run in order for type :selector and :sequence nodes and in parallel for
+    # type :parallel
     children: [Seq1, SeqComposite1, Seq4]
 end
 

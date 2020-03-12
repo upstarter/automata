@@ -27,22 +27,17 @@ defmodule Automaton.Behavior do
       alias Automaton.Behavior
       @behaviour Behavior
 
-      # TODO: allow user to choose from behavior tree, utility AI, or both
-      # for the knowledge and decisioning system. Allow third-party strategies?
       use GlobalBlackboard
       use NodeBlackboard
       use GlobalUtility
       use NodeUtility
 
       @impl Behavior
-      # overriden by users
       def on_init(state)
 
-      # overriden by users
       @impl Behavior
       def update(state)
 
-      # overriden by users
       @impl Behavior
       def on_terminate(new_state)
 
@@ -50,8 +45,6 @@ defmodule Automaton.Behavior do
         GenServer.call(pid, :do_status, status)
       end
 
-      # Creates a new process and does a request to
-      # itself.
       defp set_status(from, state, status) do
         pid = self()
 
