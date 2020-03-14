@@ -8,6 +8,7 @@ defmodule Automaton.NodeSupervisor do
     )
   end
 
+  @spec init([]) :: no_return
   def init([automaton_server, {_m, _f, _a}, _name]) do
     Process.link(automaton_server)
 

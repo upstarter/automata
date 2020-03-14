@@ -6,6 +6,7 @@ defmodule Automata.Supervisor do
     Supervisor.start_link(__MODULE__, nodes_config, name: __MODULE__)
   end
 
+  @spec init(any) :: no_return
   def init(nodes_config) do
     children = [
       {Automata.AutomataSupervisor, []},
