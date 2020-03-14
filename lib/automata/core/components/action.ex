@@ -38,7 +38,6 @@ defmodule Automaton.Action do
         # #######################
         # # GenServer Callbacks #
         # #######################
-        @impl true
         def init([composite_sup, mfa, %State{} = state]) do
           {:ok, state}
         end
@@ -46,7 +45,7 @@ defmodule Automaton.Action do
 
     control =
       quote do
-        @impl Behavior
+        
         def on_init(state) do
           case state.status do
             :bh_success ->
@@ -63,7 +62,7 @@ defmodule Automaton.Action do
           state
         end
 
-        @impl Behavior
+        
         def on_terminate(status) do
           case status do
             :bh_running ->

@@ -16,7 +16,6 @@ defmodule Automaton.Composite.Sequence do
 
   defmacro __using__(opts) do
     quote do
-      @impl Behavior
       def update(%{workers: workers} = state) do
         {w, status} = tick_workers(workers)
 
@@ -52,7 +51,6 @@ defmodule Automaton.Composite.Sequence do
         end)
       end
 
-      @impl Behavior
       def on_init(state) do
         case state.status do
           :bh_success ->
@@ -69,7 +67,6 @@ defmodule Automaton.Composite.Sequence do
         state
       end
 
-      @impl Behavior
       def on_terminate(status) do
         case status do
           :bh_running ->

@@ -36,8 +36,7 @@ defmodule Automaton.CompositeServer do
     prepend =
       quote do
         use GenServer
-        import CompositeServer
-        @behaviour CompositeServer
+
         # TODO: probably handle state somewhere else? GenServer linked to Node?
         defmodule State do
           # bh_fresh is for when status has not been initialized
@@ -72,7 +71,6 @@ defmodule Automaton.CompositeServer do
         # #######################
         # # GenServer Callbacks #
         # #######################
-        @impl true
         def init([node_sup, {m, _, _} = mfa, state, name]) do
           Process.flag(:trap_exit, true)
           monitors = :ets.new(:monitors, [:private])
@@ -143,17 +141,14 @@ defmodule Automaton.CompositeServer do
         end
 
         # notifies listeners if child status is not fresh
-        @impl CompositeServer
         def add_child(child) do
           {:ok, []}
         end
 
-        @impl CompositeServer
         def remove_child(child) do
           {:ok, []}
         end
 
-        @impl CompositeServer
         def clear_children() do
           {:ok, []}
         end
@@ -233,10 +228,9 @@ defmodule Automaton.CompositeServer do
         #   {:noreply, state}
         # end
 
-        # @impl true
-        # def terminate(_reason, _state) do
-        #   :ok
-        # end
+        def terminate(_reason, _state) do
+          :ok
+        end
 
         #####################
         # Private Functions #
