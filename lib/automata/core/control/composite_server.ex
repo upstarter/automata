@@ -164,6 +164,11 @@ defmodule Automaton.CompositeServer do
         def continue_status do
           :ok
         end
+
+        @impl CompositeServer
+        def continue_status() do
+          {:ok, nil}
+        end
       end
 
     append =
