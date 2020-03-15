@@ -16,7 +16,7 @@ defmodule Automaton.Behavior do
   alias Automata.Utility, as: GlobalUtility
   alias Automaton.Utility, as: NodeUtility
 
-  @callback on_init(term) :: {:ok, term} | {:error, String.t()}
+  @callback on_init(term) :: term | {:error, String.t()}
   @callback update({:ok, term}) :: atom
   @callback on_terminate(term) :: {:ok, term}
   @callback reset() :: atom
@@ -37,7 +37,7 @@ defmodule Automaton.Behavior do
       use NodeUtility
 
       @impl Behavior
-      def on_init(arg)
+      def on_init(state)
 
       # currently control nodes run this function if `update` is not defined
       # TODO: figure out the right thing to do here
@@ -102,44 +102,6 @@ defmodule Automaton.Behavior do
         # Returns nothing to the client, but unblocks the
         # server to get more requests.
         {:noreply, state}
-      end
-
-      def handle_call(:get_status, _from, state) do
-        {:reply, state.status, state}
-      end
-
-      def handle_call(:set_running, _from, state) do
-        {:reply, :ok, %{state | status: :bh_running}}
-      end
-
-      def handle_call(:succeed, _from, state) do
-        {:reply, :ok, %{state | status: :bh_success}}
-      end
-
-      def handle_call(:fail, _from, state) do
-        {:reply, :ok, %{state | status: :bh_failure}}
-      end
-
-      def handle_call(:running?, _from, state) do
-        {:reply, state.status == :bh_running, state}
-      end
-
-      def handle_call(:aborted?, _from, state) do
-        {:reply, state.status == :bh_aborted, state}
-      end
-
-      def handle_call(:terminated?, _from, state) do
-        status = state.status
-        {:reply, status == :bh_success || status == :bh_failure, state}
-      end
-
-      def handle_call(:abort, _from, state) do
-        on_terminate(state)
-        {:reply, true, %{state | status: :bh_aborted}}
-      end
-
-      def handle_call(:reset, _from, state) do
-        {:reply, true, %{state | status: :bh_invalid}}
       end
     end
   end
