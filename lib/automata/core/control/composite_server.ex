@@ -15,7 +15,7 @@ defmodule Automaton.CompositeServer do
   # a composite is just an array of behaviors
   @callback add_child(term) :: {:ok, list} | {:error, String.t()}
   @callback remove_child(term) :: {:ok, list} | {:error, String.t()}
-  @callback clear_children :: {:ok, term} | {:error, String.t()}
+  @callback clear_children :: {:ok, list} | {:error, String.t()}
   @callback continue_status() :: atom
 
   @types [:sequence, :selector, :parallel, :priority]
@@ -147,17 +147,22 @@ defmodule Automaton.CompositeServer do
         # notifies listeners if child status is not fresh
         @impl CompositeServer
         def add_child(child) do
-          {:ok, nil}
+          {:ok, []}
         end
 
         @impl CompositeServer
         def remove_child(child) do
-          {:ok, nil}
+          {:ok, []}
         end
 
         @impl CompositeServer
         def clear_children() do
-          {:ok, nil}
+          {:ok, []}
+        end
+
+        @impl CompositeServer
+        def continue_status do
+          :ok
         end
       end
 
