@@ -159,6 +159,11 @@ defmodule Automaton.CompositeServer do
         def clear_children() do
           {:ok, nil}
         end
+
+        @impl CompositeServer
+        def continue_status() do
+          {:ok, nil}
+        end
       end
 
     append =

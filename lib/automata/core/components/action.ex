@@ -10,7 +10,6 @@ defmodule Automaton.Action do
       quote do
         # all nodes are GenServer's & Behavior's
         use GenServer
-        use Behavior
       end
 
     node_type =
