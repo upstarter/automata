@@ -6,9 +6,10 @@ defmodule Automaton.Behavior do
     tree can be thought of as high level behaviors, heirarchically combining
     smaller behaviors to provide more complex and interesting behaviors.
 
-    Note: this is all placeholder stuff right now and needs cleanup. The
-    specs for the callbacks are not accurate, just needed something that compiled and ran.
-    Needs more thought and attention as the design process continues.
+    Note: there is a bunch of placeholder stuff in here right now and needs
+    thought and cleanup. The specs for the callbacks are not accurate, just
+    needed something that compiled and ran. Needs more thought and attention as
+    the design process continues.
   """
   alias Automata.Blackboard, as: GlobalBlackboard
   alias Automaton.Blackboard, as: NodeBlackboard
@@ -16,7 +17,7 @@ defmodule Automaton.Behavior do
   alias Automaton.Utility, as: NodeUtility
 
   @callback on_init(term) :: {:ok, term} | {:error, String.t()}
-  @callback update(term) :: atom
+  @callback update({:ok, term}) :: atom
   @callback on_terminate(term) :: {:ok, term}
   @callback reset() :: atom
   @callback abort() :: {:ok, term}
@@ -36,12 +37,12 @@ defmodule Automaton.Behavior do
       use NodeUtility
 
       @impl Behavior
-      def on_init(arg) do
-        {:ok, nil}
-      end
+      def on_init(arg)
 
+      # currently control nodes run this function if `update` is not defined
+      # TODO: figure out the right thing to do here
       @impl Behavior
-      def update(arg)
+      def update(args)
 
       @impl Behavior
       def on_terminate(new_state) do
