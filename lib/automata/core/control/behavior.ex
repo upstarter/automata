@@ -16,14 +16,16 @@ defmodule Automaton.Behavior do
   alias Automata.Utility, as: GlobalUtility
   alias Automaton.Utility, as: NodeUtility
 
+  # these need serious help, just placeholders for now
   @callback on_init(term) :: term | {:error, String.t()}
-  @callback update({:ok, term}) :: atom
-  @callback on_terminate(term) :: {:ok, term}
+  @callback update(any()) :: any()
+  @callback on_terminate(term) ::
+              :bh_aborted | :bh_failure | :bh_fresh | :bh_running | :bh_success
   @callback reset() :: atom
-  @callback abort() :: {:ok, term}
-  @callback aborted?() :: bool
-  @callback terminated?() :: bool
-  @callback running?() :: bool
+  @callback abort() :: atom
+  @callback aborted?() :: bool | nil
+  @callback terminated?() :: bool | nil
+  @callback running?() :: bool | nil
   @callback get_status() :: atom
 
   defmacro __using__(_opts) do
@@ -45,9 +47,7 @@ defmodule Automaton.Behavior do
       def update(args)
 
       @impl Behavior
-      def on_terminate(new_state) do
-        {:ok, nil}
-      end
+      def on_terminate(new_state)
 
       @impl Behavior
       def reset do
@@ -56,7 +56,7 @@ defmodule Automaton.Behavior do
 
       @impl Behavior
       def abort do
-        {:ok, nil}
+        :ok
       end
 
       @impl Behavior
