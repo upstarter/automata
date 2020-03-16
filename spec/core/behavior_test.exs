@@ -1,10 +1,10 @@
-defmodule AutomataTest do
-  use ExUnit.Case, async: true
-  doctest Automata
+defmodule BehaviorTest do
+  use ESpec
+  doctest Automaton.Behavior
 
   # TODO: ex_spec for context, it BDD style, property testing
 
-  setup_all do
+  let(:nodes_config) do
     # TODO: Load user-configs into node_configs
     nodes_config = [
       [name: "MockSeq1", mfa: {MockSeq1, :start_link, []}],
@@ -15,11 +15,14 @@ defmodule AutomataTest do
     [nodes_config: nodes_config]
   end
 
-  test "context was modified", context do
-    IO.inspect(context[:nodes_config])
-  end
+  describe "#get_status" do
+    context "when running" do
+      it(do: expect(true |> to(be_true())))
+      it(do: 1..3 |> should(have(2)))
 
-  test "loads user-defined modules from the nodes/ dir", context do
-    assert Automata.start_nodes(context[:nodes_config])
+      it "loads user-defined modules from the nodes/ dir" do
+        assert Automata.start_nodes(nodes_config)
+      end
+    end
   end
 end

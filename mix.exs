@@ -7,7 +7,8 @@ defmodule Automata.MixProject do
       version: "0.1.0",
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      preferred_cli_env: [espec: :test]
     ]
   end
 
@@ -24,7 +25,7 @@ defmodule Automata.MixProject do
     [
       {:dialyxir, "~> 1.0.0-rc.7", only: [:dev], runtime: false},
       {:ex_doc, "~> 0.21", only: :dev, runtime: false},
-      {:ex_spec, "~> 2.0", only: :test}
+      {:espec, "~> 1.7.0", only: :test}
     ]
   end
 end

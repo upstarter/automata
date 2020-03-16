@@ -1,5 +1,5 @@
 defmodule MockUserNodeTest do
-  use ExUnit.Case, async: true
+  use Espec
   # doctest MockUserNodeTest
   # TODO: ex_spec for context, it BDD style, property testing
 
