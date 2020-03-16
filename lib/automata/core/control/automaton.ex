@@ -60,13 +60,11 @@ defmodule Automaton do
           Process.send_after(self(), :scheduled_tick, ms_delay)
         end
 
-        @impl GenServer
         def handle_call(:tick, _from, state) do
           [status, new_state] = tick(state)
           {:reply, status, new_state}
         end
 
-        @impl GenServer
         def handle_info(:scheduled_tick, state) do
           [status, new_state] = tick(state)
 

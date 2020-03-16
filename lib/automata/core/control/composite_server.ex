@@ -231,14 +231,14 @@ defmodule Automaton.CompositeServer do
           end
         end
 
-        def handle_info(_info, state) do
-          {:noreply, state}
-        end
+        # def handle_info(_info, state) do
+        #   {:noreply, state}
+        # end
 
-        @impl true
-        def terminate(_reason, _state) do
-          :ok
-        end
+        # @impl true
+        # def terminate(_reason, _state) do
+        #   :ok
+        # end
 
         #####################
         # Private Functions #
