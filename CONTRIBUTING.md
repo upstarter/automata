@@ -22,6 +22,9 @@ Please join the [slack channel](https://join.slack.com/t/automata-project/shared
 ##### Open Items / TODO
 1. Define protocols / data flows between control processes with a [contract checker](https://www.youtube.com/watch?v=rQIE22e0cW8) between all (cc is also an anti-corruption layer? A.K.A. embedded schema).
 
+##### Special notes for Automata devs
+- DEBUGGING NOTE: anytime you see an error or warning that is in one of the mock sequence modules, it probably isn't. It is probably in one of the modules in core that get injected into them. This is the nature of meta-programming debugging.
+
 ### Engineering Standards & Best Practices
 Check the #dev or #testing channels on [slack]((https://join.slack.com/t/automata-project/shared_invite/zt-cnroo0qs-rhziMz4CjzcVRaIYPc1Pmg)) for questions/info.
 #### Design Standards
