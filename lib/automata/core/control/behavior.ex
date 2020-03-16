@@ -11,11 +11,6 @@ defmodule Automaton.Behavior do
     needed something that compiled and ran. Needs more thought and attention as
     the design process continues.
   """
-  alias Automata.Blackboard, as: GlobalBlackboard
-  alias Automaton.Blackboard, as: NodeBlackboard
-  alias Automata.Utility, as: GlobalUtility
-  alias Automaton.Utility, as: NodeUtility
-
   # these need serious help, just placeholders for now
   @callback on_init(term) :: term | {:error, String.t()}
   @callback update(any()) :: any()
@@ -33,10 +28,10 @@ defmodule Automaton.Behavior do
       import Automaton.Behavior
       @behaviour Automaton.Behavior
 
-      use GlobalBlackboard
-      use NodeBlackboard
-      use GlobalUtility
-      use NodeUtility
+      use Automata.Blackboard
+      use Automaton.Blackboard
+      use Automata.Utility
+      use Automaton.Utility
 
       @impl Behavior
       def on_init(state)

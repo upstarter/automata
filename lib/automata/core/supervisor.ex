@@ -1,5 +1,6 @@
 defmodule Automata.Supervisor do
   use Supervisor
+  @dialyzer {:no_return, init: 1}
 
   def start_link(nodes_config) do
     Supervisor.start_link(__MODULE__, nodes_config, name: __MODULE__)

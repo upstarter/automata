@@ -1,5 +1,6 @@
 defmodule Automaton.CompositeSupervisor do
   use DynamicSupervisor
+  @dialyzer {:no_return, init: 1}
 
   def start_link([composite_server, {_, _, _} = mfa, name]) do
     DynamicSupervisor.start_link(__MODULE__, [composite_server, mfa, name],
@@ -7,7 +8,7 @@ defmodule Automaton.CompositeSupervisor do
     )
   end
 
-  def init([composite_server, {m, _f, a}, name]) do
+  def init([composite_server, mfa, name]) do
     Process.link(composite_server)
 
     opts = [
