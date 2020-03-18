@@ -106,8 +106,6 @@ defmodule Automaton.CompositeServer do
         def handle_info(:start_children, state) do
           {:reply, :ok, new_state} = start_children(state)
 
-          if unquote(user_opts[:root]) == true, do: send(self, :update)
-
           {:noreply, new_state}
         end
 

@@ -16,7 +16,7 @@ defmodule AutomataTest do
   end
 
   test "context was modified", context do
-    IO.inspect(context[:nodes_config])
+    # IO.inspect(context[:nodes_config])
   end
 
   test "loads user-defined modules from the nodes/ dir", context do

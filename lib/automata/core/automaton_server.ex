@@ -148,9 +148,7 @@ defmodule Automata.AutomatonServer do
   end
 
   defp new_automaton(node_sup, {m, _f, a} = mfa, name) do
-    # {:ok, automaton} = DynamicSupervisor.start_child(node_sup, {m, a})
     spec = {m, [[node_sup, mfa, m]]}
-    IO.inspect(spec)
     {:ok, automaton} = DynamicSupervisor.start_child(node_sup, spec)
     true = Process.link(automaton)
     automaton
