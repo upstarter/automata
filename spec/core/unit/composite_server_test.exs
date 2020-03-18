@@ -15,13 +15,37 @@ defmodule BehaviorTest do
     [nodes_config: nodes_config]
   end
 
-  describe "#get_status" do
-    context "when running" do
+  describe "#add_child" do
+    context "" do
       it(do: expect(true |> to(be_true())))
       it(do: 1..3 |> should(have(2)))
 
-      it "loads user-defined modules from the nodes/ dir" do
-        assert Automata.start_nodes(nodes_config)
+      it "" do
+        Automata.start_nodes(nodes_config)
+      end
+    end
+  end
+
+  describe "#remove_child" do
+    context "" do
+      it "" do
+        Automata.start_nodes(nodes_config)
+      end
+    end
+  end
+
+  describe "#clear_children" do
+    context "" do
+      it "" do
+        Automata.start_nodes(nodes_config)
+      end
+    end
+  end
+
+  describe "#continue_status" do
+    context "" do
+      it "" do
+        Automata.start_nodes(nodes_config)
       end
     end
   end

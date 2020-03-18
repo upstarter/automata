@@ -190,6 +190,8 @@ TODO: how to implement the above scenario.
 - [Decentralized Control of Partially Observable Markov Decision
 Processes using Belief Space Macro-actions (Dec-POSMDP)](https://arxiv.org/pdf/1502.06030.pdf)
 
+- [New Research in Multi-Agent Coordination](https://www.intechopen.com/books/applications-of-mobile-robots/a-survey-and-analysis-of-cooperative-multi-agent-robot-systems-challenges-and-directions)
+
 ###### Other
 - [Beliefs, Desires, Intentions(BDI) Architecture](https://en.wikipedia.org/wiki/Belief%E2%80%93desire%E2%80%93intention_software_model)
 
