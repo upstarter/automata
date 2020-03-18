@@ -29,7 +29,7 @@ Currently, the mock sequence runs when you run `iex -S mix`. This will change of
 ### Technologies
  [Elixir](https://elixir-lang.org/) & [OTP](https://en.wikipedia.org/wiki/Open_Telecom_Platform) provide the
  primitives for robust concurrent, fault-tolerant, highly available,
- self-healing distributed systems. Based on the Actor model, a singular Elixir `Process` embodies all 3 essential elements of computation: processing, storage, communications. It does so using very lightweight, isolated processes, each with its own stack, heap, and communications facilities (mailbox), and garbage collector. The Erlang VM (BEAM), with pre-emptive scheduling, acts somewhat as on operating system on top of an operating system. Pre-emption is good because it prevents bad processes from starving the rest of the system, allowing for higher degrees of concurrency and better interactive performance.
+ self-healing distributed systems. Based on the Actor model, a singular Elixir `Process` embodies all 3 essential elements of computation: processing, storage, communications. It does so using very lightweight, isolated processes, each with its own stack, heap, communications facilities (mailbox), and garbage collector. The Erlang VM (BEAM), with pre-emptive scheduling, acts somewhat as on operating system on top of an operating system. Pre-emption is good because it prevents bad processes from starving the rest of the system, allowing for higher degrees of concurrency and better interactive performance.
 
  [Behavior Trees](https://en.wikipedia.org/wiki/Behavior_tree_(artificial_intelligence,_robotics_and_control))
  are increasingly used in place of finite state machines (FSM's) and other AI
@@ -70,9 +70,9 @@ Currently, the mock sequence runs when you run `iex -S mix`. This will change of
 
 ### Performance Features:
 - Concurrency
-  - The world is concurrent. For example: we see, hear, and move at the same time. Many global financial instruments are fluctuating at this instance. Concurrency was a core factor in the design of the Elixir language, making it easy to reason about and debug.
+  - The world is concurrent. For example: we see, hear, and move at the same time. Many global financial instruments are fluctuating at this instance. Concurrency was a core factor in the design of Erlang, making it easy to reason about and debug.
 - High availability
-  - Elixir is capable of 99.9999999% uptime (31 milliseconds/year of downtime). The main point of the Elixir model is an application that can be expected to run forever, as stated by the inventor — Joe Armstrong (RIP). Talk about unstoppable software!
+  - Elixir is capable of 99.9999999% uptime (31 milliseconds/year of downtime). The main point of the Erlang model is an application that can be expected to run forever, as stated by the inventor — Joe Armstrong (RIP). Talk about unstoppable software!
 - Fault Tolerance
   - OTP Supervision Trees and the "fail fast" principle provide strong guarantees for error recovery and self healing systems.
 - Scalability & Distribution

@@ -15,13 +15,16 @@ defmodule BehaviorTest do
     [nodes_config: nodes_config]
   end
 
+  before_all do
+    Automata.start_nodes(nodes_config)
+  end
+
   describe "#add_child" do
     context "" do
-      it(do: expect(true |> to(be_true())))
-      it(do: 1..3 |> should(have(2)))
+      # it(do: expect(true |> to(be_true())))
+      # it(do: 1..3 |> should(have(2)))
 
       it "" do
-        Automata.start_nodes(nodes_config)
       end
     end
   end
@@ -29,7 +32,6 @@ defmodule BehaviorTest do
   describe "#remove_child" do
     context "" do
       it "" do
-        Automata.start_nodes(nodes_config)
       end
     end
   end
@@ -37,7 +39,6 @@ defmodule BehaviorTest do
   describe "#clear_children" do
     context "" do
       it "" do
-        Automata.start_nodes(nodes_config)
       end
     end
   end
@@ -45,7 +46,6 @@ defmodule BehaviorTest do
   describe "#continue_status" do
     context "" do
       it "" do
-        Automata.start_nodes(nodes_config)
       end
     end
   end
