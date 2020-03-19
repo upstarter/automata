@@ -71,7 +71,6 @@ defmodule Automaton.Behavior do
 
       @impl Behavior
       def status do
-        :bh_running
       end
 
       def set_status(pid, status) do
