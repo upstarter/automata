@@ -27,8 +27,11 @@ defmodule BehaviorTest do
 
   describe "#update" do
     context "updating the tree from the root" do
-      it "ticks all the children" do
-        assert GenServer.call(MockSeq1, :update) == :bh_running
+      it "updates all children" do
+        send(MockSeq1Server, :update)
+        # require IEx
+        # IEx.pry()
+        assert MockSeq1Server.status() == :bh_running
       end
     end
   end

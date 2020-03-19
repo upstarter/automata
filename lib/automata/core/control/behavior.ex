@@ -1,10 +1,10 @@
 defmodule Automaton.Behavior do
   @moduledoc """
-    An Automaton.Behavior is an abstract interface for actions, conditions, and
-    composites that can be activated, run, and deactivated. Actions(Execution
-    Nodes) provide specific implementations of this interface. Branches in the
-    tree can be thought of as high level behaviors, heirarchically combining
-    smaller behaviors to provide more complex and interesting behaviors.
+    An Automaton.Behavior is an abstract interface for composites and actions
+    that can be activated, run, and deactivated. Actions(Execution Nodes)
+    provide specific implementations of this interface. Branches in the tree can
+    be thought of as high level behaviors, heirarchically combining smaller
+    behaviors to provide more complex and interesting behaviors.
 
     Note: there is a bunch of placeholder stuff in here right now and needs
     thought and cleanup. The specs for the callbacks are not accurate, just
@@ -21,7 +21,7 @@ defmodule Automaton.Behavior do
   @callback aborted?() :: bool | nil
   @callback terminated?() :: bool | nil
   @callback running?() :: bool | nil
-  @callback get_status() :: atom
+  @callback status() :: atom
 
   defmacro __using__(_opts) do
     quote do
@@ -70,7 +70,7 @@ defmodule Automaton.Behavior do
       end
 
       @impl Behavior
-      def get_status do
+      def status do
         :bh_running
       end
 
