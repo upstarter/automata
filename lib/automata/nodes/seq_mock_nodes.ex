@@ -4,12 +4,19 @@ require Integer
 defmodule MockSeq1 do
   use Automaton,
     root: true,
+    # for granular control of effectors
+    mode: nil,
+    # for filtering, utility decisioning, prioritization
+    type: nil,
     # required
     # one of :sequence, :selector, :parallel, :priority, etc...
     # or type :action for action nodes (no children)
     node_type: :sequence,
 
-    # the frequency of updates for this node(tree), in milliseconds
+    # the system heartbeat for this node(subtree), in milliseconds
+    # the default is 0 ms (infinite loop)
+    # heartbeat adaption as meta-level(automata) action
+    # can be changed at runtime
     tick_freq: 2000,
 
     # not included for action nodes list of child control/execution nodes

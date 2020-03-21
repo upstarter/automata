@@ -73,6 +73,53 @@ defmodule Automaton.Behavior do
       def status do
       end
 
+      @impl Behavior
+      def handle_call(:status, _from, state) do
+        {:reply, state.status, state}
+      end
+
+      @impl Behavior
+      def handle_call(:set_running, _from, state) do
+        {:reply, :ok, %{state | status: :bh_running}}
+      end
+
+      @impl Behavior
+      def handle_call(:succeed, _from, state) do
+        {:reply, :ok, %{state | status: :bh_success}}
+      end
+
+      @impl Behavior
+      def handle_call(:fail, _from, state) do
+        {:reply, :ok, %{state | status: :bh_failure}}
+      end
+
+      @impl Behavior
+      def handle_call(:running?, _from, state) do
+        {:reply, state.status == :bh_running, state}
+      end
+
+      @impl Behavior
+      def handle_call(:aborted?, _from, state) do
+        {:reply, state.status == :bh_aborted, state}
+      end
+
+      @impl Behavior
+      def handle_call(:terminated?, _from, state) do
+        status = state.status
+        {:reply, status == :bh_success || status == :bh_failure, state}
+      end
+
+      @impl Behavior
+      def handle_call(:abort, _from, state) do
+        on_terminate(state)
+        {:reply, true, %{state | status: :bh_aborted}}
+      end
+
+      @impl Behavior
+      def handle_call(:reset, _from, state) do
+        {:reply, true, %{state | status: :bh_invalid}}
+      end
+
       def set_status(pid, status) do
         GenServer.call(pid, :do_status, status)
       end

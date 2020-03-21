@@ -31,7 +31,7 @@ defmodule BehaviorTest do
         send(MockSeq1Server, :update)
         # require IEx
         # IEx.pry()
-        assert MockSeq1Server.status() == :bh_running
+        assert GenServer.call(MockSeq1Server, :status) == :bh_running
       end
     end
   end

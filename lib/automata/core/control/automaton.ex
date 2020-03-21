@@ -62,13 +62,13 @@ defmodule Automaton do
 
         def handle_call(:tick, _from, state) do
           [status, new_state] = tick(state)
-          {:reply, status, new_state}
+          {:reply, status, %{new_state | status: status}}
         end
 
         def handle_info(:scheduled_tick, state) do
           [status, new_state] = tick(state)
 
-          {:noreply, new_state}
+          {:noreply, %{new_state | status: status}}
         end
       end
 

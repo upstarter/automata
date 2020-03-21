@@ -22,7 +22,20 @@ See the current milestones [here](https://github.com/upstarter/automata/mileston
 
 ## Usage
 
-Currently, the mock sequence runs when you run `iex -S mix`. This will change of course.
+Currently, you can run the mock sequence in an iex shell as follows:
+
+```elixir
+iex -S mix
+send(MockSeq1Server, :update)
+```
+
+and tests can be run with debugging capabilities as follows:
+
+`MIX_ENV=test iex -S mix espec spec/unit/core/behavior_test.exs:31`
+
+where you are running a specific context/it block containing line 31.
+
+
 
 ## Implementation Overview
 
@@ -40,6 +53,23 @@ Currently, the mock sequence runs when you run `iex -S mix`. This will change of
  is used to keep the automata focused on actions by providing an external system for all decision making support. This significantly reduces the amount of logic/nodes required for an agent and takes the heavy mathematical workload off of action developers.
 
 ### Requirements
+
+#### Autonomy is the capacity of agent(s) to achieve a set of coordinated goals by their own means (without human intervention) adapting to environment variations.
+
+It combines five complementary  aspects:
+  - Perception e.g. interpretation of stimuli, removing ambiguity/vagueness from
+    complex input data and determining relevant information;
+  - Reflection e.g. building/updating a faithful environment run-time model;
+  - Goal management e.g. choosing among possible goals the most appropriate ones for
+    a given configuration of the environment model;
+  - Planning to achieve chosen goals;
+  - Self-adaptation e.g. the ability to adjust behavior through learning and reasoning and
+    to change dynamically the goal management and planning processes.
+
+Note that the five aspects are orthogonal. The first two aspects deal with
+“understanding” the situation of the environment. The third and the forth aspect
+deal with autonomy of decision. Self adaptation ensures adequacy of decisions
+with respect to the environment situation.
 
 #### A system is defined as an Autonomous Decentralized System (ADS) if the following 2 properties are satisfied:
 
@@ -119,8 +149,10 @@ defmodule MyAutomaton do
     # one of :sequence, :selector, :parallel, :action (no children), etc...
     node_type: :selector,
 
-    # the frequency of updates for this node(subtree), in milliseconds
-    # the default is 0 ms, essentially an infinite loop
+    # the system heartbeat for this node(subtree), in milliseconds
+    # the default is 0 ms (infinite loop)
+    # heartbeat adaption as meta-level(automata) action
+    # can be changed at runtime
     tick_freq: 200, # 200ms
 
 
@@ -133,6 +165,7 @@ defmodule MyAutomaton do
     # called every tick, must return status
     def update do
       # reactively and proactively change the world
+      # ie.. effect the current environment using either effectors or via communication with other agents
       {:ok, status}
     end
 end
@@ -183,12 +216,21 @@ TODO: how to implement the above scenario.
 - [Utility AI Design Patterns](https://course.ccs.neu.edu/cs5150f13/readings/dill_designpatterns.pdf)
 
 ###### Theoretical
-- [Multi-Agent Online Planning with Communication](https://www.aaai.org/ocs/index.php/ICAPS/ICAPS09/paper/viewFile/729/1129)
+- Automaton Control
 
-- [The Complexity of Decentralized Control of Markov Decision Processes (Dec-POMPDP)](https://arxiv.org/pdf/1301.3836.pdf)
+  - [Multi-Agent Online Planning with Communication](https://www.aaai.org/ocs/index.php/ICAPS/ICAPS09/paper/viewFile/729/1129)
 
-- [Decentralized Control of Partially Observable Markov Decision
-Processes using Belief Space Macro-actions (Dec-POSMDP)](https://arxiv.org/pdf/1502.06030.pdf)
+  - [The Complexity of Decentralized Control of Markov Decision Processes (Dec-POMPDP)](https://arxiv.org/pdf/1301.3836.pdf)
+
+  - [Decentralized Control of Partially Observable Markov Decision
+  Processes using Belief Space Macro-actions (Dec-POSMDP)](https://arxiv.org/pdf/1502.06030.pdf)
+
+- Automata Control (MMLC)
+
+  - [Multi-Agent Meta-Level Control](https://www.academia.edu/22145349/Multiagent_meta-level_control_for_radar_coordination)
+
+
+- [General Architecture](https://arxiv.org/pdf/1811.10277.pdf)
 
 - [New Research in Multi-Agent Coordination](https://www.intechopen.com/books/applications-of-mobile-robots/a-survey-and-analysis-of-cooperative-multi-agent-robot-systems-challenges-and-directions)
 
