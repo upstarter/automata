@@ -1,11 +1,12 @@
-defmodule BehaviorTest do
+# Unit Tests for the core functions and behavior of the Composite behaviour
+defmodule CompositeServerSpec do
   use ESpec
   doctest Automaton.Behavior
 
   # TODO: ex_spec for context, it BDD style, property testing
 
   let(:nodes_config) do
-    # TODO: Load user-configs into node_configs
+    # TODO: Load user-configs into node_config
     nodes_config = [
       [name: "MockSeq1", mfa: {MockSeq1, :start_link, []}],
       [name: "MockSeq2", mfa: {MockSeq2, :start_link, []}],
@@ -19,7 +20,7 @@ defmodule BehaviorTest do
     Automata.start_nodes(nodes_config)
   end
 
-  describe "#add_child" do
+  describe "#" do
     context "" do
       # it(do: expect(true |> to(be_true())))
       # it(do: 1..3 |> should(have(2)))
@@ -29,21 +30,21 @@ defmodule BehaviorTest do
     end
   end
 
-  describe "#remove_child" do
+  describe "#" do
     context "" do
       it "" do
       end
     end
   end
 
-  describe "#clear_children" do
+  describe "#" do
     context "" do
       it "" do
       end
     end
   end
 
-  describe "#continue_status" do
+  describe "#" do
     context "" do
       it "" do
       end

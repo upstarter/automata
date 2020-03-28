@@ -1,4 +1,5 @@
-defmodule BehaviorTest do
+# test the Action state changes, data flows, and contract checking as applicable
+defmodule ActionStateSpec do
   use ESpec
   doctest Automaton.Behavior
 
@@ -26,7 +27,7 @@ defmodule BehaviorTest do
   # # assertion about state
 
   describe "#update" do
-    context "updating the tree from the root" do
+    context "updating from the root" do
       it "updates all children" do
         send(MockSeq1Server, :update)
         # require IEx
@@ -37,65 +38,58 @@ defmodule BehaviorTest do
   end
 
   # describe "#on_init" do
-  #   context "" do
+  #   context "when status == :fresh" do
   #     it "" do
   #     end
   #   end
+
+  #   context "when status == :running" do
+  #     it "" do
+  #     end
+  #   end
+  #
+  #   context "when status == :success" do
+  #     it "" do
+  #     end
+  #   end
+  #
+  #   context "when status == :failure" do
+  #     it "" do
+  #     end
+  #   end
+
+  #   context "when status == :aborted" do
+  #     it "" do
+  #     end
+  #   end
+  #
   # end
   #
   # describe "#on_terminate" do
-  #   context "" do
+  #   context "when status == :fresh" do
+  #     it "" do
+  #     end
+  #   end
+
+  #   context "when status == :running" do
+  #     it "" do
+  #     end
+  #   end
+  #
+  #   context "when status == :success" do
+  #     it "" do
+  #     end
+  #   end
+  #
+  #   context "when status == :failure" do
+  #     it "" do
+  #     end
+  #   end
+
+  #   context "when status == :aborted" do
   #     it "" do
   #     end
   #   end
   # end
-  #
-  # describe "#reset" do
-  #   context "" do
-  #     it "" do
-  #     end
-  #   end
-  # end
-  #
-  # describe "#abort" do
-  #   context "" do
-  #     it "" do
-  #     end
-  #   end
-  # end
-  #
-  # describe "#running?" do
-  #   context "" do
-  #     it "" do
-  #     end
-  #   end
-  # end
-  #
-  # describe "#aborted?" do
-  #   context "" do
-  #     it "" do
-  #     end
-  #   end
-  # end
-  #
-  # describe "#terminated?" do
-  #   context "" do
-  #     it "" do
-  #     end
-  #   end
-  # end
-  #
-  # describe "#get_status" do
-  #   context "" do
-  #     it "" do
-  #     end
-  #   end
-  # end
-  #
-  # describe "#set_status" do
-  #   context "" do
-  #     it "" do
-  #     end
-  #   end
   # end
 end

@@ -1,13 +1,13 @@
 
 #  ⦿	| Automata | ⦿	⦿ 	⦿	⦿
 
-### An AI control architecture framework for building autonomous decentralized systems ([ADS](https://en.wikipedia.org/wiki/Autonomous_decentralized_system)).
+### A comprehensive Autonomous Decentralized Systems framework for artificial intelligence control architects.
 
 ![](particles.gif)
 
 Spawn a [system](http://web.stanford.edu/class/ee380/Abstracts/190123.html) of concurrent, distributed, fault tolerant, and highly available
 intelligent agents for coordinated and/or uncoordinated action in one or many
-environments with no central point of failure. This project is Open Source.
+environments with no central point of failure. This project is Open Source. [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 ## Project Mission & Summary
 The Automata Project is a comprehensive framework for Artificial Intelligence Control Architects. It combines the state-of-the-art AI control techniques with the latest research in autonomous decentralized systems.
@@ -26,12 +26,14 @@ Currently, you can run the mock sequence in an iex shell as follows:
 
 ```elixir
 iex -S mix
-send(MockSeq1Server, :update)
+iex(1)> send(MockSeq1Server, :update)
 ```
 
 and tests can be run with debugging capabilities as follows:
 
-`MIX_ENV=test iex -S mix espec spec/unit/core/behavior_test.exs:31`
+```bash
+MIX_ENV=test iex -S mix espec spec/unit/core/behavior_test.exs:31
+```
 
 where you are running a specific context/it block containing line 31.
 
@@ -42,7 +44,7 @@ where you are running a specific context/it block containing line 31.
 ### Technologies
  [Elixir](https://elixir-lang.org/) & [OTP](https://en.wikipedia.org/wiki/Open_Telecom_Platform) provide the
  primitives for robust concurrent, fault-tolerant, highly available,
- self-healing distributed systems. Based on the Actor model, a singular Elixir `Process` embodies all 3 essential elements of computation: processing, storage, communications. It does so using very lightweight, isolated processes, each with its own stack, heap, communications facilities (mailbox), and garbage collector. The Erlang VM (BEAM), with pre-emptive scheduling, acts somewhat as on operating system on top of an operating system. Pre-emption is good because it prevents bad processes from starving the rest of the system, allowing for higher degrees of concurrency and better interactive performance.
+ self-healing distributed systems. Based on the Actor Model <sup>[1](#actorfootnote1)</sup>, a singular Elixir `Process`(Actor) embodies all 3 essential elements of computation: processing, storage, communications. It does so using very lightweight, isolated processes, each with its own stack, heap, communications facilities (mailbox), and garbage collector. The Erlang VM (BEAM), with pre-emptive scheduling, acts somewhat as on operating system on top of an operating system. Pre-emption is good because it prevents bad actors from starving the rest of the system, allowing for higher degrees of concurrency and better interactive performance.
 
  [Behavior Trees](https://en.wikipedia.org/wiki/Behavior_tree_(artificial_intelligence,_robotics_and_control))
  are increasingly used in place of finite state machines (FSM's) and other AI
@@ -57,19 +59,15 @@ where you are running a specific context/it block containing line 31.
 #### Autonomy is the capacity of agent(s) to achieve a set of coordinated goals by their own means (without human intervention) adapting to environment variations.
 
 It combines five complementary  aspects:
-  - Perception e.g. interpretation of stimuli, removing ambiguity/vagueness from
-    complex input data and determining relevant information;
-  - Reflection e.g. building/updating a faithful environment run-time model;
-  - Goal management e.g. choosing among possible goals the most appropriate ones for
-    a given configuration of the environment model;
-  - Planning to achieve chosen goals;
-  - Self-adaptation e.g. the ability to adjust behavior through learning and reasoning and
-    to change dynamically the goal management and planning processes.
+  - Perception e.g. interpretation of stimuli, removing ambiguity/vagueness from complex input data and determining relevant information based on context/strata/motif specific communications
+  - Reflection e.g. building/updating a faithful environment run-time model
+  - Goal management e.g. choosing among possible goals the most appropriate ones for a given configuration of the environment model
+  - Planning to achieve chosen goals
+  - Self-adaptation e.g. the ability to adjust behavior through learning and reasoning and to change dynamically the goal management and planning processes.
+
 
 Note that the five aspects are orthogonal. The first two aspects deal with
-“understanding” the situation of the environment. The third and the forth aspect
-deal with autonomy of decision. Self adaptation ensures adequacy of decisions
-with respect to the environment situation.
+“understanding” the map of the environment. The third and the forth aspects deal with autonomy of decision. Self adaptation ensures adequacy of decisions with respect to the environment map. See MMLC<sup>[2](#mmlcfootnote1)</sup>.
 
 #### A system is defined as an Autonomous Decentralized System (ADS) if the following 2 properties are satisfied:
 
@@ -82,6 +80,11 @@ with respect to the environment situation.
 ## Features
 
 ### Functional Features:
+#### General
+
+- Meta-level control (triggered each heartbeat) to support agent interaction, network reorganization. Meta-level control is the ability of an agent to optimize its long term performance by choosing and sequencing its deliberation and execution actions appropriately. <sup>[2](#mmlcfootnote1)</sup>
+
+
 - #### User defined behavior trees
   - Control Nodes currently on the roadmap
     - Selector
@@ -93,10 +96,11 @@ with respect to the environment situation.
   - Helper Nodes for accessing utility AI systems
 
 - #### A Concurrent, Scalable Blackboard Knowledge System
+  > The central problem of artificial intelligence is how to express the knowledge needed in order to create intelligent behavior. — John McCarthy, M.I.T/Stanford Professor, Creator of Lisp
+
   - A global blackboard that can coordinate automata without being a central point of failure.
   - Individual automaton blackboards readable by all automata, writeable by owning automaton
-  - Potentially bringing the code to the data rather than the other way around.
-
+  - Neuromorphic/Probabilistic computing, potentially bringing the code to the data rather than the other way around.
 
 ### Performance Features:
 - Concurrency
@@ -111,13 +115,14 @@ with respect to the environment situation.
 - Modularity
   - Modular BT's allow the designer to hierarchically combine independently developed, tested, deployed, and reusable unit behaviors that provide more valuable emergent properties in the large.
 - Flexibility
-  - A design goal of `Automata` is to allow high flexibility (supports many use cases)
+  - A design goal of `Automata` is to allow high flexibility via extreme abstraction (to enable design space evolution, support diversity in applications)
 - Simplicity of Implementation
   - Elixir's meta-programming facilities enable very user-friendly API's so developers don't need to know the details of BT's or Automata Theory to get things done, and BT's themselves lend efficiency via simplicity to the development value chain.
 
 ### Applications
 - Trading Systems
 - Patient Monitoring & Care Systems
+- Autonomous Pandemic Testing Drone Units
 - Swarm Intelligence / Distributed Robotics
 - Intelligent agents with soft realtime multi-dimensional sensory, perception, intuition, and action capabilities
 - Multi-Agent Reinforcement Learning
@@ -149,23 +154,22 @@ defmodule MyAutomaton do
     # one of :sequence, :selector, :parallel, :action (no children), etc...
     node_type: :selector,
 
-    # the system heartbeat for this node(subtree), in milliseconds
+    # the heartbeat for this node(subtree), in milliseconds
     # the default is 0 ms (infinite loop)
-    # heartbeat adaption as meta-level(automata) action
-    # can be changed at runtime
+    # heartbeat adaption as meta-level(automata) action, to be changed at runtime
     tick_freq: 200, # 200ms
 
 
-    # not included for execution nodes
+    # excluded for execution nodes
     # list of child control/action(execution) nodes
-    # these run in order for type :selector and :sequence nodes
-    # and in parallel for type :parallel, and in some user-defined dynamic order for :priority
+    # these run in order for type :selector and :sequence nodes and in parallel
+    # for type :parallel, and in a user-defined dynamic order for :priority
     children: [ChildAction1, ChildSequence1, ChildAction2]
 
     # called every tick, must return status
     def update do
       # reactively and proactively change the world
-      # ie.. effect the current environment using either effectors or via communication with other agents
+      # ie.. effect the current environment in phases using either effectors or via communication with other agents
       {:ok, status}
     end
 end
@@ -188,8 +192,6 @@ TODO: how to implement the above scenario.
 
 ###### Libraries & Tooling (WIP)
 - [Horde](https://github.com/derekkraan/horde)
-- [swarm](https://github.com/bitwalker/swarm)
-- [libcluster](https://github.com/bitwalker/libcluster)
 
 
 ###### Behavior Trees
@@ -202,6 +204,9 @@ TODO: how to implement the above scenario.
 - [Elixir Behavior Tree](https://github.com/jschomay/elixir-behavior-tree) and the corresponding [elixirconf talk](https://elixirforum.com/t/39-elixirconf-us-2018-behavior-trees-and-battleship-tapping-into-the-power-of-advanced-data-structures-jeff-schomay/16785)
 
 - [BT AI](https://github.com/libgdx/gdx-ai/wiki/Behavior-Trees)
+
+- [Lessons Learned on previous attempts](https://takinginitiative.wordpress.com/tag/behavior-trees/)
+
 
 ###### The Blackboard
 - [Sharing Data in Actions](https://github.com/libgdx/gdx-ai/wiki/Behavior-Trees#using-data-for-inter-task-communication)
@@ -227,10 +232,11 @@ TODO: how to implement the above scenario.
 
 - Automata Control (MMLC)
 
-  - [Multi-Agent Meta-Level Control](https://www.academia.edu/22145349/Multiagent_meta-level_control_for_radar_coordination)
+  - <a name="mmlcfootnote1" href="https://www.academia.edu/22145349/Multiagent_meta-level_control_for_radar_coordination">Multi-Agent Meta-Level Control</a>
 
+- [Coordination vs. Information in Multi-Agent Decision Processes](https://www.academia.edu/2687355/Coordination_vs._information_in_multi-agent_decision_processes)
 
-- [General Architecture](https://arxiv.org/pdf/1811.10277.pdf)
+- [Autonomous Systems Architecture](https://arxiv.org/pdf/1811.10277.pdf)
 
 - [New Research in Multi-Agent Coordination](https://www.intechopen.com/books/applications-of-mobile-robots/a-survey-and-analysis-of-cooperative-multi-agent-robot-systems-challenges-and-directions)
 
@@ -238,6 +244,11 @@ TODO: how to implement the above scenario.
 - [Beliefs, Desires, Intentions(BDI) Architecture](https://en.wikipedia.org/wiki/Belief%E2%80%93desire%E2%80%93intention_software_model)
 
 - [Entity, Component, System(ECS) Architecture](https://en.wikipedia.org/wiki/Entity_component_system) and [this](https://www.youtube.com/watch?v=7m37kKZ5ohA&t=336s) excellent Empex talk.
+
+###### References
+1. <a name="actorfootnote1" href="https://arxiv.org/vc/arxiv/papers/1008/1008.1459v8.pdf">Actor Model</a>
+
+2. <a name="mmlcfootnote1" href="https://www.academia.edu/22145349/Multiagent_meta-level_control_for_radar_coordination">Multi-Agent Meta-Level Control</a>
 
 ## Installation
 

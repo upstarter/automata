@@ -60,3 +60,74 @@ In Progress. Property Testing? Permutation Testing? Join the conversation on [Th
 
 
 #### [Code of Conduct](https://www.apache.org/foundation/policies/conduct)
+
+### How it works
+
+#### High Level Overview
+
+##### The Automata supervision tree(s)
+![automata supervision tree diagram](sup_tree.png)
+
+There are 4 Layers in the supervision tree below the Application
+supervisor.
+
+The terminal abstract system control supervisor is the `AutomatonNodeSupervisor`
+which supervises the user-defined behavior tree root nodes which become its children when started —
+they are the "brains and braun", which are the `CompositeServer` and the `CompositeSupervisor`.
+
+The `CompositeServer` is the "mastermind" of the user-defined BT's, starting, stopping, and handling messages from the user-defined nodes as children of `CompositeSupervisor`. All nodes are components of a composite as root control nodes should always have children, of which some are `CompositeServer`'s, and some are `ActionServer`'s.
+
+When the system starts, each root node configured in `lib/automata.ex` is started and run as a `GenServer`. These root nodes start and add their children to their own `CompositeSupervisor` since they are `CompositeServer`'s.
+
+The children are started as either OTP `DyanmicSupervisor`'s (for composite nodes, each with its own `CompositeSupervisor` & `CompositeServer`).  Every node in the tree is a child of a composite as the root is always a `CompositeServer`.
+
+When the control system encounters and starts a `CompositeServer` node (sequence, selector, etc..), the current `CompositeSupervisor` supervises the node as a `CompositeServer` & `CompositeSupervisor` pair via the `CompositeServer`.
+
+When the control system encounters and starts a `ComponentServer` node (action, decorator, etc..), the current `CompositeSupervisor` supervises that single node as a `GenServer`.
+
+ The `CompositeSupervisor` handles fault tolerance of user-defined BT nodes.
+
+It starts the user defined
+nodes as children of `AutomatonNodeSupervisor`, which is kept lean for fault
+tolerance purposes.
+
+The following is a breakdown of roles and responsibilities in the system (corresponding to files in `lib/automata/core/`):
+
+###### The Core Supervision Tree (in `lib/core/`)
+This tree is the management & fault tolerance mechanism for the parsing and validation of user config, as well as controlling the instantiation of the user-defined behavior trees.
+- `Automata.Supervisor`
+  - on application start, this supervisor process starts the `AutomataSupervisor` and it's corresponding `Server`. It is started with strategy `:one_for_one` to ensure that the `AutomatonSupervisor` is independently self-healing
+- `Automata.Server`
+  - acts as the "brains" of the `AutomataSupervisor` to keep the supervisor lean and mean. It starts the `Automata.AutomatonSupervisor`, passing the user-defined config.
+- `Automata.AutomatonSupervisor`
+  - this process acts as supervisor to each `AutomatonNodeSupervisor` and has strategy `:one_for_all` to ensure that errors restart the entire supervision tree including the GenServers (`AutomatonServer`). It delegates the spawning of the user-defined BT nodes to the `AutomatonServer` which currently handles most of the logic.
+- `AutomatonNodeSupervisor`
+  - runs concurrently, independently, and with `restart: permanent`. This supervisor is the root of the user-defined behavior trees.
+- `AutomatonServer`
+  - this node parses and validates the user configuration and creates and manages OTP event callbacks of the user-defined behavior tree root node.
+
+###### The Control Supervision Tree (in `lib/core/control/`)
+These are the management & fault tolerance mechanisms for the user-defined behavior tree(s).
+
+- `Automaton.Node`
+  - this is the most complicated node as it defines the user API and manages and
+  controls the operations of the user-defined behavior trees in a recursive fashion.
+- `Automaton.Behavior`
+  - this is the interface (behaviour in elixir) that is implemented by all user-defined nodes, providing the most general policy for BT-ness.
+- `Automaton.Action`
+  - this is the interface for action(execution) nodes — where the world is changed, reactively and proactively
+
+###### The Blackboard
+
+- Global Blackboard
+  - all nodes share this knowledge store
+  - the automata will act upon seeing certain data changes in the global blackboard
+- Individual Node Blackboards
+  - node blackboards use protected tables for knowledge sharing – all processes can read, one process has write access
+  - the automaton will act upon seeing certain data changes in the global blackboard
+
+
+## Future Directions
+- to suggest users break up the system heartbeat(update) into phases to improve designs, is there a general abstraction and will there be any needed system support?
+- offline learning?
+- meta-level control for heartbeat adaptation
