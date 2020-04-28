@@ -116,10 +116,6 @@ defmodule Automaton.Composite.Selector do
 
           status
         end
-
-        def update(%{workers: []} = state) do
-          state
-        end
       end
   end
 end

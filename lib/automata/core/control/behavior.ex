@@ -11,6 +11,13 @@ defmodule Automaton.Behavior do
     needed something that compiled and ran. Needs more thought and attention as
     the design process continues.
   """
+
+  # alias Automaton.Behavior
+  # alias Automata.Blackboard, as: GlobalBlackboard
+  # alias Automaton.Blackboard, as: NodeBlackboard
+  # alias Automata.Utility, as: GlobalUtility
+  # alias Automaton.Utility, as: NodeUtility
+
   # these need serious help, just placeholders for now
   @callback on_init(term) :: term | {:error, String.t()}
   @callback update(any()) :: any()
@@ -25,7 +32,8 @@ defmodule Automaton.Behavior do
 
   defmacro __using__(_opts) do
     quote do
-      @behaviour Behavior
+      import Automaton.Behavior
+      @behaviour Automaton.Behavior
 
       use Automata.Blackboard
       use Automaton.Blackboard
@@ -61,7 +69,7 @@ defmodule Automaton.Behavior do
       def status do
       end
 
-      def handle_call(:get_status, _from, state) do
+      def handle_call(:status, _from, state) do
         {:reply, state.status, state}
       end
 

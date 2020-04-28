@@ -45,7 +45,6 @@ defmodule Automaton.Action do
 
     control =
       quote do
-        
         def on_init(state) do
           case state.status do
             :bh_success ->
@@ -62,7 +61,6 @@ defmodule Automaton.Action do
           state
         end
 
-        
         def on_terminate(status) do
           case status do
             :bh_running ->
@@ -85,16 +83,6 @@ defmodule Automaton.Action do
 
           status
         end
-
-        #
-        # @impl Behaviour
-        # def update(state) do
-        #   status = :bh_running
-        #   IO.inspect("Action Updated", label: Process.info(self)[:registered_name])
-        #
-        #   # return status, overidden by user
-        #   status
-        # end
       end
 
     # extra stuff at end
