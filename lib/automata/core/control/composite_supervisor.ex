@@ -8,7 +8,8 @@ defmodule Automaton.CompositeSupervisor do
     )
   end
 
-  def init([composite_server, mfa, name]) do
+  @spec init([]) :: no_return
+  def init([composite_server, {m, _f, a}, name]) do
     Process.link(composite_server)
 
     opts = [

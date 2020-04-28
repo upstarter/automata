@@ -25,97 +25,76 @@ defmodule Automaton.Behavior do
 
   defmacro __using__(_opts) do
     quote do
-      import Automaton.Behavior
-      @behaviour Automaton.Behavior
+      @behaviour Behavior
 
       use Automata.Blackboard
       use Automaton.Blackboard
       use Automata.Utility
       use Automaton.Utility
 
-      @impl Behavior
       def on_init(state)
 
-      # currently control nodes run this function if `update` is not defined
-      # TODO: figure out the right thing to do here
-      @impl Behavior
-      def update(args)
+      def update(state)
 
-      @impl Behavior
       def on_terminate(new_state)
 
-      @impl Behavior
       def reset do
         :ok
       end
 
-      @impl Behavior
       def abort do
         :ok
       end
 
-      @impl Behavior
       def aborted? do
         false
       end
 
-      @impl Behavior
       def terminated? do
         false
       end
 
-      @impl Behavior
       def running? do
         true
       end
 
-      @impl Behavior
       def status do
       end
 
-      @impl Behavior
-      def handle_call(:status, _from, state) do
+      def handle_call(:get_status, _from, state) do
         {:reply, state.status, state}
       end
 
-      @impl Behavior
       def handle_call(:set_running, _from, state) do
         {:reply, :ok, %{state | status: :bh_running}}
       end
 
-      @impl Behavior
       def handle_call(:succeed, _from, state) do
         {:reply, :ok, %{state | status: :bh_success}}
       end
 
-      @impl Behavior
       def handle_call(:fail, _from, state) do
         {:reply, :ok, %{state | status: :bh_failure}}
       end
 
-      @impl Behavior
       def handle_call(:running?, _from, state) do
         {:reply, state.status == :bh_running, state}
       end
 
-      @impl Behavior
       def handle_call(:aborted?, _from, state) do
         {:reply, state.status == :bh_aborted, state}
       end
 
-      @impl Behavior
       def handle_call(:terminated?, _from, state) do
         status = state.status
         {:reply, status == :bh_success || status == :bh_failure, state}
       end
 
-      @impl Behavior
       def handle_call(:abort, _from, state) do
         on_terminate(state)
         {:reply, true, %{state | status: :bh_aborted}}
       end
 
-      @impl Behavior
       def handle_call(:reset, _from, state) do
         {:reply, true, %{state | status: :bh_invalid}}
       end

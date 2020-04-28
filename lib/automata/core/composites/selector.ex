@@ -19,7 +19,6 @@ defmodule Automaton.Composite.Selector do
   defmacro __using__(opts) do
     a =
       quote do
-        @impl Behavior
         def on_init(state) do
           case state.status do
             :bh_success ->
@@ -37,7 +36,6 @@ defmodule Automaton.Composite.Selector do
           state
         end
 
-        @impl Behavior
         def on_terminate(status) do
           case status do
             :bh_running ->
@@ -105,7 +103,6 @@ defmodule Automaton.Composite.Selector do
           end
         end
 
-        @impl Behavior
         def update(%{workers: workers} = state) do
           checked_status = check_status(workers)
           IO.inspect(["checked", checked_status])
@@ -120,7 +117,6 @@ defmodule Automaton.Composite.Selector do
           status
         end
 
-        @impl Behavior
         def update(%{workers: []} = state) do
           state
         end
