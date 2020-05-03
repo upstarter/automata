@@ -24,7 +24,7 @@ defmodule Automaton.CompositeSupervisor do
     %{
       id: :"#{name}CompositeSupervisor",
       start: {__MODULE__, :start_link, args},
-      shutdown: 10000,
+      shutdown: 10_000,
       restart: :temporary,
       type: :supervisor
     }

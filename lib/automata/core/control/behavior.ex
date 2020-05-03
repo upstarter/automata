@@ -20,7 +20,7 @@ defmodule Automaton.Behavior do
 
   # these need serious help, just placeholders for now
   @callback on_init(term) :: term | {:error, String.t()}
-  @callback update(any()) :: any()
+  @callback update(any()) :: {:ok, Module.t()}
   @callback on_terminate(term) ::
               :bh_aborted | :bh_failure | :bh_fresh | :bh_running | :bh_success
   @callback reset() :: atom

@@ -23,7 +23,7 @@ defmodule Automaton.Action do
                     control: 0,
                     children: nil,
                     current: nil,
-                    tick_freq: unquote(user_opts[:tick_freq]) || 2000,
+                    tick_freq: unquote(user_opts[:tick_freq]) || 50,
                     workers: nil
         end
 

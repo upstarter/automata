@@ -25,7 +25,7 @@ defmodule Automaton.NodeSupervisor do
     %{
       id: name <> "NodeSupervisor",
       start: {__MODULE__, :start_link, args},
-      shutdown: 10000,
+      shutdown: 10_000,
       restart: :temporary,
       type: :supervisor
     }

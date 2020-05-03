@@ -42,7 +42,7 @@ defmodule Automata.Server do
       id: __MODULE__,
       start: {__MODULE__, :start_link, [nodes_config]},
       restart: :temporary,
-      shutdown: 10000,
+      shutdown: 10_000,
       type: :worker
     }
   end

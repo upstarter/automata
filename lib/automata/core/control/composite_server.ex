@@ -52,7 +52,7 @@ defmodule Automaton.CompositeServer do
                     # parent is nil when fresh
                     parent: nil,
                     control: 0,
-                    tick_freq: unquote(user_opts[:tick_freq]) || 2000,
+                    tick_freq: unquote(user_opts[:tick_freq]) || 50,
                     monitors: nil,
                     mfa: nil
         end
@@ -136,7 +136,7 @@ defmodule Automaton.CompositeServer do
 
         defp start_node(composite_sup, {m, _f, a} = mfa) do
           {:ok, node} = DynamicSupervisor.start_child(composite_sup, {m, a})
-
+          GenServer.call(node, :initialize, 10_000)
           true = Process.link(node)
           node
         end
@@ -249,7 +249,7 @@ defmodule Automaton.CompositeServer do
           %{
             id: to_string(name) <> "Server",
             start: {__MODULE__, :start_link, args},
-            shutdown: 10000,
+            shutdown: 10_000,
             restart: :temporary,
             type: :worker
           }

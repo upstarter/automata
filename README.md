@@ -155,9 +155,9 @@ defmodule MyAutomaton do
     node_type: :selector,
 
     # the heartbeat for this node(subtree), in milliseconds
-    # the default is 0 ms (infinite loop)
+    # the default is 50ms (mimics the average human brain perception cycle time)
     # heartbeat adaption as meta-level(automata) action, to be changed at runtime
-    tick_freq: 200, # 200ms
+    tick_freq: 50, # 50ms
 
 
     # excluded for execution nodes

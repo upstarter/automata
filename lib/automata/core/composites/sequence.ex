@@ -19,6 +19,13 @@ defmodule Automaton.Composite.Sequence do
       def update(%{workers: workers} = state) do
         {w, status} = tick_workers(workers)
 
+        # TODO: return bh_failure if any node above failed (halt in tick_workers)
+
+        IO.inspect([
+          "Composite Node (Seq) update",
+          String.slice(Integer.to_string(:os.system_time(:millisecond)), -5..-1)
+        ])
+
         new_state = %{state | status: status}
         {:ok, new_state}
       end

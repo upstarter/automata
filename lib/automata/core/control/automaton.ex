@@ -39,20 +39,21 @@ defmodule Automaton do
       end
 
     control =
-      quote do
+      quote bind_quoted: [user_opts: user_opts] do
         def tick(state) do
-          new_state = if state.status != :bh_running, do: on_init(state), else: state
+          init_state = if state.status != :bh_running, do: on_init(state), else: state
 
-          {:ok, newer_state} = update(new_state)
-          status = newer_state.status
+          {:ok, updated_state} = update(init_state)
+          status = updated_state.status
 
           if status != :bh_running do
             on_terminate(status)
           else
-            schedule_next_tick(newer_state.tick_freq)
+            if !unquote(user_opts[:children]),
+              do: schedule_next_tick(updated_state.tick_freq)
           end
 
-          [status, newer_state]
+          [status, updated_state]
         end
 
         def schedule_next_tick(ms_delay) do
@@ -66,8 +67,11 @@ defmodule Automaton do
 
         def handle_info(:scheduled_tick, state) do
           [status, new_state] = tick(state)
-
           {:noreply, %{new_state | status: status}}
+        end
+
+        def handle_call(:initialize, from, state) do
+          {:reply, nil, %{state | parent: elem(from, 0)}}
         end
       end
 
