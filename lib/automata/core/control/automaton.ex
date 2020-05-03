@@ -47,10 +47,11 @@ defmodule Automaton do
           status = updated_state.status
 
           if status != :bh_running do
-            on_terminate(status)
+            on_terminate(updated_state)
           else
-            if !unquote(user_opts[:children]),
-              do: schedule_next_tick(updated_state.tick_freq)
+            if !unquote(user_opts[:children]) do
+              schedule_next_tick(updated_state.tick_freq)
+            end
           end
 
           [status, updated_state]
@@ -70,8 +71,22 @@ defmodule Automaton do
           {:noreply, %{new_state | status: status}}
         end
 
-        def handle_call(:initialize, from, state) do
-          {:reply, nil, %{state | parent: elem(from, 0)}}
+        # only called on components to access parent(composite) state
+        def handle_cast({:initialize, parent_pid}, state) do
+          parent_state = GenServer.call(parent_pid, :get_state)
+
+          new_state =
+            if !unquote(user_opts[:children]) do
+              %{state | tick_freq: parent_state.tick_freq}
+            else
+              state
+            end
+
+          {:noreply, %{new_state | parent: parent_pid}}
+        end
+
+        def handle_call(:get_state, _from, state) do
+          {:reply, state, state}
         end
       end
 

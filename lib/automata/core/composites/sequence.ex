@@ -19,14 +19,28 @@ defmodule Automaton.Composite.Sequence do
       def update(%{workers: workers} = state) do
         {w, status} = tick_workers(workers)
 
-        # TODO: return bh_failure if any node above failed (halt in tick_workers)
+        case status do
+          :bh_failure ->
+            Enum.each(state.workers, fn w ->
+              IO.inspect([
+                "#{Process.info(w)[:registered_name]} stop"
+              ])
+
+              status = GenServer.stop(w, :normal, :infinity)
+              # Process.exit(w, :normal)
+            end)
+
+          _ ->
+            nil
+        end
 
         IO.inspect([
-          "Composite Node (Seq) update",
+          "#{Process.info(self)[:registered_name]} update finished ##{state.control}",
           String.slice(Integer.to_string(:os.system_time(:millisecond)), -5..-1)
         ])
 
-        new_state = %{state | status: status}
+        new_state = %{state | control: state.control + 1, status: status}
+
         {:ok, new_state}
       end
 
@@ -54,43 +68,48 @@ defmodule Automaton.Composite.Sequence do
       def on_init(state) do
         case state.status do
           :bh_success ->
-            IO.inspect(["on_init status", state.status, state.workers],
-              label: Process.info(self)[:registered_name]
-            )
+            nil
 
           _ ->
-            IO.inspect(["on_init status", state.status, state.workers],
-              label: Process.info(self)[:registered_name]
-            )
+            nil
         end
 
         state
       end
 
-      def on_terminate(status) do
-        case status do
+      def on_terminate(state) do
+        case state.status do
           :bh_running ->
-            IO.inspect("on_terminate SEQUENCE RUNNING",
+            IO.inspect("SEQUENCE TERMINATED - RUNNING",
               label: Process.info(self)[:registered_name]
             )
 
           :bh_failure ->
-            IO.inspect("on_terminate SEQUENCE FAILED",
+            IO.inspect("SEQUENCE TERMINATED - FAILED",
               label: Process.info(self)[:registered_name]
             )
 
+          # Enum.each(state.workers, fn w ->
+          #   IO.inspect([
+          #     "#{Process.info(w)[:registered_name]} stop"
+          #   ])
+          #
+          #   # status = GenServer.stop(w, :normal, :infinity)
+          #   Process.exit(w, :normal)
+          # end)
+
           :bh_success ->
-            IO.inspect(["on_terminate SEQUENCE SUCCEEDED"],
+            IO.inspect(["SEQUENCE TERMINATED - SUCCEEDED"],
               label: Process.info(self)[:registered_name]
             )
 
           :bh_aborted ->
-            IO.inspect("on_terminate SEQUENCE ABORTED",
+            IO.inspect("SEQUENCE TERMINATED - ABORTED",
               label: Process.info(self)[:registered_name]
             )
 
           :bh_fresh ->
-            IO.inspect("on_terminate SEQUENCE FRESH",
+            IO.inspect("SEQUENCE TERMINATED - FRESH",
               label: Process.info(self)[:registered_name]
             )
         end

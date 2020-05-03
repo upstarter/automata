@@ -136,9 +136,88 @@ defmodule Automaton.CompositeServer do
 
         defp start_node(composite_sup, {m, _f, a} = mfa) do
           {:ok, node} = DynamicSupervisor.start_child(composite_sup, {m, a})
-          GenServer.call(node, :initialize, 10_000)
           true = Process.link(node)
+          GenServer.cast(node, {:initialize, self()})
           node
+        end
+      end
+
+    append =
+      quote do
+        def handle_info(
+              {:DOWN, ref, _, _, _},
+              state = %{monitors: monitors, children: children}
+            ) do
+          IO.puts("DOWN Composite")
+
+          case :ets.match(monitors, {:"$1", ref}) do
+            [[pid]] ->
+              true = :ets.delete(monitors, pid)
+              new_state = %{state | children: [pid | children]}
+              {:noreply, new_state}
+
+            [[]] ->
+              {:noreply, state}
+          end
+        end
+
+        def handle_info({:EXIT, node_sup, reason}, state = %{node_sup: node_sup}) do
+          IO.puts("EXIT Composite")
+          {:stop, reason, state}
+        end
+
+        def handle_info(
+              {:EXIT, pid, _reason},
+              state = %{
+                monitors: monitors,
+                workers: workers,
+                children: children,
+                node_sup: node_sup,
+                mfa: {m, f, a} = mfa,
+                name: name
+              }
+            ) do
+          IO.inspect([
+            "EXIT Composite 2",
+            "#{Process.info(self)[:registered_name]}"
+          ])
+
+          case :ets.lookup(monitors, pid) do
+            [{pid, ref}] ->
+              true = Process.demonitor(ref)
+              true = :ets.delete(monitors, pid)
+              new_state = handle_child_exit(pid, state)
+              {:noreply, new_state}
+
+            [] ->
+              # NOTE: child crashed, no monitor
+              case Enum.member?(workers, pid) do
+                true ->
+                  remaining_workers = workers |> Enum.reject(fn p -> p == pid end)
+
+                  new_state = %{
+                    state
+                    | workers: [
+                        start_node(node_sup, {m, :start_link, [[self(), mfa, name]]})
+                        | workers
+                      ]
+                  }
+
+                  {:noreply, new_state}
+
+                false ->
+                  {:noreply, state}
+              end
+          end
+        end
+
+        # def handle_info(_info, state) do
+        #   {:noreply, state}
+        # end
+
+        def terminate(_reason, _state) do
+          IO.puts("Terminate")
+          :ok
         end
 
         # notifies listeners if child status is not fresh
@@ -156,75 +235,6 @@ defmodule Automaton.CompositeServer do
 
         def continue_status() do
           {:ok, nil}
-        end
-      end
-
-    append =
-      quote do
-        def handle_info(
-              {:DOWN, ref, _, _, _},
-              state = %{monitors: monitors, children: children}
-            ) do
-          case :ets.match(monitors, {:"$1", ref}) do
-            [[pid]] ->
-              true = :ets.delete(monitors, pid)
-              new_state = %{state | children: [pid | children]}
-              {:noreply, new_state}
-
-            [[]] ->
-              {:noreply, state}
-          end
-        end
-
-        def handle_info({:EXIT, node_sup, reason}, state = %{node_sup: node_sup}) do
-          {:stop, reason, state}
-        end
-
-        def handle_info(
-              {:EXIT, pid, _reason},
-              state = %{
-                monitors: monitors,
-                children: children,
-                node_sup: node_sup,
-                mfa: {m, f, a} = mfa,
-                name: name
-              }
-            ) do
-          case :ets.lookup(monitors, pid) do
-            [{pid, ref}] ->
-              true = Process.demonitor(ref)
-              true = :ets.delete(monitors, pid)
-              new_state = handle_child_exit(pid, state)
-              {:noreply, new_state}
-
-            [] ->
-              # NOTE: child crashed, no monitor
-              case Enum.member?(children, pid) do
-                true ->
-                  remaining_children = children |> Enum.reject(fn p -> p == pid end)
-
-                  new_state = %{
-                    state
-                    | children: [
-                        start_node(node_sup, {m, :start_link, [[self(), mfa, name]]})
-                        | remaining_children
-                      ]
-                  }
-
-                  {:noreply, new_state}
-
-                false ->
-                  {:noreply, state}
-              end
-          end
-        end
-
-        # def handle_info(_info, state) do
-        #   {:noreply, state}
-        # end
-
-        def terminate(_reason, _state) do
-          :ok
         end
 
         #####################

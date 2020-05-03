@@ -27,7 +27,7 @@ end
 defmodule SeqComposite1 do
   use Automaton,
     node_type: :sequence,
-    tick_freq: 50,
+    tick_freq: 25,
     children: [Seq2, Seq3]
 end
 
@@ -92,7 +92,7 @@ defmodule Seq4 do
   def update(state) do
     # :timer.sleep(2000)
 
-    new_state = %{state | control: state.control + 1, status: :bh_running}
+    new_state = %{state | control: state.control + 1, status: :bh_failure}
 
     IO.inspect([
       "Seq4 update ##{new_state.control}",

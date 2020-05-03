@@ -49,37 +49,39 @@ defmodule Automaton.Action do
         def on_init(state) do
           case state.status do
             :bh_success ->
-              IO.inspect(["on_init status", state.status, state.workers],
-                label: Process.info(self)[:registered_name]
-              )
+              nil
 
             _ ->
-              IO.inspect(["on_init status", state.status, state.workers],
-                label: Process.info(self)[:registered_name]
-              )
+              nil
           end
 
           state
         end
 
-        def on_terminate(status) do
-          case status do
+        def on_terminate(state) do
+          case state.status do
             :bh_running ->
-              IO.inspect("TERMINATED — RUNNING", label: Process.info(self)[:registered_name])
+              IO.inspect("ACTION TERMINATED — RUNNING",
+                label: Process.info(self)[:registered_name]
+              )
 
             :bh_failure ->
-              IO.inspect("TERMINATED — FAILED", label: Process.info(self)[:registered_name])
+              IO.inspect("ACTION TERMINATED — FAILED", label: Process.info(self)[:registered_name])
 
             :bh_success ->
-              IO.inspect("TERMINATED — SUCCEEDED",
+              IO.inspect("ACTION TERMINATED — SUCCEEDED",
                 label: Process.info(self)[:registered_name]
               )
 
             :bh_aborted ->
-              IO.inspect("TERMINATED — ABORTED", label: Process.info(self)[:registered_name])
+              IO.inspect("ACTION TERMINATED — ABORTED",
+                label: Process.info(self)[:registered_name]
+              )
 
             :bh_fresh ->
-              IO.inspect("TERMINATED — FRESH???", label: Process.info(self)[:registered_name])
+              IO.inspect("ACTION TERMINATED — FRESH",
+                label: Process.info(self)[:registered_name]
+              )
           end
 
           status
