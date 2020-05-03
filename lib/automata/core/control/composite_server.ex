@@ -136,8 +136,8 @@ defmodule Automaton.CompositeServer do
 
         defp start_node(composite_sup, {m, _f, a} = mfa) do
           {:ok, node} = DynamicSupervisor.start_child(composite_sup, {m, a})
-          GenServer.call(node, :initialize, 10_000)
           true = Process.link(node)
+          GenServer.cast(node, {:initialize, self()})
           node
         end
 
