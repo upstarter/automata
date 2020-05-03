@@ -37,10 +37,12 @@ defmodule Seq1 do
     node_type: :action
 
   def update(state) do
-    IO.puts("Seq1#update")
-    :timer.sleep(2000)
+    # :timer.sleep(2000)
 
-    :bh_running
+    new_state = %{state | control: state.control + 1, status: :bh_running}
+    IO.inspect(["Seq1 update ##{new_state.control}", :os.system_time(:millisecond)])
+
+    {:ok, new_state}
   end
 end
 
@@ -49,10 +51,12 @@ defmodule Seq2 do
     node_type: :action
 
   def update(state) do
-    IO.puts("Seq2#update")
-    :timer.sleep(2000)
+    # :timer.sleep(2000)
 
-    :bh_running
+    new_state = %{state | control: state.control + 1, status: :bh_running}
+    IO.inspect(["Seq2 update ##{new_state.control}", :os.system_time(:millisecond)])
+
+    {:ok, new_state}
   end
 end
 
@@ -61,10 +65,12 @@ defmodule Seq3 do
     node_type: :action
 
   def update(state) do
-    IO.puts("Seq3#update")
-    :timer.sleep(2000)
+    # :timer.sleep(2000)
 
-    :bh_running
+    new_state = %{state | control: state.control + 1, status: :bh_running}
+    IO.inspect(["Seq3 update ##{new_state.control}", :os.system_time(:millisecond)])
+
+    {:ok, new_state}
   end
 end
 
@@ -73,9 +79,11 @@ defmodule Seq4 do
     node_type: :action
 
   def update(state) do
-    IO.puts("Seq4#update")
-    :timer.sleep(2000)
+    # :timer.sleep(2000)
 
-    :bh_running
+    new_state = %{state | control: state.control + 1, status: :bh_running}
+    IO.inspect(["Seq4 update ##{new_state.control}", :os.system_time(:millisecond)])
+
+    {:ok, new_state}
   end
 end

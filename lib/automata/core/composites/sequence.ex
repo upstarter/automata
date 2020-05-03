@@ -19,15 +19,8 @@ defmodule Automaton.Composite.Sequence do
       def update(%{workers: workers} = state) do
         {w, status} = tick_workers(workers)
 
-        IO.inspect(
-          [
-            "ticked composite",
-            status
-          ],
-          label: Process.info(self)[:registered_name]
-        )
-
-        status
+        new_state = %{state | status: status}
+        {:ok, new_state}
       end
 
       def tick_workers(workers) do

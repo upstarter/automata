@@ -3,7 +3,6 @@
 #
 # defmodule MockSel1 do
 #   use Automaton,
-#     root: true,
 #     # required
 #     # one of :sequence, :selector, :parallel, :priority, etc...
 #     # or type :action for action nodes (no children)

@@ -18,8 +18,9 @@ defmodule Automaton.Action do
           # bh_fresh is for when status has not been
           # initialized yet or has been reset
           defstruct status: :bh_fresh,
-                    # control is the parent, nil when fresh
-                    control: nil,
+                    # parent is nil when fresh
+                    parent: nil,
+                    control: 0,
                     children: nil,
                     current: nil,
                     tick_freq: unquote(user_opts[:tick_freq]) || 2000,

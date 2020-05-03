@@ -44,13 +44,14 @@ defmodule Automaton.CompositeServer do
           defstruct name: nil,
                     status: :bh_fresh,
                     children: unquote(user_opts[:children]),
-                    # the running children pids
+                    # workers are the pids of the running children
                     workers: [],
                     composite_sup: nil,
                     node_sup: nil,
                     node_type: unquote(user_opts[:node_type]),
-                    # control is the parent, nil when fresh
-                    control: nil,
+                    # parent is nil when fresh
+                    parent: nil,
+                    control: 0,
                     tick_freq: unquote(user_opts[:tick_freq]) || 2000,
                     monitors: nil,
                     mfa: nil

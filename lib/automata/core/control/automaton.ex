@@ -20,7 +20,6 @@ defmodule Automaton do
   defmacro __using__(user_opts) do
     prepend =
       quote do
-        # all nodes are Behavior's
         use Behavior, user_opts: unquote(user_opts)
       end
 
@@ -44,16 +43,16 @@ defmodule Automaton do
         def tick(state) do
           new_state = if state.status != :bh_running, do: on_init(state), else: state
 
-          status = update(new_state)
+          {:ok, newer_state} = update(new_state)
+          status = newer_state.status
 
           if status != :bh_running do
             on_terminate(status)
-            # else
-            #   IO.inspect(new_state.tick_freq)
-            #   schedule_next_tick(new_state.tick_freq)
+          else
+            schedule_next_tick(newer_state.tick_freq)
           end
 
-          [status, new_state]
+          [status, newer_state]
         end
 
         def schedule_next_tick(ms_delay) do
