@@ -107,9 +107,9 @@ defmodule Automaton.CompositeServer do
           {:noreply, new_state}
         end
 
-        # def handle_info(:update, state) do
-        #   {:noreply, %{state | status: update(state)}}
-        # end
+        def handle_info(:update, state) do
+          {:noreply, %{state | status: update(state)}}
+        end
 
         def start_children(
               %{

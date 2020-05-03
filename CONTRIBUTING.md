@@ -17,7 +17,7 @@
 ###### Where to get started contributing
 A good place to start is in the [project kanban](https://github.com/upstarter/automata/projects/1). Especially those threads labeled 'good first issue', 'testing'.
 
-Please join the [slack channel](https://join.slack.com/t/automata-project/shared_invite/zt-cnroo0qs-rhziMz4CjzcVRaIYPc1Pmg) and/or reach out to [ericsteen1@gmail.com](mailto:ericsteen1@gmail.com) if interested!
+Please join the [slack channel](https://join.slack.com/t/automata-project/shared_invite/zt-e4fqrmo4-7ujuZwzXHNCGVrZb1aVZmA) and/or reach out to [ericsteen1@gmail.com](mailto:ericsteen1@gmail.com) if interested!
 
 ##### Open Items / TODO
 1. Define protocols / data flows between control processes with a [contract checker](https://www.youtube.com/watch?v=rQIE22e0cW8) between all (cc is also an anti-corruption layer? A.K.A. embedded schema).
@@ -26,9 +26,9 @@ Please join the [slack channel](https://join.slack.com/t/automata-project/shared
 - DEBUGGING NOTE: anytime you see an error or warning that is in one of the mock sequence modules, it probably isn't. It is probably in one of the modules in core that get injected into them. This is the nature of meta-programming debugging.
 
 ### Engineering Standards & Best Practices
-Check the #dev or #testing channels on [slack]((https://join.slack.com/t/automata-project/shared_invite/zt-cnroo0qs-rhziMz4CjzcVRaIYPc1Pmg)) for questions/info.
+Check the #dev or #testing channels on [slack]((https://join.slack.com/t/automata-project/shared_invite/zt-e4fqrmo4-7ujuZwzXHNCGVrZb1aVZmA)) for questions/info.
 #### Design Standards
-1. Abstraction & Modularity are key. Spend the time and/or [Ask on the Slack Channel](https://join.slack.com/t/automata-project/shared_invite/zt-cnroo0qs-rhziMz4CjzcVRaIYPc1Pmg) to find the right abstraction. In terms of modularity, If its more than 10-20 lines, put it in a unit Function, Module or Struct that is tested and named well (by its role in the context if possible, rather than its data type or random name).
+1. Abstraction & Modularity are key. Spend the time and/or [Ask on the Slack Channel](https://join.slack.com/t/automata-project/shared_invite/zt-e4fqrmo4-7ujuZwzXHNCGVrZb1aVZmA) to find the right abstraction. In terms of modularity, If its more than 10-20 lines, put it in a unit Function, Module or Struct that is tested and named well (by its role in the context if possible, rather than its data type or random name).
 2. Meta-programming will be heavily used as this is a framework, but it is important to know where it is useful and where its not. It is wise not to overuse clever meta-programming magic. If your not sure, ask, or use the force Luke (if your a Jedi).
 3. Use function pattern matching over for other types of enumeration wherever possible as this is a first-principle in Elixir systems.
 4. If your not sure how to do something, rather than do a hack, put a skeleton in place and submit a PR so a more senior engineer can provide guidance.
@@ -45,12 +45,12 @@ Check the #dev or #testing channels on [slack]((https://join.slack.com/t/automat
 
 
 #### Testing Standards
-In Progress. Property Testing? Permutation Testing? Join the conversation on [The Automata Project Slack Channel](https://join.slack.com/t/automata-project/shared_invite/zt-cnroo0qs-rhziMz4CjzcVRaIYPc1Pmg)
+In Progress. Property Testing? Permutation Testing? Join the conversation on [The Automata Project Slack Channel](https://join.slack.com/t/automata-project/shared_invite/zt-e4fqrmo4-7ujuZwzXHNCGVrZb1aVZmA)
 
 1. Unit tests test the unit of behavior, not the unit of implementation. Changing the implementation, without changing the behavior or having to change any of your tests is the goal, although not always possible. So where possible, treat your test objects as black boxes, testing through the public API without calling private methods or tinkering with state.
 ##### <a name="help"></a>Where to ask for help:
 
-1. [The Automata Project Slack Channel](https://join.slack.com/t/automata-project/shared_invite/zt-cnroo0qs-rhziMz4CjzcVRaIYPc1Pmg)
+1. [The Automata Project Slack Channel](https://join.slack.com/t/automata-project/shared_invite/zt-e4fqrmo4-7ujuZwzXHNCGVrZb1aVZmA)
 2. [Elixir Forum](https://elixirforum.com/)
 3. [Elixir Slack Channel](https://elixir-slackin.herokuapp.com/)
 4. [Stack Overflow](https://stackoverflow.com/questions/tagged/elixir)
