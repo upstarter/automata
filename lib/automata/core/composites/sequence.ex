@@ -26,7 +26,7 @@ defmodule Automaton.Composite.Sequence do
                 "#{Process.info(w)[:registered_name]} stop"
               ])
 
-              status = GenServer.stop(w, :normal, :infinity)
+              # status = GenServer.stop(w, :normal, :infinity)
               # Process.exit(w, :normal)
             end)
 
