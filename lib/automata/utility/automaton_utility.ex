@@ -14,17 +14,14 @@ defmodule Automaton.Utility do
   all options. This approach is commonly referred to as weight-based random or
   weighted random.
 
-  A Dual Utility Reasoner combines both of these
-  approaches. It assigns two utility values to each option:
-  a rank (absolute utility) and a weight (relative utility).
-  Conceptually, rank is used to divide the options into
-  categories, where we only select options that are in the
-  best category. Weight is used to evaluate options within
-  the context of their category. Thus the weight of an
-  option is only meaningful relative to the weights of
-  other options within the same rank category – and only
-  the weights of the options in the best category truly
-  matter
+  A Dual Utility Reasoner combines both of these approaches. It assigns two
+  utility values to each option: a rank (absolute utility) and a weight
+  (relative utility). Conceptually, rank is used to divide the options into
+  categories, where we only select options that are in the best category. Weight
+  is used to evaluate options within the context of their category. Thus the
+  weight of an option is only meaningful relative to the weights of other
+  options within the same rank category – and only the weights of the options in
+  the best category truly matter
   """
 
   defmacro __using__(user_opts) do

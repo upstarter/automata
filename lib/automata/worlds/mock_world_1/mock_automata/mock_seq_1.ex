@@ -14,7 +14,7 @@ defmodule MockSeq1 do
 
     # the system heartbeat for this node(subtree), in milliseconds
     # the default is 50 ms (mimicing human brain perception cycle time)
-    # heartbeat adaption as meta-level(automata) action
+    # heartbeat adaptation as meta-level(automata) action
     # can be changed at runtime
     tick_freq: 50,
 
@@ -27,7 +27,7 @@ end
 defmodule SeqComposite1 do
   use Automaton,
     node_type: :sequence,
-    tick_freq: 25,
+    tick_freq: 50,
     children: [Seq2, Seq3]
 end
 

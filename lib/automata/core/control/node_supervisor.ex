@@ -1,6 +1,5 @@
 defmodule Automaton.NodeSupervisor do
   use DynamicSupervisor
-  @dialyzer {:no_return, init: 1}
 
   def start_link([automaton_server, {_, _, _} = mfa, name]) do
     DynamicSupervisor.start_link(__MODULE__, [automaton_server, mfa, name],

@@ -1,6 +1,6 @@
 defmodule Automaton.Behavior do
   @moduledoc """
-    An Automaton.Behavior is an abstract interface for composites and actions
+    An Automaton.Behavior is an abstract interface for composites and components
     that can be activated, run, and deactivated. Actions(Execution Nodes)
     provide specific implementations of this interface. Branches in the tree can
     be thought of as high level behaviors, heirarchically combining smaller
@@ -11,12 +11,6 @@ defmodule Automaton.Behavior do
     needed something that compiled and ran. Needs more thought and attention as
     the design process continues.
   """
-
-  # alias Automaton.Behavior
-  # alias Automata.Blackboard, as: GlobalBlackboard
-  # alias Automaton.Blackboard, as: NodeBlackboard
-  # alias Automata.Utility, as: GlobalUtility
-  # alias Automaton.Utility, as: NodeUtility
 
   # these need serious help, just placeholders for now
   @callback on_init(term) :: term | {:error, String.t()}

@@ -140,11 +140,13 @@ Note that the five aspects are orthogonal. The first two aspects deal with
 
 
 ### API
-Users may create tree structures of arbitrary depth by defining their own custom
-modules in the nodes/ directory which `use Automaton` as a macro. By
-overriding the `update()` function and returning a status as one of `:running`,
-`:failure`, or `:success`, the core system will run the
-Behavior Tree's as defined and handle errors and restarts.
+Users create worlds containing their automata in directory structures
+corresponding to their BT tree structures. These are created in the worlds/
+directory. Trees can be of arbitrary depth. Users define their own custom
+modules which `use Automaton` as a macro. By overriding the `update()` function
+and returning a status as one of `:running`, `:failure`, or `:success`, the core
+system will run the Behavior Tree's as defined and handle normal errors with
+restarts. Users define error handling outside generic BT capabilities.
 
 ```elixir
 defmodule MyAutomaton do
