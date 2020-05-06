@@ -27,7 +27,7 @@ end
 defmodule SeqComposite1 do
   use Automaton,
     node_type: :sequence,
-    tick_freq: 25,
+    tick_freq: 50,
     children: [Seq2, Seq3]
 end
 

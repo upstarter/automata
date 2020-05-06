@@ -10,8 +10,8 @@ defmodule Automata.Server do
     GenServer.start_link(__MODULE__, nodes_config, name: __MODULE__)
   end
 
-  def status(tree_name) do
-    Automata.AutomatonServer.status(tree_name)
+  def status(automaton_name) do
+    Automata.AutomatonServer.status(automaton_name)
   end
 
   #############

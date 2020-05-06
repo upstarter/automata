@@ -8,7 +8,6 @@ defmodule Automaton.Action do
   defmacro __using__(user_opts) do
     prepend =
       quote do
-        # all nodes are GenServer's & Behavior's
         use GenServer
       end
 

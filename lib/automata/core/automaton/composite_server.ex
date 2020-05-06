@@ -37,10 +37,10 @@ defmodule Automaton.CompositeServer do
       quote do
         use GenServer
 
-        # TODO: probably handle state somewhere else? GenServer linked to Node?
+        # TODO: when/if too much state, probably handle state somewhere else? GenServer linked to Node?
         defmodule State do
-          # bh_fresh is for when status has not been initialized
-          # yet or has been reset, name is user-defined module name + "Server"
+          # status is :bh_fresh when composite not initialized yet or has been reset
+          # name is "UserDefinedModuleName" + "Server"
           defstruct name: nil,
                     status: :bh_fresh,
                     children: unquote(user_opts[:children]),
@@ -121,6 +121,7 @@ defmodule Automaton.CompositeServer do
               } = state
             ) do
           # start all the children
+          # in future, start on some on-demand basis? following completion of prior task?
           workers =
             Enum.map(children, fn child ->
               start_node(
@@ -144,25 +145,8 @@ defmodule Automaton.CompositeServer do
 
     append =
       quote do
-        def handle_info(
-              {:DOWN, ref, _, _, _},
-              state = %{monitors: monitors, children: children}
-            ) do
-          IO.puts("DOWN Composite")
-
-          case :ets.match(monitors, {:"$1", ref}) do
-            [[pid]] ->
-              true = :ets.delete(monitors, pid)
-              new_state = %{state | children: [pid | children]}
-              {:noreply, new_state}
-
-            [[]] ->
-              {:noreply, state}
-          end
-        end
-
-        def handle_info({:EXIT, node_sup, reason}, state = %{node_sup: node_sup}) do
-          IO.puts("EXIT Composite")
+        def handle_info({:EXIT, pid, reason}, state = %{workers: workers}) do
+          IO.puts("EXIT Composite 1")
           {:stop, reason, state}
         end
 
@@ -205,22 +189,37 @@ defmodule Automaton.CompositeServer do
 
                   {:noreply, new_state}
 
+                # {:stop, :normal, new_state}
+
                 false ->
                   {:noreply, state}
               end
           end
         end
 
-        # def handle_info(_info, state) do
-        #   {:noreply, state}
-        # end
+        defp handle_child_exit(pid, state) do
+          %{
+            node_sup: node_sup,
+            workers: workers,
+            monitors: monitors
+          } = state
+
+          # TODO: since non-homogenous children, need to add new worker of same type back into worker list
+          # Process.info(pid)[:registered_name]
+
+          # retry anything other than :bh_failure?
+          # 1. User defines retry? with default(s)?
+          # - 2.
+          #   - sequence: retry - how often?, how long?
+          #   - selector: no retries? user can select?
+        end
 
         def terminate(_reason, _state) do
           IO.puts("Terminate")
           :ok
         end
 
-        # notifies listeners if child status is not fresh
+        # notifies listeners if child status is not :bh_fresh
         def add_child(child) do
           {:ok, []}
         end
@@ -243,16 +242,6 @@ defmodule Automaton.CompositeServer do
 
         defp name(tree_name) do
           :"#{tree_name}Server"
-        end
-
-        defp handle_child_exit(pid, state) do
-          %{
-            node_sup: node_sup,
-            children: children,
-            monitors: monitors
-          } = state
-
-          # TODO
         end
 
         def child_spec([[node_sup, {m, _f, a}, name]] = args) do

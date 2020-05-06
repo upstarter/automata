@@ -74,7 +74,6 @@ defmodule Automata.AutomatonServer do
     spec = {Automaton.NodeSupervisor, [[self(), mfa, name]]}
     {:ok, node_sup} = Supervisor.start_child(automaton_sup, spec)
 
-    # automaton = prepopulate(size, automaton_sup)
     automaton = new_automaton(node_sup, mfa, name)
     {:noreply, %{state | node_sup: node_sup, automaton: automaton}}
   end
