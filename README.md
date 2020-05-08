@@ -22,6 +22,8 @@ See the current milestones [here](https://github.com/upstarter/automata/mileston
 
 ## Usage
 
+Testing is currently happening using the mock sequence in `worlds/mock_world_1/mock_automata/mock_seq_1.ex`. This is currently our canonical example of how to design one automaton, which is a behavior tree, and *eventually* communicates with others that you define in `worlds/mock_world/mock_automata/<your_bt>`.
+
 Currently, you can run the mock sequence in an iex shell as follows:
 
 ```elixir
@@ -52,18 +54,18 @@ where you are running a specific context/it block containing line 31.
  reusability, and efficiency of implementation. They enable design/development scalability and efficiency.
 
  [Utility AI](http://www.gameaipro.com/GameAIPro/GameAIPro_Chapter09_An_Introduction_to_Utility_Theory.pdf)
- is used to keep the automata focused on actions by providing an external system for all decision making support. This significantly reduces the amount of logic/nodes required for an agent and takes the heavy mathematical workload off of action developers.
+ is used to keep the automata focused on actions by providing an external system for all decision making support. This significantly reduces the amount of logic/nodes required for an agent and takes the heavy mathematical workload off of designers & action developers.
 
 ### Requirements
 
 #### Autonomy is the capacity of agent(s) to achieve a set of coordinated goals by their own means (without human intervention) adapting to environment variations.
 
 It combines five complementary  aspects:
-  - Perception e.g. interpretation of stimuli, removing ambiguity/vagueness from complex input data and determining relevant information based on context/strata/motif specific communications
-  - Reflection e.g. building/updating a faithful environment run-time model
-  - Goal management e.g. choosing among possible goals the most appropriate ones for a given configuration of the environment model
-  - Planning to achieve chosen goals
-  - Self-adaptation e.g. the ability to adjust behavior through learning and reasoning and to change dynamically the goal management and planning processes.
+  1. Perception e.g. interpretation of stimuli, removing ambiguity/vagueness from complex input data and determining relevant information based on context/strata/motif specific communications
+  2. Reflection e.g. building/updating a faithful environment run-time model
+  3. Goal management e.g. choosing among possible goals the most appropriate ones for a given configuration of the environment model
+  4. Planning to achieve chosen goals
+  5. Self-adaptation e.g. the ability to adjust behavior through learning and reasoning and to change dynamically the goal management and planning processes.
 
 
 Note that the five aspects are orthogonal. The first two aspects deal with
@@ -75,14 +77,10 @@ Note that the five aspects are orthogonal. The first two aspects deal with
 
  2. Autonomous Coordinability: Even if any subsystem fails, is repaired, and/or is newly added, the other subsystems can coordinate their individual objectives among themselves and can function in a coordinated fashion.
 
-    - With `Automata`, while it is a property of the behavior tree implementation that user-defined nodes are independent, it is left to the designer to ensure coordination independence among all nodes in order to satisfy this property.
-
 ## Features
 
 ### Functional Features:
 #### General
-
-- Meta-level control (triggered each heartbeat) to support agent interaction, network reorganization. Meta-level control is the ability of an agent to optimize its long term performance by choosing and sequencing its deliberation and execution actions appropriately. <sup>[2](#mmlcfootnote1)</sup>
 
 
 - #### User defined behavior trees
@@ -100,7 +98,9 @@ Note that the five aspects are orthogonal. The first two aspects deal with
 
   - A global blackboard that can coordinate automata without being a central point of failure.
   - Individual automaton blackboards readable by all automata, writeable by owning automaton
-  - Neuromorphic/Probabilistic computing, potentially bringing the code to the data rather than the other way around.
+
+- #### Meta Level Control
+  - Meta-level control (triggered each heartbeat) to support agent interaction, any potential network reorganization. Meta-level control is the ability of an agent to optimize its long term performance by choosing and sequencing its deliberation and execution actions appropriately. <sup>[2](#mmlcfootnote1)</sup>
 
 ### Performance Features:
 - Concurrency
@@ -111,13 +111,14 @@ Note that the five aspects are orthogonal. The first two aspects deal with
   - OTP Supervision Trees and the "fail fast" principle provide strong guarantees for error recovery and self healing systems.
 - Scalability & Distribution
   -  Elixir can handle millions of processes (134 million +/-) utilizing all cores without breaking a sweat on a single machine, and easily distributes work onto multiple machines with its builtin distribution mechanisms, and there is CRDT support with [Horde](https://github.com/derekkraan/horde).
-  - Behavior trees provide value stream scalability (design/development and operations/testing).
+  - Behavior trees provide value chain efficiency/scalability (in both design/development and operations/testing) compared to previous state of the art AI control techniques.
 - Modularity
   - Modular BT's allow the designer to hierarchically combine independently developed, tested, deployed, and reusable unit behaviors that provide more valuable emergent properties in the large.
 - Flexibility
   - A design goal of `Automata` is to allow high flexibility via extreme abstraction (to enable design space evolution, support diversity in applications)
 - Simplicity of Implementation
-  - Elixir's meta-programming facilities enable very user-friendly API's so developers don't need to know the details of BT's or Automata Theory to get things done, and BT's themselves lend efficiency via simplicity to the development value chain.
+  - Elixir's meta-programming facilities enable very user-friendly API's so developers don't need to know the details of BT's or Automata Theory to get things done, and BT's themselves lend efficiency to the development value chain.
+- Neuromorphic/Probabilistic computing, potentially bringing the code to the data rather than the other way around.
 
 ### Applications
 - Trading Systems
@@ -182,8 +183,6 @@ end
 Below is a simplified hypothetical example of a sequence node(subtree) for an autonomous "Forex Trader". The first two leafs are condition nodes, and the last two are action nodes.
 
 ![automata trader sequence diagram](sequence.png)
-
-TODO: how to implement the above scenario.
 
 #### Where to read about the technologies underlying `Automata`:
 
