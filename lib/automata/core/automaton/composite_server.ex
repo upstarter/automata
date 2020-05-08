@@ -75,13 +75,11 @@ defmodule Automaton.CompositeServer do
         # #######################
         def init([node_sup, {m, _, _} = mfa, state, name]) do
           Process.flag(:trap_exit, true)
-          monitors = :ets.new(:monitors, [:private])
 
           new_state = %{
             state
             | node_sup: node_sup,
               mfa: mfa,
-              monitors: monitors,
               name: name
           }
 
@@ -122,7 +120,6 @@ defmodule Automaton.CompositeServer do
               } = state
             ) do
           # start all the children
-          # in future, start on some on-demand basis? following completion of prior task?
           workers =
             Enum.map(children, fn child ->
               start_node(
@@ -154,7 +151,6 @@ defmodule Automaton.CompositeServer do
         def handle_info(
               {:EXIT, pid, _reason},
               state = %{
-                monitors: monitors,
                 workers: workers,
                 children: children,
                 node_sup: node_sup,
@@ -167,34 +163,23 @@ defmodule Automaton.CompositeServer do
             "#{Process.info(self)[:registered_name]}"
           ])
 
-          case :ets.lookup(monitors, pid) do
-            [{pid, ref}] ->
-              true = Process.demonitor(ref)
-              true = :ets.delete(monitors, pid)
-              new_state = handle_child_exit(pid, state)
+          # NOTE: child crashed, no monitor
+          case Enum.member?(workers, pid) do
+            true ->
+              remaining_workers = workers |> Enum.reject(fn p -> p == pid end)
+
+              new_state = %{
+                state
+                | workers: [
+                    start_node(node_sup, {m, :start_link, [[self(), mfa, name]]})
+                    | workers
+                  ]
+              }
+
               {:noreply, new_state}
 
-            [] ->
-              # NOTE: child crashed, no monitor
-              case Enum.member?(workers, pid) do
-                true ->
-                  remaining_workers = workers |> Enum.reject(fn p -> p == pid end)
-
-                  new_state = %{
-                    state
-                    | workers: [
-                        start_node(node_sup, {m, :start_link, [[self(), mfa, name]]})
-                        | workers
-                      ]
-                  }
-
-                  {:noreply, new_state}
-
-                # {:stop, :normal, new_state}
-
-                false ->
-                  {:noreply, state}
-              end
+            false ->
+              {:noreply, state}
           end
         end
 

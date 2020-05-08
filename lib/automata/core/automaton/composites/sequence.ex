@@ -19,6 +19,8 @@ defmodule Automaton.Composite.Sequence do
       def update(%{workers: workers} = state) do
         {w, status} = tick_workers(workers)
 
+        # TODO: what to do when num seq actions is large enough
+        # that previous workers
         case status do
           :bh_failure ->
             Enum.each(state.workers, fn w ->
@@ -27,6 +29,7 @@ defmodule Automaton.Composite.Sequence do
               ])
 
               # status = GenServer.stop(w, :normal, :infinity)
+              # IO.inspect(status)
               # Process.exit(w, :normal)
             end)
 
@@ -51,15 +54,9 @@ defmodule Automaton.Composite.Sequence do
           cond do
             # If the child fails, or keeps running, do the same.
             status == :bh_running ->
-              # IO.puts("CONT")
-              # IO.inspect([Process.info(w)[:registered_name], status])
-              # IO.inspect([Process.info(self)[:registered_name], status])
               {:cont, {w, :bh_running}}
 
             status != :bh_success ->
-              # IO.puts("HALT")
-              # IO.inspect([Process.info(w)[:registered_name], status])
-              # IO.inspect([Process.info(self)[:registered_name], status])
               {:halt, {w, status}}
           end
         end)
@@ -88,15 +85,6 @@ defmodule Automaton.Composite.Sequence do
             IO.inspect("SEQUENCE TERMINATED - FAILED",
               label: Process.info(self)[:registered_name]
             )
-
-          # Enum.each(state.workers, fn w ->
-          #   IO.inspect([
-          #     "#{Process.info(w)[:registered_name]} stop"
-          #   ])
-          #
-          #   # status = GenServer.stop(w, :normal, :infinity)
-          #   Process.exit(w, :normal)
-          # end)
 
           :bh_success ->
             IO.inspect(["SEQUENCE TERMINATED - SUCCEEDED"],

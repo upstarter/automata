@@ -19,8 +19,20 @@ A good place to start is in the [project kanban](https://github.com/upstarter/au
 
 Please join the [slack channel](https://join.slack.com/t/automata-project/shared_invite/zt-e4fqrmo4-7ujuZwzXHNCGVrZb1aVZmA) and/or reach out to [ericsteen1@gmail.com](mailto:ericsteen1@gmail.com) if interested!
 
-##### Open Items / TODO
-1. Define protocols / data flows between control processes with a [contract checker](https://www.youtube.com/watch?v=rQIE22e0cW8) between all (cc is also an anti-corruption layer? A.K.A. embedded schema).
+##### Open Items / current TODO's
+1. Define protocols / data flows amongst control processes with a [contract checker](https://www.youtube.com/watch?v=rQIE22e0cW8) between all (cc is also an anti-corruption layer? A.K.A. embedded schema).
+
+## Current Outstanding Questions (brain-storming & [question-storming](https://www.maxjoles.com/blog/question-storming) topics)
+- timeouts: user-configurable at composite and/or component level? It seems both would be useful.
+- Reactive tree:
+  1. do we run user-defined updates async and tick tree until complete (provides reactivity since if/when conditions for a previously processed node change it can be re-activated, overtaking currently running process further in the tree). If so, does this require resetting all the nodes, etc.?
+  2. Or do we run user-defined updates synchronously and tick only proceeds when processing complete
+- previously processed nodes: when composite node fails/succeeds, do we `GenServer.stop` all previous nodes, or do we keep them running? or something else (`Process.exit`, etc.)
+
+## Future Directions
+- to suggest users break up the system heartbeat(update) into phases to improve designs, is there a general abstraction and will there be any needed system support?
+- offline learning?
+- meta-level control
 
 ##### Special notes for Automata devs
 - DEBUGGING NOTE: anytime you see an error or warning that is in one of the mock sequence modules, it probably isn't. It is probably in one of the modules in core that get injected into them. This is the nature of meta-programming debugging.
@@ -41,8 +53,9 @@ Check the #dev or #testing channels on [slack]((https://join.slack.com/t/automat
 
 1. Code Reviews by core team members are required before merging and must be escalated if there is even the slightest concern of a design/logic flaw or incomplete testing. Imagine your building a rocket to mars and putting you and your family on it. Would you commmit that spaghetti code now?
 4. Every PR should have test coverage unless it is a trivial change or is approved by 2 core team members or designated reviewers.
-5. The [BD](https://en.wikipedia.org/wiki/Benevolent_dictator_for_life) — [upstarter](https://github.com/upstarter), is a major [stickler](https://dictionary.cambridge.org/us/dictionary/english/stickler) when it comes to architecture, design, code quality, accuracy, comprehensiveness. Be warned and feel entirely free to keep him informed of his failures to follow the strict quality requirements. 😉
+5. The [BD](https://en.wikipedia.org/wiki/Benevolent_dictator_for_life) — [upstarter](https://github.com/upstarter), is a [stickler](https://dictionary.cambridge.org/us/dictionary/english/stickler) when it comes to architecture, design, code quality, accuracy, comprehensiveness. Be warned the project has very high standards as it must, and feel entirely free to keep him informed of his failures to follow the strict quality requirements. 😉 Don't take it personally if you receive a communication similar to this when a PR is not up to standards:
 
+    > Apologies, but this work cannot be accepted as it is. Perhaps there is a way it can be improved upon, but as it stands it will not be merged.
 
 #### Testing Standards
 In Progress. Property Testing? Permutation Testing? Join the conversation on [The Automata Project Slack Channel](https://join.slack.com/t/automata-project/shared_invite/zt-e4fqrmo4-7ujuZwzXHNCGVrZb1aVZmA)
@@ -75,7 +88,7 @@ The terminal abstract system control supervisor is the `AutomatonNodeSupervisor`
 which supervises the user-defined behavior tree root nodes which become its children when started —
 they are the "brains and braun", which are the `CompositeServer` and the `CompositeSupervisor`.
 
-The `CompositeServer` is the "mastermind" of the user-defined BT's, starting, stopping, and handling messages from the user-defined nodes as children of `CompositeSupervisor`. All nodes are components of a composite as root control nodes should always have children, of which some are `CompositeServer`'s, and some are `ActionServer`'s.
+The `CompositeServer` is injected into the user-defined automaton and is the "mastermind" of their BT's, starting, stopping, and handling messages from the user-defined nodes as children of `CompositeSupervisor`. All nodes are components of a composite as root control nodes should always have children, of which some are `CompositeServer`'s, and some are `ActionServer`'s.
 
 When the system starts, each root node configured in `lib/automata.ex` is started and run as a `GenServer`. These root nodes start and add their children to their own `CompositeSupervisor` since they are `CompositeServer`'s.
 
@@ -87,18 +100,18 @@ When the control system encounters and starts a `ComponentServer` node (action, 
 
  The `CompositeSupervisor` handles fault tolerance of user-defined BT nodes.
 
-It starts the user defined
-nodes as children of `AutomatonNodeSupervisor`, which is kept lean for fault
-tolerance purposes.
+It starts the user defined nodes as children of `AutomatonNodeSupervisor`, which
+is kept lean for fault tolerance purposes.
 
 The following is a breakdown of roles and responsibilities in the system (corresponding to files in `lib/automata/core/`):
 
-###### The Core Supervision Tree (in `lib/core/`)
+###### The Core Supervision Tree (in `lib/automata/core/control`)
 This tree is the management & fault tolerance mechanism for the parsing and validation of user config, as well as controlling the instantiation of the user-defined behavior trees.
 - `Automata.Supervisor`
   - on application start, this supervisor process starts the `AutomataSupervisor` and it's corresponding `Server`. It is started with strategy `:one_for_one` to ensure that the `AutomatonSupervisor` is independently self-healing
 - `Automata.Server`
-  - acts as the "brains" of the `AutomataSupervisor` to keep the supervisor lean and mean. It starts the `Automata.AutomatonSupervisor`, passing the user-defined config.
+  - acts as the "brains" of the `AutomataSupervisor` to keep the supervisor lean and mean. It starts the `Automata.AutomatonSupervisor`, passing the user-defined config, which flows through the entire tree. This data flow is a
+  core concern of the project.
 - `Automata.AutomatonSupervisor`
   - this process acts as supervisor to each `AutomatonNodeSupervisor` and has strategy `:one_for_all` to ensure that errors restart the entire supervision tree including the GenServers (`AutomatonServer`). It delegates the spawning of the user-defined BT nodes to the `AutomatonServer` which currently handles most of the logic.
 - `AutomatonNodeSupervisor`
@@ -106,14 +119,13 @@ This tree is the management & fault tolerance mechanism for the parsing and vali
 - `AutomatonServer`
   - this node parses and validates the user configuration and creates and manages OTP event callbacks of the user-defined behavior tree root node.
 
-###### The Control Supervision Tree (in `lib/core/control/`)
-These are the management & fault tolerance mechanisms for the user-defined behavior tree(s).
+###### The Automata
+These files are the core functionality of the user-defined automata which are GenServer's that are injected into the user-defined modules and provide the interface to/from the control parts and the rest of the system.
 
-- `Automaton.Node`
-  - this is the most complicated node as it defines the user API and manages and
-  controls the operations of the user-defined behavior trees in a recursive fashion.
+- `Automaton`
+  - this is the primary user interface boundary point which provides user config to the rest of the system.
 - `Automaton.Behavior`
-  - this is the interface (behaviour in elixir) that is implemented by all user-defined nodes, providing the most general policy for BT-ness.
+  - this is the interface (a behaviour in elixir) that is implemented by all user-defined nodes, providing the most general policy for BT-ness.
 - `Automaton.Action`
   - this is the interface for action(execution) nodes — where the world is changed, reactively and proactively
 
@@ -125,9 +137,3 @@ These are the management & fault tolerance mechanisms for the user-defined behav
 - Individual Node Blackboards
   - node blackboards use protected tables for knowledge sharing – all processes can read, one process has write access
   - the automaton will act upon seeing certain data changes in the global blackboard
-
-
-## Future Directions
-- to suggest users break up the system heartbeat(update) into phases to improve designs, is there a general abstraction and will there be any needed system support?
-- offline learning?
-- meta-level control for heartbeat adaptation

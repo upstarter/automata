@@ -7,9 +7,7 @@ defmodule AutomataTest do
   setup_all do
     # TODO: Load user-configs into node_configs
     nodes_config = [
-      [name: "MockSeq1", mfa: {MockSeq1, :start_link, []}],
-      [name: "MockSeq2", mfa: {MockSeq2, :start_link, []}],
-      [name: "MockSeq3", mfa: {MockSeq3, :start_link, []}]
+      [name: "MockSeq1", mfa: {MockSeq1, :start_link, []}]
     ]
 
     [nodes_config: nodes_config]
