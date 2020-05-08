@@ -22,5 +22,3 @@ erl_crash.dump
 # Ignore package tarball (built via "mix hex.build").
 Automata-*.tar
 
-# Dialyzer stuff
-.elixir_ls/

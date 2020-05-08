@@ -5,7 +5,6 @@ defmodule Automata.MixProject do
     [
       app: :automata,
       version: "0.1.0",
-      elixirc_options: [warnings_as_errors: true],
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
