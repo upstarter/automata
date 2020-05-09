@@ -1,9 +1,9 @@
-defmodule Automaton.NodeSupervisor do
+defmodule Automaton.AgentSupervisor do
   use DynamicSupervisor
 
   def start_link([automaton_server, {_, _, _} = mfa, name]) do
     DynamicSupervisor.start_link(__MODULE__, [automaton_server, mfa, name],
-      name: :"#{name}NodeSupervisor"
+      name: :"#{name}AgentSupervisor"
     )
   end
 
@@ -22,7 +22,7 @@ defmodule Automaton.NodeSupervisor do
 
   def child_spec([[_automaton_server, {_m, _f, _a}, name]] = args) do
     %{
-      id: name <> "NodeSupervisor",
+      id: name <> "AgentSupervisor",
       start: {__MODULE__, :start_link, args},
       shutdown: 10_000,
       restart: :temporary,

@@ -8,6 +8,10 @@ defmodule MockSeq1 do
     # or type :action for action nodes (no children)
     node_type: :sequence,
 
+    # for granular control of effectors
+    mode: nil,
+    # for filtering, utility decisioning, prioritization
+    type: nil,
     # the system heartbeat for this node(subtree), in milliseconds
     # the default is 50 ms (mimicing human brain perception cycle time)
     # heartbeat adaptation as meta-level(automata) action
@@ -17,12 +21,7 @@ defmodule MockSeq1 do
     # not included for action nodes list of child control/execution nodes
     # these run in order for type :selector and :sequence nodes and in parallel for
     # type :parallel
-    children: [Seq1, SeqComposite1, Seq4],
-
-    # for granular control of effectors
-    mode: nil,
-    # for filtering, utility decisioning, prioritization
-    type: nil
+    children: [Seq1, SeqComposite1, Seq4]
 end
 
 defmodule SeqComposite1 do

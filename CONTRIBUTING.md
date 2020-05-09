@@ -28,7 +28,7 @@ Please join the [slack channel](https://join.slack.com/t/automata-project/shared
   1. do we run user-defined updates async and tick tree until complete (provides reactivity since if/when conditions for a previously processed node change it can be re-activated, overtaking currently running process further in the tree). If so, does this require resetting all the nodes, etc.?
   2. Or do we run user-defined updates synchronously and tick only proceeds when processing complete
 - previously processed nodes: when composite node fails/succeeds, do we `GenServer.stop` all previous nodes, or do we keep them running? or something else (`Process.exit`, etc.)
-- monitors: do we need to monitor the `Automata.AutomatonServer` and `Automaton.CompositeServer` so that when a consumer process crashes, the worker processes should have exits handled appropriately?
+- monitors: do we need to monitor the `Automata.AgentServer` and `Automaton.CompositeServer` so that when a consumer process crashes, the worker processes should have exits handled appropriately?
 
 ## Future Directions
 - to suggest users break up the system heartbeat(update) into phases to improve designs, is there a general abstraction and will there be any needed system support?
@@ -86,7 +86,7 @@ In Progress. Property Testing? Permutation Testing? Join the conversation on [Th
 There are 4 Layers in the supervision tree below the Application
 supervisor.
 
-The terminal abstract system control supervisor is the `AutomatonNodeSupervisor`
+The terminal abstract system control supervisor is the `AutomatonAgentSupervisor`
 which supervises the user-defined behavior tree root nodes which become its children when started —
 they are the "brains and braun", which are the `CompositeServer` and the `CompositeSupervisor`.
 
@@ -102,7 +102,7 @@ When the control system encounters and starts a `ComponentServer` node (action, 
 
  The `CompositeSupervisor` handles fault tolerance of user-defined BT nodes.
 
-It starts the user defined nodes as children of `AutomatonNodeSupervisor`, which
+It starts the user defined nodes as children of `AutomatonAgentSupervisor`, which
 is kept lean for fault tolerance purposes.
 
 The following is a breakdown of roles and responsibilities in the system (corresponding to files in `lib/automata/core/`):
@@ -115,10 +115,10 @@ This tree is the management & fault tolerance mechanism for the parsing and vali
   - acts as the "brains" of the `AutomataSupervisor` to keep the supervisor lean and mean. It starts the `Automata.AutomatonSupervisor`, passing the user-defined config, which flows through the entire tree. This data flow is a
   core concern of the project.
 - `Automata.AutomatonSupervisor`
-  - this process acts as supervisor to each `AutomatonNodeSupervisor` and has strategy `:one_for_all` to ensure that errors restart the entire supervision tree including the GenServers (`AutomatonServer`). It delegates the spawning of the user-defined BT nodes to the `AutomatonServer` which currently handles most of the logic.
-- `AutomatonNodeSupervisor`
+  - this process acts as supervisor to each `AutomatonAgentSupervisor` and has strategy `:one_for_all` to ensure that errors restart the entire supervision tree including the GenServers (`AgentServer`). It delegates the spawning of the user-defined BT nodes to the `AgentServer` which currently handles most of the logic.
+- `AutomatonAgentSupervisor`
   - runs concurrently, independently, and with `restart: permanent`. This supervisor is the root of the user-defined behavior trees.
-- `AutomatonServer`
+- `AgentServer`
   - this node parses and validates the user configuration and creates and manages OTP event callbacks of the user-defined behavior tree root node.
 
 ###### The Automata

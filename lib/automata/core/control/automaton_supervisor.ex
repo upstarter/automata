@@ -1,27 +1,32 @@
 defmodule Automata.AutomatonSupervisor do
+  @moduledoc """
+  Runs as a child of `Automata.AutomataSupervisor` and supervises the
+  `Automata.AgentServer` which is a delegate for lifecycle management of the user
+  agents.
+  """
   use Supervisor
 
-  def start_link(node_config) do
-    Supervisor.start_link(__MODULE__, node_config, name: :"#{node_config[:name]}Supervisor")
+  def start_link(agent_config) do
+    Supervisor.start_link(__MODULE__, agent_config, name: :"#{agent_config[:name]}Supervisor")
   end
 
-  def init(node_config) do
+  def init(agent_config) do
     # No DynamicSupervisor since only one_for_one supported
     opts = [
       strategy: :one_for_all
     ]
 
     children = [
-      {Automata.AutomatonServer, [self(), node_config]}
+      {Automata.AgentServer, [self(), agent_config]}
     ]
 
     Supervisor.init(children, opts)
   end
 
-  def child_spec(node_config) do
+  def child_spec(agent_config) do
     %{
-      id: :"#{node_config[:name]}Supervisor",
-      start: {__MODULE__, :start_link, node_config},
+      id: :"#{agent_config[:name]}Supervisor",
+      start: {__MODULE__, :start_link, agent_config},
       type: :supervisor
     }
   end

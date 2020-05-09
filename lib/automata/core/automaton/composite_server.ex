@@ -48,7 +48,7 @@ defmodule Automaton.CompositeServer do
                     # workers are the pids of the running children
                     workers: [],
                     composite_sup: nil,
-                    node_sup: nil,
+                    agent_sup: nil,
                     node_type: unquote(user_opts[:node_type]),
                     # parent is nil when fresh
                     parent: nil,
@@ -62,10 +62,10 @@ defmodule Automaton.CompositeServer do
     control =
       quote bind_quoted: [user_opts: opts[:user_opts]] do
         # Client API
-        def start_link([node_sup, {_, _, _} = mfa, name]) do
+        def start_link([agent_sup, {_, _, _} = mfa, name]) do
           new_name = to_string(name) <> "Server"
 
-          GenServer.start_link(__MODULE__, [node_sup, mfa, %State{}, new_name],
+          GenServer.start_link(__MODULE__, [agent_sup, mfa, %State{}, new_name],
             name: String.to_atom(new_name)
           )
         end
@@ -73,12 +73,12 @@ defmodule Automaton.CompositeServer do
         # #######################
         # # GenServer Callbacks #
         # #######################
-        def init([node_sup, {m, _, _} = mfa, state, name]) do
+        def init([agent_sup, {m, _, _} = mfa, state, name]) do
           Process.flag(:trap_exit, true)
 
           new_state = %{
             state
-            | node_sup: node_sup,
+            | agent_sup: agent_sup,
               mfa: mfa,
               name: name
           }
@@ -90,10 +90,10 @@ defmodule Automaton.CompositeServer do
 
         def handle_info(
               :start_composite_supervisor,
-              state = %{node_sup: node_sup, mfa: mfa, name: name}
+              state = %{agent_sup: agent_sup, mfa: mfa, name: name}
             ) do
           spec = {Automaton.CompositeSupervisor, [[self(), mfa, name]]}
-          {:ok, composite_sup} = DynamicSupervisor.start_child(node_sup, spec)
+          {:ok, composite_sup} = DynamicSupervisor.start_child(agent_sup, spec)
           new_state = %{state | composite_sup: composite_sup}
 
           send(self(), :start_children)
@@ -153,7 +153,7 @@ defmodule Automaton.CompositeServer do
               state = %{
                 workers: workers,
                 children: children,
-                node_sup: node_sup,
+                agent_sup: agent_sup,
                 mfa: {m, f, a} = mfa,
                 name: name
               }
@@ -171,7 +171,7 @@ defmodule Automaton.CompositeServer do
               new_state = %{
                 state
                 | workers: [
-                    start_node(node_sup, {m, :start_link, [[self(), mfa, name]]})
+                    start_node(agent_sup, {m, :start_link, [[self(), mfa, name]]})
                     | workers
                   ]
               }
@@ -185,7 +185,7 @@ defmodule Automaton.CompositeServer do
 
         defp handle_child_exit(pid, state) do
           %{
-            node_sup: node_sup,
+            agent_sup: agent_sup,
             workers: workers,
             monitors: monitors
           } = state
@@ -230,7 +230,7 @@ defmodule Automaton.CompositeServer do
           :"#{tree_name}Server"
         end
 
-        def child_spec([[node_sup, {m, _f, a}, name]] = args) do
+        def child_spec([[agent_sup, {m, _f, a}, name]] = args) do
           %{
             id: to_string(name) <> "Server",
             start: {__MODULE__, :start_link, args},

@@ -1,17 +1,22 @@
-defmodule Automata.AutomatonServer do
+defmodule Automata.AgentServer do
+  @moduledoc """
+  Parses each individual agent config from the user and starts it under the `AgentSupervisor`.
+  """
   use GenServer
 
   defmodule State do
     defstruct automaton_sup: nil,
-              node_sup: nil,
+              agent_sup: nil,
               monitors: nil,
               automaton: nil,
               name: nil,
               mfa: nil
   end
 
-  def start_link([automaton_sup, node_config]) do
-    GenServer.start_link(__MODULE__, [automaton_sup, node_config], name: name(node_config[:name]))
+  def start_link([automaton_sup, agent_config]) do
+    GenServer.start_link(__MODULE__, [automaton_sup, agent_config],
+      name: name(agent_config[:name])
+    )
   end
 
   def status(tree_name) do
@@ -22,12 +27,12 @@ defmodule Automata.AutomatonServer do
   # Callbacks #
   #############
 
-  def init([automaton_sup, node_config]) when is_pid(automaton_sup) do
+  def init([automaton_sup, agent_config]) when is_pid(automaton_sup) do
     Process.flag(:trap_exit, true)
     monitors = :ets.new(:monitors, [:private])
     state = %State{automaton_sup: automaton_sup, monitors: monitors}
 
-    init(node_config, state)
+    init(agent_config, state)
   end
 
   def init([{:name, name} | rest], state) do
@@ -39,7 +44,7 @@ defmodule Automata.AutomatonServer do
   end
 
   def init([], state) do
-    send(self(), :start_node_supervisor)
+    send(self(), :start_agent_supervisor)
     {:ok, state}
   end
 
@@ -68,14 +73,14 @@ defmodule Automata.AutomatonServer do
   end
 
   def handle_info(
-        :start_node_supervisor,
+        :start_agent_supervisor,
         state = %{automaton_sup: automaton_sup, name: name, mfa: mfa}
       ) do
-    spec = {Automaton.NodeSupervisor, [[self(), mfa, name]]}
-    {:ok, node_sup} = Supervisor.start_child(automaton_sup, spec)
+    spec = {Automaton.AgentSupervisor, [[self(), mfa, name]]}
+    {:ok, agent_sup} = Supervisor.start_child(automaton_sup, spec)
 
-    automaton = new_automaton(node_sup, mfa, name)
-    {:noreply, %{state | node_sup: node_sup, automaton: automaton}}
+    automaton = new_automaton(agent_sup, mfa, name)
+    {:noreply, %{state | agent_sup: agent_sup, automaton: automaton}}
   end
 
   def handle_info({:DOWN, ref, _, _, _}, state = %{monitors: monitors, automaton: automaton}) do
@@ -90,7 +95,7 @@ defmodule Automata.AutomatonServer do
     end
   end
 
-  def handle_info({:EXIT, node_sup, reason}, state = %{node_sup: node_sup}) do
+  def handle_info({:EXIT, agent_sup, reason}, state = %{agent_sup: agent_sup}) do
     {:stop, reason, state}
   end
 
@@ -99,7 +104,7 @@ defmodule Automata.AutomatonServer do
         state = %{
           monitors: monitors,
           automaton: automaton,
-          node_sup: node_sup,
+          agent_sup: agent_sup,
           mfa: mfa,
           name: name
         }
@@ -119,7 +124,7 @@ defmodule Automata.AutomatonServer do
 
             new_state = %{
               state
-              | automaton: [new_automaton(node_sup, mfa, name) | remaining_automaton]
+              | automaton: [new_automaton(agent_sup, mfa, name) | remaining_automaton]
             }
 
             {:noreply, new_state}
@@ -146,9 +151,9 @@ defmodule Automata.AutomatonServer do
     :"#{tree_name}Server"
   end
 
-  defp new_automaton(node_sup, {m, _f, _a} = mfa, _name) do
-    spec = {m, [[node_sup, mfa, m]]}
-    {:ok, automaton} = DynamicSupervisor.start_child(node_sup, spec)
+  defp new_automaton(agent_sup, {m, _f, _a} = mfa, _name) do
+    spec = {m, [[agent_sup, mfa, m]]}
+    {:ok, automaton} = DynamicSupervisor.start_child(agent_sup, spec)
     true = Process.link(automaton)
     automaton
   end
@@ -161,7 +166,7 @@ defmodule Automata.AutomatonServer do
   #
   defp handle_automaton_exit(_pid, state) do
     %{
-      node_sup: _node_sup,
+      agent_sup: _agent_sup,
       automaton: _automaton
     } = state
 
