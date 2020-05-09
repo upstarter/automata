@@ -19,7 +19,7 @@ A good place to start is in the [project kanban](https://github.com/upstarter/au
 
 Please join the [slack channel](https://join.slack.com/t/automata-project/shared_invite/zt-e4fqrmo4-7ujuZwzXHNCGVrZb1aVZmA) and/or reach out to [ericsteen1@gmail.com](mailto:ericsteen1@gmail.com) if interested!
 
-##### Open Items / current TODO's
+## Open Items / current TODO's
 1. Define protocols / data flows amongst control processes with a [contract checker](https://www.youtube.com/watch?v=rQIE22e0cW8) between all (cc is also an anti-corruption layer? A.K.A. embedded schema).
 
 ## Current Outstanding Questions (brain-storming & [question-storming](https://www.maxjoles.com/blog/question-storming) topics)
@@ -35,21 +35,21 @@ Please join the [slack channel](https://join.slack.com/t/automata-project/shared
 - meta-level control
 
 ##### Special notes for Automata devs
-- DEBUGGING NOTE: anytime you see an error or warning that is in one of the mock sequence modules, it probably isn't. It is probably in one of the modules in core that get injected into them. This is the nature of meta-programming debugging.
+- DEBUGGING NOTE: anytime you see an error or warning that is in one of the mock sequence modules, it probably isn't. It is probably in one of the modules in core that get injected into them. This is the nature of meta-programming debugging. If anyone with experience debugging a heavily meta-programmed application, please chime in.
 
-### Engineering Standards & Best Practices
+## Engineering Standards & Best Practices
 Check the #dev or #testing channels on [slack]((https://join.slack.com/t/automata-project/shared_invite/zt-e4fqrmo4-7ujuZwzXHNCGVrZb1aVZmA)) for questions/info.
-#### Design Standards
+### Design Standards
 1. Abstraction & Modularity are key. Spend the time and/or [Ask on the Slack Channel](https://join.slack.com/t/automata-project/shared_invite/zt-e4fqrmo4-7ujuZwzXHNCGVrZb1aVZmA) to find the right abstraction. In terms of modularity, If its more than 10-20 lines, put it in a unit Function, Module or Struct that is tested and named well (by its role in the context if possible, rather than its data type or random name).
 2. Meta-programming will be heavily used as this is a framework, but it is important to know where it is useful and where its not. It is wise not to overuse clever meta-programming magic. If your not sure, ask, or use the force Luke (if your a Jedi).
 3. Use function pattern matching over for other types of enumeration wherever possible as this is a first-principle in Elixir systems.
 4. If your not sure how to do something, rather than do a hack, put a skeleton in place and submit a PR so a more senior engineer can provide guidance.
 
-#### Coding Standards
+### Coding Standards
 1. No shortcuts or Rush Jobs. Quality is job #1. We are creating something of very high quality, built to stand the test of time. Strive for 0% technical debt (the best kind of debt). Frameworks are poorly suited to “agile” practices, since they require foresight and a lot of generic capabilities. Today's emphasis on “agile” development is predicated on the developer's ignorance of what is required. Frameworks cannot be developed in that manner, since they are generic and devoid of ultimate functionality. They are all about potential, not actual end-user functionality. If you don't know the best way to do something, ask a core team member, or reach out to the very helpful Elixir community. See the [list of resources](#help).
 2. Always think about what can go wrong, what will happen on invalid input, and what might fail, which will help you catch many bugs before they happen.
 
-#### PR Review Standards
+### PR Review Standards
 
 1. Code Reviews by core team members are required before merging and must be escalated if there is even the slightest concern of a design/logic flaw or incomplete testing. Imagine your building a rocket to mars and putting you and your family on it. Would you commmit that spaghetti code now?
 4. Every PR should have test coverage unless it is a trivial change or is approved by 2 core team members or designated reviewers.
@@ -57,10 +57,11 @@ Check the #dev or #testing channels on [slack]((https://join.slack.com/t/automat
 
     > Apologies, but this work cannot be accepted as it is. Perhaps there is a way it can be improved upon, but as it stands it will not be merged.
 
-#### Testing Standards
+### Testing Standards
 In Progress. Property Testing? Permutation Testing? Join the conversation on [The Automata Project Slack Channel](https://join.slack.com/t/automata-project/shared_invite/zt-e4fqrmo4-7ujuZwzXHNCGVrZb1aVZmA)
 
 1. Unit tests test the unit of behavior, not the unit of implementation. Changing the implementation, without changing the behavior or having to change any of your tests is the goal, although not always possible. So where possible, treat your test objects as black boxes, testing through the public API without calling private methods or tinkering with state.
+2.
 ##### <a name="help"></a>Where to ask for help:
 
 1. [The Automata Project Slack Channel](https://join.slack.com/t/automata-project/shared_invite/zt-e4fqrmo4-7ujuZwzXHNCGVrZb1aVZmA)
@@ -127,7 +128,7 @@ These files are the core functionality of the user-defined automata which are Ge
 - `Automaton.Behavior`
   - this is the interface (a behaviour in elixir) that is implemented by all user-defined nodes, providing the most general policy for BT-ness.
 - `Automaton.Action`
-  - this is the interface for action(execution) nodes — where the world is changed, reactively and proactively
+  - this is the interface for action(execution) nodes — where the world is changed, reactively and/or proactively
 
 ###### The Blackboard
 
