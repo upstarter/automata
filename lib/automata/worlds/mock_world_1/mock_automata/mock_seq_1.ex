@@ -3,10 +3,6 @@ require Integer
 
 defmodule MockSeq1 do
   use Automaton,
-    # for granular control of effectors
-    mode: nil,
-    # for filtering, utility decisioning, prioritization
-    type: nil,
     # required
     # one of :sequence, :selector, :parallel, :priority, etc...
     # or type :action for action nodes (no children)
@@ -21,12 +17,18 @@ defmodule MockSeq1 do
     # not included for action nodes list of child control/execution nodes
     # these run in order for type :selector and :sequence nodes and in parallel for
     # type :parallel
-    children: [Seq1, SeqComposite1, Seq4]
+    children: [Seq1, SeqComposite1, Seq4],
+
+    # for granular control of effectors
+    mode: nil,
+    # for filtering, utility decisioning, prioritization
+    type: nil
 end
 
 defmodule SeqComposite1 do
   use Automaton,
     node_type: :sequence,
+    tick_freq: 50,
     children: [Seq2, Seq3]
 end
 

@@ -71,7 +71,7 @@ defmodule Automaton do
           {:noreply, %{new_state | status: status}}
         end
 
-        # only called on components to access parent(composite) state
+        # called on startup to access parent's state
         def handle_cast({:initialize, parent_pid}, state) do
           parent_state = GenServer.call(parent_pid, :get_state)
 

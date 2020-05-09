@@ -145,7 +145,7 @@ Users create worlds containing their automata in directory structures
 corresponding to their BT tree structures. These are created in the worlds/
 directory. Trees can be of arbitrary depth. Users define their own custom
 modules which `use Automaton` as a macro. By overriding the `update()` function
-and returning a status as one of `:running`, `:failure`, or `:success`, the core
+and returning a status as one of `:running`, `:failure`, `:success`, or `:aborted` the core
 system will run the Behavior Tree's as defined and handle normal errors with
 restarts. Users define error handling outside generic BT capabilities.
 
@@ -187,9 +187,15 @@ Below is a simplified hypothetical example of a sequence node(subtree) for an au
 #### Where to read about the technologies underlying `Automata`:
 
 ###### The core architecture
+
+- [Autonomous Systems Architecture](https://arxiv.org/pdf/1811.10277.pdf)
+
 - [The Elixir and OTP Guidebook](https://www.manning.com/books/the-little-elixir-and-otp-guidebook). old but very good
 
 - [Elixir in Action, Second Edition](https://www.manning.com/books/elixir-in-action-second-edition). new and very good
+
+- [c4 (Possible Future Direction)](http://www.naimadgames.com/publications/gdc01/gdc01.pdf)
+
 
 ###### Libraries & Tooling (WIP)
 - [Horde](https://github.com/derekkraan/horde)
@@ -233,13 +239,15 @@ Below is a simplified hypothetical example of a sequence node(subtree) for an au
 
 - Automata Control (MMLC)
 
+  - [Learning to Communicate in a Decentralized Environment](https://www.academia.edu/16947397/Learning_to_communicate_in_a_decentralized_environment?email_work_card=view-paper)
+
   - <a name="mmlcfootnote1" href="https://www.academia.edu/22145349/Multiagent_meta-level_control_for_radar_coordination">Multi-Agent Meta-Level Control</a>
 
-- [Coordination vs. Information in Multi-Agent Decision Processes](https://www.academia.edu/2687355/Coordination_vs._information_in_multi-agent_decision_processes)
+  - [Coordination vs. Information in Multi-Agent Decision Processes](https://www.academia.edu/2687355/Coordination_vs._information_in_multi-agent_decision_processes)
 
-- [Autonomous Systems Architecture](https://arxiv.org/pdf/1811.10277.pdf)
+  - [New Research in Multi-Agent Coordination](https://www.intechopen.com/books/applications-of-mobile-robots/a-survey-and-analysis-of-cooperative-multi-agent-robot-systems-challenges-and-directions)
 
-- [New Research in Multi-Agent Coordination](https://www.intechopen.com/books/applications-of-mobile-robots/a-survey-and-analysis-of-cooperative-multi-agent-robot-systems-challenges-and-directions)
+
 
 ###### Other
 - [Beliefs, Desires, Intentions(BDI) Architecture](https://en.wikipedia.org/wiki/Belief%E2%80%93desire%E2%80%93intention_software_model)

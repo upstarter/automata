@@ -28,6 +28,7 @@ Please join the [slack channel](https://join.slack.com/t/automata-project/shared
   1. do we run user-defined updates async and tick tree until complete (provides reactivity since if/when conditions for a previously processed node change it can be re-activated, overtaking currently running process further in the tree). If so, does this require resetting all the nodes, etc.?
   2. Or do we run user-defined updates synchronously and tick only proceeds when processing complete
 - previously processed nodes: when composite node fails/succeeds, do we `GenServer.stop` all previous nodes, or do we keep them running? or something else (`Process.exit`, etc.)
+- monitors: do we need to monitor the `Automata.AutomatonServer` and `Automaton.CompositeServer` so that when a consumer process crashes, the worker processes should have exits handled appropriately?
 
 ## Future Directions
 - to suggest users break up the system heartbeat(update) into phases to improve designs, is there a general abstraction and will there be any needed system support?
