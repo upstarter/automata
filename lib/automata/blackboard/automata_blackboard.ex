@@ -3,6 +3,6 @@ defmodule Automata.Blackboard do
     A global Blackboard for knowledge representations
   """
 
-  defmacro __using__(user_opts) do
+  defmacro __using__(_user_opts) do
   end
 end

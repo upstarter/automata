@@ -3,7 +3,6 @@ defmodule Automaton.Action do
     An action is a leaf in the tree.
     It operates on the world as a component of a composite(control) node.
   """
-  alias Automaton.Behavior
 
   defmacro __using__(user_opts) do
     prepend =
@@ -61,29 +60,31 @@ defmodule Automaton.Action do
           case state.status do
             :bh_running ->
               IO.inspect("ACTION TERMINATED — RUNNING",
-                label: Process.info(self)[:registered_name]
+                label: Process.info(self())[:registered_name]
               )
 
             :bh_failure ->
-              IO.inspect("ACTION TERMINATED — FAILED", label: Process.info(self)[:registered_name])
+              IO.inspect("ACTION TERMINATED — FAILED",
+                label: Process.info(self())[:registered_name]
+              )
 
             :bh_success ->
               IO.inspect("ACTION TERMINATED — SUCCEEDED",
-                label: Process.info(self)[:registered_name]
+                label: Process.info(self())[:registered_name]
               )
 
             :bh_aborted ->
               IO.inspect("ACTION TERMINATED — ABORTED",
-                label: Process.info(self)[:registered_name]
+                label: Process.info(self())[:registered_name]
               )
 
             :bh_fresh ->
               IO.inspect("ACTION TERMINATED — FRESH",
-                label: Process.info(self)[:registered_name]
+                label: Process.info(self())[:registered_name]
               )
           end
 
-          status
+          state.status
         end
       end
 

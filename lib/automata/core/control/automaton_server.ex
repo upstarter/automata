@@ -47,7 +47,7 @@ defmodule Automata.AutomatonServer do
     init(rest, state)
   end
 
-  def handle_call(:status, _from, %{automaton: automaton, monitors: monitors} = state) do
+  def handle_call(:status, _from, %{automaton: automaton, monitors: _monitors} = state) do
     {:reply, {state, length(automaton)}, state}
   end
 
@@ -146,26 +146,26 @@ defmodule Automata.AutomatonServer do
     :"#{tree_name}Server"
   end
 
-  defp new_automaton(node_sup, {m, _f, a} = mfa, name) do
+  defp new_automaton(node_sup, {m, _f, _a} = mfa, _name) do
     spec = {m, [[node_sup, mfa, m]]}
     {:ok, automaton} = DynamicSupervisor.start_child(node_sup, spec)
     true = Process.link(automaton)
     automaton
   end
 
-  defp dismiss_automaton(sup, pid) do
-    true = Process.unlink(pid)
-    DynamicSupervisor.terminate_child(sup, pid)
-  end
-
-  defp handle_automaton_exit(pid, state) do
+  #
+  # defp dismiss_automaton(sup, pid) do
+  #   true = Process.unlink(pid)
+  #   DynamicSupervisor.terminate_child(sup, pid)
+  # end
+  #
+  defp handle_automaton_exit(_pid, state) do
     %{
-      node_sup: node_sup,
-      automaton: automaton,
-      monitors: monitors
+      node_sup: _node_sup,
+      automaton: _automaton
     } = state
 
-    # TODO
+    state
   end
 
   def child_spec(arg) do

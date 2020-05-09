@@ -57,6 +57,6 @@ defmodule Automaton.Blackboard do
       - Incremental solution generation (Step by step, inch by inch. . .)
   """
 
-  defmacro __using__(user_opts) do
+  defmacro __using__(_user_opts) do
   end
 end

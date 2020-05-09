@@ -12,9 +12,8 @@ defmodule Automaton.Composite.Sequence do
     its children fails. As long as its children are succeeding, it will keep
     going. If it runs out of children, it will return in success.
   """
-  alias Automaton.{Composite, Behavior}
 
-  defmacro __using__(opts) do
+  defmacro __using__(_opts) do
     quote do
       def update(%{workers: workers} = state) do
         {w, status} = tick_workers(workers)
@@ -38,7 +37,7 @@ defmodule Automaton.Composite.Sequence do
         end
 
         IO.inspect([
-          "#{Process.info(self)[:registered_name]} update finished ##{state.control}",
+          "#{Process.info(self())[:registered_name]} update finished ##{state.control}",
           String.slice(Integer.to_string(:os.system_time(:millisecond)), -5..-1)
         ])
 
@@ -78,31 +77,31 @@ defmodule Automaton.Composite.Sequence do
         case state.status do
           :bh_running ->
             IO.inspect("SEQUENCE TERMINATED - RUNNING",
-              label: Process.info(self)[:registered_name]
+              label: Process.info(self())[:registered_name]
             )
 
           :bh_failure ->
             IO.inspect("SEQUENCE TERMINATED - FAILED",
-              label: Process.info(self)[:registered_name]
+              label: Process.info(self())[:registered_name]
             )
 
           :bh_success ->
             IO.inspect(["SEQUENCE TERMINATED - SUCCEEDED"],
-              label: Process.info(self)[:registered_name]
+              label: Process.info(self())[:registered_name]
             )
 
           :bh_aborted ->
             IO.inspect("SEQUENCE TERMINATED - ABORTED",
-              label: Process.info(self)[:registered_name]
+              label: Process.info(self())[:registered_name]
             )
 
           :bh_fresh ->
             IO.inspect("SEQUENCE TERMINATED - FRESH",
-              label: Process.info(self)[:registered_name]
+              label: Process.info(self())[:registered_name]
             )
         end
 
-        status
+        state.status
       end
     end
   end

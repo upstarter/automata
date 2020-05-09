@@ -1,6 +1,5 @@
 defmodule Automata.Server do
   use GenServer
-  use DynamicSupervisor
 
   #######
   # API #
@@ -21,7 +20,7 @@ defmodule Automata.Server do
   def init(nodes_config) do
     nodes_config
     |> Enum.each(fn node_config ->
-      send(self, {:start_tree, node_config})
+      send(self(), {:start_tree, node_config})
     end)
 
     {:ok, nodes_config}

@@ -9,7 +9,7 @@ defmodule Automaton.CompositeServer do
   the behavior tree algorithm traverses among those courses of action in a
   left-to-right manner. In other words, it performs a depth-first traversal.
   """
-  alias Automaton.CompositeServer
+
   alias Automaton.Composite.{Sequence, Selector}
 
   # a composite is just an array of behaviors
@@ -160,7 +160,7 @@ defmodule Automaton.CompositeServer do
             ) do
           IO.inspect([
             "EXIT Composite 2",
-            "#{Process.info(self)[:registered_name]}"
+            "#{Process.info(self())[:registered_name]}"
           ])
 
           # NOTE: child crashed, no monitor

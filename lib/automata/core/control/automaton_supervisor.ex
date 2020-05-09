@@ -12,7 +12,7 @@ defmodule Automata.AutomatonSupervisor do
     ]
 
     children = [
-      {Automata.AutomatonServer, [self, node_config]}
+      {Automata.AutomatonServer, [self(), node_config]}
     ]
 
     Supervisor.init(children, opts)

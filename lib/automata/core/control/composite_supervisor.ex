@@ -8,7 +8,7 @@ defmodule Automaton.CompositeSupervisor do
   end
 
   @spec init([]) :: no_return
-  def init([composite_server, {m, _f, a}, name]) do
+  def init([composite_server, {_m, _f, _a}, _name]) do
     Process.link(composite_server)
 
     opts = [
@@ -20,7 +20,7 @@ defmodule Automaton.CompositeSupervisor do
     DynamicSupervisor.init(opts)
   end
 
-  def child_spec([[composite_server, mfa, name]] = args) do
+  def child_spec([[_composite_server, _mfa, name]] = args) do
     %{
       id: :"#{name}CompositeSupervisor",
       start: {__MODULE__, :start_link, args},
