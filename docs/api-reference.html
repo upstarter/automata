@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.21.3">
+    <meta name="project" content="automata v0.1.0">
+    <title>API Reference — automata v0.1.0</title>
+    <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
+    <script src="dist/sidebar_items-c4bfe96281.js"></script>
+      <script src="docs_config.js"></script>
+    <script async src="dist/app-a225d03098e64fef431a.js"></script>
+  </head>
+  <body data-type="extras">
+    <script>try { if(localStorage.getItem('night-mode') === 'true') document.body.className += ' night-mode'; } catch (e) { }</script>
+<div class="main">
+
+<button class="sidebar-button sidebar-toggle">
+  <span class="icon-menu" title="Collapse/expand sidebar"></span>
+</button>
+
+<section class="sidebar">
+  <form class="sidebar-search" action="search.html">
+    <button type="submit" class="search-button">
+      <span class="icon-search" aria-hidden="true"></span>
+    </button>
+    <button type="button" tabindex="-1" class="search-close-button">
+      <span class="icon-cross" title="Cancel search"></span>
+    </button>
+    <label class="search-label">
+      <input name="q" type="text" id="search-list" class="search-input" placeholder="Search..." aria-label="Search" autocomplete="off" />
+    </label>
+  </form>
+
+  <div class="autocomplete">
+    <div class="autocomplete-results">
+    </div>
+  </div>
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectDetails">
+      <a href="api-reference.html" class="sidebar-projectName">
+automata      </a>
+      <h2 class="sidebar-projectVersion">
+        v0.1.0
+      </h2>
+    </div>
+  </div>
+
+  <ul class="sidebar-listNav">
+    <li><a id="extras-list" href="#full-list">Pages</a></li>
+
+      <li><a id="modules-list" href="#full-list">Modules</a></li>
+
+  </ul>
+  <div class="gradient"></div>
+  <ul id="full-list" class="sidebar-fullList"></ul>
+</section>
+
+<section class="content">
+  <div class="content-outer">
+    <div id="content" class="content-inner">
+
+<h1>
+  <small class="app-vsn">automata v0.1.0</small>
+  API Reference
+</h1>
+
+  <section class="details-list">
+    <h2 id="modules" class="section-heading">
+  <a href="#modules" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Modules
+</h2>
+
+    <div class="summary">
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Automata.html">Automata</a>
+  </div>
+    <div class="summary-synopsis"></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Automata.AgentServer.html">Automata.AgentServer</a>
+  </div>
+    <div class="summary-synopsis"><p>Parses each individual agent config from the user and starts it under the <code class="inline">AgentSupervisor</code>.</p></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Automata.AgentServer.State.html">Automata.AgentServer.State</a>
+  </div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Automata.AutomataSupervisor.html">Automata.AutomataSupervisor</a>
+  </div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Automata.AutomatonSupervisor.html">Automata.AutomatonSupervisor</a>
+  </div>
+    <div class="summary-synopsis"><p>Runs as a child of <a href="Automata.AutomataSupervisor.html"><code class="inline">Automata.AutomataSupervisor</code></a> and supervises the
+<a href="Automata.AgentServer.html"><code class="inline">Automata.AgentServer</code></a> which is a delegate for lifecycle management of the user
+agents and starts the agents under the <code class="inline">Automata.AgentSupervisor</code>.</p></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Automata.Blackboard.html">Automata.Blackboard</a>
+  </div>
+    <div class="summary-synopsis"><p>  A global Blackboard for knowledge representations</p></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Automata.Composite.Parallel.html">Automata.Composite.Parallel</a>
+  </div>
+    <div class="summary-synopsis"><p>  Parallel Node
+  When the execution of a parallel node starts, then the node’s children are
+  executed in succession from left to right without waiting for a return status
+  from any child before ticking the next one. It returns success if a given number
+  of children M ∈ N return success, it returns failure when the children that
+  return running and success are not enough to reach the given number, even if
+  they would all return success. It returns running otherwise. The purpose of
+  the parallel node is to model those tasks separable in independent sub-tasks
+  performing non-conflicting actions (e.g. a multi object tracking can be
+  performed using several cameras).</p></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Automata.Server.html">Automata.Server</a>
+  </div>
+    <div class="summary-synopsis"><p>Handles lifecycle of <a href="Automata.AutomataSupervisor.html"><code class="inline">Automata.AutomataSupervisor</code></a> as a delegate to keep the
+supervisor lean and mean, since it handles each <a href="Automata.AutomatonSupervisor.html"><code class="inline">Automata.AutomatonSupervisor</code></a>,
+passing the user config, which flows through the entire tree. This
+data flow is a key abstraction for the agents.</p></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Automata.Supervisor.html">Automata.Supervisor</a>
+  </div>
+    <div class="summary-synopsis"><p>On application start, this supervisor process starts the <code class="inline">AutomataSupervisor</code>
+and it&#39;s corresponding <code class="inline">Server</code>. It is started with strategy <code class="inline">:one_for_one</code> to
+ensure that each <code class="inline">AutomatonSupervisor</code> is independently self-healing, thus providing
+fault tolerant decentralization.</p></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Automata.Utility.html">Automata.Utility</a>
+  </div>
+    <div class="summary-synopsis"><p>Global utility decisioning
+First pass should prioritize automata based on global utility calculations
+Second pass should coordinate automata in achievement of some global goal</p></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Automata.World.html">Automata.World</a>
+  </div>
+    <div class="summary-synopsis"></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Automaton.html">Automaton</a>
+  </div>
+    <div class="summary-synopsis"><p>  This is the primary user control interface to the Automata system. The
+  configration parameters are used to inject the appropriate modules into the
+  user-defined nodes based on their node_type and other options.</p></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Automaton.Action.html">Automaton.Action</a>
+  </div>
+    <div class="summary-synopsis"><p>  An action is a leaf in the tree.
+  It operates on the world as a component of a composite(control) node.</p></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Automaton.AgentSupervisor.html">Automaton.AgentSupervisor</a>
+  </div>
+    <div class="summary-synopsis"><p>Directly supervises the lifecycle of the user-defined agents (behavior trees).
+The <code class="inline">Automaton.AgentServer</code> starts them under this process. It is the parent
+and root of the user-defined composite.</p></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Automaton.Behavior.html">Automaton.Behavior</a>
+  </div>
+    <div class="summary-synopsis"><p>  An Automaton.Behavior is an abstract interface for composites and components
+  that can be activated, run, and deactivated. Actions(Execution Nodes)
+  provide specific implementations of this interface. Branches in the tree can
+  be thought of as high level behaviors, heirarchically combining smaller
+  behaviors to provide more complex and interesting behaviors.</p></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Automaton.Blackboard.html">Automaton.Blackboard</a>
+  </div>
+    <div class="summary-synopsis"><p>  The Node Blackboard
+  Blackboard Architectures</p></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Automaton.ComponentServer.html">Automaton.ComponentServer</a>
+  </div>
+    <div class="summary-synopsis"><p>When a component behavior is complete and returns its status code,
+then the Composite it is a child of decides whether to continue through its
+children or whether to stop there and then and return a value.</p></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Automaton.Composite.Selector.html">Automaton.Composite.Selector</a>
+  </div>
+    <div class="summary-synopsis"><p>  Selector Node (also known as Fallback)</p></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Automaton.Composite.Sequence.html">Automaton.Composite.Sequence</a>
+  </div>
+    <div class="summary-synopsis"><p>  Behavior for user-defined sequence actions. When the execution of a sequence
+  node starts, then the node’s children are executed in succession from left
+  to right, returning to its parent a status failure (or running) as soon as a
+  child that returns failure (or running) is found. It returns success only
+  when all the children return success. The purpose of the sequence node is to
+  carry out the tasks that are deﬁned by a strict sequence of sub-tasks, in
+  which all have to succeed.</p></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Automaton.CompositeServer.html">Automaton.CompositeServer</a>
+  </div>
+    <div class="summary-synopsis"><p>When a child behavior is complete and returns its status code the Composite
+decides whether to continue through its children or whether to stop there and
+then and return a value.</p></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Automaton.CompositeSupervisor.html">Automaton.CompositeSupervisor</a>
+  </div>
+    <div class="summary-synopsis"><p>The <code class="inline">CompositeServer</code> is injected into the user-defined automaton and manages
+the lifecycle of their agents, ie. starting, stopping, and handling messages.
+All components are children of a composite.</p></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Automaton.Config.Parser.html">Automaton.Config.Parser</a>
+  </div>
+    <div class="summary-synopsis"><p>Purely Functional high level parsing policy for automata specific
+config from <code class="inline">user_opts</code>.</p></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Automaton.Utility.html">Automaton.Utility</a>
+  </div>
+    <div class="summary-synopsis"><p>Node utility decisioning
+First pass should prioritize composite &#39;selector&#39; actions based on utility (a
+priority composite node)</p></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="MockSeq1.html">MockSeq1</a>
+  </div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="MockSeq1.State.html">MockSeq1.State</a>
+  </div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Seq1.html">Seq1</a>
+  </div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Seq1.State.html">Seq1.State</a>
+  </div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Seq2.html">Seq2</a>
+  </div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Seq2.State.html">Seq2.State</a>
+  </div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Seq3.html">Seq3</a>
+  </div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Seq3.State.html">Seq3.State</a>
+  </div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Seq4.html">Seq4</a>
+  </div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Seq4.State.html">Seq4.State</a>
+  </div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="SeqComposite1.html">SeqComposite1</a>
+  </div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="SeqComposite1.State.html">SeqComposite1.State</a>
+  </div>
+</div>
+    </div>
+  </section>
+
+      <footer class="footer">
+        <p>
+          <span class="line">
+            Built using
+            <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener">ExDoc</a> (v0.21.3),
+          </span>
+          <span class="line">
+            designed by
+            <a href="https://twitter.com/dignifiedquire" target="_blank" rel="noopener" title="@dignifiedquire">Friedel Ziegelmayer</a>.
+          </span>
+        </p>
+        <p>
+          <button class="line footer-button display-shortcuts-help">
+            Display keyboard shortcuts
+          </button>
+          <button class="line footer-button night-mode-toggle">
+            Toggle night mode
+          </button>
+          <button class="line footer-button display-quick-switch">
+            Go to a HexDocs package
+          </button>
+          <button class="line footer-button tooltips-toggle">
+            <span class="tooltips-option-disable">Disable tooltips</span>
+            <span class="tooltips-option-enable">Enable tooltips</span>
+          </button>
+        </p>
+      </footer>
+    </div>
+  </div>
+</section>
+</div>
+  </body>
+</html>

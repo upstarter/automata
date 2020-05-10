@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.21.3">
+    <meta name="project" content="automata v0.1.0">
+    <title>Automaton.Blackboard — automata v0.1.0</title>
+    <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
+    <script src="dist/sidebar_items-c4bfe96281.js"></script>
+      <script src="docs_config.js"></script>
+    <script async src="dist/app-a225d03098e64fef431a.js"></script>
+  </head>
+  <body data-type="modules">
+    <script>try { if(localStorage.getItem('night-mode') === 'true') document.body.className += ' night-mode'; } catch (e) { }</script>
+<div class="main">
+
+<button class="sidebar-button sidebar-toggle">
+  <span class="icon-menu" title="Collapse/expand sidebar"></span>
+</button>
+
+<section class="sidebar">
+  <form class="sidebar-search" action="search.html">
+    <button type="submit" class="search-button">
+      <span class="icon-search" aria-hidden="true"></span>
+    </button>
+    <button type="button" tabindex="-1" class="search-close-button">
+      <span class="icon-cross" title="Cancel search"></span>
+    </button>
+    <label class="search-label">
+      <input name="q" type="text" id="search-list" class="search-input" placeholder="Search..." aria-label="Search" autocomplete="off" />
+    </label>
+  </form>
+
+  <div class="autocomplete">
+    <div class="autocomplete-results">
+    </div>
+  </div>
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectDetails">
+      <a href="api-reference.html" class="sidebar-projectName">
+automata      </a>
+      <h2 class="sidebar-projectVersion">
+        v0.1.0
+      </h2>
+    </div>
+  </div>
+
+  <ul class="sidebar-listNav">
+    <li><a id="extras-list" href="#full-list">Pages</a></li>
+
+      <li><a id="modules-list" href="#full-list">Modules</a></li>
+
+  </ul>
+  <div class="gradient"></div>
+  <ul id="full-list" class="sidebar-fullList"></ul>
+</section>
+
+<section class="content">
+  <div class="content-outer">
+    <div id="content" class="content-inner">
+
+      <h1>
+        <small class="app-vsn">automata v0.1.0</small>
+Automaton.Blackboard      </h1>
+
+
+        <section id="moduledoc">
+<p>  The Node Blackboard
+  Blackboard Architectures</p>
+<pre><code class="nohighlight makeup elixir"><span class="nc">A</span><span class="w"> </span><span class="n">blackboard</span><span class="w"> </span><span class="n">system</span><span class="w"> </span><span class="n">isn</span><span class="err">’</span><span class="n">t</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">decision</span><span class="w"> </span><span class="n">making</span><span class="w"> </span><span class="n">tool</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">its</span><span class="w"> </span><span class="n">own</span><span class="w"> </span><span class="n">right</span><span class="o">.</span><span class="w"> </span><span class="nc">It</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="n">a</span><span class="w">
+</span><span class="n">mechanism</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">coordinating</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">actions</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">several</span><span class="w"> </span><span class="n">decision</span><span class="w"> </span><span class="n">makers</span><span class="o">.</span><span class="w"> </span><span class="nc">The</span><span class="w">
+</span><span class="n">individual</span><span class="w"> </span><span class="n">decision</span><span class="w"> </span><span class="n">making</span><span class="w"> </span><span class="n">systems</span><span class="w"> </span><span class="n">can</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="n">implemented</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">any</span><span class="w"> </span><span class="ss">way</span><span class="p">:</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="n">a</span><span class="w">
+</span><span class="n">decision</span><span class="w"> </span><span class="n">tree</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">an</span><span class="w"> </span><span class="n">expert</span><span class="w"> </span><span class="n">system</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="n">even</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">learning</span><span class="w"> </span><span class="n">tools</span><span class="w"> </span><span class="n">such</span><span class="w"> </span><span class="n">as</span><span class="w"> </span><span class="n">neural</span><span class="w">
+</span><span class="n">networks</span><span class="o">.</span><span class="w"> </span><span class="nc">It</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="n">this</span><span class="w"> </span><span class="n">flexibility</span><span class="w"> </span><span class="n">that</span><span class="w"> </span><span class="n">makes</span><span class="w"> </span><span class="n">blackboard</span><span class="w"> </span><span class="n">architectures</span><span class="w">
+</span><span class="n">appealing</span><span class="o">.</span></code></pre>
+<p>  The Problem</p>
+<pre><code class="nohighlight makeup elixir"><span class="nc">We</span><span class="w"> </span><span class="n">would</span><span class="w"> </span><span class="n">like</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="n">able</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">coordinate</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">decision</span><span class="w"> </span><span class="n">making</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">several</span><span class="w"> </span><span class="n">different</span><span class="w">
+</span><span class="n">techniques</span><span class="o">.</span><span class="w"> </span><span class="nc">Each</span><span class="w"> </span><span class="n">technique</span><span class="w"> </span><span class="n">may</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="n">able</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">make</span><span class="w"> </span><span class="n">suggestions</span><span class="w"> </span><span class="n">as</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">what</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="k" data-group-id="3921553682-1">do</span><span class="w">
+</span><span class="n">next</span><span class="p">,</span><span class="w"> </span><span class="n">but</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">final</span><span class="w"> </span><span class="n">decision</span><span class="w"> </span><span class="n">can</span><span class="w"> </span><span class="n">only</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="n">made</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">they</span><span class="w"> </span><span class="n">cooperate</span><span class="o">.</span></code></pre>
+<p>  The Blackboard Metaphor</p>
+<pre><code class="nohighlight makeup elixir"><span class="nc">Blackboard</span><span class="o">-</span><span class="n">based</span><span class="w"> </span><span class="n">problem</span><span class="w"> </span><span class="n">solving</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="n">often</span><span class="w"> </span><span class="n">presented</span><span class="w"> </span><span class="n">using</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">following</span><span class="w">
+</span><span class="ss">metaphor</span><span class="p">:</span><span class="w"> </span><span class="nc">Imagine</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">group</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">human</span><span class="w"> </span><span class="n">specialists</span><span class="w"> </span><span class="n">seated</span><span class="w"> </span><span class="n">next</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">large</span><span class="w">
+</span><span class="n">blackboard</span><span class="o">.</span><span class="w"> </span><span class="nc">The</span><span class="w"> </span><span class="n">specialists</span><span class="w"> </span><span class="n">are</span><span class="w"> </span><span class="n">working</span><span class="w"> </span><span class="n">cooperatively</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">solve</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">problem</span><span class="p">,</span><span class="w">
+</span><span class="n">using</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">blackboard</span><span class="w"> </span><span class="n">as</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">workplace</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">developing</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">solution</span><span class="o">.</span><span class="w"> </span><span class="nc">Problem</span><span class="w">
+</span><span class="n">solving</span><span class="w"> </span><span class="n">begins</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">problem</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">initial</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="n">are</span><span class="w"> </span><span class="n">written</span><span class="w"> </span><span class="n">onto</span><span class="w"> </span><span class="n">the</span><span class="w">
+</span><span class="n">blackboard</span><span class="o">.</span><span class="w"> </span><span class="nc">The</span><span class="w"> </span><span class="n">specialists</span><span class="w"> </span><span class="n">watch</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">blackboard</span><span class="p">,</span><span class="w"> </span><span class="n">looking</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">an</span><span class="w">
+</span><span class="n">opportunity</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">apply</span><span class="w"> </span><span class="n">their</span><span class="w"> </span><span class="n">expertise</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">developing</span><span class="w"> </span><span class="n">solution</span><span class="o">.</span><span class="w"> </span><span class="nc">When</span><span class="w"> </span><span class="n">a</span><span class="w">
+</span><span class="n">specialist</span><span class="w"> </span><span class="n">finds</span><span class="w"> </span><span class="n">sufficient</span><span class="w"> </span><span class="n">information</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">make</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">contribution</span><span class="p">,</span><span class="w"> </span><span class="n">she</span><span class="w">
+</span><span class="n">records</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">contribution</span><span class="w"> </span><span class="n">on</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">blackboard</span><span class="p">,</span><span class="w"> </span><span class="n">hopefully</span><span class="w"> </span><span class="n">enabling</span><span class="w"> </span><span class="n">other</span><span class="w">
+</span><span class="n">specialists</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">apply</span><span class="w"> </span><span class="n">their</span><span class="w"> </span><span class="n">expertise</span><span class="o">.</span><span class="w"> </span><span class="nc">This</span><span class="w"> </span><span class="n">process</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">adding</span><span class="w"> </span><span class="n">contributions</span><span class="w">
+</span><span class="n">to</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">blackboard</span><span class="w"> </span><span class="n">continues</span><span class="w"> </span><span class="n">until</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">problem</span><span class="w"> </span><span class="n">has</span><span class="w"> </span><span class="n">been</span><span class="w"> </span><span class="n">solved</span><span class="o">.</span><span class="w">
+
+</span><span class="nc">This</span><span class="w"> </span><span class="n">simple</span><span class="w"> </span><span class="n">metaphor</span><span class="w"> </span><span class="n">captures</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">important</span><span class="w"> </span><span class="n">characteristics</span><span class="w"> </span><span class="n">of</span><span class="w">
+</span><span class="n">blackboard</span><span class="w"> </span><span class="n">systems</span><span class="p">,</span><span class="w"> </span><span class="n">each</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">which</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="n">described</span><span class="w"> </span><span class="n">separately</span><span class="w"> </span><span class="n">below</span><span class="o">.</span><span class="w">
+
+</span><span class="o">-</span><span class="w"> </span><span class="nc">Independence</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">expertise</span><span class="w"> </span><span class="p" data-group-id="6370473665-1">(</span><span class="nc">I</span><span class="w"> </span><span class="n">think</span><span class="p">,</span><span class="w"> </span><span class="n">therefore</span><span class="w"> </span><span class="nc">I</span><span class="w"> </span><span class="n">am</span><span class="o">.</span><span class="p" data-group-id="6370473665-1">)</span><span class="w">
+
+</span><span class="o">-</span><span class="w"> </span><span class="nc">Diversity</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">problem</span><span class="o">-</span><span class="n">solving</span><span class="w"> </span><span class="n">techniques</span><span class="w"> </span><span class="p" data-group-id="6370473665-2">(</span><span class="nc">I</span><span class="w"> </span><span class="n">don</span><span class="err">’</span><span class="n">t</span><span class="w"> </span><span class="n">think</span><span class="w"> </span><span class="n">like</span><span class="w"> </span><span class="n">you</span><span class="w"> </span><span class="k" data-group-id="6370473665-3">do</span><span class="o">.</span><span class="p">)</span><span class="w">
+
+</span><span class="o">-</span><span class="w"> </span><span class="nc">Flexible</span><span class="w"> </span><span class="n">representation</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">blackboard</span><span class="w"> </span><span class="n">information</span><span class="w"> </span><span class="p" data-group-id="6370473665-4">(</span><span class="nc">If</span><span class="w"> </span><span class="n">you</span><span class="w"> </span><span class="n">can</span><span class="w"> </span><span class="n">draw</span><span class="w"> </span><span class="n">it</span><span class="p">,</span><span class="w"> </span><span class="nc">I</span><span class="w"> </span><span class="n">can</span><span class="w"> </span><span class="kn">use</span><span class="w"> </span><span class="n">it</span><span class="o">.</span><span class="p" data-group-id="6370473665-4">)</span><span class="w">
+
+</span><span class="o">-</span><span class="w"> </span><span class="nc">Common</span><span class="w"> </span><span class="n">interaction</span><span class="w"> </span><span class="n">language</span><span class="w"> </span><span class="p" data-group-id="6370473665-5">(</span><span class="nc">What</span><span class="err">’</span><span class="n">d</span><span class="w"> </span><span class="n">you</span><span class="w"> </span><span class="n">say?</span><span class="p" data-group-id="6370473665-5">)</span><span class="w">
+
+</span><span class="o">-</span><span class="w"> </span><span class="nc">Positioning</span><span class="w"> </span><span class="n">metrics</span><span class="w"> </span><span class="p" data-group-id="6370473665-6">(</span><span class="nc">You</span><span class="w"> </span><span class="n">could</span><span class="w"> </span><span class="n">look</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="n">up</span><span class="o">.</span><span class="p" data-group-id="6370473665-6">)</span><span class="w">
+  </span><span class="nc">If</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">problem</span><span class="w"> </span><span class="n">being</span><span class="w"> </span><span class="n">solved</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="n">our</span><span class="w"> </span><span class="n">human</span><span class="w"> </span><span class="n">specialists</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="n">complex</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">their</span><span class="w">
+  </span><span class="n">contributions</span><span class="w"> </span><span class="n">made</span><span class="w"> </span><span class="n">on</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">blackboard</span><span class="w"> </span><span class="n">begins</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">grow</span><span class="p">,</span><span class="w"> </span><span class="n">quickly</span><span class="w"> </span><span class="n">locating</span><span class="w"> </span><span class="n">pertinent</span><span class="w"> </span><span class="n">information</span><span class="w">
+  </span><span class="n">becomes</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">problem</span><span class="o">.</span><span class="w"> </span><span class="nc">A</span><span class="w"> </span><span class="n">specialist</span><span class="w"> </span><span class="n">should</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">have</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">scan</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">entire</span><span class="w"> </span><span class="n">blackboard</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">see</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">a</span><span class="w">
+  </span><span class="n">particular</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="n">has</span><span class="w"> </span><span class="n">been</span><span class="w"> </span><span class="n">placed</span><span class="w"> </span><span class="n">on</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">blackboard</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="n">another</span><span class="w"> </span><span class="n">specialist</span><span class="o">.</span><span class="w">
+
+  </span><span class="nc">One</span><span class="w"> </span><span class="n">solution</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">subdivide</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">blackboard</span><span class="w"> </span><span class="n">into</span><span class="w"> </span><span class="n">regions</span><span class="p">,</span><span class="w"> </span><span class="n">each</span><span class="w"> </span><span class="n">corresponding</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">particular</span><span class="w">
+  </span><span class="n">kind</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">information</span><span class="o">.</span><span class="w"> </span><span class="nc">This</span><span class="w"> </span><span class="n">approach</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="n">commonly</span><span class="w"> </span><span class="n">used</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">blackboard</span><span class="w"> </span><span class="n">systems</span><span class="p">,</span><span class="w"> </span><span class="n">where</span><span class="w"> </span><span class="n">different</span><span class="w">
+  </span><span class="n">levels</span><span class="p">,</span><span class="w"> </span><span class="n">planes</span><span class="p">,</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="n">multiple</span><span class="w"> </span><span class="n">blackboards</span><span class="w"> </span><span class="n">are</span><span class="w"> </span><span class="n">used</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">group</span><span class="w"> </span><span class="n">related</span><span class="w"> </span><span class="n">objects</span><span class="o">.</span><span class="w">
+  </span><span class="nc">Similarly</span><span class="p">,</span><span class="w"> </span><span class="n">ordering</span><span class="w"> </span><span class="n">metrics</span><span class="w"> </span><span class="n">can</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="n">used</span><span class="w"> </span><span class="n">within</span><span class="w"> </span><span class="n">each</span><span class="w"> </span><span class="n">region</span><span class="p">,</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">sort</span><span class="w"> </span><span class="n">information</span><span class="w"> </span><span class="n">numerically</span><span class="p">,</span><span class="w">
+  </span><span class="n">alphabetically</span><span class="p">,</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="n">relevance</span><span class="o">.</span><span class="w"> </span><span class="nc">Advanced</span><span class="w"> </span><span class="n">blackboard</span><span class="o">-</span><span class="n">system</span><span class="w"> </span><span class="n">frameworks</span><span class="w"> </span><span class="n">provide</span><span class="w"> </span><span class="n">sophisticated</span><span class="w">
+  </span><span class="n">multidimensional</span><span class="w"> </span><span class="n">metrics</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">efficiently</span><span class="w"> </span><span class="n">locating</span><span class="w"> </span><span class="n">blackboard</span><span class="w"> </span><span class="n">objects</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">interest</span><span class="o">.</span><span class="w">
+
+</span><span class="o">-</span><span class="w"> </span><span class="nc">Event</span><span class="o">-</span><span class="n">based</span><span class="w"> </span><span class="n">activation</span><span class="w"> </span><span class="p" data-group-id="6370473665-7">(</span><span class="nc">Is</span><span class="w"> </span><span class="n">anybody</span><span class="w"> </span><span class="n">there?</span><span class="p" data-group-id="6370473665-7">)</span><span class="w">
+
+</span><span class="o">-</span><span class="w"> </span><span class="nc">Need</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">control</span><span class="w"> </span><span class="p" data-group-id="6370473665-8">(</span><span class="nc">It</span><span class="err">’</span><span class="n">s</span><span class="w"> </span><span class="n">my</span><span class="w"> </span><span class="n">turn</span><span class="o">.</span><span class="p" data-group-id="6370473665-8">)</span><span class="w">
+
+</span><span class="o">-</span><span class="w"> </span><span class="nc">Incremental</span><span class="w"> </span><span class="n">solution</span><span class="w"> </span><span class="n">generation</span><span class="w"> </span><span class="p" data-group-id="6370473665-9">(</span><span class="nc">Step</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="n">step</span><span class="p">,</span><span class="w"> </span><span class="n">inch</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="n">inch</span><span class="o">.</span><span class="w"> </span><span class="o">.</span><span class="w"> </span><span class="o">.</span><span class="p" data-group-id="6370473665-9">)</span></code></pre>
+        </section>
+
+
+      <footer class="footer">
+        <p>
+          <span class="line">
+            Built using
+            <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener">ExDoc</a> (v0.21.3),
+          </span>
+          <span class="line">
+            designed by
+            <a href="https://twitter.com/dignifiedquire" target="_blank" rel="noopener" title="@dignifiedquire">Friedel Ziegelmayer</a>.
+          </span>
+        </p>
+        <p>
+          <button class="line footer-button display-shortcuts-help">
+            Display keyboard shortcuts
+          </button>
+          <button class="line footer-button night-mode-toggle">
+            Toggle night mode
+          </button>
+          <button class="line footer-button display-quick-switch">
+            Go to a HexDocs package
+          </button>
+          <button class="line footer-button tooltips-toggle">
+            <span class="tooltips-option-disable">Disable tooltips</span>
+            <span class="tooltips-option-enable">Enable tooltips</span>
+          </button>
+        </p>
+      </footer>
+    </div>
+  </div>
+</section>
+</div>
+  </body>
+</html>

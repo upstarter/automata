@@ -10,7 +10,14 @@ defmodule Automata.MixProject do
       deps: deps(),
       elixirc_options: [warnings_as_errors: true],
       ignore_module_conflict: true,
-      preferred_cli_env: [espec: :test]
+      preferred_cli_env: [espec: :test],
+      docs: [
+        output: "docs",
+        extras: [
+          "README.md": [title: "ReadMe"],
+          "CONTRIBUTING.md": [title: "Contributing"]
+        ]
+      ]
     ]
   end
 

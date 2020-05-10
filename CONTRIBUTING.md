@@ -23,7 +23,7 @@ Please join the [slack channel](https://join.slack.com/t/automata-project/shared
 
 Definitely check out the [Goals](https://github.com/upstarter/automata/wiki/Goals) on the wiki. This is currently the focal point for the project defining short, medium, and long term problem solving goals across project dimensions. New issues should come from solving these problems "in goal form". Regular brain-storming and question-storming should be conducted with the end game in mind.
 
-See [How it works](https://github.com/upstarter/automata/wiki/How-it-works) for a high level view of the project, and check out the docs.
+See [How it works](https://github.com/upstarter/automata/wiki/How-it-works) for a high level view of the project, and check out the [docs](https://upstarter.github.io/automata/).
 
 See [Future Directions](https://github.com/upstarter/automata/wiki/Future-Directions) for more on what's in the works.
 

@@ -1,6 +1,7 @@
 defmodule Automaton.Config.Parser do
   @moduledoc """
-  High level user-config parsing policy.
+  Purely Functional high level parsing policy for automata specific
+  config from `user_opts`.
 
   ## User Provided State Space parsing & interpretation boundary point
   ## Delegate provided user input to modules corresponding to config state spaces

@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.21.3">
+    <meta name="project" content="automata v0.1.0">
+    <title>ReadMe — automata v0.1.0</title>
+    <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
+    <script src="dist/sidebar_items-c4bfe96281.js"></script>
+      <script src="docs_config.js"></script>
+    <script async src="dist/app-a225d03098e64fef431a.js"></script>
+  </head>
+  <body data-type="extras">
+    <script>try { if(localStorage.getItem('night-mode') === 'true') document.body.className += ' night-mode'; } catch (e) { }</script>
+<div class="main">
+
+<button class="sidebar-button sidebar-toggle">
+  <span class="icon-menu" title="Collapse/expand sidebar"></span>
+</button>
+
+<section class="sidebar">
+  <form class="sidebar-search" action="search.html">
+    <button type="submit" class="search-button">
+      <span class="icon-search" aria-hidden="true"></span>
+    </button>
+    <button type="button" tabindex="-1" class="search-close-button">
+      <span class="icon-cross" title="Cancel search"></span>
+    </button>
+    <label class="search-label">
+      <input name="q" type="text" id="search-list" class="search-input" placeholder="Search..." aria-label="Search" autocomplete="off" />
+    </label>
+  </form>
+
+  <div class="autocomplete">
+    <div class="autocomplete-results">
+    </div>
+  </div>
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectDetails">
+      <a href="api-reference.html" class="sidebar-projectName">
+automata      </a>
+      <h2 class="sidebar-projectVersion">
+        v0.1.0
+      </h2>
+    </div>
+  </div>
+
+  <ul class="sidebar-listNav">
+    <li><a id="extras-list" href="#full-list">Pages</a></li>
+
+      <li><a id="modules-list" href="#full-list">Modules</a></li>
+
+  </ul>
+  <div class="gradient"></div>
+  <ul id="full-list" class="sidebar-fullList"></ul>
+</section>
+
+<section class="content">
+  <div class="content-outer">
+    <div id="content" class="content-inner">
+
+<h1>⦿    | Automata | ⦿  ⦿   ⦿   ⦿</h1>
+<h4>Spawn a <a href="http://web.stanford.edu/class/ee380/Abstracts/190123.html">system</a> of concurrent, distributed, fault tolerant, and highly available intelligent agents for coordinated and/or uncoordinated action in one or many environments with no central point of failure. This project is Open Source. <a href="https://opensource.org/licenses/Apache-2.0"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="License" /></a></h4>
+<p><img src="particles.gif" alt="" /></p>
+<h2 id="project-mission" class="section-heading">
+  <a href="#project-mission" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Project Mission
+</h2>
+
+<p>The Automata Project combines the state-of-the-art AI control techniques with the latest research in autonomous decentralized systems, providing AI designers a flexible framework for creating valuable emergent properties in product ecosystems.</p>
+<h5>This project is in the Alpha stage and not ready for production systems. We need Contributors to get to 1.0. We are eager for your contributions and very happy you found yourself here! Please join the <a href="https://join.slack.com/t/automata-project/shared_invite/zt-e4fqrmo4-7ujuZwzXHNCGVrZb1aVZmA">slack channel</a> and/or reach out to <a href="mailto:ericsteen1@gmail.com">ericsteen1@gmail.com</a> if interested or with any questions. Here are our <a href="https://github.com/upstarter/automata/blob/master/CONTRIBUTING.md">contributing guidelines</a> and get up to speed on the <a href="https://github.com/upstarter/automata/wiki">wiki</a>.</h5>
+<h2 id="roadmap" class="section-heading">
+  <a href="#roadmap" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Roadmap
+</h2>
+
+<h4>Note: This will be updated often. The direction of the project will change as the work evolves. We very eagerly welcome any of your thoughts about roadmapping</h4>
+<p>See the current milestones <a href="https://github.com/upstarter/automata/milestones">here</a>.</p>
+<h2 id="usage" class="section-heading">
+  <a href="#usage" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Usage
+</h2>
+
+<p>Testing is currently happening using the mock sequence in <code class="inline">worlds/mock_world_1/mock_automata/mock_seq_1.ex</code>. This is currently our canonical example of how to design one automaton, which is a behavior tree, and <em>eventually</em> communicates with others that you define in <code class="inline">worlds/&lt;mock_world&gt;/&lt;mock_automata&gt;/&lt;mock_bt&gt;</code>.</p>
+<p>Currently, you can run the mock sequence in an iex shell as follows:</p>
+<pre><code class="nohighlight makeup elixir"><span class="n">iex</span><span class="w"> </span><span class="o">-</span><span class="nc">S</span><span class="w"> </span><span class="n">mix</span><span class="w">
+</span><span class="gp unselectable">iex(1)&gt; </span><span class="n">send</span><span class="p" data-group-id="3456644036-1">(</span><span class="nc">MockSeq1Server</span><span class="p">,</span><span class="w"> </span><span class="ss">:update</span><span class="p" data-group-id="3456644036-1">)</span></code></pre>
+<p>and tests can be run with debugging capabilities as follows:</p>
+<pre><code class="bash">MIX_ENV=test iex -S mix espec spec/unit/core/behavior_test.exs:31</code></pre>
+<p>where you are running a specific context/it block containing line 31.</p>
+<h2 id="implementation-overview" class="section-heading">
+  <a href="#implementation-overview" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Implementation Overview
+</h2>
+
+<h3 id="technologies" class="section-heading">
+  <a href="#technologies" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Technologies
+</h3>
+
+<p><a href="https://elixir-lang.org/">Elixir</a> &amp; <a href="https://en.wikipedia.org/wiki/Open_Telecom_Platform">OTP</a> provide the
+ primitives for robust concurrent, fault-tolerant, highly available,
+ self-healing distributed systems. Based on the Actor Model <sup><a href="#actorfootnote1">1</a></sup>, a singular Elixir <a href="https://hexdocs.pm/elixir/Process.html"><code class="inline">Process</code></a>(Actor) embodies all 3 essential elements of computation: processing, storage, communications. It does so using very lightweight, isolated processes, each with its own stack, heap, communications facilities (mailbox), and garbage collector. The Erlang VM (BEAM), with pre-emptive scheduling, acts somewhat as on operating system on top of an operating system. Pre-emption is good because it prevents bad actors from starving the rest of the system, allowing for higher degrees of concurrency and better interactive performance.</p>
+<p><a href="https://en.wikipedia.org/wiki/Behavior_tree_(artificial_intelligence,_robotics_and_control)">Behavior Trees</a>
+ are increasingly used in place of finite state machines (FSM&#39;s) and other AI
+ control architectures due to improved properties of modularity, flexibility,
+ reusability, and efficiency of implementation. They enable design/development scalability and efficiency.</p>
+<p><a href="http://www.gameaipro.com/GameAIPro/GameAIPro_Chapter09_An_Introduction_to_Utility_Theory.pdf">Utility AI</a>
+ is used to keep the automata focused on actions by providing an external system for all decision making support. This significantly reduces the amount of logic/nodes required for an agent and takes the heavy mathematical workload off of designers &amp; action developers.</p>
+<h5><a href="https://github.com/upstarter/automata/wiki/Underlying-Technology">Read the wiki</a> for more about the technologies underlying <a href="Automata.html"><code class="inline">Automata</code></a>.</h5>
+<h3 id="requirements" class="section-heading">
+  <a href="#requirements" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Requirements
+</h3>
+
+<h4>Autonomy is the capacity of agent(s) to achieve a set of coordinated goals by their own means (without human intervention) adapting to environment variations.</h4>
+<p>It combines five complementary  aspects:</p>
+<ol>
+<li>Perception e.g. interpretation of stimuli, removing ambiguity/vagueness from complex input data and determining relevant information based on context/strata/motif specific communications
+</li>
+<li>Reflection e.g. building/updating a faithful environment run-time model
+</li>
+<li>Goal management e.g. choosing among possible goals the most appropriate ones for a given configuration of the environment model
+</li>
+<li>Planning to achieve chosen goals
+</li>
+<li>Self-adaptation e.g. the ability to adjust behavior through learning and reasoning and to change dynamically the goal management and planning processes.
+</li>
+</ol>
+<p>Note that the five aspects are orthogonal. The first two aspects deal with
+“understanding” the map of the environment. The third and the forth aspects deal with autonomy of decision. Self adaptation ensures adequacy of decisions with respect to the environment map. See MMLC<sup><a href="#mmlcfootnote1">2</a></sup>.</p>
+<h4>A system is defined as an Autonomous Decentralized System (ADS) if the following 2 properties are satisfied:</h4>
+<ol>
+<li><p>Autonomous Controllability: Even if any subsystem fails, is repaired, and/or is newly added, the other subsystems can continue to manage themselves and function.</p>
+</li>
+<li><p>Autonomous Coordinability: Even if any subsystem fails, is repaired, and/or is newly added, the other subsystems can coordinate their individual objectives among themselves and can function in a coordinated fashion.</p>
+</li>
+</ol>
+<h2 id="features" class="section-heading">
+  <a href="#features" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Features
+</h2>
+
+<h3 id="functional-features" class="section-heading">
+  <a href="#functional-features" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Functional Features:
+</h3>
+
+<h4>General</h4>
+<ul>
+<li><h4>User defined behavior trees</h4>
+<ul>
+<li><p>Control Nodes currently on the roadmap</p>
+<ul>
+<li>Selector
+</li>
+<li>Sequence
+</li>
+<li>Parallel
+</li>
+<li>Priority
+</li>
+</ul>
+</li>
+<li>Condition nodes
+</li>
+<li>In-node Decorators
+</li>
+<li>Helper Nodes for accessing utility AI systems
+</li>
+</ul>
+</li>
+<li><h4>A Concurrent, Scalable Blackboard Knowledge System</h4>
+</li>
+</ul>
+<blockquote><p>The central problem of artificial intelligence is how to express the knowledge needed in order to create intelligent behavior. — John McCarthy, M.I.T/Stanford Professor, Creator of Lisp</p>
+</blockquote>
+<ul>
+<li><p>A global blackboard that can coordinate automata without being a central point of failure.</p>
+</li>
+<li><p>Individual automaton blackboards readable by all automata, writeable by owning automaton</p>
+</li>
+<li><h4>Meta Level Control</h4>
+<ul>
+<li>Meta-level control (triggered each heartbeat) to support agent interaction, any potential network reorganization. Meta-level control is the ability of an agent to optimize its long term performance by choosing and sequencing its deliberation and execution actions appropriately. <sup><a href="#mmlcfootnote1">2</a></sup>
+</li>
+</ul>
+</li>
+<li><h4>Neuromorphic/Probabilistic computing</h4>
+<ul>
+<li>potentially bringing the code to the data rather than the other way around.
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="performance-features" class="section-heading">
+  <a href="#performance-features" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Performance Features:
+</h3>
+
+<ul>
+<li><p>Concurrency</p>
+<ul>
+<li>The world is concurrent. For example: we see, hear, and move at the same time. Many global financial instruments are fluctuating at this instance. Concurrency was a core factor in the design of Erlang, making it easy to reason about and debug.
+</li>
+</ul>
+</li>
+<li><p>High availability</p>
+<ul>
+<li>Elixir is capable of 99.9999999% uptime (31 milliseconds/year of downtime). The main point of the Erlang model is an application that can be expected to run forever, as stated by the inventor — Joe Armstrong (RIP). Talk about unstoppable software!
+</li>
+</ul>
+</li>
+<li><p>Fault Tolerance</p>
+<ul>
+<li>OTP Supervision Trees and the &quot;fail fast&quot; principle provide strong guarantees for error recovery and self healing systems.
+</li>
+</ul>
+</li>
+<li><p>Scalability &amp; Distribution</p>
+<ul>
+<li>Elixir can handle millions of processes (134 million +/-) utilizing all cores without breaking a sweat on a single machine, and easily distributes work onto multiple machines with its builtin distribution mechanisms, and there is CRDT support with <a href="https://github.com/derekkraan/horde">Horde</a>.
+</li>
+<li>Behavior trees provide value chain efficiency/scalability (in both design/development and operations/testing) compared to previous state of the art AI control techniques.
+</li>
+</ul>
+</li>
+<li><p>Modularity</p>
+<ul>
+<li>Modular BT&#39;s allow the designer to hierarchically combine independently developed, tested, deployed, and reusable unit behaviors that provide more valuable emergent properties in the large.
+</li>
+</ul>
+</li>
+<li><p>Flexibility</p>
+<ul>
+<li>A design goal of <a href="Automata.html"><code class="inline">Automata</code></a> is to allow high flexibility via extreme abstraction (to enable design space evolution, support diversity in applications)
+</li>
+</ul>
+</li>
+<li><p>Simplicity of Implementation</p>
+<ul>
+<li>Elixir&#39;s meta-programming facilities enable very user-friendly API&#39;s so developers don&#39;t need to know the details of BT&#39;s or Automata Theory to get things done, and BT&#39;s themselves lend efficiency to the development value chain.
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="applications" class="section-heading">
+  <a href="#applications" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Applications
+</h3>
+
+<ul>
+<li>Trading Systems
+</li>
+<li>Patient Monitoring &amp; Care Systems
+</li>
+<li>Autonomous Pandemic Testing Drone Units
+</li>
+<li>Swarm Intelligence / Distributed Robotics
+</li>
+<li>Intelligent agents with soft realtime multi-dimensional sensory, perception, intuition, and action capabilities
+</li>
+<li>Multi-Agent Reinforcement Learning
+</li>
+<li>Mixture of Experts Deep Learning Control Systems (python inter-op with <a href="http://erlport.org/">erlport</a>)
+</li>
+<li>Blockchain Smart Contract Systems
+</li>
+<li>A Mega-constellation of satellites
+</li>
+<li>3D Printing and Factory Automation
+</li>
+<li>Product Analytics Systems
+</li>
+<li>Augmented, Virtual, Mixed Reality
+</li>
+<li>Smart Home / IOT Systems
+</li>
+<li>High-Speed Rail Systems (Japan has an ADS railway that learns)
+</li>
+<li>Chatbot &amp; Game AI&#39;s (esp. MMOG user/npc backends)
+</li>
+<li>QA Testing (BT&#39;s are particularly suited to combinatorial testing)
+</li>
+<li>? (choose your adventure)
+</li>
+</ul>
+<h3 id="api" class="section-heading">
+  <a href="#api" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  API
+</h3>
+
+<p>Users create worlds containing their automata in directory structures
+corresponding to their BT tree structures. These are created in the worlds/
+directory. Trees can be of arbitrary depth. Users define their own custom
+modules which <code class="inline">use Automaton</code> as a macro. By overriding the <code class="inline">update()</code> function
+and returning a status as one of <code class="inline">:running</code>, <code class="inline">:failure</code>, <code class="inline">:success</code>, or <code class="inline">:aborted</code> the core
+system will run the Behavior Tree&#39;s as defined and handle normal errors with
+restarts. Users define error handling outside generic BT capabilities.</p>
+<pre><code class="nohighlight makeup elixir"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyAutomaton</span><span class="w"> </span><span class="k" data-group-id="4032033995-1">do</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">Automaton</span><span class="p">,</span><span class="w">
+
+    </span><span class="c1"># required</span><span class="w">
+    </span><span class="c1"># one of :sequence, :selector, :parallel, :action (no children), etc...</span><span class="w">
+    </span><span class="ss">node_type</span><span class="p">:</span><span class="w"> </span><span class="ss">:selector</span><span class="p">,</span><span class="w">
+
+    </span><span class="c1"># the heartbeat for this node(subtree), in milliseconds</span><span class="w">
+    </span><span class="c1"># the default is 50ms (mimics the average human brain perception cycle time)</span><span class="w">
+    </span><span class="c1"># heartbeat adaption as meta-level(automata) action, to be changed at runtime</span><span class="w">
+    </span><span class="ss">tick_freq</span><span class="p">:</span><span class="w"> </span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="c1"># 50ms</span><span class="w">
+
+
+    </span><span class="c1"># excluded for execution nodes</span><span class="w">
+    </span><span class="c1"># list of child control/action(execution) nodes</span><span class="w">
+    </span><span class="c1"># these run in order for type :selector and :sequence nodes and in parallel</span><span class="w">
+    </span><span class="c1"># for type :parallel, and in a user-defined dynamic order for :priority</span><span class="w">
+    </span><span class="ss">children</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4032033995-2">[</span><span class="nc">ChildAction1</span><span class="p">,</span><span class="w"> </span><span class="nc">ChildSequence1</span><span class="p">,</span><span class="w"> </span><span class="nc">ChildAction2</span><span class="p" data-group-id="4032033995-2">]</span><span class="w">
+
+    </span><span class="c1"># called every tick, must return status</span><span class="w">
+    </span><span class="kd">def</span><span class="w"> </span><span class="nf">update</span><span class="w"> </span><span class="k" data-group-id="4032033995-3">do</span><span class="w">
+      </span><span class="c1"># reactively and proactively change the world</span><span class="w">
+      </span><span class="c1"># ie.. effect the current environment in phases using either effectors or via communication with other agents</span><span class="w">
+      </span><span class="p" data-group-id="4032033995-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p" data-group-id="4032033995-4">}</span><span class="w">
+    </span><span class="k" data-group-id="4032033995-3">end</span><span class="w">
+</span><span class="k" data-group-id="4032033995-1">end</span></code></pre>
+<h3 id="example" class="section-heading">
+  <a href="#example" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Example
+</h3>
+
+<p>Below is a simplified hypothetical example of a sequence node(subtree) for an autonomous &quot;Forex Trader&quot;. The first two leafs are condition nodes, and the last two are action nodes.</p>
+<p><img src="sequence.png" alt="automata trader sequence diagram" /></p>
+<h6>References</h6>
+<ol>
+<li><p><a name="actorfootnote1" href="https://arxiv.org/vc/arxiv/papers/1008/1008.1459v8.pdf">Actor Model</a></p>
+</li>
+<li><p><a name="mmlcfootnote1" href="https://www.academia.edu/22145349/Multiagent_meta-level_control_for_radar_coordination">Multi-Agent Meta-Level Control</a></p>
+</li>
+</ol>
+<h2 id="installation" class="section-heading">
+  <a href="#installation" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Installation
+</h2>
+
+<p>If <a href="https://hex.pm/docs/publish">available in Hex</a>, the package can be installed
+by adding <a href="Automata.html"><code class="inline">Automata</code></a> to your list of dependencies in <code class="inline">mix.exs</code>:</p>
+<pre><code class="nohighlight makeup elixir"><span class="kd">def</span><span class="w"> </span><span class="nf">deps</span><span class="w"> </span><span class="k" data-group-id="9842725240-1">do</span><span class="w">
+  </span><span class="p" data-group-id="9842725240-2">[</span><span class="w">
+    </span><span class="p" data-group-id="9842725240-3">{</span><span class="ss">:automata</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;~&gt; 0.1.0&quot;</span><span class="p" data-group-id="9842725240-3">}</span><span class="w">
+  </span><span class="p" data-group-id="9842725240-2">]</span><span class="w">
+</span><span class="k" data-group-id="9842725240-1">end</span></code></pre>
+<h2 id="authors" class="section-heading">
+  <a href="#authors" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Authors
+</h2>
+
+<ul>
+<li><strong>Eric Steen</strong> - <a href="https://github.com/upstarter">upstarter</a>
+</li>
+</ul>
+<p>See also the list of <a href="https://github.com/upstarter/automata/contributors">contributors</a> who participated in this project.</p>
+<h2 id="license" class="section-heading">
+  <a href="#license" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  License
+</h2>
+
+<p>This project is licensed under the Apache 2.0 License - see the <a href="./License.md">License.md</a> file for details or <a href="https://opensource.org/licenses/Apache-2.0"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="License" /></a></p>
+      <footer class="footer">
+        <p>
+          <span class="line">
+            Built using
+            <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener">ExDoc</a> (v0.21.3),
+          </span>
+          <span class="line">
+            designed by
+            <a href="https://twitter.com/dignifiedquire" target="_blank" rel="noopener" title="@dignifiedquire">Friedel Ziegelmayer</a>.
+          </span>
+        </p>
+        <p>
+          <button class="line footer-button display-shortcuts-help">
+            Display keyboard shortcuts
+          </button>
+          <button class="line footer-button night-mode-toggle">
+            Toggle night mode
+          </button>
+          <button class="line footer-button display-quick-switch">
+            Go to a HexDocs package
+          </button>
+          <button class="line footer-button tooltips-toggle">
+            <span class="tooltips-option-disable">Disable tooltips</span>
+            <span class="tooltips-option-enable">Enable tooltips</span>
+          </button>
+        </p>
+      </footer>
+    </div>
+  </div>
+</section>
+</div>
+  </body>
+</html>

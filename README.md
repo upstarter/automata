@@ -53,7 +53,7 @@ where you are running a specific context/it block containing line 31.
  [Utility AI](http://www.gameaipro.com/GameAIPro/GameAIPro_Chapter09_An_Introduction_to_Utility_Theory.pdf)
  is used to keep the automata focused on actions by providing an external system for all decision making support. This significantly reduces the amount of logic/nodes required for an agent and takes the heavy mathematical workload off of designers & action developers.
 
-##### [Read the wiki](https://github.com/upstarter/automata/wiki/Underlying-Technology) for more about the technologies underlying `Automata`.
+##### [Read the wiki](https://github.com/upstarter/automata/wiki/Underlying-Technology) and/or the [docs](https://upstarter.github.io/automata/) for more about the technologies underlying `Automata`.
 
 ### Requirements
 

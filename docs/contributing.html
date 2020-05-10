@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.21.3">
+    <meta name="project" content="automata v0.1.0">
+    <title>Contributing — automata v0.1.0</title>
+    <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
+    <script src="dist/sidebar_items-c4bfe96281.js"></script>
+      <script src="docs_config.js"></script>
+    <script async src="dist/app-a225d03098e64fef431a.js"></script>
+  </head>
+  <body data-type="extras">
+    <script>try { if(localStorage.getItem('night-mode') === 'true') document.body.className += ' night-mode'; } catch (e) { }</script>
+<div class="main">
+
+<button class="sidebar-button sidebar-toggle">
+  <span class="icon-menu" title="Collapse/expand sidebar"></span>
+</button>
+
+<section class="sidebar">
+  <form class="sidebar-search" action="search.html">
+    <button type="submit" class="search-button">
+      <span class="icon-search" aria-hidden="true"></span>
+    </button>
+    <button type="button" tabindex="-1" class="search-close-button">
+      <span class="icon-cross" title="Cancel search"></span>
+    </button>
+    <label class="search-label">
+      <input name="q" type="text" id="search-list" class="search-input" placeholder="Search..." aria-label="Search" autocomplete="off" />
+    </label>
+  </form>
+
+  <div class="autocomplete">
+    <div class="autocomplete-results">
+    </div>
+  </div>
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectDetails">
+      <a href="api-reference.html" class="sidebar-projectName">
+automata      </a>
+      <h2 class="sidebar-projectVersion">
+        v0.1.0
+      </h2>
+    </div>
+  </div>
+
+  <ul class="sidebar-listNav">
+    <li><a id="extras-list" href="#full-list">Pages</a></li>
+
+      <li><a id="modules-list" href="#full-list">Modules</a></li>
+
+  </ul>
+  <div class="gradient"></div>
+  <ul id="full-list" class="sidebar-fullList"></ul>
+</section>
+
+<section class="content">
+  <div class="content-outer">
+    <div id="content" class="content-inner">
+
+<h2 id="contributing" class="section-heading">
+  <a href="#contributing" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Contributing
+</h2>
+
+<p>👍🎉 First off, thanks for taking the time to contribute! 🎉👍 Please reach out to <a href="mailto:ericsteen1@gmail.com">ericsteen1@gmail.com</a> if you have any questions.</p>
+<h3 id="welcome-to-the-automata-project" class="section-heading">
+  <a href="#welcome-to-the-automata-project" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Welcome to The Automata Project!
+</h3>
+
+<h5>We are eager for your contributions and very happy you found yourself here! Here are our current needs:</h5>
+<ul>
+<li>Elixir Alchemists with Design, Architecture, OTP Best Practices Expertise
+</li>
+<li>AI, Cognitive Architecture &amp; Behavior Tree Expertise
+</li>
+<li>ETS, BlackBoard System, Utility AI Expertise
+</li>
+<li>Test Coverage
+</li>
+<li>Documentation
+</li>
+<li>Senior Code Reviewers to ensure Quality
+</li>
+<li>Willingness and motivation to learn it all
+</li>
+</ul>
+<h6>Where to get started contributing</h6>
+<p>A good place to start is in the <a href="https://github.com/upstarter/automata/projects/1">project kanban</a>. Especially those threads labeled &#39;good first issue&#39;, &#39;testing&#39;.</p>
+<p>Please join the <a href="https://join.slack.com/t/automata-project/shared_invite/zt-e4fqrmo4-7ujuZwzXHNCGVrZb1aVZmA">slack channel</a> and/or reach out to <a href="mailto:ericsteen1@gmail.com">ericsteen1@gmail.com</a> if interested!</p>
+<h3 id="if-in-doubt-check-the-wiki" class="section-heading">
+  <a href="#if-in-doubt-check-the-wiki" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  If in doubt, check the <a href="https://github.com/upstarter/automata/wiki">wiki</a>. 🕵️
+</h3>
+
+<p>Definitely check out the <a href="https://github.com/upstarter/automata/wiki/Goals">Goals</a> on the wiki. This is currently the focal point for the project defining short, medium, and long term problem solving goals across project dimensions. New issues should come from solving these problems &quot;in goal form&quot;. Regular brain-storming and question-storming should be conducted with the end game in mind.</p>
+<p>See <a href="https://github.com/upstarter/automata/wiki/How-it-works">How it works</a> for a high level view of the project, and check out the docs.</p>
+<p>See <a href="https://github.com/upstarter/automata/wiki/Future-Directions">Future Directions</a> for more on what&#39;s in the works.</p>
+<h3 id="special-notes-for-automata-developers" class="section-heading">
+  <a href="#special-notes-for-automata-developers" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Special notes for Automata developers
+</h3>
+
+<ul>
+<li>See <a href="https://hexdocs.pm/elixir/writing-documentation.html#recommendations">ex_doc recommendations</a> for documentation guidelines.
+</li>
+<li>DEBUGGING NOTE: anytime you see an error or warning that is in one of the mock sequence modules, it probably isn&#39;t. It is probably in one of the modules in core that get injected into them. This is the nature of meta-programming debugging. If anyone with experience debugging a heavily meta-programmed application, please chime in.
+</li>
+</ul>
+<h2 id="engineering-standards-best-practices" class="section-heading">
+  <a href="#engineering-standards-best-practices" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Engineering Standards &amp; Best Practices
+</h2>
+
+<p>Check the #dev or #testing channels on <a href="(https://join.slack.com/t/automata-project/shared_invite/zt-e4fqrmo4-7ujuZwzXHNCGVrZb1aVZmA)">slack</a> for questions/info.</p>
+<h3 id="design-standards" class="section-heading">
+  <a href="#design-standards" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Design Standards
+</h3>
+
+<ol>
+<li>Abstraction &amp; Modularity are key. Spend the time and/or <a href="https://join.slack.com/t/automata-project/shared_invite/zt-e4fqrmo4-7ujuZwzXHNCGVrZb1aVZmA">Ask on the Slack Channel</a> to find the right abstraction. In terms of modularity, If its more than 10-20 lines, put it in a unit Function, Module or Struct that is tested and named well (by its role in the context if possible, rather than its data type or random name).
+</li>
+<li>Meta-programming will be heavily used as this is a framework, but it is important to know where it is useful and where its not. It is wise not to overuse clever meta-programming magic. If your not sure, ask, or use the force Luke (if your a Jedi).
+</li>
+<li>Use function pattern matching over for other types of enumeration wherever possible as this is a first-principle in Elixir systems.
+</li>
+<li>If your not sure how to do something, rather than do a hack, put a skeleton in place and submit a PR so a more senior engineer can provide guidance.
+</li>
+</ol>
+<h3 id="coding-standards" class="section-heading">
+  <a href="#coding-standards" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Coding Standards
+</h3>
+
+<ol>
+<li>No shortcuts or Rush Jobs. Quality is job #1. We are creating something of very high quality, built to stand the test of time. Strive for 0% technical debt (the best kind of debt). Frameworks are poorly suited to “agile” practices, since they require foresight and a lot of generic capabilities. Today&#39;s emphasis on “agile” development is predicated on the developer&#39;s ignorance of what is required. Frameworks cannot be developed in that manner, since they are generic and devoid of ultimate functionality. They are all about potential, not actual end-user functionality. If you don&#39;t know the best way to do something, ask a core team member, or reach out to the very helpful Elixir community. See the <a href="#help">list of resources</a>.
+</li>
+<li>Always think about what can go wrong, what will happen on invalid input, and what might fail, which will help you catch many bugs before they happen.
+</li>
+</ol>
+<h3 id="pr-review-standards" class="section-heading">
+  <a href="#pr-review-standards" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  PR Review Standards
+</h3>
+
+<ol>
+<li>Code Reviews by core team members are required before merging and must be escalated if there is even the slightest concern of a design/logic flaw or incomplete testing. Imagine your building a rocket to mars and putting you and your family on it. Would you commmit that spaghetti code now?
+</li>
+<li>Every PR should have test coverage unless it is a trivial change or is approved by 2 core team members or designated reviewers.
+</li>
+<li><p>The <a href="https://en.wikipedia.org/wiki/Benevolent_dictator_for_life">BD</a> — <a href="https://github.com/upstarter">upstarter</a>, is a <a href="https://dictionary.cambridge.org/us/dictionary/english/stickler">stickler</a> when it comes to architecture, design, code quality, accuracy, comprehensiveness. Be warned the project has very high standards as it must, and feel entirely free to keep him informed of his failures to follow the strict quality requirements. 😉 Don&#39;t take it personally if you receive a communication similar to this when a PR is not up to standards:</p>
+<blockquote><p>Apologies, but this work cannot be accepted as it is. Perhaps there is a way it can be improved upon, but as it stands it will not be merged.</p>
+</blockquote>
+</li>
+</ol>
+<h3 id="testing-standards" class="section-heading">
+  <a href="#testing-standards" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Testing Standards
+</h3>
+
+<p>In Progress. Property Testing? Permutation Testing? Join the conversation on <a href="https://join.slack.com/t/automata-project/shared_invite/zt-e4fqrmo4-7ujuZwzXHNCGVrZb1aVZmA">The Automata Project Slack Channel</a></p>
+<ol>
+<li>Unit tests test the unit of behavior, not the unit of implementation. Changing the implementation, without changing the behavior or having to change any of your tests is the goal, although not always possible. So where possible, treat your test objects as black boxes, testing through the public API without calling private methods or tinkering with state.
+</li>
+</ol>
+<h5><a name="help"></a>Where to ask for help:</h5>
+<ol>
+<li><a href="https://join.slack.com/t/automata-project/shared_invite/zt-e4fqrmo4-7ujuZwzXHNCGVrZb1aVZmA">The Automata Project Slack Channel</a>
+</li>
+<li><a href="https://elixirforum.com/">Elixir Forum</a>
+</li>
+<li><a href="https://elixir-slackin.herokuapp.com/">Elixir Slack Channel</a>
+</li>
+<li><a href="https://stackoverflow.com/questions/tagged/elixir">Stack Overflow</a>
+</li>
+<li><a href="https://www.reddit.com/r/elixir/">Reddit</a>
+</li>
+<li><a href="https://www.quora.com">Quora</a>
+</li>
+<li><a href="https://www.discordapp.com">Discord</a>
+</li>
+</ol>
+<h4><a href="https://www.apache.org/foundation/policies/conduct">Code of Conduct</a></h4>
+<h6>The Blackboard</h6>
+<ul>
+<li><p>Global Blackboard</p>
+<ul>
+<li>all nodes share this knowledge store
+</li>
+<li>the automata will act upon seeing certain data changes in the global blackboard
+</li>
+</ul>
+</li>
+<li><p>Individual Node Blackboards</p>
+<ul>
+<li>node blackboards use protected tables for knowledge sharing – all processes can read, one process has write access
+</li>
+<li>the automaton will act upon seeing certain data changes in the global blackboard
+</li>
+</ul>
+</li>
+</ul>
+      <footer class="footer">
+        <p>
+          <span class="line">
+            Built using
+            <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener">ExDoc</a> (v0.21.3),
+          </span>
+          <span class="line">
+            designed by
+            <a href="https://twitter.com/dignifiedquire" target="_blank" rel="noopener" title="@dignifiedquire">Friedel Ziegelmayer</a>.
+          </span>
+        </p>
+        <p>
+          <button class="line footer-button display-shortcuts-help">
+            Display keyboard shortcuts
+          </button>
+          <button class="line footer-button night-mode-toggle">
+            Toggle night mode
+          </button>
+          <button class="line footer-button display-quick-switch">
+            Go to a HexDocs package
+          </button>
+          <button class="line footer-button tooltips-toggle">
+            <span class="tooltips-option-disable">Disable tooltips</span>
+            <span class="tooltips-option-enable">Enable tooltips</span>
+          </button>
+        </p>
+      </footer>
+    </div>
+  </div>
+</section>
+</div>
+  </body>
+</html>
