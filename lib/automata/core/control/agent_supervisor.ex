@@ -1,4 +1,9 @@
 defmodule Automaton.AgentSupervisor do
+  @moduledoc """
+  Directly supervises the lifecycle of the user-defined agents (behavior trees).
+  The `Automaton.AgentServer` starts them under this process. It is the parent
+  and root of the user-defined composite.
+  """
   use DynamicSupervisor
 
   def start_link([automaton_server, {_, _, _} = mfa, name]) do

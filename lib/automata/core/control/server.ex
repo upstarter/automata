@@ -1,4 +1,10 @@
 defmodule Automata.Server do
+  @moduledoc """
+  Handles lifecycle of `Automata.AutomataSupervisor` as a delegate to keep the
+  supervisor lean and mean, since it handles each `Automata.AutomatonSupervisor`,
+  passing the user config, which flows through the entire tree. This
+  data flow is a key abstraction for the agents.
+  """
   use GenServer
 
   #######

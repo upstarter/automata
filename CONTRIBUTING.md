@@ -83,53 +83,9 @@ In Progress. Property Testing? Permutation Testing? Join the conversation on [Th
 ##### The Automata supervision tree(s)
 ![automata supervision tree diagram](sup_tree.png)
 
-There are 4 Layers in the supervision tree below the Application
-supervisor.
+There are 4 Layers between the Application supervisor and the user agents.
 
-The terminal abstract system control supervisor is the `AutomatonAgentSupervisor`
-which supervises the user-defined behavior tree root nodes which become its children when started —
-they are the "brains and braun", which are the `CompositeServer` and the `CompositeSupervisor`.
-
-The `CompositeServer` is injected into the user-defined automaton and is the "mastermind" of their BT's, starting, stopping, and handling messages from the user-defined nodes as children of `CompositeSupervisor`. All nodes are components of a composite as root control nodes should always have children, of which some are `CompositeServer`'s, and some are `ActionServer`'s.
-
-When the system starts, each root node configured in `lib/automata.ex` is started and run as a `GenServer`. These root nodes start and add their children to their own `CompositeSupervisor` since they are `CompositeServer`'s.
-
-The children are started as either OTP `DyanmicSupervisor`'s (for composite nodes, each with its own `CompositeSupervisor` & `CompositeServer`).  Every node in the tree is a child of a composite as the root is always a `CompositeServer`.
-
-When the control system encounters and starts a `CompositeServer` node (sequence, selector, etc..), the current `CompositeSupervisor` supervises the node as a `CompositeServer` & `CompositeSupervisor` pair via the `CompositeServer`.
-
-When the control system encounters and starts a `ComponentServer` node (action, decorator, etc..), the current `CompositeSupervisor` supervises that single node as a `GenServer`.
-
- The `CompositeSupervisor` handles fault tolerance of user-defined BT nodes.
-
-It starts the user defined nodes as children of `AutomatonAgentSupervisor`, which
-is kept lean for fault tolerance purposes.
-
-The following is a breakdown of roles and responsibilities in the system (corresponding to files in `lib/automata/core/`):
-
-###### The Core Supervision Tree (in `lib/automata/core/control`)
-This tree is the management & fault tolerance mechanism for the parsing and validation of user config, as well as controlling the instantiation of the user-defined behavior trees.
-- `Automata.Supervisor`
-  - on application start, this supervisor process starts the `AutomataSupervisor` and it's corresponding `Server`. It is started with strategy `:one_for_one` to ensure that the `AutomatonSupervisor` is independently self-healing
-- `Automata.Server`
-  - acts as the "brains" of the `AutomataSupervisor` to keep the supervisor lean and mean. It starts the `Automata.AutomatonSupervisor`, passing the user-defined config, which flows through the entire tree. This data flow is a
-  core concern of the project.
-- `Automata.AutomatonSupervisor`
-  - this process acts as supervisor to each `AutomatonAgentSupervisor` and has strategy `:one_for_all` to ensure that errors restart the entire supervision tree including the GenServers (`AgentServer`). It delegates the spawning of the user-defined BT nodes to the `AgentServer` which currently handles most of the logic.
-- `AutomatonAgentSupervisor`
-  - runs concurrently, independently, and with `restart: permanent`. This supervisor is the root of the user-defined behavior trees.
-- `AgentServer`
-  - this node parses and validates the user configuration and creates and manages OTP event callbacks of the user-defined behavior tree root node.
-
-###### The Automata
-These files are the core functionality of the user-defined automata which are GenServer's that are injected into the user-defined modules and provide the interface to/from the control parts and the rest of the system.
-
-- `Automaton`
-  - this is the primary user interface boundary point which provides user config to the rest of the system.
-- `Automaton.Behavior`
-  - this is the interface (a behaviour in elixir) that is implemented by all user-defined nodes, providing the most general policy for BT-ness.
-- `Automaton.Action`
-  - this is the interface for action(execution) nodes — where the world is changed, reactively and/or proactively
+When the system starts, each user agent is started and run as a composite with children, all of which are `GenServer`'s.
 
 ###### The Blackboard
 

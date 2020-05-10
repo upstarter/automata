@@ -1,4 +1,9 @@
 defmodule Automaton.CompositeSupervisor do
+  @moduledoc """
+  The `CompositeServer` is injected into the user-defined automaton and manages
+  the lifecycle of their agents, ie. starting, stopping, and handling messages.
+  All components are children of a composite.
+  """
   use DynamicSupervisor
 
   def start_link([composite_server, {_, _, _} = mfa, name]) do

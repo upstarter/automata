@@ -24,3 +24,4 @@ Automata-*.tar
 
 # Dialyzer stuff
 .elixir_ls/
+.DS_Store

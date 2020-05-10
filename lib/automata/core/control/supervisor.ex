@@ -1,4 +1,10 @@
 defmodule Automata.Supervisor do
+  @moduledoc """
+  On application start, this supervisor process starts the `AutomataSupervisor`
+  and it's corresponding `Server`. It is started with strategy `:one_for_one` to
+  ensure that each `AutomatonSupervisor` is independently self-healing, thus providing
+  fault tolerant decentralization.
+  """
   use Supervisor
   @dialyzer {:no_return, init: 1}
 
