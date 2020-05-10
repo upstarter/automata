@@ -30,10 +30,8 @@ Please join the [slack channel](https://join.slack.com/t/automata-project/shared
 - previously processed nodes: when composite node fails/succeeds, do we `GenServer.stop` all previous nodes, or do we keep them running? or something else (`Process.exit`, etc.)
 - monitors: do we need to monitor the `Automata.AgentServer` and `Automaton.CompositeServer` so that when a consumer process crashes, the worker processes should have exits handled appropriately?
 
-## Future Directions
-- to suggest users break up the system heartbeat(update) into phases to improve designs, is there a general abstraction and will there be any needed system support?
-- offline learning?
-- meta-level control
+## [Future Directions](https://github.com/upstarter/automata/wiki/Future-Directions)
+
 
 ##### Special notes for Automata devs
 - DEBUGGING NOTE: anytime you see an error or warning that is in one of the mock sequence modules, it probably isn't. It is probably in one of the modules in core that get injected into them. This is the nature of meta-programming debugging. If anyone with experience debugging a heavily meta-programmed application, please chime in.

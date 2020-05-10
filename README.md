@@ -9,8 +9,8 @@ Spawn a [system](http://web.stanford.edu/class/ee380/Abstracts/190123.html) of c
 intelligent agents for coordinated and/or uncoordinated action in one or many
 environments with no central point of failure. This project is Open Source. [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-## Project Mission & Summary
-The Automata Project is a comprehensive framework for Artificial Intelligence Control Architects. It combines the state-of-the-art AI control techniques with the latest research in autonomous decentralized systems.
+## Project Mission
+The Automata Project combines the state-of-the-art AI control techniques with the latest research in autonomous decentralized systems to provide valuable emergent properties in product ecosystems.
 
 ##### This project is in the Alpha stage and not ready for production systems. We need Contributors to get to 1.0. We are eager for your contributions and very happy you found yourself here! Please join the [slack channel](https://join.slack.com/t/automata-project/shared_invite/zt-e4fqrmo4-7ujuZwzXHNCGVrZb1aVZmA) and/or reach out to [ericsteen1@gmail.com](mailto:ericsteen1@gmail.com) if interested or with any questions. Here are our [contributing guidelines](https://github.com/upstarter/automata/blob/master/CONTRIBUTING.md).
 
@@ -55,6 +55,8 @@ where you are running a specific context/it block containing line 31.
 
  [Utility AI](http://www.gameaipro.com/GameAIPro/GameAIPro_Chapter09_An_Introduction_to_Utility_Theory.pdf)
  is used to keep the automata focused on actions by providing an external system for all decision making support. This significantly reduces the amount of logic/nodes required for an agent and takes the heavy mathematical workload off of designers & action developers.
+
+##### [Read the wiki](https://github.com/upstarter/automata/wiki/Underlying-Technology) for more about the technologies underlying `Automata`.
 
 ### Requirements
 
@@ -183,76 +185,6 @@ end
 Below is a simplified hypothetical example of a sequence node(subtree) for an autonomous "Forex Trader". The first two leafs are condition nodes, and the last two are action nodes.
 
 ![automata trader sequence diagram](sequence.png)
-
-#### Where to read about the technologies underlying `Automata`:
-
-###### The core architecture
-
-- [Autonomous Systems Architecture](https://arxiv.org/pdf/1811.10277.pdf)
-
-- [The Elixir and OTP Guidebook](https://www.manning.com/books/the-little-elixir-and-otp-guidebook). old but very good
-
-- [Elixir in Action, Second Edition](https://www.manning.com/books/elixir-in-action-second-edition). new and very good
-
-- [c4 (Possible Future Direction)](http://www.naimadgames.com/publications/gdc01/gdc01.pdf)
-
-
-###### Libraries & Tooling (WIP)
-- [Horde](https://github.com/derekkraan/horde)
-
-
-###### Behavior Trees
-- [CraftAI BT Grammar Basics](https://www.craft.ai/blog/bt-101-behavior-trees-grammar-basics/)
-
-- [Behavior Tree Starter Kit (BTSK)](http://www.gameaipro.com/GameAIPro/GameAIPro_Chapter06_The_Behavior_Tree_Starter_Kit.pdf) and corresponding [provided source code](https://github.com/aigamedev/btsk) and in particular [this file](https://github.com/aigamedev/btsk/blob/master/BehaviorTree.cpp).
-
-- [BTSK Video](https://www.youtube.com/watch?v=n4aREFb3SsU)
-
-- [Elixir Behavior Tree](https://github.com/jschomay/elixir-behavior-tree) and the corresponding [elixirconf talk](https://elixirforum.com/t/39-elixirconf-us-2018-behavior-trees-and-battleship-tapping-into-the-power-of-advanced-data-structures-jeff-schomay/16785)
-
-- [BT AI](https://github.com/libgdx/gdx-ai/wiki/Behavior-Trees)
-
-- [Lessons Learned on previous attempts](https://takinginitiative.wordpress.com/tag/behavior-trees/)
-
-
-###### The Blackboard
-- [Sharing Data in Actions](https://github.com/libgdx/gdx-ai/wiki/Behavior-Trees#using-data-for-inter-task-communication)
-
-- [BlackBoard Architectures](https://books.google.com/books?id=1OJ8EhvuPXAC&pg=PA459&lpg=PA459&dq=blackboard+game+ai&source=bl&ots=iVYGrf_Rzy&sig=ACfU3U31OOqst7Dd7z7fhiH9HoVwBjyVJQ&hl=en&sa=X&ved=2ahUKEwjvxqyR3LHnAhVMrp4KHSSfD4sQ6AEwDHoECAsQAQ#v=onepage&q=blackboard%20game%20ai&f=false)
-
-- [Blackboard Systems](http://gbbopen.org/papers/ai-expert.pdf)
-
-###### Utility AI
-- [Behavioral Mathematics](https://www.amazon.com/Behavioral-Mathematics-Game-AI-Applied/dp/1584506849/ref=sr_1_5?keywords=game+behavior+mathematics&qid=1581555478&sr=8-5)
-
-- [Utility AI Design Patterns](https://course.ccs.neu.edu/cs5150f13/readings/dill_designpatterns.pdf)
-
-###### Theoretical
-- Automaton Control
-
-  - [Multi-Agent Online Planning with Communication](https://www.aaai.org/ocs/index.php/ICAPS/ICAPS09/paper/viewFile/729/1129)
-
-  - [The Complexity of Decentralized Control of Markov Decision Processes (Dec-POMPDP)](https://arxiv.org/pdf/1301.3836.pdf)
-
-  - [Decentralized Control of Partially Observable Markov Decision
-  Processes using Belief Space Macro-actions (Dec-POSMDP)](https://arxiv.org/pdf/1502.06030.pdf)
-
-- Automata Control (MMLC)
-
-  - [Learning to Communicate in a Decentralized Environment](https://www.academia.edu/16947397/Learning_to_communicate_in_a_decentralized_environment?email_work_card=view-paper)
-
-  - <a name="mmlcfootnote1" href="https://www.academia.edu/22145349/Multiagent_meta-level_control_for_radar_coordination">Multi-Agent Meta-Level Control</a>
-
-  - [Coordination vs. Information in Multi-Agent Decision Processes](https://www.academia.edu/2687355/Coordination_vs._information_in_multi-agent_decision_processes)
-
-  - [New Research in Multi-Agent Coordination](https://www.intechopen.com/books/applications-of-mobile-robots/a-survey-and-analysis-of-cooperative-multi-agent-robot-systems-challenges-and-directions)
-
-
-
-###### Other
-- [Beliefs, Desires, Intentions(BDI) Architecture](https://en.wikipedia.org/wiki/Belief%E2%80%93desire%E2%80%93intention_software_model)
-
-- [Entity, Component, System(ECS) Architecture](https://en.wikipedia.org/wiki/Entity_component_system) and [this](https://www.youtube.com/watch?v=7m37kKZ5ohA&t=336s) excellent Empex talk.
 
 ###### References
 1. <a name="actorfootnote1" href="https://arxiv.org/vc/arxiv/papers/1008/1008.1459v8.pdf">Actor Model</a>
