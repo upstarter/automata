@@ -22,3 +22,5 @@ jobs:
       run: mix deps.get
     - name: Make sure everything compiles
       run: mix compile
+    - name: Generate docs
+      run: mix docs
