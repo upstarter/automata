@@ -1,9 +1,9 @@
-defmodule Automaton.Config.UserConfigParser do
+defmodule Automaton.Config.Parser do
   @moduledoc """
   High level user-config parsing policy.
 
   ## User Provided State Space parsing & interpretation boundary point
-  ## Delegate provided user input to corresponding modules
+  ## Delegate provided user input to modules corresponding to config state spaces
   """
   alias Automaton.CompositeServer
   alias Automaton.ComponentServer
@@ -15,7 +15,7 @@ defmodule Automaton.Config.UserConfigParser do
 
   ## Examples
       iex> user_opts = [node_type: :selector]
-      iex> Automaton.UserConfigParser.node_type(user_opts)
+      iex> Automaton.Config.Parser.node_type(user_opts)
       :selector
   """
   def node_type(user_opts) do

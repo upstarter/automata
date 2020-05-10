@@ -16,7 +16,7 @@ defmodule Automaton do
   alias Automaton.Behavior
   alias Automaton.CompositeServer
   alias Automaton.ComponentServer
-  alias Automaton.Config.UserConfigParser
+  alias Automaton.Config.Parser
 
   defmacro __using__(user_opts) do
     prepend =
@@ -26,7 +26,7 @@ defmodule Automaton do
 
     c_types = CompositeServer.types()
     cn_types = ComponentServer.types()
-    node_type = UserConfigParser.node_type(user_opts)
+    node_type = Parser.node_type(user_opts)
 
     node_type =
       cond do
