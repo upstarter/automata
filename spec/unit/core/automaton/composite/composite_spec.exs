@@ -3,10 +3,7 @@ defmodule CompositeSpec do
   use ESpec
   doctest Automaton.Behavior
 
-  # TODO: ex_spec for context, it BDD style, property testing
-
   let(:agents_config) do
-    # TODO: Load user-configs into agent_config
     agents_config = [
       [name: "MockSeq1", mfa: {MockSeq1, :start_link, []}],
       [name: "MockSeq2", mfa: {MockSeq2, :start_link, []}],

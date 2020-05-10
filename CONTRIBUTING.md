@@ -29,6 +29,7 @@ See [Future Directions](https://github.com/upstarter/automata/wiki/Future-Direct
 
 
 ### Special notes for Automata developers
+- See [ex_doc recommendations](https://hexdocs.pm/elixir/writing-documentation.html#recommendations) for documentation guidelines.
 - DEBUGGING NOTE: anytime you see an error or warning that is in one of the mock sequence modules, it probably isn't. It is probably in one of the modules in core that get injected into them. This is the nature of meta-programming debugging. If anyone with experience debugging a heavily meta-programmed application, please chime in.
 
 ## Engineering Standards & Best Practices

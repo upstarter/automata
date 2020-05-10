@@ -1,18 +1,15 @@
 
 #  ⦿	| Automata | ⦿	⦿ 	⦿	⦿
 
-### A comprehensive Autonomous Decentralized Systems framework for artificial intelligence control architects.
+#### Spawn a [system](http://web.stanford.edu/class/ee380/Abstracts/190123.html) of concurrent, distributed, fault tolerant, and highly available intelligent agents for coordinated and/or uncoordinated action in one or many environments with no central point of failure. This project is Open Source. [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
 
 ![](particles.gif)
 
-Spawn a [system](http://web.stanford.edu/class/ee380/Abstracts/190123.html) of concurrent, distributed, fault tolerant, and highly available
-intelligent agents for coordinated and/or uncoordinated action in one or many
-environments with no central point of failure. This project is Open Source. [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-
 ## Project Mission
-The Automata Project combines the state-of-the-art AI control techniques with the latest research in autonomous decentralized systems to provide valuable emergent properties in product ecosystems.
+The Automata Project combines the state-of-the-art AI control techniques with the latest research in autonomous decentralized systems, providing AI designers a flexible framework for creating valuable emergent properties in product ecosystems.
 
-##### This project is in the Alpha stage and not ready for production systems. We need Contributors to get to 1.0. We are eager for your contributions and very happy you found yourself here! Please join the [slack channel](https://join.slack.com/t/automata-project/shared_invite/zt-e4fqrmo4-7ujuZwzXHNCGVrZb1aVZmA) and/or reach out to [ericsteen1@gmail.com](mailto:ericsteen1@gmail.com) if interested or with any questions. Here are our [contributing guidelines](https://github.com/upstarter/automata/blob/master/CONTRIBUTING.md).
+##### This project is in the Alpha stage and not ready for production systems. We need Contributors to get to 1.0. We are eager for your contributions and very happy you found yourself here! Please join the [slack channel](https://join.slack.com/t/automata-project/shared_invite/zt-e4fqrmo4-7ujuZwzXHNCGVrZb1aVZmA) and/or reach out to [ericsteen1@gmail.com](mailto:ericsteen1@gmail.com) if interested or with any questions. Here are our [contributing guidelines](https://github.com/upstarter/automata/blob/master/CONTRIBUTING.md) and get up to speed on the [wiki](https://github.com/upstarter/automata/wiki).
 
 ## Roadmap
 
@@ -104,6 +101,10 @@ Note that the five aspects are orthogonal. The first two aspects deal with
 - #### Meta Level Control
   - Meta-level control (triggered each heartbeat) to support agent interaction, any potential network reorganization. Meta-level control is the ability of an agent to optimize its long term performance by choosing and sequencing its deliberation and execution actions appropriately. <sup>[2](#mmlcfootnote1)</sup>
 
+
+- #### Neuromorphic/Probabilistic computing
+  -  potentially bringing the code to the data rather than the other way around.
+
 ### Performance Features:
 - Concurrency
   - The world is concurrent. For example: we see, hear, and move at the same time. Many global financial instruments are fluctuating at this instance. Concurrency was a core factor in the design of Erlang, making it easy to reason about and debug.
@@ -120,7 +121,6 @@ Note that the five aspects are orthogonal. The first two aspects deal with
   - A design goal of `Automata` is to allow high flexibility via extreme abstraction (to enable design space evolution, support diversity in applications)
 - Simplicity of Implementation
   - Elixir's meta-programming facilities enable very user-friendly API's so developers don't need to know the details of BT's or Automata Theory to get things done, and BT's themselves lend efficiency to the development value chain.
-- Neuromorphic/Probabilistic computing, potentially bringing the code to the data rather than the other way around.
 
 ### Applications
 - Trading Systems

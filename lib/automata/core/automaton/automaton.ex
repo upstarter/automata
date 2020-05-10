@@ -4,10 +4,10 @@ defmodule Automaton do
     configration parameters are used to inject the appropriate modules into the
     user-defined nodes based on their node_type and other options.
 
-    Notes:
-    Initialization and shutdown require extra care:
-    on_init: receive extra parameters, fetch data from blackboard/utility,  make requests, etc..
-    shutdown: free resources to not effect other actions
+    ## Notes:
+      - Initialization and shutdown require extra care:
+        - on_init: receive extra parameters, fetch data from blackboard/utility,  make requests, etc..
+        - shutdown: free resources to not effect other actions
 
     TODO: store any currently processing nodes so they can be ticked directly
     within the behaviour tree engine rather than per tick traversal of the entire
@@ -16,6 +16,7 @@ defmodule Automaton do
   alias Automaton.Behavior
   alias Automaton.CompositeServer
   alias Automaton.ComponentServer
+  alias Automaton.Config.UserConfigParser
 
   defmacro __using__(user_opts) do
     prepend =
@@ -25,9 +26,7 @@ defmodule Automaton do
 
     c_types = CompositeServer.types()
     cn_types = ComponentServer.types()
-    allowed_node_types = c_types ++ cn_types
-    node_type = user_opts[:node_type]
-    unless Enum.member?(allowed_node_types, node_type), do: raise("NodeTypeError")
+    node_type = UserConfigParser.node_type(user_opts)
 
     node_type =
       cond do
