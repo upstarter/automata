@@ -2,11 +2,11 @@
 
 👍🎉 First off, thanks for taking the time to contribute! 🎉👍 Please reach out to [ericsteen1@gmail.com](mailto:ericsteen1@gmail.com) if you have any questions.
 
-### Welcome to the Automata project!
+### Welcome to The Automata Project!
 
 ##### We are eager for your contributions and very happy you found yourself here! Here are our current needs:
 
-- Elixir Design, Architecture & Coding Best Practices Expertise
+- Elixir Alchemists with Design, Architecture, OTP Best Practices Expertise
 - AI, Cognitive Architecture & Behavior Tree Expertise
 - ETS, BlackBoard System, Utility AI Expertise
 - Test Coverage
@@ -19,21 +19,16 @@ A good place to start is in the [project kanban](https://github.com/upstarter/au
 
 Please join the [slack channel](https://join.slack.com/t/automata-project/shared_invite/zt-e4fqrmo4-7ujuZwzXHNCGVrZb1aVZmA) and/or reach out to [ericsteen1@gmail.com](mailto:ericsteen1@gmail.com) if interested!
 
-## Open Items / current TODO's
-1. Define protocols / data flows amongst control processes with a [contract checker](https://www.youtube.com/watch?v=rQIE22e0cW8) between all (cc is also an anti-corruption layer? A.K.A. embedded schema).
+### If in doubt, check the [wiki](https://github.com/upstarter/automata/wiki). 🕵️
 
-## Current Outstanding Questions (brain-storming & [question-storming](https://www.maxjoles.com/blog/question-storming) topics)
-- timeouts: user-configurable at composite and/or component level? It seems both would be useful.
-- Reactive tree:
-  1. do we run user-defined updates async and tick tree until complete (provides reactivity since if/when conditions for a previously processed node change it can be re-activated, overtaking currently running process further in the tree). If so, does this require resetting all the nodes, etc.?
-  2. Or do we run user-defined updates synchronously and tick only proceeds when processing complete
-- previously processed nodes: when composite node fails/succeeds, do we `GenServer.stop` all previous nodes, or do we keep them running? or something else (`Process.exit`, etc.)
-- monitors: do we need to monitor the `Automata.AgentServer` and `Automaton.CompositeServer` so that when a consumer process crashes, the worker processes should have exits handled appropriately?
+Definitely check out the [Goals](https://github.com/upstarter/automata/wiki/Goals) on the wiki. This is currently the focal point for the project defining short, medium, and long term problem solving goals across project dimensions. New issues should come from solving these problems "in goal form". Regular brain-storming and question-storming should be conducted with the end game in mind.
 
-## [Future Directions](https://github.com/upstarter/automata/wiki/Future-Directions)
+See [How it works](https://github.com/upstarter/automata/wiki/How-it-works) for a high level view of the project, and check out the docs.
+
+See [Future Directions](https://github.com/upstarter/automata/wiki/Future-Directions) for more on what's in the works.
 
 
-##### Special notes for Automata devs
+### Special notes for Automata developers
 - DEBUGGING NOTE: anytime you see an error or warning that is in one of the mock sequence modules, it probably isn't. It is probably in one of the modules in core that get injected into them. This is the nature of meta-programming debugging. If anyone with experience debugging a heavily meta-programmed application, please chime in.
 
 ## Engineering Standards & Best Practices
@@ -73,17 +68,6 @@ In Progress. Property Testing? Permutation Testing? Join the conversation on [Th
 
 
 #### [Code of Conduct](https://www.apache.org/foundation/policies/conduct)
-
-### How it works
-
-#### High Level Overview
-
-##### The Automata supervision tree(s)
-![automata supervision tree diagram](sup_tree.png)
-
-There are 4 Layers between the Application supervisor and the user agents.
-
-When the system starts, each user agent is started and run as a composite with children, all of which are `GenServer`'s.
 
 ###### The Blackboard
 
