@@ -1,6 +1,15 @@
 defmodule Automaton.Types.BehaviorTree do
   @moduledoc """
   Implements the BehaviorTree state space representation.
+
+  ## Notes:
+    - Initialization and shutdown require extra care:
+      - on_init: receive extra parameters, fetch data from blackboard/utility,  make requests, etc..
+      - shutdown: free resources to not effect other actions
+
+  TODO: store any currently processing nodes along with any nodes with monitor decorators
+  so when monitors are activated, reactivity is achieved.
+  Use Zipper Tree to store both?
   """
   alias Automaton.CompositeServer
   alias Automaton.ComponentServer
