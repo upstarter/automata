@@ -5,6 +5,7 @@ defmodule Automaton.Types.BehaviorTree do
   alias Automaton.CompositeServer
   alias Automaton.ComponentServer
   alias Automaton.Config.Parser
+  alias Automaton.Behavior
 
   defmacro __using__(opts) do
     user_opts = opts[:user_opts]
@@ -12,6 +13,11 @@ defmodule Automaton.Types.BehaviorTree do
     c_types = CompositeServer.types()
     cn_types = ComponentServer.types()
     node_type = Parser.node_type(user_opts)
+
+    prepend =
+      quote do
+        use Behavior, user_opts: unquote(user_opts)
+      end
 
     node_type =
       cond do
@@ -74,6 +80,6 @@ defmodule Automaton.Types.BehaviorTree do
         end
       end
 
-    [node_type, control]
+    [prepend, node_type, control]
   end
 end

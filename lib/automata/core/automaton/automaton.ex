@@ -13,16 +13,8 @@ defmodule Automaton do
     within the behaviour tree engine rather than per tick traversal of the entire
     tree. Zipper Tree?
   """
-  alias Automaton.Behavior
 
   defmacro __using__(user_opts) do
-    prepend =
-      quote do
-        use Behavior, user_opts: unquote(user_opts)
-      end
-
-    type = Automaton.Types.Typology.call(user_opts)
-
-    [prepend, type]
+    Automaton.Types.Typology.call(user_opts)
   end
 end
