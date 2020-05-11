@@ -8,7 +8,7 @@
     <meta name="project" content="automata v0.1.0">
     <title>ReadMe — automata v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
-    <script src="dist/sidebar_items-c4bfe96281.js"></script>
+    <script src="dist/sidebar_items-5ba59bf1d9.js"></script>
       <script src="docs_config.js"></script>
     <script async src="dist/app-a225d03098e64fef431a.js"></script>
   </head>
@@ -87,7 +87,7 @@ automata      </a>
 <p>Testing is currently happening using the mock sequence in <code class="inline">worlds/mock_world_1/mock_automata/mock_seq_1.ex</code>. This is currently our canonical example of how to design one automaton, which is a behavior tree, and <em>eventually</em> communicates with others that you define in <code class="inline">worlds/&lt;mock_world&gt;/&lt;mock_automata&gt;/&lt;mock_bt&gt;</code>.</p>
 <p>Currently, you can run the mock sequence in an iex shell as follows:</p>
 <pre><code class="nohighlight makeup elixir"><span class="n">iex</span><span class="w"> </span><span class="o">-</span><span class="nc">S</span><span class="w"> </span><span class="n">mix</span><span class="w">
-</span><span class="gp unselectable">iex(1)&gt; </span><span class="n">send</span><span class="p" data-group-id="3456644036-1">(</span><span class="nc">MockSeq1Server</span><span class="p">,</span><span class="w"> </span><span class="ss">:update</span><span class="p" data-group-id="3456644036-1">)</span></code></pre>
+</span><span class="gp unselectable">iex(1)&gt; </span><span class="n">send</span><span class="p" data-group-id="8902083933-1">(</span><span class="nc">MockSeq1Server</span><span class="p">,</span><span class="w"> </span><span class="ss">:update</span><span class="p" data-group-id="8902083933-1">)</span></code></pre>
 <p>and tests can be run with debugging capabilities as follows:</p>
 <pre><code class="bash">MIX_ENV=test iex -S mix espec spec/unit/core/behavior_test.exs:31</code></pre>
 <p>where you are running a specific context/it block containing line 31.</p>
@@ -110,7 +110,7 @@ automata      </a>
  reusability, and efficiency of implementation. They enable design/development scalability and efficiency.</p>
 <p><a href="http://www.gameaipro.com/GameAIPro/GameAIPro_Chapter09_An_Introduction_to_Utility_Theory.pdf">Utility AI</a>
  is used to keep the automata focused on actions by providing an external system for all decision making support. This significantly reduces the amount of logic/nodes required for an agent and takes the heavy mathematical workload off of designers &amp; action developers.</p>
-<h5><a href="https://github.com/upstarter/automata/wiki/Underlying-Technology">Read the wiki</a> for more about the technologies underlying <a href="Automata.html"><code class="inline">Automata</code></a>.</h5>
+<h5><a href="https://github.com/upstarter/automata/wiki/Underlying-Technology">Read the wiki</a> and/or the <a href="https://upstarter.github.io/automata/">docs</a> for more about the technologies underlying <a href="Automata.html"><code class="inline">Automata</code></a>.</h5>
 <h3 id="requirements" class="section-heading">
   <a href="#requirements" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
   Requirements
@@ -300,7 +300,7 @@ modules which <code class="inline">use Automaton</code> as a macro. By overridin
 and returning a status as one of <code class="inline">:running</code>, <code class="inline">:failure</code>, <code class="inline">:success</code>, or <code class="inline">:aborted</code> the core
 system will run the Behavior Tree&#39;s as defined and handle normal errors with
 restarts. Users define error handling outside generic BT capabilities.</p>
-<pre><code class="nohighlight makeup elixir"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyAutomaton</span><span class="w"> </span><span class="k" data-group-id="4032033995-1">do</span><span class="w">
+<pre><code class="nohighlight makeup elixir"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyAutomaton</span><span class="w"> </span><span class="k" data-group-id="4772564442-1">do</span><span class="w">
   </span><span class="kn">use</span><span class="w"> </span><span class="nc">Automaton</span><span class="p">,</span><span class="w">
 
     </span><span class="c1"># required</span><span class="w">
@@ -317,15 +317,15 @@ restarts. Users define error handling outside generic BT capabilities.</p>
     </span><span class="c1"># list of child control/action(execution) nodes</span><span class="w">
     </span><span class="c1"># these run in order for type :selector and :sequence nodes and in parallel</span><span class="w">
     </span><span class="c1"># for type :parallel, and in a user-defined dynamic order for :priority</span><span class="w">
-    </span><span class="ss">children</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4032033995-2">[</span><span class="nc">ChildAction1</span><span class="p">,</span><span class="w"> </span><span class="nc">ChildSequence1</span><span class="p">,</span><span class="w"> </span><span class="nc">ChildAction2</span><span class="p" data-group-id="4032033995-2">]</span><span class="w">
+    </span><span class="ss">children</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4772564442-2">[</span><span class="nc">ChildAction1</span><span class="p">,</span><span class="w"> </span><span class="nc">ChildSequence1</span><span class="p">,</span><span class="w"> </span><span class="nc">ChildAction2</span><span class="p" data-group-id="4772564442-2">]</span><span class="w">
 
     </span><span class="c1"># called every tick, must return status</span><span class="w">
-    </span><span class="kd">def</span><span class="w"> </span><span class="nf">update</span><span class="w"> </span><span class="k" data-group-id="4032033995-3">do</span><span class="w">
+    </span><span class="kd">def</span><span class="w"> </span><span class="nf">update</span><span class="w"> </span><span class="k" data-group-id="4772564442-3">do</span><span class="w">
       </span><span class="c1"># reactively and proactively change the world</span><span class="w">
       </span><span class="c1"># ie.. effect the current environment in phases using either effectors or via communication with other agents</span><span class="w">
-      </span><span class="p" data-group-id="4032033995-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p" data-group-id="4032033995-4">}</span><span class="w">
-    </span><span class="k" data-group-id="4032033995-3">end</span><span class="w">
-</span><span class="k" data-group-id="4032033995-1">end</span></code></pre>
+      </span><span class="p" data-group-id="4772564442-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p" data-group-id="4772564442-4">}</span><span class="w">
+    </span><span class="k" data-group-id="4772564442-3">end</span><span class="w">
+</span><span class="k" data-group-id="4772564442-1">end</span></code></pre>
 <h3 id="example" class="section-heading">
   <a href="#example" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
   Example
@@ -347,11 +347,11 @@ restarts. Users define error handling outside generic BT capabilities.</p>
 
 <p>If <a href="https://hex.pm/docs/publish">available in Hex</a>, the package can be installed
 by adding <a href="Automata.html"><code class="inline">Automata</code></a> to your list of dependencies in <code class="inline">mix.exs</code>:</p>
-<pre><code class="nohighlight makeup elixir"><span class="kd">def</span><span class="w"> </span><span class="nf">deps</span><span class="w"> </span><span class="k" data-group-id="9842725240-1">do</span><span class="w">
-  </span><span class="p" data-group-id="9842725240-2">[</span><span class="w">
-    </span><span class="p" data-group-id="9842725240-3">{</span><span class="ss">:automata</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;~&gt; 0.1.0&quot;</span><span class="p" data-group-id="9842725240-3">}</span><span class="w">
-  </span><span class="p" data-group-id="9842725240-2">]</span><span class="w">
-</span><span class="k" data-group-id="9842725240-1">end</span></code></pre>
+<pre><code class="nohighlight makeup elixir"><span class="kd">def</span><span class="w"> </span><span class="nf">deps</span><span class="w"> </span><span class="k" data-group-id="4251064691-1">do</span><span class="w">
+  </span><span class="p" data-group-id="4251064691-2">[</span><span class="w">
+    </span><span class="p" data-group-id="4251064691-3">{</span><span class="ss">:automata</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;~&gt; 0.1.0&quot;</span><span class="p" data-group-id="4251064691-3">}</span><span class="w">
+  </span><span class="p" data-group-id="4251064691-2">]</span><span class="w">
+</span><span class="k" data-group-id="4251064691-1">end</span></code></pre>
 <h2 id="authors" class="section-heading">
   <a href="#authors" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
   Authors
