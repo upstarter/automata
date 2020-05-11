@@ -19,11 +19,12 @@ defmodule Automaton.Config.Parser do
       iex> Automaton.Config.Parser.node_type(user_opts)
       :selector
   """
-  def node_type(user_opts) do
+  def node_type(opts) do
     c_types = CompositeServer.types()
     cn_types = ComponentServer.types()
     allowed_node_types = c_types ++ cn_types
-    node_type = user_opts[:node_type]
+    node_type = opts[:node_type]
+
     unless Enum.member?(allowed_node_types, node_type), do: raise("NodeTypeError")
     node_type
   end
