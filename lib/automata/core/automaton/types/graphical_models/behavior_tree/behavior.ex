@@ -29,11 +29,6 @@ defmodule Automaton.Behavior do
       import Automaton.Behavior
       @behaviour Automaton.Behavior
 
-      use Automata.Blackboard
-      use Automaton.Blackboard
-      use Automata.Utility
-      use Automaton.Utility
-
       def on_init(state)
 
       def update(state)

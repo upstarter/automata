@@ -1,4 +1,9 @@
 defmodule Automata.AutomataSupervisor do
+  @moduledoc """
+  The `Automata.Server` starts the `Automata.AutomatonSupervisor` under this
+  Supervisor. The :one_for_one restart strategy causes each
+  `Automata.AutomatonSupervisor` to be individally fault tolerant.
+  """
   use DynamicSupervisor
 
   def start_link([]) do

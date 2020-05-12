@@ -1,7 +1,7 @@
 # Unit Tests for the core functions and behavior of the Automaton module
 defmodule AutomatonSpec do
   use ESpec
-  doctest Automaton.Behavior
+  doctest Automaton
 
   before_all do
     agents_config = [

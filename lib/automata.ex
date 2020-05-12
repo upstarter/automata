@@ -8,8 +8,7 @@ defmodule Automata do
     # TODO: recursively autoload all the user-defined agents from the worlds/ directory tree
     # to build the data structure of root agents needed to spawn the automata.
 
-    # USER DEFINED BT ROOT(CompositeServer) NODES (AUTOMATA)
-    # these are started specifically in `lib/automaton_server.ex`
+    # the user agents are started in `lib/core/control/automaton/agent_server.ex`
     agents_config = [
       [name: "Automaton1", mfa: {MockSeq1, :start_link, []}]
       # [name: "Automaton2", mfa: {MockSel1, :start_link, []}]
