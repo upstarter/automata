@@ -19,7 +19,7 @@ See the current milestones [here](https://github.com/upstarter/automata/mileston
 
 ## Usage
 
-Testing is currently happening using the mock sequence in `worlds/mock_world_1/mock_automata/mock_seq_1.ex`. This is currently our canonical example of how to design one automaton, which is a behavior tree, and *eventually* communicates with others that you define in `worlds/<mock_world>/<mock_automata>/<mock_bt>`.
+Testing is currently happening using the mock sequence in `worlds/mock_world_1/mock_automata/mock_seq_1.ex`. This is currently our canonical example of how to design a behavior tree (one type of `Automaton`), and *eventually* communicates with others that you define in `worlds/<mock_world>/<mock_automata>/<mock_bt>`.
 
 Currently, you can run the mock sequence in an iex shell as follows:
 
@@ -31,7 +31,7 @@ iex(1)> send(MockSeq1Server, :update)
 and tests can be run with debugging capabilities as follows:
 
 ```bash
-MIX_ENV=test iex -S mix espec spec/unit/core/behavior_test.exs:31
+MIX_ENV=test iex -S mix espec spec/unit/core/automaton/behavior_tree/behavior_spec.exs:31
 ```
 
 where you are running a specific context/it block containing line 31.
@@ -70,7 +70,7 @@ It combines five complementary  aspects:
 Note that the five aspects are orthogonal. The first two aspects deal with
 “understanding” the map of the environment. The third and the forth aspects deal with autonomy of decision. Self adaptation ensures adequacy of decisions with respect to the environment map. See MMLC<sup>[2](#mmlcfootnote1)</sup>.
 
-#### A system is defined as an Autonomous Decentralized System (ADS) if the following 2 properties are satisfied:
+#### A system is defined as an Autonomous Decentralized System (ADS) if the following two properties are satisfied:
 
  1. Autonomous Controllability: Even if any subsystem fails, is repaired, and/or is newly added, the other subsystems can continue to manage themselves and function.
 
@@ -82,15 +82,18 @@ Note that the five aspects are orthogonal. The first two aspects deal with
 #### General
 
 
-- #### User defined behavior trees
-  - Control Nodes currently on the roadmap
-    - Selector
-    - Sequence
-    - Parallel
-    - Priority
-  - Condition nodes
-  - In-node Decorators
-  - Helper Nodes for accessing utility AI systems
+- #### User Defined Agents
+  - Planned Builtin and/or custom built third party agent types
+    - Graphical models
+      - Behavior Trees
+      - Uninformed/Informed Search
+      - Probabilistic Graphical Models
+    - RL Based
+      - mdp, pomdp, dec-pomdp
+      - td-learning
+      - deep q-learning
+    - Cognitive / Percept Based
+      - c4 style percepts
 
 - #### A Concurrent, Scalable Blackboard Knowledge System
   > The central problem of artificial intelligence is how to express the knowledge needed in order to create intelligent behavior. — John McCarthy, M.I.T/Stanford Professor, Creator of Lisp
@@ -99,28 +102,14 @@ Note that the five aspects are orthogonal. The first two aspects deal with
   - Individual automaton blackboards readable by all automata, writeable by owning automaton
 
 - #### Meta Level Control
-  - Meta-level control (triggered each heartbeat) to support agent interaction, any potential network reorganization. Meta-level control is the ability of an agent to optimize its long term performance by choosing and sequencing its deliberation and execution actions appropriately. <sup>[2](#mmlcfootnote1)</sup>
+  - Meta-level control to support agent interaction, any potential network reorganization. Meta-level control is the ability of an agent to optimize its long term performance by choosing and sequencing its deliberation and execution actions appropriately. <sup>[2](#mmlcfootnote1)</sup>
 
 
-- #### Neuromorphic/Probabilistic computing
+- #### Neuromorphic computing
   -  potentially bringing the code to the data rather than the other way around.
 
 ### Performance Features:
-- Concurrency
-  - The world is concurrent. For example: we see, hear, and move at the same time. Many global financial instruments are fluctuating at this instance. Concurrency was a core factor in the design of Erlang, making it easy to reason about and debug.
-- High availability
-  - Elixir is capable of 99.9999999% uptime (31 milliseconds/year of downtime). The main point of the Erlang model is an application that can be expected to run forever, as stated by the inventor — Joe Armstrong (RIP). Talk about unstoppable software!
-- Fault Tolerance
-  - OTP Supervision Trees and the "fail fast" principle provide strong guarantees for error recovery and self healing systems.
-- Scalability & Distribution
-  -  Elixir can handle millions of processes (134 million +/-) utilizing all cores without breaking a sweat on a single machine, and easily distributes work onto multiple machines with its builtin distribution mechanisms, and there is CRDT support with [Horde](https://github.com/derekkraan/horde).
-  - Behavior trees provide value chain efficiency/scalability (in both design/development and operations/testing) compared to previous state of the art AI control techniques.
-- Modularity
-  - Modular BT's allow the designer to hierarchically combine independently developed, tested, deployed, and reusable unit behaviors that provide more valuable emergent properties in the large.
-- Flexibility
-  - A design goal of `Automata` is to allow high flexibility via extreme abstraction (to enable design space evolution, support diversity in applications)
-- Simplicity of Implementation
-  - Elixir's meta-programming facilities enable very user-friendly API's so developers don't need to know the details of BT's or Automata Theory to get things done, and BT's themselves lend efficiency to the development value chain.
+  - [Learn more](https://github.com/upstarter/automata/wiki/Features) about the performance features of `Automata`
 
 ### Applications
 - Trading Systems
@@ -143,20 +132,15 @@ Note that the five aspects are orthogonal. The first two aspects deal with
 
 
 ### API
-Users create worlds containing their automata in directory structures
-corresponding to their BT tree structures. These are created in the worlds/
-directory. Trees can be of arbitrary depth. Users define their own custom
-modules which `use Automaton` as a macro. By overriding the `update()` function
-and returning a status as one of `:running`, `:failure`, `:success`, or `:aborted` the core
-system will run the Behavior Tree's as defined and handle normal errors with
-restarts. Users define error handling outside generic BT capabilities.
+
 
 ```elixir
 defmodule MyAutomaton do
   use Automaton,
-
     # required
-    # one of :sequence, :selector, :parallel, :action (no children), etc...
+    type: :behavior_tree,
+
+    # required with type :behavior_tree.
     node_type: :selector,
 
     # the heartbeat for this node(subtree), in milliseconds
@@ -171,6 +155,7 @@ defmodule MyAutomaton do
     # for type :parallel, and in a user-defined dynamic order for :priority
     children: [ChildAction1, ChildSequence1, ChildAction2]
 
+    # required for type :behavior_tree
     # called every tick, must return status
     def update do
       # reactively and proactively change the world

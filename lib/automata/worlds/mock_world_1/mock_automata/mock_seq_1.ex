@@ -1,8 +1,15 @@
-# user-defined actions
+# Users create worlds containing their automata. These are created in the
+# worlds/ directory.  Users define their own custom modules which `use
+# Automaton` as a macro. By overriding the `update()` function and returning a
+# status as one of `:running`, `:failure`, `:success`, or `:aborted` the core
+# system will run the Behavior Tree's as defined and handle normal errors with
+# restarts. Users define error handling outside generic BT capabilities.
 require Integer
 
 defmodule MockSeq1 do
   use Automaton,
+    # required
+    type: :behavior_tree,
     # required
     # one of :sequence, :selector, :parallel, :priority, etc...
     # or type :action for action nodes (no children)
