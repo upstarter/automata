@@ -1,6 +1,6 @@
-defmodule Automaton.Types.BehaviorTree do
+defmodule Automaton.Types.BT do
   @moduledoc """
-  Implements the BehaviorTree state space representation.
+  Implements the BT state space representation.
 
   ## Notes:
     - Initialization and shutdown require extra care:
@@ -11,10 +11,10 @@ defmodule Automaton.Types.BehaviorTree do
   so when monitors are activated, reactivity is achieved.
   Use Zipper Tree to store both?
   """
-  alias Automaton.CompositeServer
-  alias Automaton.ComponentServer
+  alias Automaton.Types.BT.CompositeServer
+  alias Automaton.Types.BT.ComponentServer
   alias Automaton.Config.Parser
-  alias Automaton.Behavior
+  alias Automaton.Types.BT.Behavior
 
   defmacro __using__(opts) do
     user_opts = opts[:user_opts]

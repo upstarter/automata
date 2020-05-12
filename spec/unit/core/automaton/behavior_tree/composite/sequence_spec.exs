@@ -1,7 +1,7 @@
 # test the sequence,
 defmodule SequenceSpec do
   use ESpec
-  doctest Automaton.Behavior
+  doctest Automaton.Types.BT.Behavior
 
   # TODO: ex_spec for context, it BDD style, property testing
 

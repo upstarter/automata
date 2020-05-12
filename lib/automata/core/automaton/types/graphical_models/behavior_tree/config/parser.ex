@@ -1,13 +1,13 @@
 defmodule Automaton.Config.Parser do
   @moduledoc """
-  Purely Functional high level parsing policy for automaton type specific
+  Purely Functional high level parsing policy for BT specific
   config from `user_opts`.
 
   ## User Provided State Space parsing & interpretation boundary point
   ## Delegate provided user input to modules corresponding to config state spaces
   """
-  alias Automaton.CompositeServer
-  alias Automaton.ComponentServer
+  alias Automaton.Types.BT.CompositeServer
+  alias Automaton.Types.BT.ComponentServer
 
   @doc """
   Determines the node_type given the `user_opts`.

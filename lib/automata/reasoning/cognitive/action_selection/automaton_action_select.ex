@@ -1,4 +1,4 @@
-defmodule Automaton.ActionSelect do
+defmodule Automaton.Types.BT.ActionSelect do
   @moduledoc """
   Agent is a function from percept sequences to actions
   Action Selection, Must be simple and fast

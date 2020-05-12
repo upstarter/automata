@@ -1,7 +1,7 @@
 # test the Action state changes, data flows, and contract checking as applicable
 defmodule ActionStateSpec do
   use ESpec
-  doctest Automaton.Behavior
+  doctest Automaton.Types.BT.Behavior
 
   before_all do
     agents_config = [

@@ -1,4 +1,4 @@
-defmodule Automata.Composite.Parallel do
+defmodule Automaton.Types.BT.Composite.Parallel do
   @moduledoc """
     Parallel Node
     When the execution of a parallel node starts, then the node’s children are

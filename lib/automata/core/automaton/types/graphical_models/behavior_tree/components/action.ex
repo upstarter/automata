@@ -1,4 +1,4 @@
-defmodule Automaton.Action do
+defmodule Automaton.Types.BT.Action do
   @moduledoc """
     An action is a leaf in the tree.
     It operates on the world as a component of a composite(control) node.

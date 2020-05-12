@@ -1,4 +1,4 @@
-defmodule Automaton.Composite.Selector do
+defmodule Automaton.Types.BT.Composite.Selector do
   @moduledoc """
     Selector Node (also known as Fallback)
 

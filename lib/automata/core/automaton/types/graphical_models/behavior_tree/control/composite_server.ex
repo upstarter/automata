@@ -1,4 +1,4 @@
-defmodule Automaton.CompositeServer do
+defmodule Automaton.Types.BT.CompositeServer do
   @moduledoc """
   When a child behavior is complete and returns its status code the Composite
   decides whether to continue through its children or whether to stop there and
@@ -10,7 +10,7 @@ defmodule Automaton.CompositeServer do
   left-to-right manner. In other words, it performs a depth-first traversal.
   """
 
-  alias Automaton.Composite.{Sequence, Selector}
+  alias Automaton.Types.BT.Composite.{Sequence, Selector}
 
   # a composite is just an array of behaviors
   @callback add_child(term) :: {:ok, list} | {:error, String.t()}
@@ -92,7 +92,7 @@ defmodule Automaton.CompositeServer do
               :start_composite_supervisor,
               state = %{agent_sup: agent_sup, mfa: mfa, name: name}
             ) do
-          spec = {Automaton.CompositeSupervisor, [[self(), mfa, name]]}
+          spec = {Automaton.Types.BT.CompositeSupervisor, [[self(), mfa, name]]}
           {:ok, composite_sup} = DynamicSupervisor.start_child(agent_sup, spec)
           new_state = %{state | composite_sup: composite_sup}
 

@@ -1,7 +1,7 @@
 # test the sequence state changes, data flows, and contract checking as applicable
 defmodule SequenceStateSpec do
   use ESpec
-  doctest Automaton.Behavior
+  doctest Automaton.Types.BT.Behavior
 
   # TODO: ex_spec for context, it BDD style, property testing
 

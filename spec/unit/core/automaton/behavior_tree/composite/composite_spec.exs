@@ -1,7 +1,7 @@
 # Unit Tests for the core functions and behavior of the Composite behaviour
 defmodule CompositeSpec do
   use ESpec
-  doctest Automaton.Behavior
+  doctest Automaton.Types.BT.Behavior
 
   let(:agents_config) do
     agents_config = [

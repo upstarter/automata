@@ -1,4 +1,4 @@
-defmodule Automaton.Composite.Sequence do
+defmodule Automaton.Types.BT.Composite.Sequence do
   @moduledoc """
     Behavior for user-defined sequence actions. When the execution of a sequence
     node starts, then the node’s children are executed in succession from left

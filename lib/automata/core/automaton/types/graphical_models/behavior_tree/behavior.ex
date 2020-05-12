@@ -1,6 +1,6 @@
-defmodule Automaton.Behavior do
+defmodule Automaton.Types.BT.Behavior do
   @moduledoc """
-    An Automaton.Behavior is an abstract interface for composites and components
+    An Automaton.Types.BT.Behavior is an abstract interface for composites and components
     that can be activated, run, and deactivated. Actions(Execution Nodes)
     provide specific implementations of this interface. Branches in the tree can
     be thought of as high level behaviors, heirarchically combining smaller
@@ -26,8 +26,8 @@ defmodule Automaton.Behavior do
 
   defmacro __using__(_opts) do
     quote do
-      import Automaton.Behavior
-      @behaviour Automaton.Behavior
+      import Automaton.Types.BT.Behavior
+      @behaviour Automaton.Types.BT.Behavior
 
       def on_init(state)
 
