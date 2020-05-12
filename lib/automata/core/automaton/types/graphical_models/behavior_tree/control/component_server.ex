@@ -13,15 +13,15 @@ defmodule Automaton.Types.BT.ComponentServer do
   def types, do: @types
 
   defmacro __using__(opts) do
-    user_opts = opts[:user_opts]
+    user_config = opts[:user_config]
 
     a_types = ComponentServer.types()
-    node_type = user_opts[:node_type]
+    node_type = user_config[:node_type]
 
     control =
       if Enum.member?(a_types, node_type) do
         quote do
-          use(Action, user_opts: unquote(user_opts))
+          use(Action, user_config: unquote(user_config))
         end
       end
 

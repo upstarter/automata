@@ -159,7 +159,9 @@ defmodule MyAutomaton do
     # called every tick, must return status
     def update do
       # reactively and proactively change the world
-      # ie.. effect the current environment in phases using either effectors or via communication with other agents
+      # ie.. effect the current environment in phases using
+      # either *effectors* or via *communication* with
+      # other agents & internal/external systems
       {:ok, status}
     end
 end

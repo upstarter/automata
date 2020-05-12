@@ -1,6 +1,6 @@
 defmodule Automaton.Types.BT do
   @moduledoc """
-  Implements the BT state space representation.
+  Implements the Behavior Tree (BT) state space representation.
 
   ## Notes:
     - Initialization and shutdown require extra care:
@@ -17,28 +17,28 @@ defmodule Automaton.Types.BT do
   alias Automaton.Types.BT.Behavior
 
   defmacro __using__(opts) do
-    user_opts = opts[:user_opts]
+    user_config = opts[:user_config]
 
     c_types = CompositeServer.types()
     cn_types = ComponentServer.types()
-    node_type = Parser.node_type(user_opts)
+    node_type = Parser.node_type(user_config)
 
     prepend =
       quote do
-        use Behavior, user_opts: unquote(user_opts)
+        use Behavior, user_config: unquote(user_config)
       end
 
     node_type =
       cond do
         Enum.member?(c_types, node_type) ->
-          quote do: use(CompositeServer, user_opts: unquote(user_opts))
+          quote do: use(CompositeServer, user_config: unquote(user_config))
 
         Enum.member?(cn_types, node_type) ->
-          quote do: use(ComponentServer, user_opts: unquote(user_opts))
+          quote do: use(ComponentServer, user_config: unquote(user_config))
       end
 
     control =
-      quote bind_quoted: [user_opts: user_opts] do
+      quote bind_quoted: [user_config: user_config] do
         def tick(state) do
           init_state = if state.status != :bh_running, do: on_init(state), else: state
 
@@ -48,7 +48,7 @@ defmodule Automaton.Types.BT do
           if status != :bh_running do
             on_terminate(updated_state)
           else
-            if !unquote(user_opts[:children]) do
+            if !unquote(user_config[:children]) do
               schedule_next_tick(updated_state.tick_freq)
             end
           end
@@ -75,7 +75,7 @@ defmodule Automaton.Types.BT do
           parent_state = GenServer.call(parent_pid, :get_state)
 
           new_state =
-            if !unquote(user_opts[:children]) do
+            if !unquote(user_config[:children]) do
               %{state | tick_freq: parent_state.tick_freq}
             else
               state

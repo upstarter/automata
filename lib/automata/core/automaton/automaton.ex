@@ -6,7 +6,7 @@ defmodule Automaton do
     into the user-defined agents.
   """
 
-  defmacro __using__(user_opts) do
-    Automaton.Types.Typology.call(user_opts)
+  defmacro __using__(user_config) do
+    Automaton.Types.Typology.call(user_config)
   end
 end

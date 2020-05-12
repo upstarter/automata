@@ -7,6 +7,6 @@ defmodule Automaton.Blackboard do
     The Node Blackboard for Individual Agent Postings (OBJECT_OF_ATTENTION, etc.)
   """
 
-  defmacro __using__(_user_opts) do
+  defmacro __using__(_user_config) do
   end
 end

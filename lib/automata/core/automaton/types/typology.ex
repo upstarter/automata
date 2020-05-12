@@ -11,16 +11,16 @@ defmodule Automaton.Types.Typology do
   @types [:behavior_tree]
   def types, do: @types
 
-  def call(user_opts) do
+  def call(user_config) do
     type =
       cond do
-        user_opts[:type] == :behavior_tree ->
-          quote do: use(BT, user_opts: unquote(user_opts))
+        user_config[:type] == :behavior_tree ->
+          quote do: use(BT, user_config: unquote(user_config))
 
         # TODO: need this for children.
         # use parent type? raise error?
-        user_opts[:type] == nil ->
-          quote do: use(BT, user_opts: unquote(user_opts))
+        user_config[:type] == nil ->
+          quote do: use(BT, user_config: unquote(user_config))
       end
 
     [type]

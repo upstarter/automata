@@ -4,7 +4,7 @@ defmodule Automaton.Types.BT.Action do
     It operates on the world as a component of a composite(control) node.
   """
 
-  defmacro __using__(user_opts) do
+  defmacro __using__(user_config) do
     prepend =
       quote do
         use GenServer
@@ -21,7 +21,7 @@ defmodule Automaton.Types.BT.Action do
                     control: 0,
                     children: nil,
                     current: nil,
-                    tick_freq: unquote(user_opts[:tick_freq]) || 50,
+                    tick_freq: unquote(user_config[:tick_freq]) || 50,
                     workers: nil
         end
 

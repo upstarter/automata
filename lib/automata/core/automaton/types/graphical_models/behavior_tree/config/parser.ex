@@ -1,7 +1,7 @@
 defmodule Automaton.Config.Parser do
   @moduledoc """
   Purely Functional high level parsing policy for BT specific
-  config from `user_opts`.
+  config from `user_config`.
 
   ## User Provided State Space parsing & interpretation boundary point
   ## Delegate provided user input to modules corresponding to config state spaces
@@ -10,13 +10,13 @@ defmodule Automaton.Config.Parser do
   alias Automaton.Types.BT.ComponentServer
 
   @doc """
-  Determines the node_type given the `user_opts`.
+  Determines the node_type given the `user_config`.
 
   Returns `node_type`.
 
   ## Examples
-      iex> user_opts = [node_type: :selector]
-      iex> Automaton.Config.Parser.node_type(user_opts)
+      iex> user_config = [node_type: :selector]
+      iex> Automaton.Config.Parser.node_type(user_config)
       :selector
   """
   def node_type(opts) do

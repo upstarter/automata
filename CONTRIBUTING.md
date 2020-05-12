@@ -6,9 +6,9 @@
 
 ##### We are eager for your contributions and very happy you found yourself here! Here are our current needs:
 
-- Elixir Alchemists with Design, Architecture, OTP Best Practices Expertise
+- Elixir Alchemists & Mad Scientists with Design, Architecture, Scalable OTP Best Practices Expertise
 - AI, Cognitive Architecture & Behavior Tree Expertise
-- ETS, BlackBoard System, Utility AI Expertise
+- ETS, Reinforcement Learning, BlackBoard Systems, & Utility AI Expertise
 - Test Coverage
 - Documentation
 - Senior Code Reviewers to ensure Quality

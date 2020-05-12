@@ -4,6 +4,6 @@ defmodule Automaton.Reasoning do
 
   use Automaton.Utility
 
-  defmacro __using__(_user_opts) do
+  defmacro __using__(_user_config) do
   end
 end
