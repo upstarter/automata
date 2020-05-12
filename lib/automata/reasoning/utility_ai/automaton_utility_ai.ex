@@ -4,7 +4,7 @@ defmodule Automaton.Utility do
   First pass should prioritize composite 'selector' actions based on utility (a
   priority composite node)
 
-  Dual Utility Reasoner?
+  Dual Utility Reasoner
   There are two common approaches to utility-based selection. The first,
   absolute utility, is to evaluate every option and take the one with the
   highest utility. The second, relative utility, is to select an option at
