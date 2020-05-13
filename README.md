@@ -13,7 +13,7 @@ The Automata Project combines the state-of-the-art AI control techniques with th
 
 ## Roadmap
 
-#### Note: This will be updated often. The direction of the project will change as the work evolves. We very eagerly welcome any of your thoughts about roadmapping
+#### Note: This will be updated often. The direction of the project will change as the work evolves. We welcome any of your thoughts about roadmapping.
 
 See the current milestones [here](https://github.com/upstarter/automata/milestones).
 
@@ -45,13 +45,22 @@ where you are running a specific context/it block containing line 31.
  primitives for robust concurrent, fault-tolerant, highly available,
  self-healing distributed systems. Based on the Actor Model <sup>[1](#actorfootnote1)</sup>, a singular Elixir `Process`(Actor) embodies all 3 essential elements of computation: processing, storage, communications. It does so using very lightweight, isolated processes, each with its own stack, heap, communications facilities (mailbox), and garbage collector. The Erlang VM (BEAM), with pre-emptive scheduling, acts somewhat as on operating system on top of an operating system. Pre-emption is good because it prevents bad actors from starving the rest of the system, allowing for higher degrees of concurrency and better interactive performance.
 
- [Behavior Trees](https://en.wikipedia.org/wiki/Behavior_tree_(artificial_intelligence,_robotics_and_control))
- are increasingly used in place of finite state machines (FSM's) and other AI
- control architectures due to improved properties of modularity, flexibility,
- reusability, and efficiency of implementation. They enable design/development scalability and efficiency.
+Heterogeneous agent types provide scientists and analysts a variety of graphical models, reinforcement learning  based, and percept based agent systems.
 
- [Utility AI](http://www.gameaipro.com/GameAIPro/GameAIPro_Chapter09_An_Introduction_to_Utility_Theory.pdf)
- is used to keep the automata focused on actions by providing an external system for all decision making support. This significantly reduces the amount of logic/nodes required for an agent and takes the heavy mathematical workload off of designers & action developers.
+#### The `Automata` framework has three distinct parts:
+
+##### **Environment** *(State Space Representations)*
+
+These are the map of the territory. Without a good map, any adventurer could easily get lost. To fit the information available to the problem at hand, we separate the data structures representing our models into distinct layers with well defined boundaries.
+
+##### **Reasoning** *(Decision Making, Action Selection)*
+
+All agents have some formulation of action selection, otherwise they would never achieve their goals. To keep agent decision making as decoupled as possible, we introduce a layer which fits the mode of reasoning to the state space.
+
+##### **Knowledge** *(Memory)*
+
+Interchangeable memory modules across short term working memory, blackboards, and databases.
+
 
 ##### [Read the wiki](https://github.com/upstarter/automata/wiki/Underlying-Technology) and/or the [docs](https://upstarter.github.io/automata/) for more about the technologies underlying `Automata`.
 
@@ -79,33 +88,35 @@ Note that the five aspects are orthogonal. The first two aspects deal with
 ## Features
 
 ### Functional Features:
-#### General
 
+#### User Defined Agents
+  - ##### Planned builtin and/or custom third-party agent types
 
-- #### User Defined Agents
-  - Planned Builtin and/or custom built third party agent types
-    - Graphical models
+    - Graphical Model Based
       - Behavior Trees
       - Uninformed/Informed Search
       - Probabilistic Graphical Models
-    - RL Based
+      - Bayesian Networks
+
+    - Reinforcement Learning Based
       - mdp, pomdp, dec-pomdp
-      - td-learning
+      - td-learning</dd>
       - deep q-learning
+
     - Cognitive / Percept Based
       - c4 style percepts
 
-- #### A Concurrent, Scalable Blackboard Knowledge System
+#### A Concurrent, Scalable Blackboard Knowledge System
   > The central problem of artificial intelligence is how to express the knowledge needed in order to create intelligent behavior. — John McCarthy, M.I.T/Stanford Professor, Creator of Lisp
 
   - A global blackboard that can coordinate automata without being a central point of failure.
   - Individual automaton blackboards readable by all automata, writeable by owning automaton
 
-- #### Meta Level Control
+#### Meta Level Control
   - Meta-level control to support agent interaction, any potential network reorganization. Meta-level control is the ability of an agent to optimize its long term performance by choosing and sequencing its deliberation and execution actions appropriately. <sup>[2](#mmlcfootnote1)</sup>
 
 
-- #### Neuromorphic computing
+#### Neuromorphic computing
   -  potentially bringing the code to the data rather than the other way around.
 
 ### Performance Features:
@@ -140,7 +151,7 @@ defmodule MyAutomaton do
     # required
     type: :behavior_tree,
 
-    # required with type :behavior_tree.
+    # the remainder are required with type :behavior_tree.
     node_type: :selector,
 
     # the heartbeat for this node(subtree), in milliseconds
@@ -169,7 +180,7 @@ end
 
 ### Example
 
-Below is a simplified hypothetical example of a sequence node(subtree) for an autonomous "Forex Trader". The first two leafs are condition nodes, and the last two are action nodes.
+Below is a simplified hypothetical example of a `:behavior tree` sequence control node(subtree) for an autonomous "Forex Trader". The first two leafs are condition nodes, and the last two are action nodes.
 
 ![automata trader sequence diagram](sequence.png)
 

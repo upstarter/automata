@@ -41,7 +41,7 @@ defmodule Automaton.Types.BT.CompositeServer do
         # else? GenServer linked to Node w/ cc?
         defmodule State do
           # status is :bh_fresh when composite not initialized yet or has been reset
-          # name is "UserDefinedModuleName" + "Server"
+          # name ends up as "UserDefinedCompositeName"  + "Server"
           defstruct name: nil,
                     status: :bh_fresh,
                     children: unquote(user_config[:children]),
