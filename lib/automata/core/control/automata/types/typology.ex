@@ -6,23 +6,10 @@ defmodule Automata.Types.Typology do
   on user configuration. Each type has a `config/` dir to handle user
   config parsing and interpretation specific to it's domain.
   """
-  alias Automata.Types.BT
 
   @types [:behavior_tree]
   def types, do: @types
 
-  def call(automaton_config) do
-    type =
-      cond do
-        automaton_config[:type] == :behavior_tree ->
-          quote do: use(BT, automaton_config: unquote(automaton_config))
-
-        # TODO: need this for children.
-        # use parent type? raise error?
-        automaton_config[:type] == nil ->
-          quote do: use(BT, automaton_config: unquote(automaton_config))
-      end
-
-    [type]
+  def call(_automata_config) do
   end
 end

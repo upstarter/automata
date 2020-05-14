@@ -186,8 +186,7 @@ defmodule Automaton.Types.BT.CompositeServer do
         defp handle_child_exit(pid, state) do
           %{
             agent_sup: agent_sup,
-            workers: workers,
-            monitors: monitors
+            workers: workers
           } = state
 
           # TODO: since non-homogenous children, need to add new worker of same type back into worker list

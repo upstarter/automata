@@ -8,7 +8,7 @@
     <meta name="project" content="automata v0.1.0">
     <title>Automaton — automata v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
-    <script src="dist/sidebar_items-5ba59bf1d9.js"></script>
+    <script src="dist/sidebar_items-93ed374a40.js"></script>
       <script src="docs_config.js"></script>
     <script async src="dist/app-a225d03098e64fef431a.js"></script>
   </head>
@@ -68,16 +68,10 @@ Automaton      </h1>
 
 
         <section id="moduledoc">
-<p>  This is the primary user control interface to the Automata system. The
-  configration parameters are used to inject the appropriate modules into the
-  user-defined nodes based on their node_type and other options.</p>
-<p>  ## Notes:</p>
-<pre><code class="nohighlight makeup elixir"><span class="o">-</span><span class="w"> </span><span class="nc">Initialization</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">shutdown</span><span class="w"> </span><span class="kn">require</span><span class="w"> </span><span class="n">extra</span><span class="w"> </span><span class="ss">care</span><span class="p">:</span><span class="w">
-  </span><span class="o">-</span><span class="w"> </span><span class="ss">on_init</span><span class="p">:</span><span class="w"> </span><span class="k">receive</span><span class="w"> </span><span class="n">extra</span><span class="w"> </span><span class="n">parameters</span><span class="p">,</span><span class="w"> </span><span class="n">fetch</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="n">blackboard</span><span class="o">/</span><span class="n">utility</span><span class="p">,</span><span class="w">  </span><span class="n">make</span><span class="w"> </span><span class="n">requests</span><span class="p">,</span><span class="w"> </span><span class="n">etc</span><span class="o">.</span><span class="o">.</span><span class="w">
-  </span><span class="o">-</span><span class="w"> </span><span class="ss">shutdown</span><span class="p">:</span><span class="w"> </span><span class="n">free</span><span class="w"> </span><span class="n">resources</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">effect</span><span class="w"> </span><span class="n">other</span><span class="w"> </span><span class="n">actions</span></code></pre>
-<p>  TODO: store any currently processing nodes so they can be ticked directly
-  within the behaviour tree engine rather than per tick traversal of the entire
-  tree. Zipper Tree?</p>
+<p>  This is the primary user boundary point control interface to the Automata
+  system. The configration parameters flow from the root through the
+  supervision tree on startup and are used to inject the appropriate modules
+  into the user-defined agents.</p>
         </section>
 
 

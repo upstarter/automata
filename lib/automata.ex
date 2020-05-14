@@ -14,7 +14,7 @@ defmodule Automata do
         # world_config: [name: "MockWorld1", mfa: {MockWorld1, :start_link, []}],
 
         # the user agents for the world are started in `lib/core/control/automaton/agent_server.ex`
-        agents_config: [
+        automata_config: [
           [name: "Automaton1", mfa: {MockSeq1, :start_link, []}]
           # [name: "Automaton2", mfa: {MockSel1, :start_link, []}]
         ]
@@ -33,15 +33,15 @@ defmodule Automata do
     {:ok, pid}
   end
 
-  def start_world([{:agents_config, agents_config} | _rest]) do
-    start_agents(agents_config)
+  def start_world([{:automata_config, automata_config} | _rest]) do
+    start_agents(automata_config)
   end
 
-  def start_agents(agents_config) do
-    Automata.Supervisor.start_link(agents_config)
+  def start_agents(automata_config) do
+    Automata.Supervisor.start_link(automata_config)
   end
 
-  def status(agent_name) do
-    Automata.Server.status(agent_name)
+  def status(automaton_name) do
+    Automata.Server.status(automaton_name)
   end
 end

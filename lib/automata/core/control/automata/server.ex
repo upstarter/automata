@@ -13,41 +13,41 @@ defmodule Automata.Server do
   # API #
   #######
 
-  def start_link(agents_config) do
-    GenServer.start_link(__MODULE__, agents_config, name: __MODULE__)
+  def start_link(automata_config) do
+    GenServer.start_link(__MODULE__, automata_config, name: __MODULE__)
   end
 
-  def status(agent_name) do
-    Automata.AgentServer.status(agent_name)
+  def status(automaton_name) do
+    Automata.AgentServer.status(automaton_name)
   end
 
   #############
   # Callbacks #
   #############
 
-  def init(agents_config) do
-    agents_config
-    |> Enum.each(fn agent_config ->
-      send(self(), {:start_automaton_sup, agent_config})
+  def init(automata_config) do
+    automata_config
+    |> Enum.each(fn automaton_config ->
+      send(self(), {:start_automaton_sup, automaton_config})
     end)
 
-    {:ok, agents_config}
+    {:ok, automata_config}
   end
 
-  def handle_info({:start_automaton_sup, agent_config}, state) do
+  def handle_info({:start_automaton_sup, automaton_config}, state) do
     {:ok, _tree_sup} =
       DynamicSupervisor.start_child(
         Automata.AutomataSupervisor,
-        {Automata.AutomatonSupervisor, [agent_config]}
+        {Automata.AutomatonSupervisor, [automaton_config]}
       )
 
     {:noreply, state}
   end
 
-  def child_spec([agents_config]) do
+  def child_spec([automata_config]) do
     %{
       id: __MODULE__,
-      start: {__MODULE__, :start_link, [agents_config]},
+      start: {__MODULE__, :start_link, [automata_config]},
       restart: :temporary,
       shutdown: 10_000,
       type: :worker

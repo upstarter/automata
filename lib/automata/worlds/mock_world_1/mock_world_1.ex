@@ -2,7 +2,7 @@ defmodule MockWorld1 do
   @moduledoc """
 
   """
-  # use Automata,
-  #   # the Automata configured for this world
-  #   members: [MockSeq1]
+  use Automata.World,
+    # the Automata configured for this world
+    automata: [MockSeq1]
 end

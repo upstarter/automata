@@ -8,7 +8,7 @@
     <meta name="project" content="automata v0.1.0">
     <title>Automata.Supervisor — automata v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
-    <script src="dist/sidebar_items-5ba59bf1d9.js"></script>
+    <script src="dist/sidebar_items-93ed374a40.js"></script>
       <script src="docs_config.js"></script>
     <script async src="dist/app-a225d03098e64fef431a.js"></script>
   </head>
@@ -68,10 +68,10 @@ Automata.Supervisor      </h1>
 
 
         <section id="moduledoc">
-<p>On application start, this supervisor process starts the <code class="inline">AutomataSupervisor</code>
-and it&#39;s corresponding <code class="inline">Server</code>. It is started with strategy <code class="inline">:one_for_one</code> to
-ensure that each <code class="inline">AutomatonSupervisor</code> is independently self-healing, thus providing
-fault tolerant decentralization.</p>
+<p>On application start, this supervisor process starts the
+<a href="Automata.AutomataSupervisor.html"><code class="inline">Automata.AutomataSupervisor</code></a> and it&#39;s corresponding <code class="inline">Server</code>. It is started
+with strategy <code class="inline">:one_for_one</code> to ensure that each <a href="Automata.AutomataSupervisor.html"><code class="inline">Automata.AutomataSupervisor</code></a>
+is independently self-healing, thus providing fault tolerance.</p>
         </section>
 
         <section id="summary" class="details-list">
@@ -94,13 +94,13 @@ fault tolerant decentralization.</p>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#init/1">init(agents_config)</a>
+    <a href="#init/1">init(automata_config)</a>
   </div>
     <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/elixir/Supervisor.html#c:init/1"><code class="inline">Supervisor.init/1</code></a>.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#start_link/1">start_link(agents_config)</a>
+    <a href="#start_link/1">start_link(automata_config)</a>
   </div>
 </div>
   </div>
@@ -133,7 +133,7 @@ Functions          </h1>
       <span class="icon-link" aria-hidden="true"></span>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature">init(agents_config)</h1>
+    <h1 class="signature">init(automata_config)</h1>
       <div class="specs">
           <pre>init(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">no_return</a>()</pre>
       </div>
@@ -148,7 +148,7 @@ Functions          </h1>
       <span class="icon-link" aria-hidden="true"></span>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature">start_link(agents_config)</h1>
+    <h1 class="signature">start_link(automata_config)</h1>
   </div>
   <section class="docstring">
   </section>

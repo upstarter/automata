@@ -8,7 +8,7 @@
     <meta name="project" content="automata v0.1.0">
     <title>Automata.Blackboard — automata v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
-    <script src="dist/sidebar_items-5ba59bf1d9.js"></script>
+    <script src="dist/sidebar_items-93ed374a40.js"></script>
       <script src="docs_config.js"></script>
     <script async src="dist/app-a225d03098e64fef431a.js"></script>
   </head>
@@ -69,6 +69,55 @@ Automata.Blackboard      </h1>
 
         <section id="moduledoc">
 <p>  A global Blackboard for knowledge representations</p>
+<p>  Memory and Interaction Protocols</p>
+<pre><code class="nohighlight makeup elixir"><span class="nc">With</span><span class="w"> </span><span class="n">large</span><span class="w"> </span><span class="n">trees</span><span class="p">,</span><span class="w"> </span><span class="n">we</span><span class="w"> </span><span class="n">face</span><span class="w"> </span><span class="n">another</span><span class="w"> </span><span class="ss">challenge</span><span class="p">:</span><span class="w"> </span><span class="n">storage</span><span class="o">.</span><span class="w"> </span><span class="nc">In</span><span class="w"> </span><span class="n">an</span><span class="w"> </span><span class="n">ideal</span><span class="w"> </span><span class="n">world</span><span class="p">,</span></code></pre>
+<p>  each AI would have an entire tree allocated to it, with each behavior having
+  a persistent amount of storage allocated to it, so that any state necessary
+  for its functioning would simply always be available. However, assuming
+  about 100 actors allocated at a time about 60 behaviors in the average tree,
+  and each behavior taking up about 32 bytes of memory, this gives us about
+  192K of persistent behavior storage. Clearly, as the tree grows even further
+  this becomes even more of a memory burden, especially for a platform like
+  the Xbox.</p>
+<pre><code class="nohighlight makeup elixir"><span class="nc">We</span><span class="w"> </span><span class="n">can</span><span class="w"> </span><span class="n">cut</span><span class="w"> </span><span class="n">down</span><span class="w"> </span><span class="n">on</span><span class="w"> </span><span class="n">this</span><span class="w"> </span><span class="n">burden</span><span class="w"> </span><span class="n">considerably</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">we</span><span class="w"> </span><span class="n">note</span><span class="w"> </span><span class="n">that</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">vast</span><span class="w"> </span><span class="n">majority</span></code></pre>
+<p>  of cases, we are only really interested in a small number of behaviors - those
+  that are actually running (the current leaf, its parent, it grandparent and so
+  on up the tree). The obvious optimization to make is to create a small pool of
+  state memory for each actor divided into chunks corresponding to levels of the
+  hierarchy. The tree becomes a free-standing static structure (i.e. is not
+  allocated per actor) and the behaviors themselves become code fragments that
+  operate on a chunk. (The same sort of memory usage can be obtained in an object
+  oriented way if parent behavior objects only instantiate their children at the
+  time that the children are selected. This was the approach taken in [Alt04]).
+  Our memory usage suddenly becomes far more efficient: 100 actors times 64 bytes
+  (an upper bound on the amount behavior storage needed) times 4 layers (in the
+  case of Halo 2), or about 25K. Very importantly, this number only grows with the
+  maximum depth of the tree, not the number of behaviors.</p>
+<p>  This leaves us with another problem however, the problem of persistent
+  behavior state. There are numerous instances in the Halo 2 repertoire
+  where behaviors are disallowed for a certain amount of time after their
+  last successful performance (grenade-throwing, for example). In the ideal
+  world, this information about &quot;last execution time&quot; would be stored in the
+  persistently allocated grenade behavior. However, as that storage in the
+  above scheme is only temporarily allocated, we need somewhere else to
+  store the persistent behavior data.</p>
+<p>  There is an even worse example - what about per-target persistent behavior
+  state? Consider the search behavior. Search would like to indicate when it
+  fails in its operation on a particular target. This lets the actor know to
+  forget about that target and concentrate its efforts elsewhere. However,
+  this doesn&#39;t preclude the actor going and searching for a different target -
+  so the behavior cannot simply be turned off once it has failed.</p>
+<p>  Memory - in the psychological sense of stored information on past actions
+  and events, not in the sense of RAM - presents a problem that is inherent to
+  the tree structure. The solution in any world besides the ideal one is to
+  create a memory pool - or a number of memory pools - outside the tree to act
+  as its storage proxy.</p>
+<p>  When we consider our memory needs more generally, we can quickly distinguish
+  at least four different categories:</p>
+<pre><code class="nohighlight makeup elixir"><span class="nc">Per</span><span class="o">-</span><span class="n">behavior</span><span class="w"> </span><span class="p" data-group-id="8956780371-1">(</span><span class="n">persistent</span><span class="p" data-group-id="8956780371-1">)</span><span class="p">:</span><span class="w"> </span><span class="n">grenade</span><span class="w"> </span><span class="n">throws</span><span class="p">,</span><span class="w"> </span><span class="n">recent</span><span class="w"> </span><span class="n">vehicle</span><span class="w"> </span><span class="n">actions</span><span class="w">
+</span><span class="nc">Per</span><span class="o">-</span><span class="n">behavior</span><span class="w"> </span><span class="p" data-group-id="8956780371-2">(</span><span class="n">short</span><span class="o">-</span><span class="n">term</span><span class="p" data-group-id="8956780371-2">)</span><span class="p">:</span><span class="w"> </span><span class="n">state</span><span class="w"> </span><span class="n">lost</span><span class="w"> </span><span class="ow">when</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">behavior</span><span class="w"> </span><span class="n">finishes</span><span class="w">
+</span><span class="nc">Per</span><span class="o">-</span><span class="ss">object</span><span class="p">:</span><span class="w"> </span><span class="n">perception</span><span class="w"> </span><span class="n">information</span><span class="p">,</span><span class="w"> </span><span class="n">last</span><span class="w"> </span><span class="n">seen</span><span class="w"> </span><span class="n">position</span><span class="p">,</span><span class="w"> </span><span class="n">last</span><span class="w"> </span><span class="n">seen</span><span class="w"> </span><span class="n">orientation</span><span class="w">
+</span><span class="nc">Per</span><span class="o">-</span><span class="n">object</span><span class="w"> </span><span class="n">per</span><span class="o">-</span><span class="ss">behavior</span><span class="p">:</span><span class="w"> </span><span class="n">last</span><span class="o">-</span><span class="n">meleed</span><span class="w"> </span><span class="n">time</span><span class="p">,</span><span class="w"> </span><span class="n">search</span><span class="w"> </span><span class="n">failures</span><span class="p">,</span><span class="w"> </span><span class="n">pathfinding</span><span class="o">-</span><span class="n">to</span><span class="w"> </span><span class="n">failures</span></code></pre>
         </section>
 
 

@@ -3,18 +3,18 @@ defmodule CompositeSpec do
   use ESpec
   doctest Automaton.Types.BT.Behavior
 
-  let(:agents_config) do
-    agents_config = [
+  let(:automata_config) do
+    automata_config = [
       [name: "MockSeq1", mfa: {MockSeq1, :start_link, []}],
       [name: "MockSeq2", mfa: {MockSeq2, :start_link, []}],
       [name: "MockSeq3", mfa: {MockSeq3, :start_link, []}]
     ]
 
-    [agents_config: agents_config]
+    [automata_config: automata_config]
   end
 
   before_all do
-    Automata.start_nodes(agents_config)
+    Automata.start_nodes(automata_config)
   end
 
   context "updating from the root" do

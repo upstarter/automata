@@ -5,19 +5,19 @@ defmodule AutomataTest do
   # TODO: ex_spec for context, it BDD style, property testing
 
   setup_all do
-    # TODO: Load user-configs into agent_configs
-    agents_config = [
+    # TODO: Load user-configs into automaton_configs
+    automata_config = [
       [name: "MockSeq1", mfa: {MockSeq1, :start_link, []}]
     ]
 
-    [agents_config: agents_config]
+    [automata_config: automata_config]
   end
 
   test "context was modified", context do
-    # IO.inspect(context[:agents_config])
+    # IO.inspect(context[:automata_config])
   end
 
   test "loads user-defined modules from the nodes/ dir", context do
-    assert Automata.start_nodes(context[:agents_config])
+    assert Automata.start_nodes(context[:automata_config])
   end
 end

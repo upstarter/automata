@@ -4,13 +4,13 @@ defmodule ActionSpec do
   doctest Automaton.Types.BT.Behavior
 
   before_all do
-    agents_config = [
+    automata_config = [
       [name: "MockSeq1", mfa: {MockSeq1, :start_link, []}]
     ]
 
-    [agents_config: agents_config]
+    [automata_config: automata_config]
 
-    Automata.start_nodes(agents_config)
+    Automata.start_nodes(automata_config)
   end
 
   let(:opts) do

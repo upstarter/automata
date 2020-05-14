@@ -8,7 +8,7 @@
     <meta name="project" content="automata v0.1.0">
     <title>API Reference — automata v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
-    <script src="dist/sidebar_items-5ba59bf1d9.js"></script>
+    <script src="dist/sidebar_items-93ed374a40.js"></script>
       <script src="docs_config.js"></script>
     <script async src="dist/app-a225d03098e64fef431a.js"></script>
   </head>
@@ -76,7 +76,18 @@ automata      </a>
     <div class="summary">
 <div class="summary-row">
   <div class="summary-signature">
+    <a href="Activation.html">Activation</a>
+  </div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
     <a href="Automata.html">Automata</a>
+  </div>
+    <div class="summary-synopsis"></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Automata.ActionSelect.html">Automata.ActionSelect</a>
   </div>
     <div class="summary-synopsis"></div>
 </div>
@@ -95,6 +106,9 @@ automata      </a>
   <div class="summary-signature">
     <a href="Automata.AutomataSupervisor.html">Automata.AutomataSupervisor</a>
   </div>
+    <div class="summary-synopsis"><p>The <a href="Automata.Server.html"><code class="inline">Automata.Server</code></a> starts the <a href="Automata.AutomatonSupervisor.html"><code class="inline">Automata.AutomatonSupervisor</code></a> under this
+Supervisor. The :one_for_one restart strategy causes each
+<a href="Automata.AutomatonSupervisor.html"><code class="inline">Automata.AutomatonSupervisor</code></a> to be individally fault tolerant.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
@@ -112,18 +126,32 @@ agents and starts the agents under the <code class="inline">Automata.AgentSuperv
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="Automaton.Types.BT.Composite.Parallel.html">Automaton.Types.BT.Composite.Parallel</a>
+    <a href="Automata.Perceptory.html">Automata.Perceptory</a>
   </div>
-    <div class="summary-synopsis"><p>  Parallel Node
-  When the execution of a parallel node starts, then the node’s children are
-  executed in succession from left to right without waiting for a return status
-  from any child before ticking the next one. It returns success if a given number
-  of children M ∈ N return success, it returns failure when the children that
-  return running and success are not enough to reach the given number, even if
-  they would all return success. It returns running otherwise. The purpose of
-  the parallel node is to model those tasks separable in independent sub-tasks
-  performing non-conflicting actions (e.g. a multi object tracking can be
-  performed using several cameras).</p></div>
+    <div class="summary-synopsis"><p>  Classification hierarchy (Perception System) Once the stimulus from the world
+  has been “sensed,” it can then be “perceived.” The distinction between sensing
+  and perceiving is important. An agent, for example, may “sense” an acoustic
+  event, but it is up to the perception system to recognize it as an instance of a
+  specific type of acoustic event that has some meaning to the agent. A segment of
+  agents may interpret an UtteranceDataRecord as just another noise, but one should
+  classify the utterance as the word &quot;hello”. Similarly with multicast, unicast,
+  broadcast events. Thus, it is within the Perception System that each agent assigns a
+  unique “meaning” to events in the world.</p></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Automata.Reasoning.html">Automata.Reasoning</a>
+  </div>
+    <div class="summary-synopsis"><p>  MMLC - Meta-MultiLevel Control</p></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Automata.Sensory.html">Automata.Sensory</a>
+  </div>
+    <div class="summary-synopsis"><p>  The World-Agent Division
+  The Sensory System marks the single entry point into an agent from the World. All
+  sensory input from the world must pass through the Sensory System before it can
+  be processed by the rest of the agent&#39;s mind.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
@@ -138,10 +166,23 @@ data flow is a key abstraction for the agents.</p></div>
   <div class="summary-signature">
     <a href="Automata.Supervisor.html">Automata.Supervisor</a>
   </div>
-    <div class="summary-synopsis"><p>On application start, this supervisor process starts the <code class="inline">AutomataSupervisor</code>
-and it&#39;s corresponding <code class="inline">Server</code>. It is started with strategy <code class="inline">:one_for_one</code> to
-ensure that each <code class="inline">AutomatonSupervisor</code> is independently self-healing, thus providing
-fault tolerant decentralization.</p></div>
+    <div class="summary-synopsis"><p>On application start, this supervisor process starts the
+<a href="Automata.AutomataSupervisor.html"><code class="inline">Automata.AutomataSupervisor</code></a> and it&#39;s corresponding <code class="inline">Server</code>. It is started
+with strategy <code class="inline">:one_for_one</code> to ensure that each <a href="Automata.AutomataSupervisor.html"><code class="inline">Automata.AutomataSupervisor</code></a>
+is independently self-healing, thus providing fault tolerance.</p></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Automata.Types.Typology.html">Automata.Types.Typology</a>
+  </div>
+    <div class="summary-synopsis"><h2 id="types-are-builtin-state-space-representations" class="section-heading">
+  <a href="#types-are-builtin-state-space-representations" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Types are builtin state space representations.
+</h2>
+
+<p>Typology is for interpretation of what state space representation to use based
+on user configuration. Each type has a <code class="inline">config/</code> dir to handle user
+config parsing and interpretation specific to it&#39;s domain.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
@@ -155,22 +196,18 @@ Second pass should coordinate automata in achievement of some global goal</p></d
   <div class="summary-signature">
     <a href="Automata.World.html">Automata.World</a>
   </div>
-    <div class="summary-synopsis"></div>
+    <div class="summary-synopsis"><p>The world contains environments and automata that operate on/from them.
+User defined automata state spaces and blackboards serve as short term working memory
+for the world.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
     <a href="Automaton.html">Automaton</a>
   </div>
-    <div class="summary-synopsis"><p>  This is the primary user control interface to the Automata system. The
-  configration parameters are used to inject the appropriate modules into the
-  user-defined nodes based on their node_type and other options.</p></div>
-</div>
-<div class="summary-row">
-  <div class="summary-signature">
-    <a href="Automaton.Types.BT.Action.html">Automaton.Types.BT.Action</a>
-  </div>
-    <div class="summary-synopsis"><p>  An action is a leaf in the tree.
-  It operates on the world as a component of a composite(control) node.</p></div>
+    <div class="summary-synopsis"><p>  This is the primary user boundary point control interface to the Automata
+  system. The configration parameters flow from the root through the
+  supervision tree on startup and are used to inject the appropriate modules
+  into the user-defined agents.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
@@ -182,20 +219,55 @@ and root of the user-defined composite.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="Automaton.Types.BT.Behavior.html">Automaton.Types.BT.Behavior</a>
+    <a href="Automaton.Blackboard.html">Automaton.Blackboard</a>
   </div>
-    <div class="summary-synopsis"><p>  An Automaton.Types.BT.Behavior is an abstract interface for composites and components
-  that can be activated, run, and deactivated. Actions(Execution Nodes)
-  provide specific implementations of this interface. Branches in the tree can
-  be thought of as high level behaviors, heirarchically combining smaller
-  behaviors to provide more complex and interesting behaviors.</p></div>
+    <div class="summary-synopsis"><p>  The “brain” of each agent implemented with Automata is organized into a
+  collection of discrete systems that communicate through an internal
+  blackboard.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="Automaton.Blackboard.html">Automaton.Blackboard</a>
+    <a href="Automaton.Reasoning.html">Automaton.Reasoning</a>
   </div>
-    <div class="summary-synopsis"><p>  The Node Blackboard
-  Blackboard Architectures</p></div>
+    <div class="summary-synopsis"></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Automaton.Types.BT.html">Automaton.Types.BT</a>
+  </div>
+    <div class="summary-synopsis"><p>Implements the Behavior Tree (BT) state space representation.</p></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Automaton.Types.BT.Action.html">Automaton.Types.BT.Action</a>
+  </div>
+    <div class="summary-synopsis"><p>  An action is a leaf in the tree.
+  It operates on the world as a component of a composite(control) node.</p></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Automaton.Types.BT.ActionSelect.html">Automaton.Types.BT.ActionSelect</a>
+  </div>
+    <div class="summary-synopsis"><p>Agent is a function from percept sequences to actions
+Action Selection, Must be simple and fast
+Given a set of PerceptMemory objects(structs) that detail the perceived state
+of the world, the agent must decide which action(s) it is appropriate to
+perform. This process is known as Action Selection. There are three essential
+issues to be addressed when designing an Action Selection mechanism. First,
+what is the fundamental representation of action used by the system? Second,
+how does the system choose which actions to perform at a given instant? Many
+types of decision-making processes are possible here. Third, how can the
+choice of action be modified to allow the agent to learn from experience?</p></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Automaton.Types.BT.Behavior.html">Automaton.Types.BT.Behavior</a>
+  </div>
+    <div class="summary-synopsis"><p>  An Automaton.Types.BT.Behavior is an abstract interface for composites and
+  components that can be activated, run, and deactivated. Actions(Execution
+  Nodes) provide specific implementations of this interface. Branches in the
+  tree can be thought of as high level behaviors, heirarchically combining
+  smaller behaviors to provide more complex and interesting behaviors.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
@@ -204,6 +276,21 @@ and root of the user-defined composite.</p></div>
     <div class="summary-synopsis"><p>When a component behavior is complete and returns its status code,
 then the Composite it is a child of decides whether to continue through its
 children or whether to stop there and then and return a value.</p></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Automaton.Types.BT.Composite.Parallel.html">Automaton.Types.BT.Composite.Parallel</a>
+  </div>
+    <div class="summary-synopsis"><p>  Parallel Node
+  When the execution of a parallel node starts, then the node’s children are
+  executed in succession from left to right without waiting for a return status
+  from any child before ticking the next one. It returns success if a given number
+  of children M ∈ N return success, it returns failure when the children that
+  return running and success are not enough to reach the given number, even if
+  they would all return success. It returns running otherwise. The purpose of
+  the parallel node is to model those tasks separable in independent sub-tasks
+  performing non-conflicting actions (e.g. a multi object tracking can be
+  performed using several cameras).</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
@@ -236,26 +323,28 @@ then and return a value.</p></div>
     <a href="Automaton.Types.BT.CompositeSupervisor.html">Automaton.Types.BT.CompositeSupervisor</a>
   </div>
     <div class="summary-synopsis"><p>The <code class="inline">CompositeServer</code> is injected into the user-defined automaton and manages
-the lifecycle of their agents, ie. starting, stopping, and handling messages.
+the lifecycle of their children (the execution nodes), ie. starting, stopping, and handling messages.
 All components are children of a composite.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="Automaton.Config.Parser.html">Automaton.Config.Parser</a>
+    <a href="Automaton.Types.BT.Config.Parser.html">Automaton.Types.BT.Config.Parser</a>
   </div>
-    <div class="summary-synopsis"><p>Purely Functional high level parsing policy for automaton type specific
+    <div class="summary-synopsis"><p>Purely Functional high level parsing policy for BT specific
 config from <code class="inline">automaton_config</code>.</p></div>
-</div>
-<div class="summary-row">
-  <div class="summary-signature">
-    <a href="Automaton.Types.BT.html">Automaton.Types.BT</a>
-  </div>
-    <div class="summary-synopsis"><p>Implements the BT state space representation.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
     <a href="Automaton.Types.Typology.html">Automaton.Types.Typology</a>
   </div>
+    <div class="summary-synopsis"><h2 id="types-are-builtin-state-space-representations-1" class="section-heading">
+  <a href="#types-are-builtin-state-space-representations-1" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Types are builtin state space representations.
+</h2>
+
+<p>Typology is for interpretation of what state space representation to use based
+on user configuration. Each type has a <code class="inline">config/</code> dir to handle user
+config parsing and interpretation specific to it&#39;s domain.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
@@ -274,6 +363,52 @@ priority composite node)</p></div>
   <div class="summary-signature">
     <a href="MockSeq1.State.html">MockSeq1.State</a>
   </div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="MockWorld1.html">MockWorld1</a>
+  </div>
+    <div class="summary-synopsis"></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Percept.html">Percept</a>
+  </div>
+    <div class="summary-synopsis"></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="PerceptMem.html">PerceptMem</a>
+  </div>
+    <div class="summary-synopsis"><p>When a DataRecord enters the Perception System, a new PerceptMemory is
+created, and as the DataRecord is pushed through the Percept Tree, each
+percept that registers a positive match adds its respective data to the new
+PerceptMemory.</p></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="PerceptTree.html">PerceptTree</a>
+  </div>
+    <div class="summary-synopsis"><p>  A Tree of Percepts
+  The Perception System takes the form of a Percept Tree. A Percept is an
+  atomic classification and data extraction unit that models some aspect of
+  the sensory inputs passed in by the Sensory System. Given a DataRecord it
+  returns both a match probability (the BirdPercept will return the
+  probability that a DataRecord represents the experience of seeing a bird)
+  and, if the match is above a threshold, a piece of extracted data (such as
+  body-space coordinates of the bird). The details of how the confidence is
+  computed and what exact data is extracted are left to the individual
+  percept. The percept structure might encapsulate a neural net or it might
+  encapsulate a simple “if … then …else” clause. This freedom of form is one
+  of the keys to making the Perception System extensible, since the system
+  makes no assumptions about what a percept will detect, what type of data it
+  will extract or how it will be implemented.</p></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Sensor.html">Sensor</a>
+  </div>
+    <div class="summary-synopsis"></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">

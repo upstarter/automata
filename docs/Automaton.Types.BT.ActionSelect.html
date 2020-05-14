@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.21.3">
+    <meta name="project" content="automata v0.1.0">
+    <title>Automaton.Types.BT.ActionSelect — automata v0.1.0</title>
+    <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
+    <script src="dist/sidebar_items-93ed374a40.js"></script>
+      <script src="docs_config.js"></script>
+    <script async src="dist/app-a225d03098e64fef431a.js"></script>
+  </head>
+  <body data-type="modules">
+    <script>try { if(localStorage.getItem('night-mode') === 'true') document.body.className += ' night-mode'; } catch (e) { }</script>
+<div class="main">
+
+<button class="sidebar-button sidebar-toggle">
+  <span class="icon-menu" title="Collapse/expand sidebar"></span>
+</button>
+
+<section class="sidebar">
+  <form class="sidebar-search" action="search.html">
+    <button type="submit" class="search-button">
+      <span class="icon-search" aria-hidden="true"></span>
+    </button>
+    <button type="button" tabindex="-1" class="search-close-button">
+      <span class="icon-cross" title="Cancel search"></span>
+    </button>
+    <label class="search-label">
+      <input name="q" type="text" id="search-list" class="search-input" placeholder="Search..." aria-label="Search" autocomplete="off" />
+    </label>
+  </form>
+
+  <div class="autocomplete">
+    <div class="autocomplete-results">
+    </div>
+  </div>
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectDetails">
+      <a href="api-reference.html" class="sidebar-projectName">
+automata      </a>
+      <h2 class="sidebar-projectVersion">
+        v0.1.0
+      </h2>
+    </div>
+  </div>
+
+  <ul class="sidebar-listNav">
+    <li><a id="extras-list" href="#full-list">Pages</a></li>
+
+      <li><a id="modules-list" href="#full-list">Modules</a></li>
+
+  </ul>
+  <div class="gradient"></div>
+  <ul id="full-list" class="sidebar-fullList"></ul>
+</section>
+
+<section class="content">
+  <div class="content-outer">
+    <div id="content" class="content-inner">
+
+      <h1>
+        <small class="app-vsn">automata v0.1.0</small>
+Automaton.Types.BT.ActionSelect      </h1>
+
+
+        <section id="moduledoc">
+<p>Agent is a function from percept sequences to actions
+Action Selection, Must be simple and fast
+Given a set of PerceptMemory objects(structs) that detail the perceived state
+of the world, the agent must decide which action(s) it is appropriate to
+perform. This process is known as Action Selection. There are three essential
+issues to be addressed when designing an Action Selection mechanism. First,
+what is the fundamental representation of action used by the system? Second,
+how does the system choose which actions to perform at a given instant? Many
+types of decision-making processes are possible here. Third, how can the
+choice of action be modified to allow the agent to learn from experience?</p>
+<p>ActionGroup = {}
+ActionTuple = {} fields:</p>
+<p>trigger - A piece of code that returns a scalar value representing the relevance of
+  an ActionTuple given the current state of Working Memory. Triggers are
+  typically references to percepts in the Percept Tree (a trigger that
+  points to the &quot;Bird Shape” percept will return a high relevance given any
+  PerceptMemory that has a high &quot;Bird Shape” confidence). However, the
+  TriggerContext is general enough that more complex trigger-conditions can
+  be hand-crafted. As we will see, Percept-based triggers are useful because
+  they can be automatically generated through the learning process</p>
+<p>action - Primitive action to take (usually modify blackboard as event system)</p>
+<p>object - Target for the Action often defined in terms of percepts When an
+  ActionTuple is active, the ObjectContext posts the PerceptMemory chosen into
+  the OBJECT_OF_ATTENTION posting of the internal blackboard, thereby making
+  it available to the rest of the system. The ObjectContext is an optional
+  component, since not all actions are necessarily targeted</p>
+<p>do_until - A piece of code that returns a scalar representing the continuing
+  relevance of an ActionTuple while it is active.</p>
+<p>value - intrinsic value/relevance, an indicator of how generally “good” the
+  ActionTuple is. This is similar to the Q-value in Q-learning (see [Ballard
+  1997])</p>
+        </section>
+
+
+      <footer class="footer">
+        <p>
+          <span class="line">
+            Built using
+            <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener">ExDoc</a> (v0.21.3),
+          </span>
+          <span class="line">
+            designed by
+            <a href="https://twitter.com/dignifiedquire" target="_blank" rel="noopener" title="@dignifiedquire">Friedel Ziegelmayer</a>.
+          </span>
+        </p>
+        <p>
+          <button class="line footer-button display-shortcuts-help">
+            Display keyboard shortcuts
+          </button>
+          <button class="line footer-button night-mode-toggle">
+            Toggle night mode
+          </button>
+          <button class="line footer-button display-quick-switch">
+            Go to a HexDocs package
+          </button>
+          <button class="line footer-button tooltips-toggle">
+            <span class="tooltips-option-disable">Disable tooltips</span>
+            <span class="tooltips-option-enable">Enable tooltips</span>
+          </button>
+        </p>
+      </footer>
+    </div>
+  </div>
+</section>
+</div>
+  </body>
+</html>

@@ -1,7 +1,7 @@
 defmodule Automaton.Types.BT.CompositeSupervisor do
   @moduledoc """
   The `CompositeServer` is injected into the user-defined automaton and manages
-  the lifecycle of their agents, ie. starting, stopping, and handling messages.
+  the lifecycle of their children (the execution nodes), ie. starting, stopping, and handling messages.
   All components are children of a composite.
   """
   use DynamicSupervisor

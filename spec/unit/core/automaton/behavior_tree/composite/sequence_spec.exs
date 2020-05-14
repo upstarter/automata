@@ -5,19 +5,19 @@ defmodule SequenceSpec do
 
   # TODO: ex_spec for context, it BDD style, property testing
 
-  let(:agents_config) do
-    # TODO: Load user-configs into agent_config
-    agents_config = [
+  let(:automata_config) do
+    # TODO: Load user-configs into automaton_config
+    automata_config = [
       [name: "MockSeq1", mfa: {MockSeq1, :start_link, []}],
       [name: "MockSeq2", mfa: {MockSeq2, :start_link, []}],
       [name: "MockSeq3", mfa: {MockSeq3, :start_link, []}]
     ]
 
-    [agents_config: agents_config]
+    [automata_config: automata_config]
   end
 
   before_all do
-    Automata.start_nodes(agents_config)
+    Automata.start_nodes(automata_config)
   end
 
   # {:ok, state} = MockSeq1.init(opts)

@@ -8,7 +8,7 @@
     <meta name="project" content="automata v0.1.0">
     <title>Automata.Server — automata v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
-    <script src="dist/sidebar_items-5ba59bf1d9.js"></script>
+    <script src="dist/sidebar_items-93ed374a40.js"></script>
       <script src="docs_config.js"></script>
     <script async src="dist/app-a225d03098e64fef431a.js"></script>
   </head>
@@ -72,6 +72,7 @@ Automata.Server      </h1>
 supervisor lean and mean, since it handles each <a href="Automata.AutomatonSupervisor.html"><code class="inline">Automata.AutomatonSupervisor</code></a>,
 passing the user config, which flows through the entire tree. This
 data flow is a key abstraction for the agents.</p>
+<p>TODO: Automata.Config.Parser to have handler Automata.Types.Typology handle</p>
         </section>
 
         <section id="summary" class="details-list">
@@ -94,18 +95,18 @@ data flow is a key abstraction for the agents.</p>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#init/1">init(agents_config)</a>
+    <a href="#init/1">init(automata_config)</a>
   </div>
     <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/elixir/GenServer.html#c:init/1"><code class="inline">GenServer.init/1</code></a>.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#start_link/1">start_link(agents_config)</a>
+    <a href="#start_link/1">start_link(automata_config)</a>
   </div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#status/1">status(agent_name)</a>
+    <a href="#status/1">status(automaton_name)</a>
   </div>
 </div>
   </div>
@@ -138,7 +139,7 @@ Functions          </h1>
       <span class="icon-link" aria-hidden="true"></span>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature">init(agents_config)</h1>
+    <h1 class="signature">init(automata_config)</h1>
   </div>
   <section class="docstring">
 <p>Callback implementation for <a href="https://hexdocs.pm/elixir/GenServer.html#c:init/1"><code class="inline">GenServer.init/1</code></a>.</p>
@@ -150,7 +151,7 @@ Functions          </h1>
       <span class="icon-link" aria-hidden="true"></span>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature">start_link(agents_config)</h1>
+    <h1 class="signature">start_link(automata_config)</h1>
   </div>
   <section class="docstring">
   </section>
@@ -161,7 +162,7 @@ Functions          </h1>
       <span class="icon-link" aria-hidden="true"></span>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature">status(agent_name)</h1>
+    <h1 class="signature">status(automaton_name)</h1>
   </div>
   <section class="docstring">
   </section>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.21.3">
+    <meta name="project" content="automata v0.1.0">
+    <title>Automata.Sensory — automata v0.1.0</title>
+    <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
+    <script src="dist/sidebar_items-93ed374a40.js"></script>
+      <script src="docs_config.js"></script>
+    <script async src="dist/app-a225d03098e64fef431a.js"></script>
+  </head>
+  <body data-type="modules">
+    <script>try { if(localStorage.getItem('night-mode') === 'true') document.body.className += ' night-mode'; } catch (e) { }</script>
+<div class="main">
+
+<button class="sidebar-button sidebar-toggle">
+  <span class="icon-menu" title="Collapse/expand sidebar"></span>
+</button>
+
+<section class="sidebar">
+  <form class="sidebar-search" action="search.html">
+    <button type="submit" class="search-button">
+      <span class="icon-search" aria-hidden="true"></span>
+    </button>
+    <button type="button" tabindex="-1" class="search-close-button">
+      <span class="icon-cross" title="Cancel search"></span>
+    </button>
+    <label class="search-label">
+      <input name="q" type="text" id="search-list" class="search-input" placeholder="Search..." aria-label="Search" autocomplete="off" />
+    </label>
+  </form>
+
+  <div class="autocomplete">
+    <div class="autocomplete-results">
+    </div>
+  </div>
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectDetails">
+      <a href="api-reference.html" class="sidebar-projectName">
+automata      </a>
+      <h2 class="sidebar-projectVersion">
+        v0.1.0
+      </h2>
+    </div>
+  </div>
+
+  <ul class="sidebar-listNav">
+    <li><a id="extras-list" href="#full-list">Pages</a></li>
+
+      <li><a id="modules-list" href="#full-list">Modules</a></li>
+
+  </ul>
+  <div class="gradient"></div>
+  <ul id="full-list" class="sidebar-fullList"></ul>
+</section>
+
+<section class="content">
+  <div class="content-outer">
+    <div id="content" class="content-inner">
+
+      <h1>
+        <small class="app-vsn">automata v0.1.0</small>
+Automata.Sensory      </h1>
+
+
+        <section id="moduledoc">
+<p>  The World-Agent Division
+  The Sensory System marks the single entry point into an agent from the World. All
+  sensory input from the world must pass through the Sensory System before it can
+  be processed by the rest of the agent&#39;s mind.</p>
+<p>  The primary job of the Sensory System is to act as the enforcer of sensory
+  honesty. As such, it processes each DataRecord so that it appears as it would
+  from the agents point of view. Sometimes that means removing it completely –
+  for example, culling VisualDataRecords outside of the perceptual field – or
+  otherwise transforming it into the appropriate reference frame.</p>
+<p>  Because the Sensory System offers a single entry point, it allows us to
+  provide more or less uniform treatment to the many types of DataRecords that an
+  agent may be called upon to process.</p>
+<p>  Types of sensory data:
+  Network:</p>
+<pre><code class="nohighlight makeup elixir"><span class="nc">API</span><span class="w"> </span><span class="n">calls</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">third</span><span class="w"> </span><span class="n">parties</span><span class="w">
+</span><span class="nc">API</span><span class="w"> </span><span class="n">calls</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="n">third</span><span class="w"> </span><span class="n">parties</span><span class="w"> </span><span class="p" data-group-id="9778551186-1">(</span><span class="nc">WebHooks</span><span class="p" data-group-id="9778551186-1">)</span><span class="w">
+</span><span class="nc">Data</span><span class="w"> </span><span class="nc">Streams</span><span class="w"> </span><span class="p" data-group-id="9778551186-2">(</span><span class="nc">WebSockets</span><span class="p" data-group-id="9778551186-2">)</span></code></pre>
+<p>  Local Sys:</p>
+<pre><code class="nohighlight makeup elixir"><span class="nc">Local</span><span class="w"> </span><span class="nc">Events</span><span class="w">
+</span><span class="nc">Local</span><span class="w"> </span><span class="nc">Memory</span><span class="w"> </span><span class="nc">Stores</span><span class="w"> </span><span class="nc">RAM</span><span class="w">
+</span><span class="nc">Local</span><span class="w"> </span><span class="nc">Database</span><span class="w"> </span><span class="nc">ROM</span></code></pre>
+<p>  The Sensory System is a filter through which all world events (represented by
+  DataRecords) must pass. Unlike its physical equivalents, where any data that
+  passes through is fair game, in Automata the Sensory System plays an active role
+  in keeping the agents virtual sensation honest. In a simulated
+  world, there is potentially much more accessible information than the
+  agent, limited by its sensory apparatus, should be able to sense.</p>
+        </section>
+
+
+      <footer class="footer">
+        <p>
+          <span class="line">
+            Built using
+            <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener">ExDoc</a> (v0.21.3),
+          </span>
+          <span class="line">
+            designed by
+            <a href="https://twitter.com/dignifiedquire" target="_blank" rel="noopener" title="@dignifiedquire">Friedel Ziegelmayer</a>.
+          </span>
+        </p>
+        <p>
+          <button class="line footer-button display-shortcuts-help">
+            Display keyboard shortcuts
+          </button>
+          <button class="line footer-button night-mode-toggle">
+            Toggle night mode
+          </button>
+          <button class="line footer-button display-quick-switch">
+            Go to a HexDocs package
+          </button>
+          <button class="line footer-button tooltips-toggle">
+            <span class="tooltips-option-disable">Disable tooltips</span>
+            <span class="tooltips-option-enable">Enable tooltips</span>
+          </button>
+        </p>
+      </footer>
+    </div>
+  </div>
+</section>
+</div>
+  </body>
+</html>

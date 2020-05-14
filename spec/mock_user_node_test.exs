@@ -5,14 +5,14 @@ defmodule MockUserNodeTest do
 
   # TODO: how to put in shared context (for sharing across files)?
   setup_all do
-    # TODO: Load user-configs into agent_configs
-    agents_config = [
+    # TODO: Load user-configs into automaton_configs
+    automata_config = [
       [name: "MockSeq1", mfa: {MockSeq1, :start_link, []}],
       [name: "MockSeq2", mfa: {MockSeq2, :start_link, []}],
       [name: "MockSeq3", mfa: {MockSeq3, :start_link, []}]
     ]
 
-    [agents_config: agents_config]
+    [automata_config: automata_config]
   end
 
   describe "run a simple sequence" do

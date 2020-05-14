@@ -13,9 +13,9 @@ defmodule Automata.AgentServer do
               mfa: nil
   end
 
-  def start_link([automaton_sup, agent_config]) do
-    GenServer.start_link(__MODULE__, [automaton_sup, agent_config],
-      name: name(agent_config[:name])
+  def start_link([automaton_sup, automaton_config]) do
+    GenServer.start_link(__MODULE__, [automaton_sup, automaton_config],
+      name: name(automaton_config[:name])
     )
   end
 
@@ -27,12 +27,12 @@ defmodule Automata.AgentServer do
   # Callbacks #
   #############
 
-  def init([automaton_sup, agent_config]) when is_pid(automaton_sup) do
+  def init([automaton_sup, automaton_config]) when is_pid(automaton_sup) do
     Process.flag(:trap_exit, true)
     monitors = :ets.new(:monitors, [:private])
     state = %State{automaton_sup: automaton_sup, monitors: monitors}
 
-    init(agent_config, state)
+    init(automaton_config, state)
   end
 
   def init([{:name, name} | rest], state) do

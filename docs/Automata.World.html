@@ -8,7 +8,7 @@
     <meta name="project" content="automata v0.1.0">
     <title>Automata.World — automata v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
-    <script src="dist/sidebar_items-5ba59bf1d9.js"></script>
+    <script src="dist/sidebar_items-93ed374a40.js"></script>
       <script src="docs_config.js"></script>
     <script async src="dist/app-a225d03098e64fef431a.js"></script>
   </head>
@@ -68,6 +68,15 @@ Automata.World      </h1>
 
 
         <section id="moduledoc">
+<p>The world contains environments and automata that operate on/from them.
+User defined automata state spaces and blackboards serve as short term working memory
+for the world.</p>
+<p>The further in the supervision tree you get to the <code class="inline">Automaton.Types</code> the less
+information you have about the global situation, and vice versa.</p>
+<p>Therefore, it will be wise to thoughtfully provide abstractions for robust state space,
+blackboard, ontological representations, etc. for coordination of interacting agents.</p>
+<p>Can also be the source of network calls for the world, called into from running agents.</p>
+<p>Local and/or external databases can provide long term world storage.</p>
         </section>
 
 
