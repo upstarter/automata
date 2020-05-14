@@ -5,6 +5,6 @@ defmodule Automata.Utility do
   Second pass should coordinate automata in achievement of some global goal
   """
 
-  defmacro __using__(_user_config) do
+  defmacro __using__(_automaton_config) do
   end
 end

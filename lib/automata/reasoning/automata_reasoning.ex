@@ -5,6 +5,6 @@ defmodule Automata.Reasoning do
 
   use Automata.Utility
 
-  defmacro __using__(_user_config) do
+  defmacro __using__(_automaton_config) do
   end
 end

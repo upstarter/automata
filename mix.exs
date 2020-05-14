@@ -35,7 +35,8 @@ defmodule Automata.MixProject do
       {:dialyxir, "~> 1.0.0-rc.7", only: [:dev], runtime: false},
       {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
       {:ex_doc, "~> 0.21", only: :dev, runtime: false},
-      {:espec, "~> 1.7.0", only: :test}
+      {:espec, "~> 1.7.0", only: :test},
+      {:ecto, "~> 3.0"}
     ]
   end
 end

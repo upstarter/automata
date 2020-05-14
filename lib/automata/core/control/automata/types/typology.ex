@@ -1,4 +1,4 @@
-defmodule Automaton.Types.Typology do
+defmodule Automata.Types.Typology do
   @moduledoc """
   ## Types are builtin state space representations.
 
@@ -6,7 +6,7 @@ defmodule Automaton.Types.Typology do
   on user configuration. Each type has a `config/` dir to handle user
   config parsing and interpretation specific to it's domain.
   """
-  alias Automaton.Types.BT
+  alias Automata.Types.BT
 
   @types [:behavior_tree]
   def types, do: @types

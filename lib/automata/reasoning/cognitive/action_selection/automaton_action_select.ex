@@ -39,6 +39,6 @@ defmodule Automaton.Types.BT.ActionSelect do
     1997])
   """
 
-  defmacro __using__(_user_config) do
+  defmacro __using__(_automaton_config) do
   end
 end

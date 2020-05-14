@@ -22,10 +22,10 @@ defmodule Automaton.Types.BT.CompositeServer do
   def types, do: @types
 
   defmacro __using__(opts) do
-    user_config = opts[:user_config]
+    automaton_config = opts[:automaton_config]
 
     imports =
-      case user_config[:node_type] do
+      case automaton_config[:node_type] do
         :sequence ->
           quote do: use(Sequence)
 
@@ -44,23 +44,23 @@ defmodule Automaton.Types.BT.CompositeServer do
           # name ends up as "UserDefinedCompositeName"  + "Server"
           defstruct name: nil,
                     status: :bh_fresh,
-                    children: unquote(user_config[:children]),
+                    children: unquote(automaton_config[:children]),
                     # workers are the pids of the running children
                     workers: [],
                     composite_sup: nil,
                     agent_sup: nil,
-                    node_type: unquote(user_config[:node_type]),
+                    node_type: unquote(automaton_config[:node_type]),
                     # parent is nil when fresh
                     parent: nil,
                     control: 0,
-                    tick_freq: unquote(user_config[:tick_freq]) || 50,
+                    tick_freq: unquote(automaton_config[:tick_freq]) || 50,
                     monitors: nil,
                     mfa: nil
         end
       end
 
     control =
-      quote bind_quoted: [user_config: opts[:user_config]] do
+      quote bind_quoted: [automaton_config: opts[:automaton_config]] do
         # Client API
         def start_link([agent_sup, {_, _, _} = mfa, name]) do
           new_name = to_string(name) <> "Server"

@@ -60,6 +60,6 @@ defmodule Automata.Blackboard do
       Per-object per-behavior: last-meleed time, search failures, pathfinding-to failures
   """
 
-  defmacro __using__(_user_config) do
+  defmacro __using__(_automaton_config) do
   end
 end

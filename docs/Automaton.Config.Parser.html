@@ -69,7 +69,7 @@ Automaton.Config.Parser      </h1>
 
         <section id="moduledoc">
 <p>Purely Functional high level parsing policy for automaton type specific
-config from <code class="inline">user_config</code>.</p>
+config from <code class="inline">automaton_config</code>.</p>
 <h2 id="module-user-provided-state-space-parsing-interpretation-boundary-point" class="section-heading">
   <a href="#module-user-provided-state-space-parsing-interpretation-boundary-point" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
   User Provided State Space parsing &amp; interpretation boundary point
@@ -98,7 +98,7 @@ config from <code class="inline">user_config</code>.</p>
   <div class="summary-signature">
     <a href="#node_type/1">node_type(opts)</a>
   </div>
-    <div class="summary-synopsis"><p>Determines the node_type given the <code class="inline">user_config</code>.</p></div>
+    <div class="summary-synopsis"><p>Determines the node_type given the <code class="inline">automaton_config</code>.</p></div>
 </div>
   </div>
         </section>
@@ -120,15 +120,15 @@ Functions          </h1>
     <h1 class="signature">node_type(opts)</h1>
   </div>
   <section class="docstring">
-<p>Determines the node_type given the <code class="inline">user_config</code>.</p>
+<p>Determines the node_type given the <code class="inline">automaton_config</code>.</p>
 <p>Returns <code class="inline">node_type</code>.</p>
 <h2 id="node_type/1-examples" class="section-heading">
   <a href="#node_type/1-examples" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
   Examples
 </h2>
 
-<pre><code class="nohighlight makeup elixir"><span class="gp unselectable">iex&gt; </span><span class="n">user_config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="3279858626-1">[</span><span class="ss">node_type</span><span class="p">:</span><span class="w"> </span><span class="ss">:selector</span><span class="p" data-group-id="3279858626-1">]</span><span class="w">
-</span><span class="gp unselectable">iex&gt; </span><span class="nc">Automaton.Config.Parser</span><span class="o">.</span><span class="n">node_type</span><span class="p" data-group-id="3279858626-2">(</span><span class="n">user_config</span><span class="p" data-group-id="3279858626-2">)</span><span class="w">
+<pre><code class="nohighlight makeup elixir"><span class="gp unselectable">iex&gt; </span><span class="n">automaton_config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="3279858626-1">[</span><span class="ss">node_type</span><span class="p">:</span><span class="w"> </span><span class="ss">:selector</span><span class="p" data-group-id="3279858626-1">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Automaton.Config.Parser</span><span class="o">.</span><span class="n">node_type</span><span class="p" data-group-id="3279858626-2">(</span><span class="n">automaton_config</span><span class="p" data-group-id="3279858626-2">)</span><span class="w">
 </span><span class="ss">:selector</span></code></pre>
   </section>
 </section>

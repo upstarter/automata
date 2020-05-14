@@ -4,6 +4,8 @@ defmodule Automata.Server do
   supervisor lean and mean, since it handles each `Automata.AutomatonSupervisor`,
   passing the user config, which flows through the entire tree. This
   data flow is a key abstraction for the agents.
+
+  TODO: Automata.Config.Parser to have handler Automata.Types.Typology handle
   """
   use GenServer
 
@@ -26,13 +28,13 @@ defmodule Automata.Server do
   def init(agents_config) do
     agents_config
     |> Enum.each(fn agent_config ->
-      send(self(), {:start_tree, agent_config})
+      send(self(), {:start_automaton_sup, agent_config})
     end)
 
     {:ok, agents_config}
   end
 
-  def handle_info({:start_tree, agent_config}, state) do
+  def handle_info({:start_automaton_sup, agent_config}, state) do
     {:ok, _tree_sup} =
       DynamicSupervisor.start_child(
         Automata.AutomataSupervisor,
