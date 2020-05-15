@@ -1,8 +1,11 @@
 defmodule Automata.AutomataSupervisor do
   @moduledoc """
-  The `Automata.Server` starts the `Automata.AutomatonSupervisor` under this
-  Supervisor. The :one_for_one restart strategy causes each
-  `Automata.AutomatonSupervisor` to be individally fault tolerant.
+  The `Automata.Server` starts the individual `Automata.AutomatonSupervisor`'s
+  under this Supervisor, which handles their lifecycle management.
+
+  The :one_for_one restart strategy causes each `Automata.AutomatonSupervisor`
+  to have their lifecycles individally managed (by the `Automata.Server`) in a
+  decentralized way with no central point of failure.
   """
   use DynamicSupervisor
 

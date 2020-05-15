@@ -1,9 +1,17 @@
 defmodule Automata.Server do
   @moduledoc """
-  Handles lifecycle of `Automata.AutomataSupervisor` as a delegate to keep the
-  supervisor lean and mean, since it handles each `Automata.AutomatonSupervisor`,
-  passing the user config, which flows through the entire tree. This
-  data flow is a key abstraction for the agents.
+  `Automata.Server` is a behavior which provides decentralized fault tolerance
+  lifecycle management for a collection of user-defined agents.
+
+  `Automata.AutomataSupervisor` delegates the logic for starting the
+  user-defined  agents (along with their supervisors) to this process to keep
+  the supervisor clean and thus more resilient to failure so it can do its
+  primary job, keeping all the automata alive with the life changing magic of
+  OTP supervision at the helm.
+
+  This is a primary boundary point between the high level automata control
+  policy layers and  the lower level (and highly variant) automaton control
+  policy layers. This is a good place for more layers (TBD).
 
   TODO: Automata.Config.Parser to have handler Automata.Types.Typology handle
   """
@@ -18,13 +26,18 @@ defmodule Automata.Server do
   end
 
   def status(automaton_name) do
-    Automata.AgentServer.status(automaton_name)
+    Automaton.AgentServer.status(automaton_name)
   end
 
   #############
   # Callbacks #
   #############
 
+  @doc """
+  The automata_config data flow is a key abstraction for meta-level control
+  of the agents. This is a good place for a boundary point, before starting the
+  individual agents one by one.
+  """
   def init(automata_config) do
     automata_config
     |> Enum.each(fn automaton_config ->

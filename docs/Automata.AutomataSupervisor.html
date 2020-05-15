@@ -8,7 +8,7 @@
     <meta name="project" content="automata v0.1.0">
     <title>Automata.AutomataSupervisor — automata v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
-    <script src="dist/sidebar_items-93ed374a40.js"></script>
+    <script src="dist/sidebar_items-7722a97926.js"></script>
       <script src="docs_config.js"></script>
     <script async src="dist/app-a225d03098e64fef431a.js"></script>
   </head>
@@ -68,9 +68,11 @@ Automata.AutomataSupervisor      </h1>
 
 
         <section id="moduledoc">
-<p>The <a href="Automata.Server.html"><code class="inline">Automata.Server</code></a> starts the <a href="Automata.AutomatonSupervisor.html"><code class="inline">Automata.AutomatonSupervisor</code></a> under this
-Supervisor. The :one_for_one restart strategy causes each
-<a href="Automata.AutomatonSupervisor.html"><code class="inline">Automata.AutomatonSupervisor</code></a> to be individally fault tolerant.</p>
+<p>The <a href="Automata.Server.html"><code class="inline">Automata.Server</code></a> starts the individual <a href="Automata.AutomatonSupervisor.html"><code class="inline">Automata.AutomatonSupervisor</code></a>&#39;s
+under this Supervisor, which handles their lifecycle management.</p>
+<p>The :one_for_one restart strategy causes each <a href="Automata.AutomatonSupervisor.html"><code class="inline">Automata.AutomatonSupervisor</code></a>
+to have their lifecycles individally managed (by the <a href="Automata.Server.html"><code class="inline">Automata.Server</code></a>) in a
+decentralized way with no central point of failure.</p>
         </section>
 
         <section id="summary" class="details-list">

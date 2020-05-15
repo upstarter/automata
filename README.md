@@ -41,17 +41,19 @@ where you are running a specific context/it block containing line 31.
 ## Implementation Overview
 
 ### Technologies
- [Elixir](https://elixir-lang.org/) & [OTP](https://en.wikipedia.org/wiki/Open_Telecom_Platform) provide the
- primitives for robust concurrent, fault-tolerant, highly available,
- self-healing distributed systems. Based on the Actor Model <sup>[1](#actorfootnote1)</sup>, a singular Elixir `Process`(Actor) embodies all 3 essential elements of computation: processing, storage, communications. It does so using very lightweight, isolated processes, each with its own stack, heap, communications facilities (mailbox), and garbage collector. The Erlang VM (BEAM), with pre-emptive scheduling, acts somewhat as on operating system on top of an operating system. Pre-emption is good because it prevents bad actors from starving the rest of the system, allowing for higher degrees of concurrency and better interactive performance.
+  - [Elixir](https://elixir-lang.org/) & [OTP](https://en.wikipedia.org/wiki/Open_Telecom_Platform) provide the
+  primitives for robust concurrent, fault-tolerant, highly available,
+  self-healing distributed systems. The main point of the Erlang model is an application that can be expected to run forever, as stated by the language designer. Talk about unstoppable software! [Read more](https://github.com/upstarter/automata/wiki/Features) about the many other benefits of Elixir and OTP.
 
-Heterogeneous agent types provide scientists and analysts a variety of graphical models, reinforcement learning  based, and percept based agent systems.
+  - Heterogeneous agent types equipped with environment and reasoning components provide scientists and analysts a selection of *graphical*, *reinforcement learning*, and *percept* based agent constellations for a variety of real world environments.
 
-#### The `Automata` framework has three distinct parts:
+  - [erlport](http://erlport.org)[ruster](https://github.com/rusterlium/rustler)
+
+#### The `Automata` framework has three abstract semantic layers:
 
 ##### **Environment** *(State Space Representations)*
 
-These are the map of the territory. Without a good map, any adventurer could easily get lost. To fit the information available to the problem at hand, we separate the data structures representing our models into distinct layers with well defined boundaries.
+These are the maps of the territory. Without a good map, any adventurer could easily get lost. To fit the information available to the problem at hand, we separate the data structures representing our models into distinct layers with well defined boundaries.
 
 ##### **Reasoning** *(Decision Making, Action Selection)*
 
@@ -59,7 +61,7 @@ All agents have some formulation of action selection, otherwise they would never
 
 ##### **Knowledge** *(Memory)*
 
-Interchangeable memory modules across short term working memory, blackboards, and databases.
+Interchangeable memory modules across short term working memory, blackboards, and knowledge bases.
 
 
 ##### [Read the wiki](https://github.com/upstarter/automata/wiki/Underlying-Technology) and/or the [docs](https://upstarter.github.io/automata/) for more about the technologies underlying `Automata`.
@@ -87,24 +89,26 @@ Note that the five aspects are orthogonal. The first two aspects deal with
 
 ## Features
 
-### Functional Features:
+### Functional Features
 
 #### User Defined Agents
-  - ##### Planned builtin and/or custom third-party agent types
 
-    - Graphical Model Based
-      - Behavior Trees
-      - Uninformed/Informed Search
-      - Probabilistic Graphical Models
-      - Bayesian Networks
+Planned builtin and/or custom third-party agent types include:
 
-    - Reinforcement Learning Based
-      - mdp, pomdp, dec-pomdp
-      - td-learning</dd>
-      - deep q-learning
+  - Graphical Model Based
+    - Behavior Trees
+    - Informed Search
+    - Generalized Probabilistic Models
+    - Bayesian Networks
 
-    - Cognitive / Percept Based
-      - c4 style percepts
+
+  - Reinforcement Learning Based
+    - mdp, pomdp, dec-pomdp
+    - deep learning
+
+
+  - Cognitive / Percept Based
+    - c4 style percepts
 
 #### A Concurrent, Scalable Blackboard Knowledge System
   > The central problem of artificial intelligence is how to express the knowledge needed in order to create intelligent behavior. — John McCarthy, M.I.T/Stanford Professor, Creator of Lisp
@@ -116,16 +120,16 @@ Note that the five aspects are orthogonal. The first two aspects deal with
   - Meta-level control to support agent interaction, any potential network reorganization. Meta-level control is the ability of an agent to optimize its long term performance by choosing and sequencing its deliberation and execution actions appropriately. <sup>[2](#mmlcfootnote1)</sup>
 
 
-#### Neuromorphic computing
+#### Neuromorphic Computing
   -  potentially bringing the code to the data rather than the other way around.
 
-### Performance Features:
+### Performance Features
   - [Learn more](https://github.com/upstarter/automata/wiki/Features) about the performance features of `Automata`
 
 ### Applications
 - Trading Systems
 - Patient Monitoring & Care Systems
-- Autonomous Pandemic Testing Drone Units
+- Pandemic Testing Drone Units
 - Swarm Intelligence / Distributed Robotics
 - Intelligent agents with soft realtime multi-dimensional sensory, perception, intuition, and action capabilities
 - Multi-Agent Reinforcement Learning
@@ -159,20 +163,23 @@ defmodule MyAutomaton do
     # heartbeat adaption as meta-level(automata) action, to be changed at runtime
     tick_freq: 50, # 50ms
 
-
     # excluded for execution nodes
     # list of child control/action(execution) nodes
     # these run in order for type :selector and :sequence nodes and in parallel
     # for type :parallel, and in a user-defined dynamic order for :priority
     children: [ChildAction1, ChildSequence1, ChildAction2]
 
-    # required for type :behavior_tree
-    # called every tick, must return status
+
+    @doc """
+    Required with `type: :behavior_tree`
+      - Called every tick, must return `{:ok, status}` or `{:error, reason}`
+
+    ## Reactively and Proactively Change the World
+      > ie.. effect the current environment in phases using
+        either *effectors* or via *communication* with
+        other agents and/or internal/external systems
+    """
     def update do
-      # reactively and proactively change the world
-      # ie.. effect the current environment in phases using
-      # either *effectors* or via *communication* with
-      # other agents & internal/external systems
       {:ok, status}
     end
 end
@@ -185,9 +192,7 @@ Below is a simplified hypothetical example of a `:behavior tree` sequence contro
 ![automata trader sequence diagram](sequence.png)
 
 ###### References
-1. <a name="actorfootnote1" href="https://arxiv.org/vc/arxiv/papers/1008/1008.1459v8.pdf">Actor Model</a>
-
-2. <a name="mmlcfootnote1" href="https://www.academia.edu/22145349/Multiagent_meta-level_control_for_radar_coordination">Multi-Agent Meta-Level Control</a>
+1. <a name="mmlcfootnote1" href="https://www.academia.edu/22145349/Multiagent_meta-level_control_for_radar_coordination">Multi-Agent Meta-Level Control</a>
 
 ## Installation
 

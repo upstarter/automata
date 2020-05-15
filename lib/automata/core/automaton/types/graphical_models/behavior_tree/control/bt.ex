@@ -2,6 +2,11 @@ defmodule Automaton.Types.BT do
   @moduledoc """
   Implements the Behavior Tree (BT) state space representation.
 
+  Behavior trees are a unique combination of state space representation
+  (graphical, or tree) and action-selection decision scheme with plugin
+  variations, where the user can choose or customize the logic for traversal and
+  lifecycle management.
+
   ## Notes:
     - Initialization and shutdown require extra care:
       - on_init: receive extra parameters, fetch data from blackboard/utility,  make requests, etc..
