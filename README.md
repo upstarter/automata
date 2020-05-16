@@ -47,10 +47,10 @@ where you are running a specific context/it block containing line 31.
 
   - Heterogeneous agent types equipped with environment and reasoning components provide scientists and analysts a selection of *graphical*, *reinforcement learning*, and *percept* based agent constellations for a variety of real world environments.
 
-  - How Elixir? Elixir for world class control and fault tolerance, while leveraging its growing inter-operability support libraries to compensate for lack of high dimensional linear solutions performance
-    - [julia](https://github.com/cjen07/julia_port)
-    - [rust](https://github.com/rusterlium/rustler)
+  - How Elixir? Elixir for world class control fault tolerance and distribution, while leveraging inter-operability to compensate for lack of high dimensional function approximation (linear solver) performance without NIF's:
     - [python](http://erlport.org)
+    - [julia + python](http://web.mit.edu/18.06/www/Spring17/Julia-intro.pdf)
+    - [rust](https://github.com/rusterlium/rustler) + [python](https://github.com/PyO3/pyo3)
 
 #### The `Automata` framework has three abstract semantic layers:
 
@@ -62,7 +62,7 @@ These are the maps of the territory. Without a good map, any adventurer could ea
 
 All agents have some formulation of action selection, otherwise they would never achieve their goals. To keep agent decision making as decoupled as possible, we introduce a layer which fits the mode of reasoning to the state space.
 
-##### **Knowledge** *(Memory)*
+##### **Knowledge** *(Memory, Local & Global Histories)*
 
 Interchangeable memory modules across short term working memory, blackboards, and knowledge bases.
 
