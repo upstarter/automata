@@ -19,7 +19,7 @@ See the current milestones [here](https://github.com/upstarter/automata/mileston
 
 ## Usage
 
-Testing is currently happening using the mock sequence in `worlds/mock_world_1/mock_automata/mock_seq_1.ex`. This is currently our canonical example of how to design a behavior tree (one type of `Automaton`), and *eventually* communicates with others that you define in `worlds/<mock_world>/<mock_automata>/<mock_bt>`.
+Testing is currently happening using the mock sequence in `worlds/mock_world_1/mock_automata/mock_seq_1.ex`. This is currently our canonical example of how to design a behavior tree (one type of `Automaton`), and *eventually* communicates with other heterogeneous agents that you define in `worlds/<mock_world>/<mock_automata>/<mock_automaton>`.
 
 Currently, you can run the mock sequence in an iex shell as follows:
 
@@ -47,7 +47,10 @@ where you are running a specific context/it block containing line 31.
 
   - Heterogeneous agent types equipped with environment and reasoning components provide scientists and analysts a selection of *graphical*, *reinforcement learning*, and *percept* based agent constellations for a variety of real world environments.
 
-  - [erlport](http://erlport.org)[ruster](https://github.com/rusterlium/rustler)
+  - How Elixir? Elixir for world class control and fault tolerance, while leveraging its growing inter-operability support libraries to compensate for lack of high dimensional linear solutions performance
+    - [julia](https://github.com/cjen07/julia_port)
+    - [rust](https://github.com/rusterlium/rustler)
+    - [python](http://erlport.org)
 
 #### The `Automata` framework has three abstract semantic layers:
 
