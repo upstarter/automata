@@ -24,4 +24,7 @@ Automata-*.tar
 
 # Dialyzer stuff
 .elixir_ls/
+priv/plts/*.plt
+priv/plts/*.plt.hash
+
 .DS_Store
