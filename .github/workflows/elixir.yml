@@ -1,10 +1,6 @@
 name: Elixir CI
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+on: [push, pull_request]
 
 jobs:
   build:
@@ -13,6 +9,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Dialyzer cache
+      uses: actions/cache@v1
+      env:
+        cache-name: cache-dialyzer-v1
+      with:
+        path: priv/plts
+        key: ${{ runner.os }}-build-${{ env.cache-name }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+          ${{ runner.os }}-build-
+          ${{ runner.os }}-
     - name: Setup elixir
       uses: actions/setup-elixir@v1
       with:
@@ -24,3 +31,5 @@ jobs:
       run: mix compile
     - name: Generate docs
       run: mix docs
+    - name: Run dialyzer
+      run: mix dialyzer --format dialyzer
