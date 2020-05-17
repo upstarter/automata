@@ -54,7 +54,6 @@ defmodule Automaton.Types.BT.CompositeServer do
                     parent: nil,
                     control: 0,
                     tick_freq: unquote(automaton_config[:tick_freq]) || 50,
-                    monitors: nil,
                     mfa: nil
         end
       end

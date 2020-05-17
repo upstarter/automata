@@ -2,8 +2,8 @@ defmodule Automaton.Types.BT.Config.Parser do
   @moduledoc """
   High level automaton_config parsing policy for BT specific user configs.
   """
-  alias Automaton.Types.BT.CompositeServer
-  alias Automaton.Types.BT.ComponentServer
+
+  alias Automaton.Types.BT.Config
 
   @doc """
   Determines the node_type given the `automaton_config`.
@@ -15,13 +15,14 @@ defmodule Automaton.Types.BT.Config.Parser do
       iex> Automaton.Config.Parser.node_type(automaton_config)
       :selector
   """
-  def node_type(automaton_config) do
-    c_types = CompositeServer.types()
-    cn_types = ComponentServer.types()
-    allowed_node_types = c_types ++ cn_types
-    node_type = automaton_config[:node_type]
+  def call(automaton_config) do
+    config = %Config{
+      node_type: automaton_config[:node_type]
+    }
 
-    unless Enum.member?(allowed_node_types, node_type), do: raise("NodeTypeError")
-    node_type
+    unless Enum.member?(config.allowed_node_types, config.node_type),
+      do: raise("NodeTypeError")
+
+    {config.node_type, config.c_types, config.cn_types}
   end
 end

@@ -13,6 +13,9 @@ defmodule Automata.Types.Typology do
   @doc """
   ## TODO: determine layers and levels of abstraction for builtins and custom support
     - ontology, environs, automata type specific protocols and/or behaviours.
+
+    Using information from the World, including the agent configurations, initialize
+    the state space representations according to the ontology.
   """
   def call(automata_config) do
     automata_config

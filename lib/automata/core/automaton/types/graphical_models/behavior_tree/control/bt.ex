@@ -24,9 +24,7 @@ defmodule Automaton.Types.BT do
   defmacro __using__(opts) do
     automaton_config = opts[:automaton_config]
 
-    c_types = CompositeServer.types()
-    cn_types = ComponentServer.types()
-    node_type = Parser.node_type(automaton_config)
+    {node_type, c_types, cn_types} = Parser.call(automaton_config)
 
     prepend =
       quote do

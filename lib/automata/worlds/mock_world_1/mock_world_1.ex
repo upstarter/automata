@@ -6,7 +6,7 @@ defmodule MockWorld1 do
     # highest level meta representations. Ontological working memory can be used
     # to describe meta-state & relations in the world in terms of perspectives,
     # constraints, representations(environs), types of contexts, classes of
-    # objects/agents and their types, objective & subjective representations
+    # objects/agents and their types, objective predictive representations
     ontology: [],
     # the initial stratified state space representations describing the world
     # ontology may determine the environment and vice versa, they are dependent

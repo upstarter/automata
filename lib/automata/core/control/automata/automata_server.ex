@@ -56,9 +56,10 @@ defmodule Automata.Server do
   end
 
   @doc """
-  Primary boundary point for interpretation, re-organization of automata level
-  control policy in order to determine automaton level control policies. We are
-  transforming from policy -> policies.
+  Primary boundary point for initial interpretation, re-organization of automata
+  level control policy in order to determine automaton level control policies.
+  We are transforming from control policy -> control policies using information
+  from the World, including the agent configurations.
   """
   def transform_automata_config(automata_config) do
     Automata.Types.Typology.call(automata_config)
