@@ -16,7 +16,7 @@ defmodule Automaton.Types.BT.Config.Parser do
       :selector
   """
 
-  @spec call([node_type: atom]) :: {}
+  @spec call([node_type: atom]) :: tuple
   def call(automaton_config) do
     config = %Config{
       node_type: automaton_config[:node_type]
