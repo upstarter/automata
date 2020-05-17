@@ -19,6 +19,8 @@ defmodule Automaton.Types.BT.Config.Parser do
       iex> Automaton.Config.Parser.node_type(automaton_config)
       :selector
   """
+
+ @spec node_type([node_type: atom]) :: atom
   def node_type(opts) do
     c_types = CompositeServer.types()
     cn_types = ComponentServer.types()
