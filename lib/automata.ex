@@ -13,6 +13,9 @@ defmodule Automata do
       MockWorld1: [
         # world_config: [name: "MockWorld1", mfa: {MockWorld1, :start_link, []}],
         automata_config: [
+          # these lists end up as `automaton_config` from  `Automata.Server` on in
+          # the supervision tree (past the `Automata` Control Boundary Layer and
+          # into the `Automaton` Control Boundary)
           [name: "Automaton1", mfa: {MockSeq1, :start_link, []}]
           # [name: "Automaton2", mfa: {MockSel1, :start_link, []}]
         ]

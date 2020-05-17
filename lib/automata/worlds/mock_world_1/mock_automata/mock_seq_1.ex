@@ -17,8 +17,7 @@ defmodule MockSeq1 do
 
     # for granular control of effectors
     mode: nil,
-    # for filtering, utility decisioning, prioritization
-    type: :behavior_tree,
+
     # the system heartbeat for this node(subtree), in milliseconds
     # the default is 50 ms (mimicing human brain perception cycle time)
     # heartbeat adaptation as meta-level(automata) action

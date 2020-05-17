@@ -48,7 +48,7 @@ where you are running a specific context/it block containing line 31.
   - Heterogeneous agent types equipped with environment and reasoning components provide scientists and analysts a selection of *graphical*, *reinforcement learning*, and *percept* based agent constellations for a variety of real world environments.
 
   - How Elixir? Elixir for world class control fault tolerance and distribution, while leveraging inter-operability to compensate for lack of high dimensional function approximation (linear solver) performance without NIF's:
-    - [python](http://erlport.org)
+    - [erlport](http://erlport.org) (python)
     - [julia + python](http://web.mit.edu/18.06/www/Spring17/Julia-intro.pdf)
     - [rust](https://github.com/rusterlium/rustler) + [python](https://github.com/PyO3/pyo3)
 
@@ -99,19 +99,19 @@ Note that the five aspects are orthogonal. The first two aspects deal with
 Planned builtin and/or custom third-party agent types include:
 
   - Graphical Model Based
-    - Behavior Trees
-    - Informed Search
-    - Generalized Probabilistic Models
-    - Bayesian Networks
+    - *Behavior Trees*
+    - *Informed Search*
+    - *Generalized Probabilistic Models*
+    - *Bayesian Networks*
 
 
   - Reinforcement Learning Based
-    - mdp, pomdp, dec-pomdp
-    - deep learning
+    - *mdp*, *pomdp*, *dec-pomdp*
+    - *deep learning*
 
 
   - Cognitive / Percept Based
-    - c4 style percepts
+    - *c4 style percepts*
 
 #### A Concurrent, Scalable Blackboard Knowledge System
   > The central problem of artificial intelligence is how to express the knowledge needed in order to create intelligent behavior. — John McCarthy, M.I.T/Stanford Professor, Creator of Lisp

@@ -11,7 +11,7 @@ defmodule Automata.Server do
 
   This is a primary boundary point between the high level automata control
   policy layers and  the lower level (and highly variant) automaton control
-  policy layers. This is a good place for more layers (TBD).
+  policy layers. The configured policies are handled by additional layers TBD.
 
   TODO: Automata.Config.Parser to have handler Automata.Types.Typology handle
   """
@@ -35,16 +35,33 @@ defmodule Automata.Server do
 
   @doc """
   The automata_config data flow is a key abstraction for meta-level control
-  of the agents. This is a good place for a boundary point, before starting the
+  of the agents. This is a primary internal boundary point, before starting the
   individual agents one by one.
+
+  The `automaton_config` data flow / signals transmitted from this point should
+  be untouched until hitting the `Automaton.AgentServer`, a key boundary point
+  providing lifecycle and argument interpretation before being expedited to the
+  `Automaton` to be interpreted at both the builtins and custom built level. The
+  layers pre, post, and in between are TBD, along with design of other potential
+  servers off of the `Automaton.AgentSupervisor`.
   """
   def init(automata_config) do
     automata_config
+    |> transform_automata_config()
     |> Enum.each(fn automaton_config ->
       send(self(), {:start_automaton_sup, automaton_config})
     end)
 
     {:ok, automata_config}
+  end
+
+  @doc """
+  Primary boundary point for interpretation, re-organization of automata level
+  control policy in order to determine automaton level control policies. We are
+  transforming from policy -> policies.
+  """
+  def transform_automata_config(automata_config) do
+    Automata.Types.Typology.call(automata_config)
   end
 
   def handle_info({:start_automaton_sup, automaton_config}, state) do
