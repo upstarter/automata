@@ -8,7 +8,7 @@
     <meta name="project" content="automata v0.1.0">
     <title>API Reference — automata v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
-    <script src="dist/sidebar_items-93ed374a40.js"></script>
+    <script src="dist/sidebar_items-7722a97926.js"></script>
       <script src="docs_config.js"></script>
     <script async src="dist/app-a225d03098e64fef431a.js"></script>
   </head>
@@ -93,29 +93,17 @@ automata      </a>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="Automata.AgentServer.html">Automata.AgentServer</a>
-  </div>
-    <div class="summary-synopsis"><p>Parses each individual agent config from the user and starts it under the <code class="inline">AgentSupervisor</code>.</p></div>
-</div>
-<div class="summary-row">
-  <div class="summary-signature">
-    <a href="Automata.AgentServer.State.html">Automata.AgentServer.State</a>
-  </div>
-</div>
-<div class="summary-row">
-  <div class="summary-signature">
     <a href="Automata.AutomataSupervisor.html">Automata.AutomataSupervisor</a>
   </div>
-    <div class="summary-synopsis"><p>The <a href="Automata.Server.html"><code class="inline">Automata.Server</code></a> starts the <a href="Automata.AutomatonSupervisor.html"><code class="inline">Automata.AutomatonSupervisor</code></a> under this
-Supervisor. The :one_for_one restart strategy causes each
-<a href="Automata.AutomatonSupervisor.html"><code class="inline">Automata.AutomatonSupervisor</code></a> to be individally fault tolerant.</p></div>
+    <div class="summary-synopsis"><p>The <a href="Automata.Server.html"><code class="inline">Automata.Server</code></a> starts the individual <a href="Automata.AutomatonSupervisor.html"><code class="inline">Automata.AutomatonSupervisor</code></a>&#39;s
+under this Supervisor, which handles their lifecycle management.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
     <a href="Automata.AutomatonSupervisor.html">Automata.AutomatonSupervisor</a>
   </div>
     <div class="summary-synopsis"><p>Runs as a child of <a href="Automata.AutomataSupervisor.html"><code class="inline">Automata.AutomataSupervisor</code></a> and supervises the
-<a href="Automata.AgentServer.html"><code class="inline">Automata.AgentServer</code></a> which is a delegate for lifecycle management of the user
+<a href="Automaton.AgentServer.html"><code class="inline">Automaton.AgentServer</code></a> which is a delegate for lifecycle management of the user
 agents and starts the agents under the <code class="inline">Automata.AgentSupervisor</code>.</p></div>
 </div>
 <div class="summary-row">
@@ -157,10 +145,8 @@ agents and starts the agents under the <code class="inline">Automata.AgentSuperv
   <div class="summary-signature">
     <a href="Automata.Server.html">Automata.Server</a>
   </div>
-    <div class="summary-synopsis"><p>Handles lifecycle of <a href="Automata.AutomataSupervisor.html"><code class="inline">Automata.AutomataSupervisor</code></a> as a delegate to keep the
-supervisor lean and mean, since it handles each <a href="Automata.AutomatonSupervisor.html"><code class="inline">Automata.AutomatonSupervisor</code></a>,
-passing the user config, which flows through the entire tree. This
-data flow is a key abstraction for the agents.</p></div>
+    <div class="summary-synopsis"><p><a href="#content"><code class="inline">Automata.Server</code></a> is a behavior which provides decentralized fault tolerance
+lifecycle management for a collection of user-defined agents.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
@@ -204,18 +190,30 @@ for the world.</p></div>
   <div class="summary-signature">
     <a href="Automaton.html">Automaton</a>
   </div>
-    <div class="summary-synopsis"><p>  This is the primary user boundary point control interface to the Automata
-  system. The configration parameters flow from the root through the
-  supervision tree on startup and are used to inject the appropriate modules
-  into the user-defined agents.</p></div>
+    <div class="summary-synopsis"><p>This is the primary user boundary point control interface to the Automata
+system. The <code class="inline">automaton_config</code> parameters flow from the root through the
+supervision tree on startup and are interpreted by the Typology system to inject
+the appropriate modules into the user-defined agents.</p></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Automaton.AgentServer.html">Automaton.AgentServer</a>
+  </div>
+    <div class="summary-synopsis"><p>Parses each individual agent config from the user and starts it under the <code class="inline">AgentSupervisor</code>.</p></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Automaton.AgentServer.State.html">Automaton.AgentServer.State</a>
+  </div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
     <a href="Automaton.AgentSupervisor.html">Automaton.AgentSupervisor</a>
   </div>
     <div class="summary-synopsis"><p>Directly supervises the lifecycle of the user-defined agents (behavior trees).
-The <code class="inline">Automaton.AgentServer</code> starts them under this process. It is the parent
-and root of the user-defined composite.</p></div>
+The <a href="Automaton.AgentServer.html"><code class="inline">Automaton.AgentServer</code></a> starts them under this process. It is the parent
+and root of the user-defined composite, making it the boundary point between
+the high level Automaton policy control system and the user defined control.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
@@ -263,11 +261,11 @@ choice of action be modified to allow the agent to learn from experience?</p></d
   <div class="summary-signature">
     <a href="Automaton.Types.BT.Behavior.html">Automaton.Types.BT.Behavior</a>
   </div>
-    <div class="summary-synopsis"><p>  An Automaton.Types.BT.Behavior is an abstract interface for composites and
-  components that can be activated, run, and deactivated. Actions(Execution
-  Nodes) provide specific implementations of this interface. Branches in the
-  tree can be thought of as high level behaviors, heirarchically combining
-  smaller behaviors to provide more complex and interesting behaviors.</p></div>
+    <div class="summary-synopsis"><p>An Automaton.Types.BT.Behavior is an abstract interface for composites and
+components that can be activated, run, and deactivated. Actions(Execution
+Nodes) provide specific implementations of this interface. Branches in the
+tree can be thought of as high level behaviors, heirarchically combining
+smaller behaviors to provide more complex and interesting behaviors.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
@@ -330,8 +328,7 @@ All components are children of a composite.</p></div>
   <div class="summary-signature">
     <a href="Automaton.Types.BT.Config.Parser.html">Automaton.Types.BT.Config.Parser</a>
   </div>
-    <div class="summary-synopsis"><p>Purely Functional high level parsing policy for BT specific
-config from <code class="inline">automaton_config</code>.</p></div>
+    <div class="summary-synopsis"><p>High level automaton_config parsing policy for BT specific user configs.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">

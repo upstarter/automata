@@ -2,7 +2,8 @@ defmodule Automaton.AgentSupervisor do
   @moduledoc """
   Directly supervises the lifecycle of the user-defined agents (behavior trees).
   The `Automaton.AgentServer` starts them under this process. It is the parent
-  and root of the user-defined composite.
+  and root of the user-defined composite, making it the boundary point between
+  the high level Automaton policy control system and the user defined control.
   """
   use DynamicSupervisor
 

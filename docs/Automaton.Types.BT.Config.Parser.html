@@ -8,7 +8,7 @@
     <meta name="project" content="automata v0.1.0">
     <title>Automaton.Types.BT.Config.Parser — automata v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
-    <script src="dist/sidebar_items-93ed374a40.js"></script>
+    <script src="dist/sidebar_items-7722a97926.js"></script>
       <script src="docs_config.js"></script>
     <script async src="dist/app-a225d03098e64fef431a.js"></script>
   </head>
@@ -68,18 +68,7 @@ Automaton.Types.BT.Config.Parser      </h1>
 
 
         <section id="moduledoc">
-<p>Purely Functional high level parsing policy for BT specific
-config from <code class="inline">automaton_config</code>.</p>
-<h2 id="module-user-provided-state-space-parsing-interpretation-boundary-point" class="section-heading">
-  <a href="#module-user-provided-state-space-parsing-interpretation-boundary-point" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
-  User Provided State Space parsing &amp; interpretation boundary point
-</h2>
-
-<h2 id="module-delegate-provided-user-input-to-modules-corresponding-to-config-state-spaces" class="section-heading">
-  <a href="#module-delegate-provided-user-input-to-modules-corresponding-to-config-state-spaces" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
-  Delegate provided user input to modules corresponding to config state spaces
-</h2>
-
+<p>High level automaton_config parsing policy for BT specific user configs.</p>
         </section>
 
         <section id="summary" class="details-list">
@@ -96,7 +85,7 @@ config from <code class="inline">automaton_config</code>.</p>
     </h2>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#node_type/1">node_type(opts)</a>
+    <a href="#node_type/1">node_type(automaton_config)</a>
   </div>
     <div class="summary-synopsis"><p>Determines the node_type given the <code class="inline">automaton_config</code>.</p></div>
 </div>
@@ -117,7 +106,7 @@ Functions          </h1>
       <span class="icon-link" aria-hidden="true"></span>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature">node_type(opts)</h1>
+    <h1 class="signature">node_type(automaton_config)</h1>
   </div>
   <section class="docstring">
 <p>Determines the node_type given the <code class="inline">automaton_config</code>.</p>
@@ -127,8 +116,8 @@ Functions          </h1>
   Examples
 </h2>
 
-<pre><code class="nohighlight makeup elixir"><span class="gp unselectable">iex&gt; </span><span class="n">automaton_config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="6513536949-1">[</span><span class="ss">node_type</span><span class="p">:</span><span class="w"> </span><span class="ss">:selector</span><span class="p" data-group-id="6513536949-1">]</span><span class="w">
-</span><span class="gp unselectable">iex&gt; </span><span class="nc">Automaton.Config.Parser</span><span class="o">.</span><span class="n">node_type</span><span class="p" data-group-id="6513536949-2">(</span><span class="n">automaton_config</span><span class="p" data-group-id="6513536949-2">)</span><span class="w">
+<pre><code class="nohighlight makeup elixir"><span class="gp unselectable">iex&gt; </span><span class="n">automaton_config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="7160394647-1">[</span><span class="ss">node_type</span><span class="p">:</span><span class="w"> </span><span class="ss">:selector</span><span class="p" data-group-id="7160394647-1">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Automaton.Config.Parser</span><span class="o">.</span><span class="n">node_type</span><span class="p" data-group-id="7160394647-2">(</span><span class="n">automaton_config</span><span class="p" data-group-id="7160394647-2">)</span><span class="w">
 </span><span class="ss">:selector</span></code></pre>
   </section>
 </section>

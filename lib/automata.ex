@@ -7,14 +7,15 @@ defmodule Automata do
   def start(_type, _args) do
     # TODO: recursively autoload all the user-defined worlds from the worlds/ directory tree
     # to build the worlds_config data structure ie. config for each agent from world config
-    # which defines which automata are operating in that world.
+    # which defines which automata which are operating in that world.
 
     worlds_config = [
       MockWorld1: [
         # world_config: [name: "MockWorld1", mfa: {MockWorld1, :start_link, []}],
-
-        # the user agents for the world are started in `lib/core/control/automaton/agent_server.ex`
         automata_config: [
+          # these lists end up as `automaton_config` from  `Automata.Server` on in
+          # the supervision tree (past the `Automata` Control Boundary Layer and
+          # into the `Automaton` Control Boundary)
           [name: "Automaton1", mfa: {MockSeq1, :start_link, []}]
           # [name: "Automaton2", mfa: {MockSel1, :start_link, []}]
         ]
@@ -34,10 +35,10 @@ defmodule Automata do
   end
 
   def start_world([{:automata_config, automata_config} | _rest]) do
-    start_agents(automata_config)
+    start_automata(automata_config)
   end
 
-  def start_agents(automata_config) do
+  def start_automata(automata_config) do
     Automata.Supervisor.start_link(automata_config)
   end
 

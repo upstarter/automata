@@ -1,4 +1,4 @@
-dist/search_items-00aca6f299.js
+dist/search_items-288bc7de90.js
 dist/app-a225d03098e64fef431a.js
 dist/elixir-0ab8a6a80ebaaa287431.css
 dist/erlang-bd206729da4d0d280293.css
@@ -6,7 +6,7 @@ dist/html/fonts/icomoon.eot
 dist/html/fonts/icomoon.svg
 dist/html/fonts/icomoon.ttf
 dist/html/fonts/icomoon.woff
-dist/sidebar_items-93ed374a40.js
+dist/sidebar_items-7722a97926.js
 api-reference.html
 readme.html
 contributing.html
@@ -15,8 +15,6 @@ search.html
 Activation.html
 Automata.html
 Automata.ActionSelect.html
-Automata.AgentServer.html
-Automata.AgentServer.State.html
 Automata.AutomataSupervisor.html
 Automata.AutomatonSupervisor.html
 Automata.Blackboard.html
@@ -29,6 +27,8 @@ Automata.Types.Typology.html
 Automata.Utility.html
 Automata.World.html
 Automaton.html
+Automaton.AgentServer.html
+Automaton.AgentServer.State.html
 Automaton.AgentSupervisor.html
 Automaton.Blackboard.html
 Automaton.Reasoning.html

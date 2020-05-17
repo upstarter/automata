@@ -1,7 +1,7 @@
 defmodule Automata.AutomatonSupervisor do
   @moduledoc """
   Runs as a child of `Automata.AutomataSupervisor` and supervises the
-  `Automata.AgentServer` which is a delegate for lifecycle management of the user
+  `Automaton.AgentServer` which is a delegate for lifecycle management of the user
   agents and starts the agents under the `Automata.AgentSupervisor`.
 
   This supervisor uses strategy `:one_for_all` to ensure that errors restart the
@@ -20,7 +20,7 @@ defmodule Automata.AutomatonSupervisor do
     ]
 
     children = [
-      {Automata.AgentServer, [self(), automaton_config]}
+      {Automaton.AgentServer, [self(), automaton_config]}
     ]
 
     Supervisor.init(children, opts)

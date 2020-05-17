@@ -1,4 +1,4 @@
-defmodule Automata.AgentServer do
+defmodule Automaton.AgentServer do
   @moduledoc """
   Parses each individual agent config from the user and starts it under the `AgentSupervisor`.
   """

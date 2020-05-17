@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.21.3">
     <meta name="project" content="automata v0.1.0">
-    <title>Automata.AutomatonSupervisor — automata v0.1.0</title>
+    <title>Automaton.AgentServer — automata v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
     <script src="dist/sidebar_items-7722a97926.js"></script>
       <script src="docs_config.js"></script>
@@ -64,15 +64,11 @@ automata      </a>
 
       <h1>
         <small class="app-vsn">automata v0.1.0</small>
-Automata.AutomatonSupervisor      </h1>
+Automaton.AgentServer      </h1>
 
 
         <section id="moduledoc">
-<p>Runs as a child of <a href="Automata.AutomataSupervisor.html"><code class="inline">Automata.AutomataSupervisor</code></a> and supervises the
-<a href="Automaton.AgentServer.html"><code class="inline">Automaton.AgentServer</code></a> which is a delegate for lifecycle management of the user
-agents and starts the agents under the <code class="inline">Automata.AgentSupervisor</code>.</p>
-<p>This supervisor uses strategy <code class="inline">:one_for_all</code> to ensure that errors restart the
-entire supervision tree including the <a href="Automaton.AgentServer.html"><code class="inline">Automaton.AgentServer</code></a>.</p>
+<p>Parses each individual agent config from the user and starts it under the <code class="inline">AgentSupervisor</code>.</p>
         </section>
 
         <section id="summary" class="details-list">
@@ -95,13 +91,23 @@ entire supervision tree including the <a href="Automaton.AgentServer.html"><code
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#init/1">init(automaton_config)</a>
+    <a href="#init/1">init(list)</a>
   </div>
-    <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/elixir/Supervisor.html#c:init/1"><code class="inline">Supervisor.init/1</code></a>.</p></div>
+    <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/elixir/GenServer.html#c:init/1"><code class="inline">GenServer.init/1</code></a>.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#start_link/1">start_link(automaton_config)</a>
+    <a href="#init/2">init(list, state)</a>
+  </div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#start_link/1">start_link(list)</a>
+  </div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#status/1">status(tree_name)</a>
   </div>
 </div>
   </div>
@@ -134,10 +140,21 @@ Functions          </h1>
       <span class="icon-link" aria-hidden="true"></span>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature">init(automaton_config)</h1>
+    <h1 class="signature">init(list)</h1>
   </div>
   <section class="docstring">
-<p>Callback implementation for <a href="https://hexdocs.pm/elixir/Supervisor.html#c:init/1"><code class="inline">Supervisor.init/1</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/elixir/GenServer.html#c:init/1"><code class="inline">GenServer.init/1</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="init/2">
+  <div class="detail-header">
+    <a href="#init/2" class="detail-link" title="Link to this function">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature">init(list, state)</h1>
+  </div>
+  <section class="docstring">
   </section>
 </section>
 <section class="detail" id="start_link/1">
@@ -146,7 +163,18 @@ Functions          </h1>
       <span class="icon-link" aria-hidden="true"></span>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature">start_link(automaton_config)</h1>
+    <h1 class="signature">start_link(list)</h1>
+  </div>
+  <section class="docstring">
+  </section>
+</section>
+<section class="detail" id="status/1">
+  <div class="detail-header">
+    <a href="#status/1" class="detail-link" title="Link to this function">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature">status(tree_name)</h1>
   </div>
   <section class="docstring">
   </section>

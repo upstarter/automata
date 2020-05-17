@@ -1,15 +1,15 @@
 defmodule Automaton.Types.BT.Behavior do
   @moduledoc """
-    An Automaton.Types.BT.Behavior is an abstract interface for composites and
-    components that can be activated, run, and deactivated. Actions(Execution
-    Nodes) provide specific implementations of this interface. Branches in the
-    tree can be thought of as high level behaviors, heirarchically combining
-    smaller behaviors to provide more complex and interesting behaviors.
+  An Automaton.Types.BT.Behavior is an abstract interface for composites and
+  components that can be activated, run, and deactivated. Actions(Execution
+  Nodes) provide specific implementations of this interface. Branches in the
+  tree can be thought of as high level behaviors, heirarchically combining
+  smaller behaviors to provide more complex and interesting behaviors.
 
-    Note: there is a bunch of placeholder stuff in here right now and needs
-    thought and cleanup. The specs for the callbacks are not accurate, just
-    needed something that compiled and ran. Needs more thought and attention as
-    the design process continues.
+  Note: there is a bunch of placeholder stuff in here right now and needs
+  thought and cleanup. The specs for the callbacks are not accurate, just
+  needed something that compiled and ran. Needs more thought and attention as
+  the design process continues.
   """
 
   # these need serious help, just placeholders for now
