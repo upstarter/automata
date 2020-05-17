@@ -11,6 +11,7 @@ defmodule Automaton.Types.Typology do
   @types [:behavior_tree]
   def types, do: @types
 
+  @spec call(nonempty_list()) :: nonempty_list()
   def call(automaton_config) do
     type =
       automaton_config[:type]
