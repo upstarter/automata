@@ -13,7 +13,7 @@ defmodule Automaton.Types.Typology do
 
   def call(automaton_config) do
     type =
-      automaton_config
+      automaton_config[:type]
       |> case do
         :behavior_tree ->
           quote do: use(BT, automaton_config: unquote(automaton_config))
