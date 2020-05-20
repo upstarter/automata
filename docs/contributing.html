@@ -101,17 +101,21 @@ automata      </a>
 <p>Definitely check out the <a href="https://github.com/upstarter/automata/wiki/Goals">Goals</a> on the wiki. This is currently the focal point for the project defining short, medium, and long term problem solving goals across project dimensions. New issues should come from solving these problems &quot;in goal form&quot;. Regular brain-storming and question-storming should be conducted with the end game in mind.</p>
 <p>See <a href="https://github.com/upstarter/automata/wiki/How-it-works">How it works</a> for a high level view of the project, and check out the <a href="https://upstarter.github.io/automata/">docs</a>.</p>
 <p>See <a href="https://github.com/upstarter/automata/wiki/Future-Directions">Future Directions</a> for more on what&#39;s in the works.</p>
-<h3 id="special-notes-for-automata-developers" class="section-heading">
-  <a href="#special-notes-for-automata-developers" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
-  Special notes for Automata developers
-</h3>
-
-<ul>
-<li>See <a href="https://hexdocs.pm/elixir/writing-documentation.html#recommendations">ex_doc recommendations</a> for documentation guidelines.
+<h5><a name="help"></a>Where to ask for help:</h5>
+<ol>
+<li><a href="https://join.slack.com/t/automata-project/shared_invite/zt-e4fqrmo4-7ujuZwzXHNCGVrZb1aVZmA">The Automata Project Slack Channel</a>
 </li>
-<li>DEBUGGING NOTE: anytime you see an error or warning that is in one of the mock sequence modules, it probably isn&#39;t. It is probably in one of the modules in core that get injected into them. This is the nature of meta-programming debugging. If anyone with experience debugging a heavily meta-programmed application, please chime in.
+<li><a href="https://elixirforum.com/">Elixir Forum</a>
 </li>
-</ul>
+<li><a href="https://elixir-slackin.herokuapp.com/">Elixir Slack Channel</a>
+</li>
+<li><a href="https://stackoverflow.com/questions/tagged/elixir">Stack Overflow</a>
+</li>
+<li><a href="https://www.reddit.com/r/elixir/">Reddit</a>
+</li>
+<li><a href="https://www.quora.com">Quora</a>
+</li>
+</ol>
 <h2 id="engineering-standards-best-practices" class="section-heading">
   <a href="#engineering-standards-best-practices" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
   Engineering Standards &amp; Best Practices
@@ -169,43 +173,18 @@ automata      </a>
 <li>Unit tests test the unit of behavior, not the unit of implementation. Changing the implementation, without changing the behavior or having to change any of your tests is the goal, although not always possible. So where possible, treat your test objects as black boxes, testing through the public API without calling private methods or tinkering with state.
 </li>
 </ol>
-<h5><a name="help"></a>Where to ask for help:</h5>
-<ol>
-<li><a href="https://join.slack.com/t/automata-project/shared_invite/zt-e4fqrmo4-7ujuZwzXHNCGVrZb1aVZmA">The Automata Project Slack Channel</a>
+<h3 id="special-notes-for-automata-developers" class="section-heading">
+  <a href="#special-notes-for-automata-developers" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Special notes for Automata developers
+</h3>
+
+<ul>
+<li>See <a href="https://hexdocs.pm/elixir/writing-documentation.html#recommendations">ex_doc recommendations</a> for documentation guidelines.
 </li>
-<li><a href="https://elixirforum.com/">Elixir Forum</a>
+<li>DEBUGGING NOTE: anytime you see an error or warning that is in one of the mock sequence modules, it probably isn&#39;t. It is probably in one of the modules in core that get injected into them. This is the nature of meta-programming debugging. If anyone with experience debugging a heavily meta-programmed application, please chime in.
 </li>
-<li><a href="https://elixir-slackin.herokuapp.com/">Elixir Slack Channel</a>
-</li>
-<li><a href="https://stackoverflow.com/questions/tagged/elixir">Stack Overflow</a>
-</li>
-<li><a href="https://www.reddit.com/r/elixir/">Reddit</a>
-</li>
-<li><a href="https://www.quora.com">Quora</a>
-</li>
-<li><a href="https://www.discordapp.com">Discord</a>
-</li>
-</ol>
+</ul>
 <h4><a href="https://www.apache.org/foundation/policies/conduct">Code of Conduct</a></h4>
-<h6>The Blackboard</h6>
-<ul>
-<li><p>Global Blackboard</p>
-<ul>
-<li>all nodes share this knowledge store
-</li>
-<li>the automata will act upon seeing certain data changes in the global blackboard
-</li>
-</ul>
-</li>
-<li><p>Individual Node Blackboards</p>
-<ul>
-<li>node blackboards use protected tables for knowledge sharing – all processes can read, one process has write access
-</li>
-<li>the automaton will act upon seeing certain data changes in the global blackboard
-</li>
-</ul>
-</li>
-</ul>
       <footer class="footer">
         <p>
           <span class="line">

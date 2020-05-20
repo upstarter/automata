@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.21.3">
     <meta name="project" content="automata v0.1.0">
-    <title>Automaton.Types.Typology — automata v0.1.0</title>
+    <title>Automata.ACL — automata v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
-    <script src="dist/sidebar_items-584d3af45c.js"></script>
+    <script src="dist/sidebar_items-c9906118b8.js"></script>
       <script src="docs_config.js"></script>
     <script async src="dist/app-a225d03098e64fef431a.js"></script>
   </head>
@@ -64,19 +64,9 @@ automata      </a>
 
       <h1>
         <small class="app-vsn">automata v0.1.0</small>
-Automaton.Types.Typology      </h1>
+Automata.ACL      </h1>
 
 
-        <section id="moduledoc">
-<h2 id="module-types-are-builtin-state-space-representations" class="section-heading">
-  <a href="#module-types-are-builtin-state-space-representations" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
-  Types are builtin state space representations.
-</h2>
-
-<p>Typology is for interpretation of what state space representation to use based
-on user configuration. Each type has a <code class="inline">config/</code> dir to handle user
-config parsing and interpretation specific to its domain.</p>
-        </section>
 
         <section id="summary" class="details-list">
           <h1 class="section-heading">
@@ -92,12 +82,12 @@ config parsing and interpretation specific to its domain.</p>
     </h2>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#call/1">call(automaton_config)</a>
+    <a href="#abstract_changeset/2">abstract_changeset(base, raw_map)</a>
   </div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#types/0">types()</a>
+    <a href="#abstract_new/2">abstract_new(raw_map, struct_module)</a>
   </div>
 </div>
   </div>
@@ -111,27 +101,24 @@ config parsing and interpretation specific to its domain.</p>
             </a>
 Functions          </h1>
           <div class="functions-list">
-<section class="detail" id="call/1">
+<section class="detail" id="abstract_changeset/2">
   <div class="detail-header">
-    <a href="#call/1" class="detail-link" title="Link to this function">
+    <a href="#abstract_changeset/2" class="detail-link" title="Link to this function">
       <span class="icon-link" aria-hidden="true"></span>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature">call(automaton_config)</h1>
-      <div class="specs">
-          <pre>call([...]) :: [...]</pre>
-      </div>
+    <h1 class="signature">abstract_changeset(base, raw_map)</h1>
   </div>
   <section class="docstring">
   </section>
 </section>
-<section class="detail" id="types/0">
+<section class="detail" id="abstract_new/2">
   <div class="detail-header">
-    <a href="#types/0" class="detail-link" title="Link to this function">
+    <a href="#abstract_new/2" class="detail-link" title="Link to this function">
       <span class="icon-link" aria-hidden="true"></span>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature">types()</h1>
+    <h1 class="signature">abstract_new(raw_map, struct_module)</h1>
   </div>
   <section class="docstring">
   </section>

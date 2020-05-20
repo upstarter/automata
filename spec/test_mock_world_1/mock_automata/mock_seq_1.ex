@@ -6,7 +6,7 @@
 # restarts. Users define error handling outside generic BT capabilities.
 require Integer
 
-defmodule MockSeq1 do
+defmodule TestMockSeq1 do
   use Automaton,
     # required
     type: :behavior_tree,
@@ -16,7 +16,7 @@ defmodule MockSeq1 do
     node_type: :sequence,
 
     # for granular control of effectors
-    # mode: nil,
+    mode: nil,
 
     # the system heartbeat for this node(subtree), in milliseconds
     # the default is 50 ms (mimicing human brain perception cycle time)
@@ -27,17 +27,17 @@ defmodule MockSeq1 do
     # not included for action nodes list of child control/execution nodes
     # these run in order for type :selector and :sequence nodes and in parallel for
     # type :parallel
-    children: [Seq1, SeqComposite1, Seq4]
+    children: [TestSeq1, TestSeqComposite1, TestSeq4]
 end
 
-defmodule SeqComposite1 do
+defmodule TestSeqComposite1 do
   use Automaton,
     node_type: :sequence,
     tick_freq: 50,
-    children: [Seq2, Seq3]
+    children: [TestSeq2, TestSeq3]
 end
 
-defmodule Seq1 do
+defmodule TestSeq1 do
   use Automaton,
     node_type: :action
 
@@ -47,7 +47,7 @@ defmodule Seq1 do
     new_state = %{state | control: state.control + 1, status: :bh_running}
 
     IO.inspect([
-      "Seq1 update ##{new_state.control}",
+      "TestSeq1 update ##{new_state.control}",
       String.slice(Integer.to_string(:os.system_time(:millisecond)), -5..-1)
     ])
 
@@ -55,7 +55,7 @@ defmodule Seq1 do
   end
 end
 
-defmodule Seq2 do
+defmodule TestSeq2 do
   use Automaton,
     node_type: :action
 
@@ -65,7 +65,7 @@ defmodule Seq2 do
     new_state = %{state | control: state.control + 1, status: :bh_running}
 
     IO.inspect([
-      "Seq2 update ##{new_state.control}",
+      "TestSeq2 update ##{new_state.control}",
       String.slice(Integer.to_string(:os.system_time(:millisecond)), -5..-1)
     ])
 
@@ -73,7 +73,7 @@ defmodule Seq2 do
   end
 end
 
-defmodule Seq3 do
+defmodule TestSeq3 do
   use Automaton,
     node_type: :action
 
@@ -83,7 +83,7 @@ defmodule Seq3 do
     new_state = %{state | control: state.control + 1, status: :bh_running}
 
     IO.inspect([
-      "Seq3 update ##{new_state.control}",
+      "TestSeq3 update ##{new_state.control}",
       String.slice(Integer.to_string(:os.system_time(:millisecond)), -5..-1)
     ])
 
@@ -91,7 +91,7 @@ defmodule Seq3 do
   end
 end
 
-defmodule Seq4 do
+defmodule TestSeq4 do
   use Automaton,
     node_type: :action
 
@@ -101,7 +101,7 @@ defmodule Seq4 do
     new_state = %{state | control: state.control + 1, status: :bh_running}
 
     IO.inspect([
-      "Seq4 update ##{new_state.control}",
+      "TestSeq4 update ##{new_state.control}",
       String.slice(Integer.to_string(:os.system_time(:millisecond)), -5..-1)
     ])
 
