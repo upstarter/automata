@@ -11,15 +11,17 @@ defmodule Automaton.Types.Typology do
   @types [:behavior_tree]
   def types, do: @types
 
+  @spec call(nonempty_list()) :: nonempty_list()
   def call(automaton_config) do
     type =
-      cond do
-        automaton_config[:type] == :behavior_tree ->
+      automaton_config[:type]
+      |> case do
+        :behavior_tree ->
           quote do: use(BT, automaton_config: unquote(automaton_config))
 
         # TODO: need this for children.
         # use parent type? raise error?
-        automaton_config[:type] == nil ->
+        nil ->
           quote do: use(BT, automaton_config: unquote(automaton_config))
       end
 

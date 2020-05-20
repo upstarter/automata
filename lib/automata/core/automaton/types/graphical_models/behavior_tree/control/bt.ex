@@ -38,6 +38,9 @@ defmodule Automaton.Types.BT do
 
         Enum.member?(cn_types, node_type) ->
           quote do: use(ComponentServer, automaton_config: unquote(automaton_config))
+
+        # What should the default value be if first two conditions fail?
+
       end
 
     control =

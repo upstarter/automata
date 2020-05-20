@@ -15,6 +15,8 @@ defmodule Automaton.Types.BT.Config.Parser do
       iex> Automaton.Config.Parser.node_type(automaton_config)
       :selector
   """
+
+  @spec call([node_type: atom]) :: tuple
   def call(automaton_config) do
     config = %Config{
       node_type: automaton_config[:node_type]
@@ -22,7 +24,6 @@ defmodule Automaton.Types.BT.Config.Parser do
 
     unless Enum.member?(config.allowed_node_types, config.node_type),
       do: raise("NodeTypeError")
-
     {config.node_type, config.c_types, config.cn_types}
   end
 end
