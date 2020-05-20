@@ -12,7 +12,7 @@ jobs:
     - name: Dialyzer cache
       uses: actions/cache@v1
       env:
-        cache-name: cache-dialyzer-v1
+        cache-name: cache-dialyzer-v2
       with:
         path: priv/plts
         key: ${{ runner.os }}-build-${{ env.cache-name }}
