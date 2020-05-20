@@ -8,7 +8,7 @@
     <meta name="project" content="automata v0.1.0">
     <title>Automaton.Types.BT.Config.Parser — automata v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
-    <script src="dist/sidebar_items-7722a97926.js"></script>
+    <script src="dist/sidebar_items-584d3af45c.js"></script>
       <script src="docs_config.js"></script>
     <script async src="dist/app-a225d03098e64fef431a.js"></script>
   </head>
@@ -85,7 +85,7 @@ Automaton.Types.BT.Config.Parser      </h1>
     </h2>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#node_type/1">node_type(automaton_config)</a>
+    <a href="#call/1">call(automaton_config)</a>
   </div>
     <div class="summary-synopsis"><p>Determines the node_type given the <code class="inline">automaton_config</code>.</p></div>
 </div>
@@ -100,24 +100,27 @@ Automaton.Types.BT.Config.Parser      </h1>
             </a>
 Functions          </h1>
           <div class="functions-list">
-<section class="detail" id="node_type/1">
+<section class="detail" id="call/1">
   <div class="detail-header">
-    <a href="#node_type/1" class="detail-link" title="Link to this function">
+    <a href="#call/1" class="detail-link" title="Link to this function">
       <span class="icon-link" aria-hidden="true"></span>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature">node_type(automaton_config)</h1>
+    <h1 class="signature">call(automaton_config)</h1>
+      <div class="specs">
+          <pre>call([{:node_type, <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>()}]) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">tuple</a>()</pre>
+      </div>
   </div>
   <section class="docstring">
 <p>Determines the node_type given the <code class="inline">automaton_config</code>.</p>
 <p>Returns <code class="inline">node_type</code>.</p>
-<h2 id="node_type/1-examples" class="section-heading">
-  <a href="#node_type/1-examples" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+<h2 id="call/1-examples" class="section-heading">
+  <a href="#call/1-examples" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
   Examples
 </h2>
 
-<pre><code class="nohighlight makeup elixir"><span class="gp unselectable">iex&gt; </span><span class="n">automaton_config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="7160394647-1">[</span><span class="ss">node_type</span><span class="p">:</span><span class="w"> </span><span class="ss">:selector</span><span class="p" data-group-id="7160394647-1">]</span><span class="w">
-</span><span class="gp unselectable">iex&gt; </span><span class="nc">Automaton.Config.Parser</span><span class="o">.</span><span class="n">node_type</span><span class="p" data-group-id="7160394647-2">(</span><span class="n">automaton_config</span><span class="p" data-group-id="7160394647-2">)</span><span class="w">
+<pre><code class="nohighlight makeup elixir"><span class="gp unselectable">iex&gt; </span><span class="n">automaton_config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="5596232293-1">[</span><span class="ss">node_type</span><span class="p">:</span><span class="w"> </span><span class="ss">:selector</span><span class="p" data-group-id="5596232293-1">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Automaton.Config.Parser</span><span class="o">.</span><span class="n">node_type</span><span class="p" data-group-id="5596232293-2">(</span><span class="n">automaton_config</span><span class="p" data-group-id="5596232293-2">)</span><span class="w">
 </span><span class="ss">:selector</span></code></pre>
   </section>
 </section>

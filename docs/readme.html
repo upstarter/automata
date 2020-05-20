@@ -8,7 +8,7 @@
     <meta name="project" content="automata v0.1.0">
     <title>ReadMe — automata v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
-    <script src="dist/sidebar_items-7722a97926.js"></script>
+    <script src="dist/sidebar_items-584d3af45c.js"></script>
       <script src="docs_config.js"></script>
     <script async src="dist/app-a225d03098e64fef431a.js"></script>
   </head>
@@ -64,7 +64,7 @@ automata      </a>
 
 <h1>⦿    | Automata | ⦿  ⦿   ⦿   ⦿</h1>
 <h4>Spawn a <a href="http://web.stanford.edu/class/ee380/Abstracts/190123.html">system</a> of concurrent, distributed, fault tolerant, and highly available intelligent agents for coordinated and/or uncoordinated action in one or many environments with no central point of failure. This project is Open Source. <a href="https://opensource.org/licenses/Apache-2.0"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="License" /></a></h4>
-<p><img src="particles.gif" alt="" /></p>
+<p><img src="./assets/particles.gif" alt="" /></p>
 <h2 id="project-mission" class="section-heading">
   <a href="#project-mission" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
   Project Mission
@@ -84,10 +84,10 @@ automata      </a>
   Usage
 </h2>
 
-<p>Testing is currently happening using the mock sequence in <code class="inline">worlds/mock_world_1/mock_automata/mock_seq_1.ex</code>. This is currently our canonical example of how to design a behavior tree (one type of <a href="Automaton.html"><code class="inline">Automaton</code></a>), and <em>eventually</em> communicates with others that you define in <code class="inline">worlds/&lt;mock_world&gt;/&lt;mock_automata&gt;/&lt;mock_bt&gt;</code>.</p>
+<p>Testing is currently happening using the mock sequence in <code class="inline">worlds/mock_world_1/mock_automata/mock_seq_1.ex</code>. This is currently our canonical example of how to design a behavior tree (one type of <a href="Automaton.html"><code class="inline">Automaton</code></a>), and <em>eventually</em> communicates with other heterogeneous agents that you define in <code class="inline">worlds/&lt;mock_world&gt;/&lt;mock_automata&gt;/&lt;mock_automaton&gt;</code>.</p>
 <p>Currently, you can run the mock sequence in an iex shell as follows:</p>
 <pre><code class="nohighlight makeup elixir"><span class="n">iex</span><span class="w"> </span><span class="o">-</span><span class="nc">S</span><span class="w"> </span><span class="n">mix</span><span class="w">
-</span><span class="gp unselectable">iex(1)&gt; </span><span class="n">send</span><span class="p" data-group-id="7293583774-1">(</span><span class="nc">MockSeq1Server</span><span class="p">,</span><span class="w"> </span><span class="ss">:update</span><span class="p" data-group-id="7293583774-1">)</span></code></pre>
+</span><span class="gp unselectable">iex(1)&gt; </span><span class="n">send</span><span class="p" data-group-id="9238505213-1">(</span><span class="nc">MockSeq1Server</span><span class="p">,</span><span class="w"> </span><span class="ss">:update</span><span class="p" data-group-id="9238505213-1">)</span></code></pre>
 <p>and tests can be run with debugging capabilities as follows:</p>
 <pre><code class="bash">MIX_ENV=test iex -S mix espec spec/unit/core/automaton/behavior_tree/behavior_spec.exs:31</code></pre>
 <p>where you are running a specific context/it block containing line 31.</p>
@@ -101,17 +101,31 @@ automata      </a>
   Technologies
 </h3>
 
-<p><a href="https://elixir-lang.org/">Elixir</a> &amp; <a href="https://en.wikipedia.org/wiki/Open_Telecom_Platform">OTP</a> provide the
- primitives for robust concurrent, fault-tolerant, highly available,
- self-healing distributed systems. Based on the Actor Model <sup><a href="#actorfootnote1">1</a></sup>, a singular Elixir <a href="https://hexdocs.pm/elixir/Process.html"><code class="inline">Process</code></a>(Actor) embodies all 3 essential elements of computation: processing, storage, communications. It does so using very lightweight, isolated processes, each with its own stack, heap, communications facilities (mailbox), and garbage collector. The Erlang VM (BEAM), with pre-emptive scheduling, acts somewhat as on operating system on top of an operating system. Pre-emption is good because it prevents bad actors from starving the rest of the system, allowing for higher degrees of concurrency and better interactive performance.</p>
-<p>Heterogeneous agent types provide scientists and analysts a variety of graphical models, reinforcement learning  based, and percept based agent systems.</p>
-<h4>The <a href="Automata.html"><code class="inline">Automata</code></a> framework has three distinct parts:</h4>
+<ul>
+<li><p><a href="https://elixir-lang.org/">Elixir</a> &amp; <a href="https://en.wikipedia.org/wiki/Open_Telecom_Platform">OTP</a> provide the
+primitives for robust concurrent, fault-tolerant, highly available,
+self-healing distributed systems. The main point of the Erlang model is an application that can be expected to run forever, as stated by the language designer. Talk about unstoppable software! <a href="https://github.com/upstarter/automata/wiki/Features">Read more</a> about the many other benefits of Elixir and OTP.</p>
+</li>
+<li><p>Heterogeneous agent types equipped with environment and reasoning components provide scientists and analysts a selection of <em>graphical</em>, <em>reinforcement learning</em>, and <em>percept</em> based agent constellations for a variety of real world environments.</p>
+</li>
+<li><p>How Elixir? Elixir for world class control fault tolerance and distribution, while leveraging inter-operability to compensate for lack of high dimensional function approximation (linear solver) performance without NIF&#39;s:</p>
+<ul>
+<li><a href="http://erlport.org">erlport</a> (python)
+</li>
+<li><a href="http://web.mit.edu/18.06/www/Spring17/Julia-intro.pdf">julia + python</a>
+</li>
+<li><a href="https://github.com/rusterlium/rustler">rust</a> + <a href="https://github.com/PyO3/pyo3">python</a>
+</li>
+</ul>
+</li>
+</ul>
+<h4>The <a href="Automata.html"><code class="inline">Automata</code></a> framework has three abstract semantic layers:</h4>
 <h5><strong>Environment</strong> <em>(State Space Representations)</em></h5>
-<p>These are the map of the territory. Without a good map, any adventurer could easily get lost. To fit the information available to the problem at hand, we separate the data structures representing our models into distinct layers with well defined boundaries.</p>
+<p>These are the maps of the territory. Without a good map, any adventurer could easily get lost. To fit the information available to the problem at hand, we separate the data structures representing our models into distinct layers with well defined boundaries.</p>
 <h5><strong>Reasoning</strong> <em>(Decision Making, Action Selection)</em></h5>
 <p>All agents have some formulation of action selection, otherwise they would never achieve their goals. To keep agent decision making as decoupled as possible, we introduce a layer which fits the mode of reasoning to the state space.</p>
-<h5><strong>Knowledge</strong> <em>(Memory)</em></h5>
-<p>Interchangeable memory modules across short term working memory, blackboards, and databases.</p>
+<h5><strong>Knowledge</strong> <em>(Memory, Local &amp; Global Histories)</em></h5>
+<p>Interchangeable memory modules across short term working memory, blackboards, and knowledge bases.</p>
 <h5><a href="https://github.com/upstarter/automata/wiki/Underlying-Technology">Read the wiki</a> and/or the <a href="https://upstarter.github.io/automata/">docs</a> for more about the technologies underlying <a href="Automata.html"><code class="inline">Automata</code></a>.</h5>
 <h3 id="requirements" class="section-heading">
   <a href="#requirements" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
@@ -148,37 +162,35 @@ automata      </a>
 
 <h3 id="functional-features" class="section-heading">
   <a href="#functional-features" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
-  Functional Features:
+  Functional Features
 </h3>
 
 <h4>User Defined Agents</h4>
-<h5>Planned builtin and/or custom third-party agent types</h5>
+<p>Planned builtin and/or custom third-party agent types include:</p>
 <ul>
 <li><p>Graphical Model Based</p>
 <ul>
-<li>Behavior Trees
+<li><em>Behavior Trees</em>
 </li>
-<li>Uninformed/Informed Search
+<li><em>Informed Search</em>
 </li>
-<li>Probabilistic Graphical Models
+<li><em>Generalized Probabilistic Models</em>
 </li>
-<li>Bayesian Networks
+<li><em>Bayesian Networks</em>
 </li>
 </ul>
 </li>
 <li><p>Reinforcement Learning Based</p>
 <ul>
-<li>mdp, pomdp, dec-pomdp
+<li><em>mdp</em>, <em>pomdp</em>, <em>dec-pomdp</em>
 </li>
-<li>td-learning</dd>
-</li>
-<li>deep q-learning
+<li><em>deep learning</em>
 </li>
 </ul>
 </li>
 <li><p>Cognitive / Percept Based</p>
 <ul>
-<li>c4 style percepts
+<li><em>c4 style percepts</em>
 </li>
 </ul>
 </li>
@@ -197,14 +209,14 @@ automata      </a>
 <li>Meta-level control to support agent interaction, any potential network reorganization. Meta-level control is the ability of an agent to optimize its long term performance by choosing and sequencing its deliberation and execution actions appropriately. <sup><a href="#mmlcfootnote1">2</a></sup>
 </li>
 </ul>
-<h4>Neuromorphic computing</h4>
+<h4>Neuromorphic Computing</h4>
 <ul>
 <li>potentially bringing the code to the data rather than the other way around.
 </li>
 </ul>
 <h3 id="performance-features" class="section-heading">
   <a href="#performance-features" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
-  Performance Features:
+  Performance Features
 </h3>
 
 <ul>
@@ -221,7 +233,7 @@ automata      </a>
 </li>
 <li>Patient Monitoring &amp; Care Systems
 </li>
-<li>Autonomous Pandemic Testing Drone Units
+<li>Pandemic Testing Drone Units
 </li>
 <li>Swarm Intelligence / Distributed Robotics
 </li>
@@ -257,7 +269,7 @@ automata      </a>
   API
 </h3>
 
-<pre><code class="nohighlight makeup elixir"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyAutomaton</span><span class="w"> </span><span class="k" data-group-id="1699298618-1">do</span><span class="w">
+<pre><code class="nohighlight makeup elixir"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyAutomaton</span><span class="w"> </span><span class="k" data-group-id="3810933020-1">do</span><span class="w">
   </span><span class="kn">use</span><span class="w"> </span><span class="nc">Automaton</span><span class="p">,</span><span class="w">
     </span><span class="c1"># required</span><span class="w">
     </span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="ss">:behavior_tree</span><span class="p">,</span><span class="w">
@@ -274,7 +286,7 @@ automata      </a>
     </span><span class="c1"># list of child control/action(execution) nodes</span><span class="w">
     </span><span class="c1"># these run in order for type :selector and :sequence nodes and in parallel</span><span class="w">
     </span><span class="c1"># for type :parallel, and in a user-defined dynamic order for :priority</span><span class="w">
-    </span><span class="ss">children</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1699298618-2">[</span><span class="nc">ChildAction1</span><span class="p">,</span><span class="w"> </span><span class="nc">ChildSequence1</span><span class="p">,</span><span class="w"> </span><span class="nc">ChildAction2</span><span class="p" data-group-id="1699298618-2">]</span><span class="w">
+    </span><span class="ss">children</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3810933020-2">[</span><span class="nc">ChildAction1</span><span class="p">,</span><span class="w"> </span><span class="nc">ChildSequence1</span><span class="p">,</span><span class="w"> </span><span class="nc">ChildAction2</span><span class="p" data-group-id="3810933020-2">]</span><span class="w">
 
 
     </span><span class="na">@doc</span><span class="w"> </span><span class="s">&quot;&quot;&quot;
@@ -286,22 +298,20 @@ automata      </a>
         either *effectors* or via *communication* with
         other agents and/or internal/external systems
     &quot;&quot;&quot;</span><span class="w">
-    </span><span class="kd">def</span><span class="w"> </span><span class="nf">update</span><span class="w"> </span><span class="k" data-group-id="1699298618-3">do</span><span class="w">
-      </span><span class="p" data-group-id="1699298618-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p" data-group-id="1699298618-4">}</span><span class="w">
-    </span><span class="k" data-group-id="1699298618-3">end</span><span class="w">
-</span><span class="k" data-group-id="1699298618-1">end</span></code></pre>
+    </span><span class="kd">def</span><span class="w"> </span><span class="nf">update</span><span class="w"> </span><span class="k" data-group-id="3810933020-3">do</span><span class="w">
+      </span><span class="p" data-group-id="3810933020-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p" data-group-id="3810933020-4">}</span><span class="w">
+    </span><span class="k" data-group-id="3810933020-3">end</span><span class="w">
+</span><span class="k" data-group-id="3810933020-1">end</span></code></pre>
 <h3 id="example" class="section-heading">
   <a href="#example" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
   Example
 </h3>
 
 <p>Below is a simplified hypothetical example of a <code class="inline">:behavior tree</code> sequence control node(subtree) for an autonomous &quot;Forex Trader&quot;. The first two leafs are condition nodes, and the last two are action nodes.</p>
-<p><img src="sequence.png" alt="automata trader sequence diagram" /></p>
+<p><img src="./assets/sequence.png" alt="automata trader sequence diagram" /></p>
 <h6>References</h6>
 <ol>
-<li><p><a name="actorfootnote1" href="https://arxiv.org/vc/arxiv/papers/1008/1008.1459v8.pdf">Actor Model</a></p>
-</li>
-<li><p><a name="mmlcfootnote1" href="https://www.academia.edu/22145349/Multiagent_meta-level_control_for_radar_coordination">Multi-Agent Meta-Level Control</a></p>
+<li><a name="mmlcfootnote1" href="https://www.academia.edu/22145349/Multiagent_meta-level_control_for_radar_coordination">Multi-Agent Meta-Level Control</a>
 </li>
 </ol>
 <h2 id="installation" class="section-heading">
@@ -311,11 +321,11 @@ automata      </a>
 
 <p>If <a href="https://hex.pm/docs/publish">available in Hex</a>, the package can be installed
 by adding <a href="Automata.html"><code class="inline">Automata</code></a> to your list of dependencies in <code class="inline">mix.exs</code>:</p>
-<pre><code class="nohighlight makeup elixir"><span class="kd">def</span><span class="w"> </span><span class="nf">deps</span><span class="w"> </span><span class="k" data-group-id="5381690698-1">do</span><span class="w">
-  </span><span class="p" data-group-id="5381690698-2">[</span><span class="w">
-    </span><span class="p" data-group-id="5381690698-3">{</span><span class="ss">:automata</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;~&gt; 0.1.0&quot;</span><span class="p" data-group-id="5381690698-3">}</span><span class="w">
-  </span><span class="p" data-group-id="5381690698-2">]</span><span class="w">
-</span><span class="k" data-group-id="5381690698-1">end</span></code></pre>
+<pre><code class="nohighlight makeup elixir"><span class="kd">def</span><span class="w"> </span><span class="nf">deps</span><span class="w"> </span><span class="k" data-group-id="6229524895-1">do</span><span class="w">
+  </span><span class="p" data-group-id="6229524895-2">[</span><span class="w">
+    </span><span class="p" data-group-id="6229524895-3">{</span><span class="ss">:automata</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;~&gt; 0.1.0&quot;</span><span class="p" data-group-id="6229524895-3">}</span><span class="w">
+  </span><span class="p" data-group-id="6229524895-2">]</span><span class="w">
+</span><span class="k" data-group-id="6229524895-1">end</span></code></pre>
 <h2 id="authors" class="section-heading">
   <a href="#authors" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
   Authors
