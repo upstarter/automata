@@ -48,6 +48,7 @@ defmodule Automaton.Types.BT.Composite.Sequence do
 
       def tick_workers(workers) do
         Enum.reduce_while(workers, :ok, fn w, _acc ->
+          # TODO: go fully async for fully reactive agent
           status = GenServer.call(w, :tick, 10_000)
 
           cond do

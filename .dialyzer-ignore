@@ -1,5 +1,5 @@
+Guard test _@4::['Elixir.Seq1' | 'Elixir.Seq4' | 'Elixir.SeqComposite1',...] =:= 'nil' can never succeed
+Guard test _@7::['Elixir.Seq1' | 'Elixir.Seq4' | 'Elixir.SeqComposite1',...] =:= 'nil' can never succeed
+Guard test _@4::['Elixir.Seq2' | 'Elixir.Seq3',...] =:= 'nil' can never succeed
+Guard test _@7::['Elixir.Seq2' | 'Elixir.Seq3',...] =:= 'nil' can never succeed
 Unknown type 'Elixir.Module':t/0
-Guard test __@4::['Elixir.Seq1' | 'Elixir.Seq4' | 'Elixir.SeqComposite1',...] =:= 'nil' can never succeed
-Guard test __@7::['Elixir.Seq1' | 'Elixir.Seq4' | 'Elixir.SeqComposite1',...] =:= 'nil' can never succeed
-Guard test __@4::['Elixir.Seq2' | 'Elixir.Seq3',...] =:= 'nil' can never succeed
-Guard test __@7::['Elixir.Seq2' | 'Elixir.Seq3',...] =:= 'nil' can never succeed

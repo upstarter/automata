@@ -16,7 +16,7 @@ defmodule MockSeq1 do
     node_type: :sequence,
 
     # for granular control of effectors
-    mode: nil,
+    # mode: nil,
 
     # the system heartbeat for this node(subtree), in milliseconds
     # the default is 50 ms (mimicing human brain perception cycle time)
