@@ -8,7 +8,7 @@
     <meta name="project" content="automata v0.1.0">
     <title>Automata.Server — automata v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
-    <script src="dist/sidebar_items-7722a97926.js"></script>
+    <script src="dist/sidebar_items-c9906118b8.js"></script>
       <script src="docs_config.js"></script>
     <script async src="dist/app-a225d03098e64fef431a.js"></script>
   </head>
@@ -77,7 +77,7 @@ primary job, keeping all the automata alive with the life changing magic of
 OTP supervision at the helm.</p>
 <p>This is a primary boundary point between the high level automata control
 policy layers and  the lower level (and highly variant) automaton control
-policy layers. This is a good place for more layers (TBD).</p>
+policy layers. The configured policies are handled by additional layers TBD.</p>
 <p>TODO: Automata.Config.Parser to have handler Automata.Types.Typology handle</p>
         </section>
 
@@ -104,7 +104,7 @@ policy layers. This is a good place for more layers (TBD).</p>
     <a href="#init/1">init(automata_config)</a>
   </div>
     <div class="summary-synopsis"><p>The automata_config data flow is a key abstraction for meta-level control
-of the agents. This is a good place for a boundary point, before starting the
+of the agents. This is a primary internal boundary point, before starting the
 individual agents one by one.</p></div>
 </div>
 <div class="summary-row">
@@ -116,6 +116,15 @@ individual agents one by one.</p></div>
   <div class="summary-signature">
     <a href="#status/1">status(automaton_name)</a>
   </div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#transform_automata_config/1">transform_automata_config(automata_config)</a>
+  </div>
+    <div class="summary-synopsis"><p>Primary boundary point for initial interpretation, re-organization of automata
+level control policy in order to determine automaton level control policies.
+We are transforming from control policy -&gt; control policies using information
+from the World, including the agent configurations.</p></div>
 </div>
   </div>
         </section>
@@ -151,8 +160,14 @@ Functions          </h1>
   </div>
   <section class="docstring">
 <p>The automata_config data flow is a key abstraction for meta-level control
-of the agents. This is a good place for a boundary point, before starting the
+of the agents. This is a primary internal boundary point, before starting the
 individual agents one by one.</p>
+<p>The <code class="inline">automaton_config</code> data flow / signals transmitted from this point should
+be untouched until hitting the <a href="Automaton.AgentServer.html"><code class="inline">Automaton.AgentServer</code></a>, a key boundary point
+providing lifecycle and argument interpretation before being expedited to the
+<a href="Automaton.html"><code class="inline">Automaton</code></a> to be interpreted at both the builtins and custom built level. The
+layers pre, post, and in between are TBD, along with design of other potential
+servers off of the <a href="Automaton.AgentSupervisor.html"><code class="inline">Automaton.AgentSupervisor</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="start_link/1">
@@ -175,6 +190,21 @@ individual agents one by one.</p>
     <h1 class="signature">status(automaton_name)</h1>
   </div>
   <section class="docstring">
+  </section>
+</section>
+<section class="detail" id="transform_automata_config/1">
+  <div class="detail-header">
+    <a href="#transform_automata_config/1" class="detail-link" title="Link to this function">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature">transform_automata_config(automata_config)</h1>
+  </div>
+  <section class="docstring">
+<p>Primary boundary point for initial interpretation, re-organization of automata
+level control policy in order to determine automaton level control policies.
+We are transforming from control policy -&gt; control policies using information
+from the World, including the agent configurations.</p>
   </section>
 </section>
           </div>
