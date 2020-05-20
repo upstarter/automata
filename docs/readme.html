@@ -8,7 +8,7 @@
     <meta name="project" content="automata v0.1.0">
     <title>ReadMe — automata v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
-    <script src="dist/sidebar_items-c9906118b8.js"></script>
+    <script src="dist/sidebar_items-584d3af45c.js"></script>
       <script src="docs_config.js"></script>
     <script async src="dist/app-a225d03098e64fef431a.js"></script>
   </head>
@@ -64,7 +64,7 @@ automata      </a>
 
 <h1>⦿    | Automata | ⦿  ⦿   ⦿   ⦿</h1>
 <h4>Spawn a <a href="http://web.stanford.edu/class/ee380/Abstracts/190123.html">system</a> of concurrent, distributed, fault tolerant, and highly available intelligent agents for coordinated and/or uncoordinated action in one or many environments with no central point of failure. This project is Open Source. <a href="https://opensource.org/licenses/Apache-2.0"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="License" /></a></h4>
-<p><img src="particles.gif" alt="" /></p>
+<p><img src="./assets/particles.gif" alt="" /></p>
 <h2 id="project-mission" class="section-heading">
   <a href="#project-mission" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
   Project Mission
@@ -87,7 +87,7 @@ automata      </a>
 <p>Testing is currently happening using the mock sequence in <code class="inline">worlds/mock_world_1/mock_automata/mock_seq_1.ex</code>. This is currently our canonical example of how to design a behavior tree (one type of <a href="Automaton.html"><code class="inline">Automaton</code></a>), and <em>eventually</em> communicates with other heterogeneous agents that you define in <code class="inline">worlds/&lt;mock_world&gt;/&lt;mock_automata&gt;/&lt;mock_automaton&gt;</code>.</p>
 <p>Currently, you can run the mock sequence in an iex shell as follows:</p>
 <pre><code class="nohighlight makeup elixir"><span class="n">iex</span><span class="w"> </span><span class="o">-</span><span class="nc">S</span><span class="w"> </span><span class="n">mix</span><span class="w">
-</span><span class="gp unselectable">iex(1)&gt; </span><span class="n">send</span><span class="p" data-group-id="0279329406-1">(</span><span class="nc">MockSeq1Server</span><span class="p">,</span><span class="w"> </span><span class="ss">:update</span><span class="p" data-group-id="0279329406-1">)</span></code></pre>
+</span><span class="gp unselectable">iex(1)&gt; </span><span class="n">send</span><span class="p" data-group-id="9238505213-1">(</span><span class="nc">MockSeq1Server</span><span class="p">,</span><span class="w"> </span><span class="ss">:update</span><span class="p" data-group-id="9238505213-1">)</span></code></pre>
 <p>and tests can be run with debugging capabilities as follows:</p>
 <pre><code class="bash">MIX_ENV=test iex -S mix espec spec/unit/core/automaton/behavior_tree/behavior_spec.exs:31</code></pre>
 <p>where you are running a specific context/it block containing line 31.</p>
@@ -190,7 +190,7 @@ self-healing distributed systems. The main point of the Erlang model is an appli
 </li>
 <li><p>Cognitive / Percept Based</p>
 <ul>
-<li><em><a href="http://www.naimadgames.com/publications/gdc01/gdc01.pdf">c4</a> style percepts</em>
+<li><em>c4 style percepts</em>
 </li>
 </ul>
 </li>
@@ -269,7 +269,7 @@ self-healing distributed systems. The main point of the Erlang model is an appli
   API
 </h3>
 
-<pre><code class="nohighlight makeup elixir"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyAutomaton</span><span class="w"> </span><span class="k" data-group-id="8545823563-1">do</span><span class="w">
+<pre><code class="nohighlight makeup elixir"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">MyAutomaton</span><span class="w"> </span><span class="k" data-group-id="3810933020-1">do</span><span class="w">
   </span><span class="kn">use</span><span class="w"> </span><span class="nc">Automaton</span><span class="p">,</span><span class="w">
     </span><span class="c1"># required</span><span class="w">
     </span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="ss">:behavior_tree</span><span class="p">,</span><span class="w">
@@ -286,7 +286,7 @@ self-healing distributed systems. The main point of the Erlang model is an appli
     </span><span class="c1"># list of child control/action(execution) nodes</span><span class="w">
     </span><span class="c1"># these run in order for type :selector and :sequence nodes and in parallel</span><span class="w">
     </span><span class="c1"># for type :parallel, and in a user-defined dynamic order for :priority</span><span class="w">
-    </span><span class="ss">children</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="8545823563-2">[</span><span class="nc">ChildAction1</span><span class="p">,</span><span class="w"> </span><span class="nc">ChildSequence1</span><span class="p">,</span><span class="w"> </span><span class="nc">ChildAction2</span><span class="p" data-group-id="8545823563-2">]</span><span class="w">
+    </span><span class="ss">children</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3810933020-2">[</span><span class="nc">ChildAction1</span><span class="p">,</span><span class="w"> </span><span class="nc">ChildSequence1</span><span class="p">,</span><span class="w"> </span><span class="nc">ChildAction2</span><span class="p" data-group-id="3810933020-2">]</span><span class="w">
 
 
     </span><span class="na">@doc</span><span class="w"> </span><span class="s">&quot;&quot;&quot;
@@ -298,17 +298,17 @@ self-healing distributed systems. The main point of the Erlang model is an appli
         either *effectors* or via *communication* with
         other agents and/or internal/external systems
     &quot;&quot;&quot;</span><span class="w">
-    </span><span class="kd">def</span><span class="w"> </span><span class="nf">update</span><span class="w"> </span><span class="k" data-group-id="8545823563-3">do</span><span class="w">
-      </span><span class="p" data-group-id="8545823563-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p" data-group-id="8545823563-4">}</span><span class="w">
-    </span><span class="k" data-group-id="8545823563-3">end</span><span class="w">
-</span><span class="k" data-group-id="8545823563-1">end</span></code></pre>
+    </span><span class="kd">def</span><span class="w"> </span><span class="nf">update</span><span class="w"> </span><span class="k" data-group-id="3810933020-3">do</span><span class="w">
+      </span><span class="p" data-group-id="3810933020-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p" data-group-id="3810933020-4">}</span><span class="w">
+    </span><span class="k" data-group-id="3810933020-3">end</span><span class="w">
+</span><span class="k" data-group-id="3810933020-1">end</span></code></pre>
 <h3 id="example" class="section-heading">
   <a href="#example" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
   Example
 </h3>
 
 <p>Below is a simplified hypothetical example of a <code class="inline">:behavior tree</code> sequence control node(subtree) for an autonomous &quot;Forex Trader&quot;. The first two leafs are condition nodes, and the last two are action nodes.</p>
-<p><img src="sequence.png" alt="automata trader sequence diagram" /></p>
+<p><img src="./assets/sequence.png" alt="automata trader sequence diagram" /></p>
 <h6>References</h6>
 <ol>
 <li><a name="mmlcfootnote1" href="https://www.academia.edu/22145349/Multiagent_meta-level_control_for_radar_coordination">Multi-Agent Meta-Level Control</a>
@@ -321,11 +321,11 @@ self-healing distributed systems. The main point of the Erlang model is an appli
 
 <p>If <a href="https://hex.pm/docs/publish">available in Hex</a>, the package can be installed
 by adding <a href="Automata.html"><code class="inline">Automata</code></a> to your list of dependencies in <code class="inline">mix.exs</code>:</p>
-<pre><code class="nohighlight makeup elixir"><span class="kd">def</span><span class="w"> </span><span class="nf">deps</span><span class="w"> </span><span class="k" data-group-id="4992551292-1">do</span><span class="w">
-  </span><span class="p" data-group-id="4992551292-2">[</span><span class="w">
-    </span><span class="p" data-group-id="4992551292-3">{</span><span class="ss">:automata</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;~&gt; 0.1.0&quot;</span><span class="p" data-group-id="4992551292-3">}</span><span class="w">
-  </span><span class="p" data-group-id="4992551292-2">]</span><span class="w">
-</span><span class="k" data-group-id="4992551292-1">end</span></code></pre>
+<pre><code class="nohighlight makeup elixir"><span class="kd">def</span><span class="w"> </span><span class="nf">deps</span><span class="w"> </span><span class="k" data-group-id="6229524895-1">do</span><span class="w">
+  </span><span class="p" data-group-id="6229524895-2">[</span><span class="w">
+    </span><span class="p" data-group-id="6229524895-3">{</span><span class="ss">:automata</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;~&gt; 0.1.0&quot;</span><span class="p" data-group-id="6229524895-3">}</span><span class="w">
+  </span><span class="p" data-group-id="6229524895-2">]</span><span class="w">
+</span><span class="k" data-group-id="6229524895-1">end</span></code></pre>
 <h2 id="authors" class="section-heading">
   <a href="#authors" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
   Authors

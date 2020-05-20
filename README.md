@@ -4,7 +4,7 @@
 #### Spawn a [system](http://web.stanford.edu/class/ee380/Abstracts/190123.html) of concurrent, distributed, fault tolerant, and highly available intelligent agents for coordinated and/or uncoordinated action in one or many environments with no central point of failure. This project is Open Source. [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 
-![](particles.gif)
+![](./assets/particles.gif)
 
 ## Project Mission
 The Automata Project combines the state-of-the-art AI control techniques with the latest research in autonomous decentralized systems, providing AI designers a flexible framework for creating valuable emergent properties in product ecosystems.
@@ -192,7 +192,7 @@ end
 
 Below is a simplified hypothetical example of a `:behavior tree` sequence control node(subtree) for an autonomous "Forex Trader". The first two leafs are condition nodes, and the last two are action nodes.
 
-![automata trader sequence diagram](sequence.png)
+![automata trader sequence diagram](./assets/sequence.png)
 
 ###### References
 1. <a name="mmlcfootnote1" href="https://www.academia.edu/22145349/Multiagent_meta-level_control_for_radar_coordination">Multi-Agent Meta-Level Control</a>
