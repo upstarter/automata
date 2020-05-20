@@ -111,7 +111,7 @@ Planned builtin and/or custom third-party agent types include:
 
 
   - Cognitive / Percept Based
-    - *c4 style percepts*
+    - *[c4](http://www.naimadgames.com/publications/gdc01/gdc01.pdf) style percepts*
 
 #### A Concurrent, Scalable Blackboard Knowledge System
   > The central problem of artificial intelligence is how to express the knowledge needed in order to create intelligent behavior. — John McCarthy, M.I.T/Stanford Professor, Creator of Lisp

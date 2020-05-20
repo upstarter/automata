@@ -27,10 +27,14 @@ See [How it works](https://github.com/upstarter/automata/wiki/How-it-works) for 
 
 See [Future Directions](https://github.com/upstarter/automata/wiki/Future-Directions) for more on what's in the works.
 
+##### <a name="help"></a>Where to ask for help:
 
-### Special notes for Automata developers
-- See [ex_doc recommendations](https://hexdocs.pm/elixir/writing-documentation.html#recommendations) for documentation guidelines.
-- DEBUGGING NOTE: anytime you see an error or warning that is in one of the mock sequence modules, it probably isn't. It is probably in one of the modules in core that get injected into them. This is the nature of meta-programming debugging. If anyone with experience debugging a heavily meta-programmed application, please chime in.
+1. [The Automata Project Slack Channel](https://join.slack.com/t/automata-project/shared_invite/zt-e4fqrmo4-7ujuZwzXHNCGVrZb1aVZmA)
+2. [Elixir Forum](https://elixirforum.com/)
+3. [Elixir Slack Channel](https://elixir-slackin.herokuapp.com/)
+4. [Stack Overflow](https://stackoverflow.com/questions/tagged/elixir)
+5. [Reddit](https://www.reddit.com/r/elixir/)
+6. [Quora](https://www.quora.com)
 
 ## Engineering Standards & Best Practices
 Check the #dev or #testing channels on [slack]((https://join.slack.com/t/automata-project/shared_invite/zt-e4fqrmo4-7ujuZwzXHNCGVrZb1aVZmA)) for questions/info.
@@ -57,24 +61,10 @@ In Progress. Property Testing? Permutation Testing? Join the conversation on [Th
 
 1. Unit tests test the unit of behavior, not the unit of implementation. Changing the implementation, without changing the behavior or having to change any of your tests is the goal, although not always possible. So where possible, treat your test objects as black boxes, testing through the public API without calling private methods or tinkering with state.
 
-##### <a name="help"></a>Where to ask for help:
+### Special notes for Automata developers
+- See [ex_doc recommendations](https://hexdocs.pm/elixir/writing-documentation.html#recommendations) for documentation guidelines.
+- DEBUGGING NOTE: anytime you see an error or warning that is in one of the mock sequence modules, it probably isn't. It is probably in one of the modules in core that get injected into them. This is the nature of meta-programming debugging. If anyone with experience debugging a heavily meta-programmed application, please chime in.
 
-1. [The Automata Project Slack Channel](https://join.slack.com/t/automata-project/shared_invite/zt-e4fqrmo4-7ujuZwzXHNCGVrZb1aVZmA)
-2. [Elixir Forum](https://elixirforum.com/)
-3. [Elixir Slack Channel](https://elixir-slackin.herokuapp.com/)
-4. [Stack Overflow](https://stackoverflow.com/questions/tagged/elixir)
-5. [Reddit](https://www.reddit.com/r/elixir/)
-6. [Quora](https://www.quora.com)
-7. [Discord](https://www.discordapp.com)
 
 
 #### [Code of Conduct](https://www.apache.org/foundation/policies/conduct)
-
-###### The Blackboard
-
-- Global Blackboard
-  - all nodes share this knowledge store
-  - the automata will act upon seeing certain data changes in the global blackboard
-- Individual Node Blackboards
-  - node blackboards use protected tables for knowledge sharing – all processes can read, one process has write access
-  - the automaton will act upon seeing certain data changes in the global blackboard

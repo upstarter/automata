@@ -41,7 +41,7 @@ defmodule Automata.World do
   defmacro __using__(_automaton_config) do
     prepend =
       quote do
-        use GenServer
+        # use GenServer
       end
 
     [prepend]
