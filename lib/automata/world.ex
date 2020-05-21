@@ -1,8 +1,11 @@
 defmodule Automata.World do
   @moduledoc """
-  The world contains environments and automata that operate on/from them. User
-  defined automata state spaces (as distinct from automaton state spaces) and
-  blackboards serve as short term working memory shared by the world's agents.
+  A World is made up of Agents (automata) which interpret & act based on
+  global(all-agents) & local(per-agent) Obervations (from State Space
+  Representations) and Events from the World.
+
+  Events arise in the world, and agents with matching traits and capabilities
+  respond to the events individually and collectively.
 
   The further in the supervision tree you get to the `Automaton.Types` the less
   information you have about the global situation, and vice versa.

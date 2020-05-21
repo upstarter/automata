@@ -8,6 +8,9 @@ defmodule Automaton.Types.BT.Composite.Sequence do
     carry out the tasks that are deﬁned by a strict sequence of sub-tasks, in
     which all have to succeed.
 
+    Most BT implementations also include a Sequence with memory, where a subtree
+    that returned Succeed is never executed again.
+
     A Sequence will return immediately with a failure status code when one of
     its children fails. As long as its children are succeeding, it will keep
     going. If it runs out of children, it will return in success.

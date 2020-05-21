@@ -2,6 +2,10 @@ defmodule Automaton.Types.BT.Action do
   @moduledoc """
     An action is a leaf in the tree.
     It operates on the world as a component of a composite(control) node.
+    Actions can alter the system configuration, returning one of three possible
+    state values: Success, Failure, or Running. Conditions cannot alter the
+    system configuration, returning one of two possible state values: Success,
+    or Failure.
   """
 
   defmacro __using__(automaton_config) do

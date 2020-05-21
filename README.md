@@ -192,7 +192,7 @@ end
 
 Below is a simplified hypothetical example of a `:behavior tree` sequence control node(subtree) for an autonomous "Forex Trader". The first two leafs are condition nodes, and the last two are action nodes.
 
-![automata trader sequence diagram](./assets/sequence.png)
+![automata trader sequence diagram](./docs/assets/sequence.png)
 
 ###### References
 1. <a name="mmlcfootnote1" href="https://www.academia.edu/22145349/Multiagent_meta-level_control_for_radar_coordination">Multi-Agent Meta-Level Control</a>
