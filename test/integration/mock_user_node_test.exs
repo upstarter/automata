@@ -1,15 +1,13 @@
 defmodule MockUserNodeTest do
-  use Espec
-  # doctest MockUserNodeTest
+  use ExUnit.Case
+  #
   # TODO: ex_spec for context, it BDD style, property testing
 
   # TODO: how to put in shared context (for sharing across files)?
   setup_all do
     # TODO: Load user-configs into automaton_configs
     automata_config = [
-      [name: "MockSeq1", mfa: {MockSeq1, :start_link, []}],
-      [name: "MockSeq2", mfa: {MockSeq2, :start_link, []}],
-      [name: "MockSeq3", mfa: {MockSeq3, :start_link, []}]
+      [name: "MockSeq1", mfa: {MockSeq1, :start_link, []}]
     ]
 
     [automata_config: automata_config]

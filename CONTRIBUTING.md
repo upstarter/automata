@@ -15,7 +15,7 @@
 - Willingness and motivation to learn it all
 
 ###### Where to get started contributing
-A good place to start is in the [project kanban](https://github.com/upstarter/automata/projects/1). Especially those threads labeled 'good first issue', 'testing'.
+A good place to start is in the [project kanban](https://github.com/upstarter/automata/projects/1). ExUnitially those threads labeled 'good first issue', 'testing'.
 
 Please join the [slack channel](https://join.slack.com/t/automata-project/shared_invite/zt-e4fqrmo4-7ujuZwzXHNCGVrZb1aVZmA) and/or reach out to [ericsteen1@gmail.com](mailto:ericsteen1@gmail.com) if interested!
 

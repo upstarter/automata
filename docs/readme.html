@@ -89,7 +89,7 @@ automata      </a>
 <pre><code class="nohighlight makeup elixir"><span class="n">iex</span><span class="w"> </span><span class="o">-</span><span class="nc">S</span><span class="w"> </span><span class="n">mix</span><span class="w">
 </span><span class="gp unselectable">iex(1)&gt; </span><span class="n">send</span><span class="p" data-group-id="9238505213-1">(</span><span class="nc">MockSeq1Server</span><span class="p">,</span><span class="w"> </span><span class="ss">:update</span><span class="p" data-group-id="9238505213-1">)</span></code></pre>
 <p>and tests can be run with debugging capabilities as follows:</p>
-<pre><code class="bash">MIX_ENV=test iex -S mix espec spec/unit/core/automaton/behavior_tree/behavior_spec.exs:31</code></pre>
+<pre><code class="bash">MIX_ENV=test iex -S mix ExUnit spec/unit/core/automaton/behavior_tree/behavior_spec.exs:31</code></pre>
 <p>where you are running a specific context/it block containing line 31.</p>
 <h2 id="implementation-overview" class="section-heading">
   <a href="#implementation-overview" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
@@ -147,7 +147,7 @@ self-healing distributed systems. The main point of the Erlang model is an appli
 </li>
 </ol>
 <p>Note that the five aspects are orthogonal. The first two aspects deal with
-“understanding” the map of the environment. The third and the forth aspects deal with autonomy of decision. Self adaptation ensures adequacy of decisions with respect to the environment map. See MMLC<sup><a href="#mmlcfootnote1">2</a></sup>.</p>
+“understanding” the map of the environment. The third and the forth aspects deal with autonomy of decision. Self adaptation ensures adequacy of decisions with rExUnitt to the environment map. See MMLC<sup><a href="#mmlcfootnote1">2</a></sup>.</p>
 <h4>A system is defined as an Autonomous Decentralized System (ADS) if the following two properties are satisfied:</h4>
 <ol>
 <li><p>Autonomous Controllability: Even if any subsystem fails, is repaired, and/or is newly added, the other subsystems can continue to manage themselves and function.</p>

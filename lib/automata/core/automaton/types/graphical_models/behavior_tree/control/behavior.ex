@@ -26,8 +26,8 @@ defmodule Automaton.Types.BT.Behavior do
 
   defmacro __using__(_opts) do
     quote do
-      import Automaton.Types.BT.Behavior
-      @behaviour Automaton.Types.BT.Behavior
+      import unquote(__MODULE__)
+      @behaviour unquote(__MODULE__)
 
       def on_init(state)
 
@@ -56,69 +56,6 @@ defmodule Automaton.Types.BT.Behavior do
       end
 
       def status do
-      end
-
-      def handle_call(:status, _from, state) do
-        {:reply, state.status, state}
-      end
-
-      def handle_call(:set_running, _from, state) do
-        {:reply, :ok, %{state | status: :bh_running}}
-      end
-
-      def handle_call(:succeed, _from, state) do
-        {:reply, :ok, %{state | status: :bh_success}}
-      end
-
-      def handle_call(:fail, _from, state) do
-        {:reply, :ok, %{state | status: :bh_failure}}
-      end
-
-      def handle_call(:running?, _from, state) do
-        {:reply, state.status == :bh_running, state}
-      end
-
-      def handle_call(:aborted?, _from, state) do
-        {:reply, state.status == :bh_aborted, state}
-      end
-
-      def handle_call(:terminated?, _from, state) do
-        status = state.status
-        {:reply, status == :bh_success || status == :bh_failure, state}
-      end
-
-      def handle_call(:abort, _from, state) do
-        on_terminate(state)
-        {:reply, true, %{state | status: :bh_aborted}}
-      end
-
-      def handle_call(:reset, _from, state) do
-        {:reply, true, %{state | status: :bh_invalid}}
-      end
-
-      def set_status(pid, status) do
-        GenServer.call(pid, :do_status, status)
-      end
-
-      defp set_status(from, state, status) do
-        pid = self()
-
-        spawn_link(fn ->
-          result = GenServer.call(pid, :do_status, [state, status])
-          GenServer.reply(from, result)
-        end)
-      end
-
-      def handle_call(:do_status, _from, [state, status]) do
-        {:reply, :ok, %{state | status: status}}
-      end
-
-      def handle_call(:set_status, from, [state, status]) do
-        # Handles set_status and the reply to from.
-        set_status(from, state, status)
-        # Returns nothing to the client, but unblocks the
-        # server to get more requests.
-        {:noreply, state}
       end
     end
   end

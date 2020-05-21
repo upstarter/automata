@@ -106,8 +106,16 @@ defmodule Automaton.Types.BT.CompositeServer do
           {:noreply, new_state}
         end
 
+        # async updates
         def handle_info(:update, state) do
-          {:noreply, %{state | status: update(state)}}
+          {:ok, new_state} = update(state)
+          {:noreply, new_state}
+        end
+
+        # synchronous updates
+        def handle_call(:update, _from, state) do
+          {:ok, new_state} = update(state)
+          {:reply, new_state.status, new_state}
         end
 
         def start_children(
@@ -237,9 +245,6 @@ defmodule Automaton.Types.BT.CompositeServer do
             type: :worker
           }
         end
-
-        # Defoverridable makes the given functions in the current module overridable
-        defoverridable update: 1, on_init: 1, on_terminate: 1
       end
 
     [imports, prepend, control, append]

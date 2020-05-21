@@ -104,9 +104,6 @@ defmodule Automaton.Types.BT.Action do
             type: :worker
           }
         end
-
-        # Defoverridable makes the given functions in the current module overridable
-        defoverridable update: 1, on_init: 1, on_terminate: 1
       end
 
     [prepend, node_type, control, append]

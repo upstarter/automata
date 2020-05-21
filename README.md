@@ -31,7 +31,7 @@ iex(1)> send(MockSeq1Server, :update)
 and tests can be run with debugging capabilities as follows:
 
 ```bash
-MIX_ENV=test iex -S mix espec spec/unit/core/automaton/behavior_tree/behavior_spec.exs:31
+MIX_ENV=test iex -S mix ExUnit spec/unit/core/automaton/behavior_tree/behavior_spec.exs:31
 ```
 
 where you are running a specific context/it block containing line 31.
@@ -82,7 +82,7 @@ It combines five complementary  aspects:
 
 
 Note that the five aspects are orthogonal. The first two aspects deal with
-“understanding” the map of the environment. The third and the forth aspects deal with autonomy of decision. Self adaptation ensures adequacy of decisions with respect to the environment map. See MMLC<sup>[2](#mmlcfootnote1)</sup>.
+“understanding” the map of the environment. The third and the forth aspects deal with autonomy of decision. Self adaptation ensures adequacy of decisions with rExUnitt to the environment map. See MMLC<sup>[2](#mmlcfootnote1)</sup>.
 
 #### A system is defined as an Autonomous Decentralized System (ADS) if the following two properties are satisfied:
 

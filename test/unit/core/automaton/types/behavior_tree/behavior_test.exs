@@ -1,19 +1,12 @@
-# Unit Tests for the core functions and behavior of the Automaton module
-defmodule AutomatonSpec do
-  use ESpec
-  doctest Automaton
+defmodule BehaviorTest do
+  use ExUnit.Case
 
-  before_all do
+  setup_all do
     automata_config = [
       [name: "MockSeq1", mfa: {MockSeq1, :start_link, []}]
     ]
 
-    [automata_config: automata_config]
-
-    Automata.start_nodes(automata_config)
-  end
-
-  let(:opts) do
+    Automata.start_automata(automata_config: automata_config)
   end
 
   # {:ok, state} = MockSeq1.init(opts)
@@ -25,4 +18,7 @@ defmodule AutomatonSpec do
   # # assertion about state
   # {:noreply, state} = MockSeq1.handle_info({:blah, B, 2}, state)
   # # assertion about state
+
+  describe "#update" do
+  end
 end
