@@ -4,6 +4,8 @@ defmodule Automaton.Types.BT.Config.Parser do
   """
 
   alias Automaton.Types.BT.Config
+  alias Automaton.Types.BT.CompositeServer
+  alias Automaton.Types.BT.ComponentServer
 
   @doc """
   Determines the node_type given the `automaton_config`.
@@ -19,7 +21,10 @@ defmodule Automaton.Types.BT.Config.Parser do
   @spec call(type: atom, node_type: atom) :: tuple
   def call(automaton_config) do
     config = %Config{
-      node_type: automaton_config[:node_type]
+      node_type: automaton_config[:node_type],
+      c_types: CompositeServer.types(),
+      cn_types: ComponentServer.types(),
+      allowed_node_types: CompositeServer.types() ++ ComponentServer.types()
     }
 
     unless Enum.member?(config.allowed_node_types, config.node_type),

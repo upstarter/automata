@@ -1,9 +1,16 @@
 defmodule Automaton.Types.BT.Config do
-  alias Automaton.Types.BT.CompositeServer
-  alias Automaton.Types.BT.ComponentServer
+  use Ecto.Schema
 
-  defstruct node_type: nil,
-            c_types: CompositeServer.types(),
-            cn_types: ComponentServer.types(),
-            allowed_node_types: CompositeServer.types() ++ ComponentServer.types()
+  alias AtomType
+
+  embedded_schema do
+    field(:node_type)
+    field(:c_types)
+    field(:cn_types)
+    field(:allowed_node_types)
+  end
+
+  def new(data) do
+    struct(WorldConfig, data)
+  end
 end
