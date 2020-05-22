@@ -2,14 +2,6 @@
 defmodule SequenceStateTest do
   use ExUnit.Case
 
-  setup_all do
-    automata_config = [
-      [name: "MockSeq1", mfa: {MockSeq1, :start_link, []}]
-    ]
-
-    Automata.start_automata(automata_config: automata_config)
-  end
-
   describe "#update" do
     #   describe "when status == :fresh" do
     #     test "" do

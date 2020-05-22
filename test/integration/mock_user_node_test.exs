@@ -7,7 +7,7 @@ defmodule MockUserNodeTest do
   setup_all do
     # TODO: Load user-configs into automaton_configs
     automata_config = [
-      [name: "MockSeq1", mfa: {MockSeq1, :start_link, []}]
+      [name: "MockSeq1", mfa: {TestMockSeq1, :start_link, []}]
     ]
 
     [automata_config: automata_config]

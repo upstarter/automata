@@ -31,10 +31,10 @@ iex(1)> send(MockSeq1Server, :update)
 and tests can be run with debugging capabilities as follows:
 
 ```bash
-MIX_ENV=test iex -S mix ExUnit spec/unit/core/automaton/behavior_tree/behavior_spec.exs:31
+MIX_ENV=test iex -S mix test test/unit/core/automaton/automaton_test.exs:23
 ```
 
-where you are running a specific context/it block containing line 31.
+where you are running a specific context/it block containing line 23.
 
 
 
