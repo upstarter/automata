@@ -15,7 +15,6 @@ defmodule Automata.MixProject do
         ignore_warnings: ".dialyzer-ignore",
         # as filters tend to become obsolete
         list_unused_filters: true,
-        plt_file: {:no_warn, "priv/plts/dialyzer.plt"},
         # only Direct OTP runtime application dependencies - not the entire tree
         plt_add_deps: :apps_direct
       ],
