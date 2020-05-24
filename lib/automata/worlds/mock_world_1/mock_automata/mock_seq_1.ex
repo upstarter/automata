@@ -22,7 +22,7 @@ defmodule MockSeq1 do
     # the default is 50 ms (mimicing human brain perception cycle time)
     # heartbeat adaptation as meta-level(automata) action
     # can be changed at runtime
-    tick_freq: 50,
+    tick_freq: 999_999_999,
 
     # not included for action nodes list of child control/execution nodes
     # these run in order for type :selector and :sequence nodes and in parallel for
@@ -33,7 +33,7 @@ end
 defmodule SeqComposite1 do
   use Automaton,
     node_type: :sequence,
-    tick_freq: 50,
+    tick_freq: 999_999_999,
     children: [Seq2, Seq3]
 end
 
