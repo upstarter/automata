@@ -37,13 +37,20 @@ defmodule Automata.MixProject do
   def application do
     [
       extra_applications: [:logger],
-      mod: {Automata, []}
+      mod: mod()
     ]
+  end
+
+  defp mod() do
+    case Mix.env() do
+      :test -> {TestAutomata, []}
+      _ -> {Automata, []}
+    end
   end
 
   defp aliases() do
     [
-      test: "test --no-start"
+      # test: "test --no-start"
     ]
   end
 
