@@ -53,7 +53,7 @@ defmodule Automaton.Types.BT do
           if status != :bh_running do
             on_terminate(updated_state)
           else
-            if !unquote(automaton_config[:children]) do
+            if !unquote(automaton_config[:children]) && Mix.env() != :test do
               schedule_next_tick(updated_state.tick_freq)
             end
           end
