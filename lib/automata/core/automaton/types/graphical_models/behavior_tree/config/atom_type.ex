@@ -9,6 +9,6 @@ defmodule AtomType do
   def dump(value) when is_atom(value), do: {:ok, Atom.to_string(value)}
 
   def dump(_), do: :error
-  def embed_as(_), do: :ok
+  def embed_as(_), do: :self
   def equal?(_, _), do: true
 end
