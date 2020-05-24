@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.21.3">
     <meta name="project" content="automata v0.1.0">
-    <title>Automata.Server — automata v0.1.0</title>
+    <title>AtomType — automata v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
     <script src="dist/sidebar_items-6df651b196.js"></script>
       <script src="docs_config.js"></script>
@@ -64,22 +64,9 @@ automata      </a>
 
       <h1>
         <small class="app-vsn">automata v0.1.0</small>
-Automata.Server      </h1>
+AtomType      </h1>
 
 
-        <section id="moduledoc">
-<p><a href="#content"><code class="inline">Automata.Server</code></a> is a behavior which provides decentralized fault tolerance
-lifecycle management for a collection of user-defined agents.</p>
-<p><a href="Automata.AutomataSupervisor.html"><code class="inline">Automata.AutomataSupervisor</code></a> delegates the logic for starting the
-user-defined  agents (along with their supervisors) to this process to keep
-the supervisor clean and thus more resilient to failure so it can do its
-primary job, keeping all the automata alive with the life changing magic of
-OTP supervision at the helm.</p>
-<p>This is a primary boundary point between the high level automata control
-policy layers and  the lower level (and highly variant) automaton control
-policy layers. The configured policies are handled by additional layers TBD.</p>
-<p>TODO: Automata.Config.Parser to have handler Automata.Types.Typology handle</p>
-        </section>
 
         <section id="summary" class="details-list">
           <h1 class="section-heading">
@@ -95,36 +82,39 @@ policy layers. The configured policies are handled by additional layers TBD.</p>
     </h2>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#child_spec/1">child_spec(init_arg)</a>
+    <a href="#cast/1">cast(value)</a>
   </div>
-    <div class="summary-synopsis"><p>Returns a specification to start this module under a supervisor.</p></div>
+    <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.4.4/Ecto.Type.html#c:cast/1"><code class="inline">Ecto.Type.cast/1</code></a>.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#init/1">init(automata_config)</a>
+    <a href="#dump/1">dump(value)</a>
   </div>
-    <div class="summary-synopsis"><p>The automata_config data flow is a key abstraction for meta-level control
-of the agents. This is a primary internal boundary point, before starting the
-individual agents one by one.</p></div>
+    <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.4.4/Ecto.Type.html#c:dump/1"><code class="inline">Ecto.Type.dump/1</code></a>.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#start_link/1">start_link(automata_config)</a>
+    <a href="#embed_as/1">embed_as(_)</a>
   </div>
+    <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.4.4/Ecto.Type.html#c:embed_as/1"><code class="inline">Ecto.Type.embed_as/1</code></a>.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#status/1">status(automaton_name)</a>
+    <a href="#equal?/2">equal?(_, _)</a>
   </div>
+    <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.4.4/Ecto.Type.html#c:equal?/2"><code class="inline">Ecto.Type.equal?/2</code></a>.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#transform_automata_config/1">transform_automata_config(automata_config)</a>
+    <a href="#load/1">load(value)</a>
   </div>
-    <div class="summary-synopsis"><p>Primary boundary point for initial interpretation, re-organization of automata
-level control policy in order to determine automaton level control policies.
-We are transforming from control policy -&gt; control policies using information
-from the World, including the agent configurations.</p></div>
+    <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.4.4/Ecto.Type.html#c:load/1"><code class="inline">Ecto.Type.load/1</code></a>.</p></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#type/0">type()</a>
+  </div>
+    <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.4.4/Ecto.Type.html#c:type/0"><code class="inline">Ecto.Type.type/0</code></a>.</p></div>
 </div>
   </div>
         </section>
@@ -137,74 +127,76 @@ from the World, including the agent configurations.</p></div>
             </a>
 Functions          </h1>
           <div class="functions-list">
-<section class="detail" id="child_spec/1">
+<section class="detail" id="cast/1">
   <div class="detail-header">
-    <a href="#child_spec/1" class="detail-link" title="Link to this function">
+    <a href="#cast/1" class="detail-link" title="Link to this function">
       <span class="icon-link" aria-hidden="true"></span>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature">child_spec(init_arg)</h1>
+    <h1 class="signature">cast(value)</h1>
   </div>
   <section class="docstring">
-<p>Returns a specification to start this module under a supervisor.</p>
-<p>See <a href="https://hexdocs.pm/elixir/Supervisor.html"><code class="inline">Supervisor</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.4.4/Ecto.Type.html#c:cast/1"><code class="inline">Ecto.Type.cast/1</code></a>.</p>
   </section>
 </section>
-<section class="detail" id="init/1">
+<section class="detail" id="dump/1">
   <div class="detail-header">
-    <a href="#init/1" class="detail-link" title="Link to this function">
+    <a href="#dump/1" class="detail-link" title="Link to this function">
       <span class="icon-link" aria-hidden="true"></span>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature">init(automata_config)</h1>
+    <h1 class="signature">dump(value)</h1>
   </div>
   <section class="docstring">
-<p>The automata_config data flow is a key abstraction for meta-level control
-of the agents. This is a primary internal boundary point, before starting the
-individual agents one by one.</p>
-<p>The <code class="inline">automaton_config</code> data flow / signals transmitted from this point should
-be untouched until hitting the <a href="Automaton.AgentServer.html"><code class="inline">Automaton.AgentServer</code></a>, a key boundary point
-providing lifecycle and argument interpretation before being expedited to the
-<a href="Automaton.html"><code class="inline">Automaton</code></a> to be interpreted at both the builtins and custom built level. The
-layers pre, post, and in between are TBD, along with design of other potential
-servers off of the <a href="Automaton.AgentSupervisor.html"><code class="inline">Automaton.AgentSupervisor</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.4.4/Ecto.Type.html#c:dump/1"><code class="inline">Ecto.Type.dump/1</code></a>.</p>
   </section>
 </section>
-<section class="detail" id="start_link/1">
+<section class="detail" id="embed_as/1">
   <div class="detail-header">
-    <a href="#start_link/1" class="detail-link" title="Link to this function">
+    <a href="#embed_as/1" class="detail-link" title="Link to this function">
       <span class="icon-link" aria-hidden="true"></span>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature">start_link(automata_config)</h1>
+    <h1 class="signature">embed_as(_)</h1>
   </div>
   <section class="docstring">
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.4.4/Ecto.Type.html#c:embed_as/1"><code class="inline">Ecto.Type.embed_as/1</code></a>.</p>
   </section>
 </section>
-<section class="detail" id="status/1">
+<section class="detail" id="equal?/2">
   <div class="detail-header">
-    <a href="#status/1" class="detail-link" title="Link to this function">
+    <a href="#equal?/2" class="detail-link" title="Link to this function">
       <span class="icon-link" aria-hidden="true"></span>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature">status(automaton_name)</h1>
+    <h1 class="signature">equal?(_, _)</h1>
   </div>
   <section class="docstring">
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.4.4/Ecto.Type.html#c:equal?/2"><code class="inline">Ecto.Type.equal?/2</code></a>.</p>
   </section>
 </section>
-<section class="detail" id="transform_automata_config/1">
+<section class="detail" id="load/1">
   <div class="detail-header">
-    <a href="#transform_automata_config/1" class="detail-link" title="Link to this function">
+    <a href="#load/1" class="detail-link" title="Link to this function">
       <span class="icon-link" aria-hidden="true"></span>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature">transform_automata_config(automata_config)</h1>
+    <h1 class="signature">load(value)</h1>
   </div>
   <section class="docstring">
-<p>Primary boundary point for initial interpretation, re-organization of automata
-level control policy in order to determine automaton level control policies.
-We are transforming from control policy -&gt; control policies using information
-from the World, including the agent configurations.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.4.4/Ecto.Type.html#c:load/1"><code class="inline">Ecto.Type.load/1</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="type/0">
+  <div class="detail-header">
+    <a href="#type/0" class="detail-link" title="Link to this function">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature">type()</h1>
+  </div>
+  <section class="docstring">
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.4.4/Ecto.Type.html#c:type/0"><code class="inline">Ecto.Type.type/0</code></a>.</p>
   </section>
 </section>
           </div>

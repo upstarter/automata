@@ -8,7 +8,7 @@
     <meta name="project" content="automata v0.1.0">
     <title>Automaton.Types.BT.Action — automata v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
-    <script src="dist/sidebar_items-584d3af45c.js"></script>
+    <script src="dist/sidebar_items-6df651b196.js"></script>
       <script src="docs_config.js"></script>
     <script async src="dist/app-a225d03098e64fef431a.js"></script>
   </head>
@@ -69,7 +69,11 @@ Automaton.Types.BT.Action      </h1>
 
         <section id="moduledoc">
 <p>  An action is a leaf in the tree.
-  It operates on the world as a component of a composite(control) node.</p>
+  It operates on the world as a component of a composite(control) node.
+  Actions can alter the system configuration, returning one of three possible
+  state values: Success, Failure, or Running. Conditions cannot alter the
+  system configuration, returning one of two possible state values: Success,
+  or Failure.</p>
         </section>
 
 

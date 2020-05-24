@@ -8,7 +8,7 @@
     <meta name="project" content="automata v0.1.0">
     <title>Automata.Sensory — automata v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
-    <script src="dist/sidebar_items-584d3af45c.js"></script>
+    <script src="dist/sidebar_items-6df651b196.js"></script>
       <script src="docs_config.js"></script>
     <script async src="dist/app-a225d03098e64fef431a.js"></script>
   </head>
@@ -69,32 +69,33 @@ Automata.Sensory      </h1>
 
         <section id="moduledoc">
 <p>  The World-Agent Division
-  The Sensory System marks the single entry point into an agent from the World. All
-  sensory input from the world must pass through the Sensory System before it can
-  be processed by the rest of the agent&#39;s mind.</p>
+  The Sensory System marks the single entry point into an agent from the
+  World. All sensory input from the world must pass through the Sensory System
+  before it can be processed by the rest of the agent&#39;s mind.</p>
 <p>  The primary job of the Sensory System is to act as the enforcer of sensory
-  honesty. As such, it processes each DataRecord so that it appears as it would
-  from the agents point of view. Sometimes that means removing it completely –
-  for example, culling VisualDataRecords outside of the perceptual field – or
-  otherwise transforming it into the appropriate reference frame.</p>
+  honesty. As such, it processes each DataRecord so that it appears as it
+  would from the agents point of view. Sometimes that means removing it
+  completely – for example, culling VisualDataRecords outside of the
+  perceptual field – or otherwise transforming it into the appropriate
+  reference frame.</p>
 <p>  Because the Sensory System offers a single entry point, it allows us to
-  provide more or less uniform treatment to the many types of DataRecords that an
-  agent may be called upon to process.</p>
+  provide more or less uniform treatment to the many types of DataRecords that
+  an agent may be called upon to process.</p>
 <p>  Types of sensory data:
   Network:</p>
 <pre><code class="nohighlight makeup elixir"><span class="nc">API</span><span class="w"> </span><span class="n">calls</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">third</span><span class="w"> </span><span class="n">parties</span><span class="w">
-</span><span class="nc">API</span><span class="w"> </span><span class="n">calls</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="n">third</span><span class="w"> </span><span class="n">parties</span><span class="w"> </span><span class="p" data-group-id="6544259751-1">(</span><span class="nc">WebHooks</span><span class="p" data-group-id="6544259751-1">)</span><span class="w">
-</span><span class="nc">Data</span><span class="w"> </span><span class="nc">Streams</span><span class="w"> </span><span class="p" data-group-id="6544259751-2">(</span><span class="nc">WebSockets</span><span class="p" data-group-id="6544259751-2">)</span></code></pre>
+</span><span class="nc">API</span><span class="w"> </span><span class="n">calls</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="n">third</span><span class="w"> </span><span class="n">parties</span><span class="w"> </span><span class="p" data-group-id="6944264889-1">(</span><span class="nc">WebHooks</span><span class="p" data-group-id="6944264889-1">)</span><span class="w">
+</span><span class="nc">Data</span><span class="w"> </span><span class="nc">Streams</span><span class="w"> </span><span class="p" data-group-id="6944264889-2">(</span><span class="nc">WebSockets</span><span class="p" data-group-id="6944264889-2">)</span></code></pre>
 <p>  Local Sys:</p>
 <pre><code class="nohighlight makeup elixir"><span class="nc">Local</span><span class="w"> </span><span class="nc">Events</span><span class="w">
 </span><span class="nc">Local</span><span class="w"> </span><span class="nc">Memory</span><span class="w"> </span><span class="nc">Stores</span><span class="w"> </span><span class="nc">RAM</span><span class="w">
 </span><span class="nc">Local</span><span class="w"> </span><span class="nc">Database</span><span class="w"> </span><span class="nc">ROM</span></code></pre>
-<p>  The Sensory System is a filter through which all world events (represented by
-  DataRecords) must pass. Unlike its physical equivalents, where any data that
-  passes through is fair game, in Automata the Sensory System plays an active role
-  in keeping the agents virtual sensation honest. In a simulated
-  world, there is potentially much more accessible information than the
-  agent, limited by its sensory apparatus, should be able to sense.</p>
+<p>  The Sensory System is a filter through which all world events (represented
+  by DataRecords) must pass. Unlike its physical equivalents, where any data
+  that passes through is fair game, in Automata the Sensory System plays an
+  active role in keeping the agents virtual sensation honest. In a simulated
+  world, there is potentially much more accessible information than the agent,
+  limited by its sensory apparatus, should be able to sense.</p>
         </section>
 
 

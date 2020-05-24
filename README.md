@@ -56,11 +56,11 @@ where you are running a specific context/it block containing line 23.
 
 ##### **Environment** *(State Space Representations)*
 
-These are the maps of the territory. Without a good map, any adventurer could easily get lost. To fit the information available to the problem at hand, we separate the data structures representing our models into distinct layers with well defined boundaries.
+These are the maps of the territory. Without a good map, any adventurer could easily get lost. To fit the information available to the problem at hand, we separate representations into distinct layers with well defined boundaries.
 
 ##### **Reasoning** *(Decision Making, Action Selection)*
 
-All agents have some formulation of action selection, otherwise they would never achieve their goals. To keep agent decision making as decoupled as possible, we introduce a layer which fits the mode of reasoning to the representation.
+All agents have some formulation of action selection, otherwise they would never achieve their goals. To keep agent decision making correct, we fit the mode of reasoning to the representation.
 
 ##### **Knowledge** *(Memory, Local & Global Histories)*
 
@@ -82,7 +82,7 @@ It combines five complementary  aspects:
 
 
 Note that the five aspects are orthogonal. The first two aspects deal with
-“understanding” the map of the environment. The third and the forth aspects deal with autonomy of decision. Self adaptation ensures adequacy of decisions with rExUnitt to the environment map. See MMLC<sup>[2](#mmlcfootnote1)</sup>.
+“understanding” the map of the environment. The third and the forth aspects deal with autonomy of decision. Self adaptation ensures adequacy of decisions with respect to the environment map. See MMLC<sup>[2](#mmlcfootnote1)</sup>.
 
 #### A system is defined as an Autonomous Decentralized System (ADS) if the following two properties are satisfied:
 

@@ -8,6 +8,7 @@ defmodule Automata.MixProject do
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
+      aliases: aliases(),
       elixirc_paths: elixirc_paths(Mix.env()),
       elixirc_options: [warnings_as_errors: true],
       ignore_module_conflict: true,
@@ -38,6 +39,12 @@ defmodule Automata.MixProject do
     [
       extra_applications: [:logger],
       mod: {Automata, []}
+    ]
+  end
+
+  defp aliases() do
+    [
+      test: "test --no-start"
     ]
   end
 

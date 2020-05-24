@@ -8,7 +8,7 @@
     <meta name="project" content="automata v0.1.0">
     <title>API Reference — automata v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
-    <script src="dist/sidebar_items-584d3af45c.js"></script>
+    <script src="dist/sidebar_items-6df651b196.js"></script>
       <script src="docs_config.js"></script>
     <script async src="dist/app-a225d03098e64fef431a.js"></script>
   </head>
@@ -81,6 +81,11 @@ automata      </a>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
+    <a href="AtomType.html">AtomType</a>
+  </div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
     <a href="Automata.html">Automata</a>
   </div>
     <div class="summary-synopsis"></div>
@@ -142,9 +147,9 @@ agents and starts the agents under the <code class="inline">Automata.AgentSuperv
     <a href="Automata.Sensory.html">Automata.Sensory</a>
   </div>
     <div class="summary-synopsis"><p>  The World-Agent Division
-  The Sensory System marks the single entry point into an agent from the World. All
-  sensory input from the world must pass through the Sensory System before it can
-  be processed by the rest of the agent&#39;s mind.</p></div>
+  The Sensory System marks the single entry point into an agent from the
+  World. All sensory input from the world must pass through the Sensory System
+  before it can be processed by the rest of the agent&#39;s mind.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
@@ -173,7 +178,7 @@ is independently self-healing, thus providing fault tolerance.</p></div>
 
 <p>Typology is for interpretation of what state space representation to use based
 on user configuration. Each type has a <code class="inline">config/</code> dir to handle user
-config parsing and interpretation specific to it&#39;s domain.</p></div>
+config parsing and interpretation specific to that types domain.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
@@ -187,9 +192,9 @@ Second pass should coordinate automata in achievement of some global goal</p></d
   <div class="summary-signature">
     <a href="Automata.World.html">Automata.World</a>
   </div>
-    <div class="summary-synopsis"><p>The world contains environments and automata that operate on/from them. User
-defined automata state spaces (as distinct from automaton state spaces) and
-blackboards serve as short term working memory shared by the world&#39;s agents.</p></div>
+    <div class="summary-synopsis"><p>A World is made up of Agents (automata) which interpret &amp; act based on
+global(all-agents) &amp; local(per-agent) Obervations (from State Space
+Representations) and Events from the World.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
@@ -238,14 +243,20 @@ the high level Automaton policy control system and the user defined control.</p>
   <div class="summary-signature">
     <a href="Automaton.Types.BT.html">Automaton.Types.BT</a>
   </div>
-    <div class="summary-synopsis"><p>Implements the Behavior Tree (BT) state space representation.</p></div>
+    <div class="summary-synopsis"><p>Implements the Behavior Tree (BT) state space representation.
+Each tree is goal-oriented, i.e. associated with a distinct, high-level goal
+which it attempts to achieve.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
     <a href="Automaton.Types.BT.Action.html">Automaton.Types.BT.Action</a>
   </div>
     <div class="summary-synopsis"><p>  An action is a leaf in the tree.
-  It operates on the world as a component of a composite(control) node.</p></div>
+  It operates on the world as a component of a composite(control) node.
+  Actions can alter the system configuration, returning one of three possible
+  state values: Success, Failure, or Running. Conditions cannot alter the
+  system configuration, returning one of two possible state values: Success,
+  or Failure.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
@@ -394,7 +405,7 @@ priority composite node)</p></div>
   </div>
     <div class="summary-synopsis"><p>When a DataRecord enters the Perception System, a new PerceptMemory is
 created, and as the DataRecord is pushed through the Percept Tree, each
-percept that registers a positive match adds its rExUnittive data to the new
+percept that registers a positive match adds its data to the new
 PerceptMemory.</p></div>
 </div>
 <div class="summary-row">
@@ -470,6 +481,11 @@ PerceptMemory.</p></div>
 <div class="summary-row">
   <div class="summary-signature">
     <a href="SeqComposite1.State.html">SeqComposite1.State</a>
+  </div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="WorldConfig.html">WorldConfig</a>
   </div>
 </div>
     </div>

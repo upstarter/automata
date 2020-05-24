@@ -8,7 +8,7 @@
     <meta name="project" content="automata v0.1.0">
     <title>Automata.World — automata v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
-    <script src="dist/sidebar_items-584d3af45c.js"></script>
+    <script src="dist/sidebar_items-6df651b196.js"></script>
       <script src="docs_config.js"></script>
     <script async src="dist/app-a225d03098e64fef431a.js"></script>
   </head>
@@ -68,9 +68,11 @@ Automata.World      </h1>
 
 
         <section id="moduledoc">
-<p>The world contains environments and automata that operate on/from them. User
-defined automata state spaces (as distinct from automaton state spaces) and
-blackboards serve as short term working memory shared by the world&#39;s agents.</p>
+<p>A World is made up of Agents (automata) which interpret &amp; act based on
+global(all-agents) &amp; local(per-agent) Obervations (from State Space
+Representations) and Events from the World.</p>
+<p>Events arise in the world, and agents with matching traits and capabilities
+respond to the events individually and collectively.</p>
 <p>The further in the supervision tree you get to the <code class="inline">Automaton.Types</code> the less
 information you have about the global situation, and vice versa.</p>
 <p>Therefore, it will be wise to thoughtfully provide abstractions for robust
@@ -90,17 +92,17 @@ from running agents</p>
   </span><span class="c1"># working memory can be used to describe inter-relations in terms of</span><span class="w">
   </span><span class="c1"># perspectives, constraints, environs, stratified classes of objects/agents and</span><span class="w">
   </span><span class="c1"># their types, objective predictive representations</span><span class="w">
-  </span><span class="ss">ontology</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9900736213-1">[</span><span class="p" data-group-id="9900736213-1">]</span><span class="p">,</span><span class="w">
+  </span><span class="ss">ontology</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4723819247-1">[</span><span class="p" data-group-id="4723819247-1">]</span><span class="p">,</span><span class="w">
 
   </span><span class="c1"># The representations describing the world ontology may determine the initial</span><span class="w">
   </span><span class="c1"># environment and vice versa, they are dependent and can be mixed and matched.</span><span class="w">
-  </span><span class="ss">environs</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9900736213-2">[</span><span class="p" data-group-id="9900736213-2">]</span><span class="p">,</span><span class="w">
+  </span><span class="ss">environs</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4723819247-2">[</span><span class="p" data-group-id="4723819247-2">]</span><span class="p">,</span><span class="w">
 
   </span><span class="c1"># the Automata configured to operate in this world, given the environs</span><span class="w">
   </span><span class="c1"># TODO: match (or automatch) the automata to an environ or all environs</span><span class="w">
   </span><span class="c1"># perhaps like: `automata: [MockAgent1: :psr, MockRobot1: :dec_pomdp]`</span><span class="w">
   </span><span class="c1"># or inferred at automata level policies</span><span class="w">
-  </span><span class="ss">automata</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9900736213-3">[</span><span class="nc">MockSeq1</span><span class="p" data-group-id="9900736213-3">]</span></code></pre>
+  </span><span class="ss">automata</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4723819247-3">[</span><span class="nc">MockSeq1</span><span class="p" data-group-id="4723819247-3">]</span></code></pre>
         </section>
 
 

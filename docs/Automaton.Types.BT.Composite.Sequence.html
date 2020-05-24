@@ -8,7 +8,7 @@
     <meta name="project" content="automata v0.1.0">
     <title>Automaton.Types.BT.Composite.Sequence — automata v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
-    <script src="dist/sidebar_items-584d3af45c.js"></script>
+    <script src="dist/sidebar_items-6df651b196.js"></script>
       <script src="docs_config.js"></script>
     <script async src="dist/app-a225d03098e64fef431a.js"></script>
   </head>
@@ -75,6 +75,8 @@ Automaton.Types.BT.Composite.Sequence      </h1>
   when all the children return success. The purpose of the sequence node is to
   carry out the tasks that are deﬁned by a strict sequence of sub-tasks, in
   which all have to succeed.</p>
+<p>  Most BT implementations also include a Sequence with memory, where a subtree
+  that returned Succeed is never executed again.</p>
 <p>  A Sequence will return immediately with a failure status code when one of
   its children fails. As long as its children are succeeding, it will keep
   going. If it runs out of children, it will return in success.</p>
