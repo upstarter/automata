@@ -60,7 +60,7 @@ These are the maps of the territory. Without a good map, any adventurer could ea
 
 ##### **Reasoning** *(Decision Making, Action Selection)*
 
-All agents have some formulation of action selection, otherwise they would never achieve their goals. To keep agent decision making as decoupled as possible, we introduce a layer which fits the mode of reasoning to the state space.
+All agents have some formulation of action selection, otherwise they would never achieve their goals. To keep agent decision making as decoupled as possible, we introduce a layer which fits the mode of reasoning to the representation.
 
 ##### **Knowledge** *(Memory, Local & Global Histories)*
 

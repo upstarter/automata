@@ -2,7 +2,7 @@ defmodule PerceptMem do
   @moduledoc """
   When a DataRecord enters the Perception System, a new PerceptMemory is
   created, and as the DataRecord is pushed through the Percept Tree, each
-  percept that registers a positive match adds its rExUnittive data to the new
+  percept that registers a positive match adds its data to the new
   PerceptMemory.
 
   PerceptMemory can be thought of as Beliefs about the world ( individually and

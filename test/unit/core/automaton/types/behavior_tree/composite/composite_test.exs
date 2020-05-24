@@ -9,17 +9,11 @@ defmodule CompositeTest do
   end
 
   describe "#remove_child" do
-    test "" do
-    end
   end
 
   describe "#clear_children" do
-    test "" do
-    end
   end
 
   describe "#continue_status" do
-    test "" do
-    end
   end
 end
