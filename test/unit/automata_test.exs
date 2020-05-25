@@ -1,4 +1,4 @@
-defmodule AutomataTest do
+defmodule AutomataUnitTest do
   use ExUnit.Case, async: true
 
   # describe "start_worlds" do

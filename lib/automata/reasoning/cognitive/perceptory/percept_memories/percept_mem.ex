@@ -33,7 +33,7 @@ defmodule PerceptMem do
   PerceptMemory object. When a DataRecord enters the Perception System, a new
   PerceptMemory is created, and as the DataRecord is pushed through the
   Percept Tree, each percept that registers a positive match adds its
-  rExUnittive data to the new PerceptMemory. Thus, given a sensory stimulus,
+  data to the new PerceptMemory. Thus, given a sensory stimulus,
   the PerceptMemory represents all the agent can know about that stimulus.
 
   Thus, given a sensory stimulus, the PerceptMemory represents all the agent

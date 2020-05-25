@@ -19,7 +19,7 @@ defmodule Automata.MixProject do
         # only Direct OTP runtime application dependencies - not the entire tree
         plt_add_deps: :apps_direct
       ],
-      # preferred_cli_env: [ExUnit: :test],
+      preferred_cli_env: [ExUnit: :test],
       docs: [
         output: "docs",
         extras: [

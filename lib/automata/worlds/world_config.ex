@@ -11,4 +11,11 @@ defmodule WorldConfig do
   def new(data) do
     struct(WorldConfig, data)
   end
+
+  @type t :: %__MODULE__{
+          world: list,
+          ontology: list,
+          environs: list,
+          automata_config: list
+        }
 end

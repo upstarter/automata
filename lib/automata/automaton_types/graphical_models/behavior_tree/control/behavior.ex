@@ -12,17 +12,28 @@ defmodule Automaton.Types.BT.Behavior do
   the design process continues.
   """
 
+  @typedoc """
+  All nodes start with a statuses of `:bh_fresh`.
+  A BT node can be in one of five statuses:
+    1. :bh_fresh (when never run, or when reset)
+    2. :bh_running (when running an async user action)
+    3. :bh_failure
+    4. :bh_success
+    5. :bh_aborted (when aborted due to exits & exceptions)
+  """
+  @type status ::
+          :bh_aborted | :bh_failure | :bh_fresh | :bh_running | :bh_success
+
   # these need serious help, just placeholders for now
   @callback on_init(term) :: term | {:error, String.t()}
   @callback update(any()) :: {:ok, Module.t()}
-  @callback on_terminate(term) ::
-              :bh_aborted | :bh_failure | :bh_fresh | :bh_running | :bh_success
+  @callback on_terminate(term) :: status
   @callback reset() :: atom
   @callback abort() :: atom
   @callback aborted?() :: bool | nil
   @callback terminated?() :: bool | nil
   @callback running?() :: bool | nil
-  @callback status() :: atom
+  @callback status() :: status
 
   defmacro __using__(_opts) do
     quote do

@@ -25,10 +25,6 @@ defmodule Automata.Server do
     GenServer.start_link(__MODULE__, automata_config, name: __MODULE__)
   end
 
-  def status(automaton_name) do
-    Automaton.AgentServer.status(automaton_name)
-  end
-
   #############
   # Callbacks #
   #############

@@ -6,7 +6,14 @@ defmodule Automaton do
   the appropriate modules into the user-defined agents.
   """
 
+  # @typedoc """
+  # All automata start with a state of nil.
+  # An automaton state is built up on startup
+  # """
+
   defmacro __using__(automaton_config) do
+    # @type state :: module()
+
     Automaton.Types.Typology.call(automaton_config)
   end
 end

@@ -11,7 +11,7 @@ defmodule Automata.Blackboard do
     about 100 actors allocated at a time about 60 behaviors in the average tree,
     and each behavior taking up about 32 bytes of memory, this gives us about
     192K of persistent behavior storage. Clearly, as the tree grows even further
-    this becomes even more of a memory burden, ExUnitially for a platform like
+    this becomes even more of a memory burden, initially for a platform like
     the Xbox.
 
       We can cut down on this burden considerably if we note that in the vast majority
