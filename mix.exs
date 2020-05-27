@@ -42,10 +42,7 @@ defmodule Automata.MixProject do
   end
 
   defp mod() do
-    case Mix.env() do
-      :test -> {TestAutomata, []}
-      _ -> {Automata, []}
-    end
+    {Automata, []}
   end
 
   defp aliases() do

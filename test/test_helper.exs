@@ -4,8 +4,10 @@
 # end
 # mix test --include pending
 ExUnit.configure(exclude: [pending: true])
-# TODO: remove this, make tests random
-ExUnit.configure(seed: 0)
+
+# to make tests not run at random per modules
+# ExUnit.configure(seed: 0)
+
 ExUnit.start()
 
 # {:ok, files} = File.ls("./test/support")

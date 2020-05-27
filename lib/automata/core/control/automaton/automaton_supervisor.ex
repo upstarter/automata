@@ -10,7 +10,9 @@ defmodule Automata.AutomatonSupervisor do
   use Supervisor
 
   def start_link(automaton_config) do
-    Supervisor.start_link(__MODULE__, automaton_config, name: :"#{automaton_config[:name]}Supervisor")
+    Supervisor.start_link(__MODULE__, automaton_config,
+      name: :"#{automaton_config[:name]}Supervisor"
+    )
   end
 
   def init(automaton_config) do

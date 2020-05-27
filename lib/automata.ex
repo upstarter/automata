@@ -46,7 +46,7 @@ defmodule Automata do
     @moduledoc """
     A struct that keeps global information about all automata for a world.
     It is received by formatters and contains the following fields:
-      * `:name`  - the automata name
+      * `:name`  - the world name
       * `:state` - the automata state (see `t:Automata.state/0`)
       * `:automata` - all automata in the world
     """
@@ -88,42 +88,53 @@ defmodule Automata do
 
   use Application
 
-  def start(_type, _args) do
-    # TODO: recursively autoload all the user-defined worlds from the worlds/ directory tree
-    # to build the config() data structure ie. config for each agent from world config
-    # which defines which automata which are operating in that world.
-    run()
+  # TODO: recursively autoload all the user-defined worlds from the worlds/ directory tree
+  # to build the config() data structure ie. config for each agent from world config
+  # which defines which automata which are operating in that world.
+  @doc false
+  def start(_type, []) do
+    children = [
+      # Automata.AutomataServer,
+      # Automata.CaptureServer,
+      # Automata.OnExitHandler
+    ]
+
+    {:ok, _pid} = run()
+
+    opts = [strategy: :one_for_one]
+
+    Supervisor.start_link(children, opts)
   end
 
-  @doc """
-  Starts Automata and automatically runs the world(s) right before the VM
-  terminates.
-  It accepts a set of `options` to configure `Automata`
-  (the same ones accepted by `configure/1`).
-  If you want to run worlds manually, you can set the `:autorun` option
-  to `false` and use run/0 to run worlds.
-  """
-  @spec start(Keyword.t()) :: :ok
-  def start(options \\ []) do
-    {:ok, _} = Application.ensure_all_started(:automata)
-
-    configure(options)
-
-    if Application.fetch_env!(:automata, :autorun) do
-      Application.put_env(:automata, :autorun, false)
-
-      System.at_exit(fn
-        0 ->
-          options = persist_defaults(configuration())
-          :ok = Automata.Operator.run(options)
-
-        _ ->
-          :ok
-      end)
-    else
-      :ok
-    end
-  end
+  # @doc """
+  # Starts Automata and automatically runs the world(s) right before the VM
+  # terminates.
+  # It accepts a set of `options` to configure `Automata`
+  # (the same ones accepted by `configure/1`).
+  # If you want to run worlds manually, you can set the `:autorun` option
+  # to `false` and use run/0 to run worlds.
+  # """
+  # @spec start(Keyword.t()) :: :ok
+  # def start(options \\ []) do
+  #   {:ok, _} = Application.ensure_all_started(:automata)
+  #
+  #   configure(options)
+  #
+  #   if Application.fetch_env!(:automata, :autorun) do
+  #     Application.put_env(:automata, :autorun, false)
+  #
+  #     System.at_exit(fn
+  #       0 ->
+  #         options = persist_defaults(configuration())
+  #         :ok = Automata.Operator.run(options)
+  #
+  #       _ ->
+  #         :ok
+  #     end)
+  #   else
+  #     :ok
+  #   end
+  # end
 
   @doc """
   Configures Automata.
@@ -171,3 +182,52 @@ defmodule Automata do
     Automaton.AgentServer.status(automaton_name)
   end
 end
+
+# defmodule Automata do
+#   @moduledoc """
+#
+#   """
+#   use Application
+#
+#   def start(_type, _args) do
+#     # TODO: recursively autoload all the user-defined worlds from the worlds/ directory tree
+#     # to build the worlds_config data structure ie. config for each agent from world config
+#     # which defines which automata which are operating in that world.
+#
+#     worlds_config = [
+#       %WorldConfig{
+#         world: [name: "MockWorld1", mfa: {MockWorld1, :start_link, []}],
+#         automata_config: [
+#           # these lists end up as `automaton_config` from  `Automata.Server` on in
+#           # the supervision tree (past the `Automata` Control Boundary Layer and
+#           # into the `Automaton` Control Boundary)
+#           [name: "MockSeq1", mfa: {MockSeq1, :start_link, []}]
+#           # [name: "Automaton2", mfa: {MockSel1, :start_link, []}]
+#         ]
+#       }
+#     ]
+#
+#     start_worlds(worlds_config, nil)
+#   end
+#
+#   def start_worlds([%WorldConfig{automata_config: automata_config} | rest], _pid) do
+#     {:ok, pid} = start_world(automata_config)
+#     start_worlds(rest, pid)
+#   end
+#
+#   def start_worlds([], pid) do
+#     {:ok, pid}
+#   end
+#
+#   def start_world(automata_config) do
+#     start_automata(automata_config)
+#   end
+#
+#   def start_automata(automata_config) do
+#     Automata.Supervisor.start_link(automata_config)
+#   end
+#
+#   def status(automaton_name) do
+#     Automata.Server.status(automaton_name)
+#   end
+# end
