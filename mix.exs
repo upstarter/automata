@@ -36,8 +36,25 @@ defmodule Automata.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
+      registered: [
+        Automata.OnExitHandler,
+        Automata.Supervisor
+      ],
       extra_applications: [:logger],
-      mod: mod()
+      mod: mod(),
+      env: [
+        # Calculated on demand
+        # max_automata: System.schedulers_online * 2,
+        # seed: rand(),
+        # formatters: [Automata.CLIFormatter],
+
+        autorun: true,
+        max_failures: :infinity,
+        refute_receive_timeout: 100,
+        timeout: 60000,
+        trace: false,
+        after_automata: []
+      ]
     ]
   end
 

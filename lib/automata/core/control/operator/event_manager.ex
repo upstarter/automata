@@ -5,7 +5,7 @@ defmodule Automata.EventManager do
   @typep manager :: {supervisor_manager :: pid, event_manager :: pid}
 
   @doc """
-  Starts an event manager that publishes events during the automata episodes.
+  Starts an event manager that publishes events during automata episodes.
   Powers the internal statistics server for Automata.
   """
   @spec start_link() :: {:ok, manager}
@@ -57,7 +57,7 @@ defmodule Automata.EventManager do
   end
 
   def automaton_finished(manager, automaton) do
-    notify(manager, {:module_finished, automaton})
+    notify(manager, {:automaton_finished, automaton})
   end
 
   def update_started(manager, test) do
