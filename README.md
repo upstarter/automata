@@ -56,7 +56,7 @@ where you are running a specific context/it block containing line 23.
 
 ##### **Environment** *(State Space Representations)*
 
-These are the maps of the territory. Without a good map, any adventurer could easily get lost. To fit the information available to the problem at hand, we separate representations into distinct layers with well defined boundaries.
+These are the maps of the territory. Without a good map, any explorer could easily get lost. To fit the information available to the problem at hand, we separate representations into distinct layers with well defined boundaries.
 
 ##### **Reasoning** *(Decision Making, Action Selection)*
 
@@ -103,10 +103,12 @@ Planned builtin and/or custom third-party agent types include:
     - *Informed Search*
     - *Generalized Probabilistic Models*
     - *Bayesian Networks*
+    - *Markov Models* (*pomdp*, *dec-pomdp*)
 
 
   - Reinforcement Learning Based
-    - *mdp*, *pomdp*, *dec-pomdp*
+    - *td-learning*, *q-learning*
+    - *predictive-learning*
     - *deep learning*
 
 
@@ -131,16 +133,16 @@ Planned builtin and/or custom third-party agent types include:
 
 ### Applications
 - Trading Systems
-- Patient Monitoring & Care Systems
 - Pandemic Testing Drone Units
+- Patient Monitoring & Care Systems
 - Swarm Intelligence / Distributed Robotics
 - Intelligent agents with soft realtime multi-dimensional sensory, perception, intuition, and action capabilities
-- Multi-Agent Reinforcement Learning
-- Mixture of Experts Deep Learning Control Systems (python inter-op with [erlport](http://erlport.org/))
+- Multi-Agent Reinforcement Learning (MARL)
+- Mixture of Experts (MoE) Deep Learning Control Systems (python inter-op with [erlport](http://erlport.org/))
 - Blockchain Smart Contract Systems
 - A Mega-constellation of satellites
 - 3D Printing and Factory Automation
-- Product Analytics Systems
+- Product Automation & Analytics
 - Augmented, Virtual, Mixed Reality
 - Smart Home / IOT Systems
 - High-Speed Rail Systems (Japan has an ADS railway that learns)

@@ -5,7 +5,7 @@ defmodule WorldConfig do
     field(:world)
     field(:ontology)
     field(:environs)
-    field(:automata_config)
+    field(:automata)
   end
 
   def new(data) do
@@ -16,6 +16,6 @@ defmodule WorldConfig do
           world: list,
           ontology: list,
           environs: list,
-          automata_config: list
+          automata: list
         }
 end

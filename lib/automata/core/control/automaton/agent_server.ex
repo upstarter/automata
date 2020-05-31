@@ -79,7 +79,7 @@ defmodule Automaton.AgentServer do
     spec = {Automaton.AgentSupervisor, [[self(), mfa, name]]}
     {:ok, agent_sup} = Supervisor.start_child(automaton_sup, spec)
 
-    automaton = new_automaton(agent_sup, mfa, name)
+    automaton = spawn_automaton(agent_sup, mfa, name)
     {:noreply, %{state | agent_sup: agent_sup, automaton: automaton}}
   end
 
@@ -124,7 +124,7 @@ defmodule Automaton.AgentServer do
 
             new_state = %{
               state
-              | automaton: [new_automaton(agent_sup, mfa, name) | remaining_automaton]
+              | automaton: [spawn_automaton(agent_sup, mfa, name) | remaining_automaton]
             }
 
             {:noreply, new_state}
@@ -151,7 +151,7 @@ defmodule Automaton.AgentServer do
     :"#{tree_name}Server"
   end
 
-  defp new_automaton(agent_sup, {m, _f, _a} = mfa, _name) do
+  defp spawn_automaton(agent_sup, {m, _f, _a} = mfa, _name) do
     spec = {m, [[agent_sup, mfa, m]]}
     {:ok, automaton} = DynamicSupervisor.start_child(agent_sup, spec)
     true = Process.link(automaton)

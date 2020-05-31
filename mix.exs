@@ -37,7 +37,7 @@ defmodule Automata.MixProject do
   def application do
     [
       registered: [
-        Automata.OnExitHandler,
+        # Automata.OnExitHandler,
         Automata.Supervisor
       ],
       extra_applications: [:logger],

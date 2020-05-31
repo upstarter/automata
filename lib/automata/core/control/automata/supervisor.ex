@@ -7,22 +7,22 @@ defmodule Automata.Supervisor do
   """
   use Supervisor
 
-  def start_link(automata_config) do
-    Supervisor.start_link(__MODULE__, automata_config, name: __MODULE__)
+  def start_link(world_config) do
+    Supervisor.start_link(__MODULE__, world_config, name: __MODULE__)
   end
 
   @spec init(any) :: no_return
-  def init(automata_config) do
+  def init(world_config) do
     children = [
       {Automata.AutomataSupervisor, []},
-      {Automata.Server, [automata_config]}
+      {Automata.Server, [world_config]}
     ]
 
     opts = [
       strategy: :one_for_all,
       max_restart: 1,
       max_time: 3600,
-      extra_arguments: [automata_config]
+      extra_arguments: [world_config]
     ]
 
     Supervisor.init(children, opts)

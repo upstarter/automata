@@ -15,7 +15,7 @@ defmodule WorldConfigTest do
     end
 
     test "automata_config" do
-      assert %WorldConfig{}.automata_config == nil
+      assert %WorldConfig{}.automata == nil
     end
   end
 end

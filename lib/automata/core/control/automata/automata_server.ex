@@ -21,8 +21,8 @@ defmodule Automata.Server do
   # API #
   #######
 
-  def start_link(automata_config) do
-    GenServer.start_link(__MODULE__, automata_config, name: __MODULE__)
+  def start_link(world_config) do
+    GenServer.start_link(__MODULE__, [world_config], name: __MODULE__)
   end
 
   #############
@@ -30,7 +30,7 @@ defmodule Automata.Server do
   #############
 
   @doc """
-  The automata_config data flow is a key abstraction for meta-level control
+  The world_config data flow is a key abstraction for meta-level control
   of the agents. This is a primary internal boundary point, before starting the
   individual agents one by one.
 
@@ -41,14 +41,14 @@ defmodule Automata.Server do
   layers pre, post, and in between are TBD, along with design of other potential
   servers off of the `Automaton.AgentSupervisor`.
   """
-  def init(automata_config) do
-    automata_config
-    |> transform_automata_config()
+  def init([world_config]) do
+    world_config
+    |> configure_automata()
     |> Enum.each(fn automaton_config ->
-      send(self(), {:start_automaton_sup, automaton_config})
+      send(self(), {:start_automaton_sup, [automaton_config, world_config]})
     end)
 
-    {:ok, automata_config}
+    {:ok, world_config}
   end
 
   @doc """
@@ -57,24 +57,31 @@ defmodule Automata.Server do
   We are transforming from control policy -> control policies using information
   from the World, including all agent configurations.
   """
-  def transform_automata_config(automata_config) do
-    Automata.Types.Typology.call(automata_config)
+  def configure_automata(world_config) do
+    world_config = Automata.Types.Typology.call(world_config)
+    world_config.automata
   end
 
-  def handle_info({:start_automaton_sup, automaton_config}, state) do
+  def handle_info({:start_automaton_sup, [automaton_config, world_config]}, state) do
     {:ok, _tree_sup} =
       DynamicSupervisor.start_child(
         Automata.AutomataSupervisor,
         {Automata.AutomatonSupervisor, [automaton_config]}
       )
 
+    {:ok, _tree_sup} =
+      DynamicSupervisor.start_child(
+        Automata.AutomataSupervisor,
+        {Automata.World.Server, [world_config.world]}
+      )
+
     {:noreply, state}
   end
 
-  def child_spec([automata_config]) do
+  def child_spec([world_config]) do
     %{
       id: __MODULE__,
-      start: {__MODULE__, :start_link, [automata_config]},
+      start: {__MODULE__, :start_link, [world_config]},
       restart: :temporary,
       shutdown: 10_000,
       type: :worker

@@ -17,7 +17,7 @@ defmodule Automata.Types.Typology do
     Using information from the World, including the agent configurations, initialize
     the state space representations according to the ontology.
   """
-  def call(automata_config) do
-    automata_config
+  def call(world_config) do
+    world_config
   end
 end
