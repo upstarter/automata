@@ -1,5 +1,5 @@
-# Users create worlds containing their automata. These are created in the
-# worlds/ directory.  Users define their own custom modules which `use
+# Users create world containing their automata. These are created in the
+# world/ directory.  Users define their own custom modules which `use
 # Automaton` as a macro. By overriding the `update()` function and returning a
 # status as one of `:running`, `:failure`, `:success`, or `:aborted` the core
 # system will run the Behavior Tree's as defined and handle normal errors with

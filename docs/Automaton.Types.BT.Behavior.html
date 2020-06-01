@@ -4,13 +4,13 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.21.3">
+    <meta name="generator" content="ExDoc v0.22.1">
     <meta name="project" content="automata v0.1.0">
     <title>Automaton.Types.BT.Behavior — automata v0.1.0</title>
-    <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
-    <script src="dist/sidebar_items-6df651b196.js"></script>
+    <link rel="stylesheet" href="dist/elixir-e589b8fad3dab6230c65.css" />
+    <script src="dist/sidebar_items-7e84b89a31.js"></script>
       <script src="docs_config.js"></script>
-    <script async src="dist/app-a225d03098e64fef431a.js"></script>
+    <script async src="dist/app-5c0c23dfec2d63ae33a2.js"></script>
   </head>
   <body data-type="modules">
     <script>try { if(localStorage.getItem('night-mode') === 'true') document.body.className += ' night-mode'; } catch (e) { }</script>
@@ -72,12 +72,10 @@ Automaton.Types.BT.Behavior <small>behaviour</small>      </h1>
 components that can be activated, run, and deactivated. Actions(Execution
 Nodes) provide specific implementations of this interface. Branches in the
 tree can be thought of as high level behaviors, heirarchically combining
-smaller behaviors to provide more complex and interesting behaviors.</p>
-<p>Note: there is a bunch of placeholder stuff in here right now and needs
+smaller behaviors to provide more complex and interesting behaviors.</p><p>Note: there is a bunch of placeholder stuff in here right now and needs
 thought and cleanup. The specs for the callbacks are not accurate, just
 needed something that compiled and ran. Needs more thought and attention as
-the design process continues.</p>
-        </section>
+the design process continues.</p>        </section>
 
         <section id="summary" class="details-list">
           <h1 class="section-heading">
@@ -87,6 +85,18 @@ the design process continues.</p>
             </a>
             Summary
           </h1>
+  <div class="summary-types summary">
+    <h2>
+      <a href="#types">Types</a>
+    </h2>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#t:status/0">status()</a>
+  </div>
+    <div class="summary-synopsis"><p>All nodes start with a statuses of <code class="inline">:bh_fresh</code>.
+A BT node can be in one of five statuses</p></div>
+</div>
+  </div>
   <div class="summary-callbacks summary">
     <h2>
       <a href="#callbacks">Callbacks</a>
@@ -139,6 +149,34 @@ the design process continues.</p>
   </div>
         </section>
 
+        <section id="types" class="details-list">
+          <h1 class="section-heading">
+            <a class="hover-link" href="#types">
+              <span class="icon-link" aria-hidden="true"></span>
+              <span class="sr-only">Link to this section</span>
+            </a>
+Types          </h1>
+          <div class="types-list">
+<section class="detail" id="t:status/0">
+  <div class="detail-header">
+    <a href="#t:status/0" class="detail-link" title="Link to this type">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature">status()</h1>
+  </div>
+
+  <section class="docstring">
+      <h2>Specs</h2>
+      <div class="specs">
+          <pre>status() :: :bh_aborted | :bh_failure | :bh_fresh | :bh_running | :bh_success</pre>
+      </div>
+
+<p>All nodes start with a statuses of <code class="inline">:bh_fresh</code>.
+A BT node can be in one of five statuses:</p><ol><li>:bh_fresh (when never run, or when reset)</li><li>:bh_running (when running an async user action)</li><li>:bh_failure</li><li>:bh_success</li><li>:bh_aborted (when aborted due to exits &amp; exceptions)</li></ol>  </section>
+</section>
+          </div>
+        </section>
         <section id="callbacks" class="details-list">
           <h1 class="section-heading">
             <a class="hover-link" href="#callbacks">
@@ -154,11 +192,14 @@ Callbacks          </h1>
       <span class="sr-only">Link to this callback</span>
     </a>
     <h1 class="signature">abort()</h1>
+  </div>
+
+  <section class="docstring">
+      <h2>Specs</h2>
       <div class="specs">
           <pre>abort() :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>()</pre>
       </div>
-  </div>
-  <section class="docstring">
+
   </section>
 </section>
 <section class="detail" id="c:aborted?/0">
@@ -168,11 +209,14 @@ Callbacks          </h1>
       <span class="sr-only">Link to this callback</span>
     </a>
     <h1 class="signature">aborted?()</h1>
+  </div>
+
+  <section class="docstring">
+      <h2>Specs</h2>
       <div class="specs">
           <pre>aborted?() :: bool() | nil</pre>
       </div>
-  </div>
-  <section class="docstring">
+
   </section>
 </section>
 <section class="detail" id="c:on_init/1">
@@ -182,11 +226,14 @@ Callbacks          </h1>
       <span class="sr-only">Link to this callback</span>
     </a>
     <h1 class="signature">on_init(term)</h1>
+  </div>
+
+  <section class="docstring">
+      <h2>Specs</h2>
       <div class="specs">
           <pre>on_init(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>() | {:error, <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()}</pre>
       </div>
-  </div>
-  <section class="docstring">
+
   </section>
 </section>
 <section class="detail" id="c:on_terminate/1">
@@ -196,12 +243,14 @@ Callbacks          </h1>
       <span class="sr-only">Link to this callback</span>
     </a>
     <h1 class="signature">on_terminate(term)</h1>
-      <div class="specs">
-          <pre>on_terminate(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>()) ::
-  :bh_aborted | :bh_failure | :bh_fresh | :bh_running | :bh_success</pre>
-      </div>
   </div>
+
   <section class="docstring">
+      <h2>Specs</h2>
+      <div class="specs">
+          <pre>on_terminate(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>()) :: <a href="#t:status/0">status</a>()</pre>
+      </div>
+
   </section>
 </section>
 <section class="detail" id="c:reset/0">
@@ -211,11 +260,14 @@ Callbacks          </h1>
       <span class="sr-only">Link to this callback</span>
     </a>
     <h1 class="signature">reset()</h1>
+  </div>
+
+  <section class="docstring">
+      <h2>Specs</h2>
       <div class="specs">
           <pre>reset() :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>()</pre>
       </div>
-  </div>
-  <section class="docstring">
+
   </section>
 </section>
 <section class="detail" id="c:running?/0">
@@ -225,11 +277,14 @@ Callbacks          </h1>
       <span class="sr-only">Link to this callback</span>
     </a>
     <h1 class="signature">running?()</h1>
+  </div>
+
+  <section class="docstring">
+      <h2>Specs</h2>
       <div class="specs">
           <pre>running?() :: bool() | nil</pre>
       </div>
-  </div>
-  <section class="docstring">
+
   </section>
 </section>
 <section class="detail" id="c:status/0">
@@ -239,11 +294,14 @@ Callbacks          </h1>
       <span class="sr-only">Link to this callback</span>
     </a>
     <h1 class="signature">status()</h1>
-      <div class="specs">
-          <pre>status() :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>()</pre>
-      </div>
   </div>
+
   <section class="docstring">
+      <h2>Specs</h2>
+      <div class="specs">
+          <pre>status() :: <a href="#t:status/0">status</a>()</pre>
+      </div>
+
   </section>
 </section>
 <section class="detail" id="c:terminated?/0">
@@ -253,11 +311,14 @@ Callbacks          </h1>
       <span class="sr-only">Link to this callback</span>
     </a>
     <h1 class="signature">terminated?()</h1>
+  </div>
+
+  <section class="docstring">
+      <h2>Specs</h2>
       <div class="specs">
           <pre>terminated?() :: bool() | nil</pre>
       </div>
-  </div>
-  <section class="docstring">
+
   </section>
 </section>
 <section class="detail" id="c:update/1">
@@ -267,11 +328,14 @@ Callbacks          </h1>
       <span class="sr-only">Link to this callback</span>
     </a>
     <h1 class="signature">update(any)</h1>
-      <div class="specs">
-          <pre>update(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()) :: {:ok, <a href="https://hexdocs.pm/elixir/Module.html#t:t/0">Module.t</a>()}</pre>
-      </div>
   </div>
+
   <section class="docstring">
+      <h2>Specs</h2>
+      <div class="specs">
+          <pre>update(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()) :: {:ok, Module.t()}</pre>
+      </div>
+
   </section>
 </section>
           </div>
@@ -280,7 +344,7 @@ Callbacks          </h1>
         <p>
           <span class="line">
             Built using
-            <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener">ExDoc</a> (v0.21.3),
+            <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener">ExDoc</a> (v0.22.1),
           </span>
           <span class="line">
             designed by

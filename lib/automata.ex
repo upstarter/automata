@@ -86,9 +86,6 @@ defmodule Automata do
 
   use Application
 
-  # TODO: recursively autoload all the user-defined worlds from the worlds/ directory tree
-  # to build the config() data structure ie. config for each agent from world config
-  # which defines which automata which are operating in that world.
   @doc false
   def start(_type, []) do
     children = [
@@ -109,8 +106,8 @@ defmodule Automata do
   # terminates.
   # It accepts a set of `options` to configure `Automata`
   # (the same ones accepted by `configure/1`).
-  # If you want to run worlds manually, you can set the `:autorun` option
-  # to `false` and use run/0 to run worlds.
+  # If you want to run world manually, you can set the `:autorun` option
+  # to `false` and use run/0 to run world.
   # """
   @spec start(Keyword.t()) :: :ok
   def start(options \\ []) do

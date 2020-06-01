@@ -19,7 +19,7 @@ See the current milestones [here](https://github.com/upstarter/automata/mileston
 
 ## Usage
 
-Testing is currently happening using the mock sequence in `worlds/mock_world_1/mock_automata/mock_seq_1.ex`. This is currently our canonical example of how to design a behavior tree (one type of `Automaton`), and *eventually* communicates with other heterogeneous agents that you define in `worlds/<mock_world>/<mock_automata>/<mock_automaton>`.
+Testing is currently happening using the mock sequence in `world/mock_world_1/mock_automata/mock_seq_1.ex`. This is currently our canonical example of how to design a behavior tree (one type of `Automaton`), and *eventually* communicates with other heterogeneous agents that you define in `world/<mock_world>/<mock_automata>/<mock_automaton>`.
 
 Currently, you can run the mock sequence in an iex shell as follows:
 

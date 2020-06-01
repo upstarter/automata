@@ -1,12 +1,12 @@
-dist/search_items-d40005074c.js
-dist/app-a225d03098e64fef431a.js
-dist/elixir-0ab8a6a80ebaaa287431.css
-dist/erlang-bd206729da4d0d280293.css
+dist/search_items-e69dc0034b.js
+dist/app-5c0c23dfec2d63ae33a2.js
+dist/elixir-e589b8fad3dab6230c65.css
+dist/erlang-9792543de8efae7446f0.css
 dist/html/fonts/icomoon.eot
 dist/html/fonts/icomoon.svg
 dist/html/fonts/icomoon.ttf
 dist/html/fonts/icomoon.woff
-dist/sidebar_items-6df651b196.js
+dist/sidebar_items-7e84b89a31.js
 api-reference.html
 readme.html
 contributing.html
@@ -18,8 +18,10 @@ Automata.html
 Automata.ACL.html
 Automata.ActionSelect.html
 Automata.AutomataSupervisor.html
+Automata.AutomatonInfo.html
 Automata.AutomatonSupervisor.html
 Automata.Blackboard.html
+Automata.Operator.html
 Automata.Perceptory.html
 Automata.Reasoning.html
 Automata.Sensory.html
@@ -28,6 +30,9 @@ Automata.Supervisor.html
 Automata.Types.Typology.html
 Automata.Utility.html
 Automata.World.html
+Automata.World.Server.html
+Automata.World.Typology.html
+Automata.WorldInfo.html
 Automaton.html
 Automaton.AgentServer.html
 Automaton.AgentServer.State.html
@@ -67,4 +72,6 @@ Seq4.State.html
 SeqComposite1.html
 SeqComposite1.State.html
 WorldConfig.html
+Automata.MultiError.html
+Automata.TimeoutError.html
 index.html

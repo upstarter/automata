@@ -4,13 +4,13 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.21.3">
+    <meta name="generator" content="ExDoc v0.22.1">
     <meta name="project" content="automata v0.1.0">
     <title>Automata.World — automata v0.1.0</title>
-    <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
-    <script src="dist/sidebar_items-6df651b196.js"></script>
+    <link rel="stylesheet" href="dist/elixir-e589b8fad3dab6230c65.css" />
+    <script src="dist/sidebar_items-7e84b89a31.js"></script>
       <script src="docs_config.js"></script>
-    <script async src="dist/app-a225d03098e64fef431a.js"></script>
+    <script async src="dist/app-5c0c23dfec2d63ae33a2.js"></script>
   </head>
   <body data-type="modules">
     <script>try { if(localStorage.getItem('night-mode') === 'true') document.body.className += ' night-mode'; } catch (e) { }</script>
@@ -70,47 +70,39 @@ Automata.World      </h1>
         <section id="moduledoc">
 <p>A World is made up of Agents (automata) which interpret &amp; act based on
 global(all-agents) &amp; local(per-agent) Obervations (from State Space
-Representations) and Events from the World.</p>
-<p>Events arise in the world, and agents with matching traits and capabilities
-respond to the events individually and collectively.</p>
-<p>The further in the supervision tree you get to the <code class="inline">Automaton.Types</code> the less
-information you have about the global situation, and vice versa.</p>
-<p>Therefore, it will be wise to thoughtfully provide abstractions for robust
+Representations) and Events from the World.</p><p>Events arise in the world, and agents with matching traits and capabilities
+respond to the events individually and collectively.</p><p>The further in the supervision tree you get to the <code class="inline">Automaton.Types</code> the less
+information you have about the global situation, and vice versa.</p><p>Therefore, it will be wise to thoughtfully provide abstractions for robust
 state space, blackboard, ontological representations, etc. for coordination of
-interacting agents.</p>
-<p>The World can also be the source of network calls for the world, called into
-from running agents</p>
-<p>Local and/or external databases can provide long term world storage.</p>
-<h2 id="module-usage" class="section-heading">
+interacting agents.</p><p>The World can also be the source of network calls for the world, called into
+from running agents</p><p>Local and/or external databases can provide long term world storage.</p><h2 id="module-usage" class="section-heading">
   <a href="#module-usage" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
   Usage
 </h2>
-
 <pre><code class="nohighlight makeup elixir"><span class="kn">use</span><span class="w"> </span><span class="nc">Automata.World</span><span class="p">,</span><span class="w">
   </span><span class="c1"># An **Ontology** is for highest level meta representations for a **World**. It</span><span class="w">
   </span><span class="c1"># gives us a way to provide shared goals, beliefs, features. Ontological</span><span class="w">
   </span><span class="c1"># working memory can be used to describe inter-relations in terms of</span><span class="w">
   </span><span class="c1"># perspectives, constraints, environs, stratified classes of objects/agents and</span><span class="w">
   </span><span class="c1"># their types, objective predictive representations</span><span class="w">
-  </span><span class="ss">ontology</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4723819247-1">[</span><span class="p" data-group-id="4723819247-1">]</span><span class="p">,</span><span class="w">
+  </span><span class="ss">ontology</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0813530984-1">[</span><span class="p" data-group-id="0813530984-1">]</span><span class="p">,</span><span class="w">
 
   </span><span class="c1"># The representations describing the world ontology may determine the initial</span><span class="w">
   </span><span class="c1"># environment and vice versa, they are dependent and can be mixed and matched.</span><span class="w">
-  </span><span class="ss">environs</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4723819247-2">[</span><span class="p" data-group-id="4723819247-2">]</span><span class="p">,</span><span class="w">
+  </span><span class="ss">environs</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0813530984-2">[</span><span class="p" data-group-id="0813530984-2">]</span><span class="p">,</span><span class="w">
 
   </span><span class="c1"># the Automata configured to operate in this world, given the environs</span><span class="w">
   </span><span class="c1"># TODO: match (or automatch) the automata to an environ or all environs</span><span class="w">
   </span><span class="c1"># perhaps like: `automata: [MockAgent1: :psr, MockRobot1: :dec_pomdp]`</span><span class="w">
   </span><span class="c1"># or inferred at automata level policies</span><span class="w">
-  </span><span class="ss">automata</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4723819247-3">[</span><span class="nc">MockSeq1</span><span class="p" data-group-id="4723819247-3">]</span></code></pre>
-        </section>
+  </span><span class="ss">automata</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0813530984-3">[</span><span class="nc">MockSeq1</span><span class="p" data-group-id="0813530984-3">]</span></code></pre>        </section>
 
 
       <footer class="footer">
         <p>
           <span class="line">
             Built using
-            <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener">ExDoc</a> (v0.21.3),
+            <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener">ExDoc</a> (v0.22.1),
           </span>
           <span class="line">
             designed by

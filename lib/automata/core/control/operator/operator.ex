@@ -41,7 +41,7 @@ defmodule Automata.Operator do
     }
   end
 
-  # TODO: handle spawning multi worlds, for now just singular case
+  # TODO: handle spawning multi world, for now just singular case
   defp spawn_world(config) do
     EM.world_started(config.manager, config.world)
 

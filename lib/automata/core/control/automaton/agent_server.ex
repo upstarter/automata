@@ -148,7 +148,7 @@ defmodule Automaton.AgentServer do
   #####################
 
   defp name(tree_name) do
-    :"#{tree_name}Server"
+    :"#{tree_name}AgentServer"
   end
 
   defp spawn_automaton(agent_sup, {m, _f, _a} = mfa, _name) do

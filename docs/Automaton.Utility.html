@@ -4,13 +4,13 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.21.3">
+    <meta name="generator" content="ExDoc v0.22.1">
     <meta name="project" content="automata v0.1.0">
     <title>Automaton.Utility — automata v0.1.0</title>
-    <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
-    <script src="dist/sidebar_items-6df651b196.js"></script>
+    <link rel="stylesheet" href="dist/elixir-e589b8fad3dab6230c65.css" />
+    <script src="dist/sidebar_items-7e84b89a31.js"></script>
       <script src="docs_config.js"></script>
-    <script async src="dist/app-a225d03098e64fef431a.js"></script>
+    <script async src="dist/app-5c0c23dfec2d63ae33a2.js"></script>
   </head>
   <body data-type="modules">
     <script>try { if(localStorage.getItem('night-mode') === 'true') document.body.className += ' night-mode'; } catch (e) { }</script>
@@ -69,9 +69,8 @@ Automaton.Utility      </h1>
 
         <section id="moduledoc">
 <p>Node utility decisioning
-First pass should prioritize composite &#39;selector&#39; actions based on utility (a
-priority composite node)</p>
-<p>Dual Utility Reasoner
+First pass should prioritize composite 'selector' actions based on utility (a
+priority composite node)</p><p>Dual Utility Reasoner
 There are two common approaches to utility-based selection. The first,
 absolute utility, is to evaluate every option and take the one with the
 highest utility. The second, relative utility, is to select an option at
@@ -79,23 +78,21 @@ random, using the utility of each option to define the probability that it
 will be selected. The probability (P) for selecting an option (O) is
 determined by dividing the utility (U) of that option by the total utility of
 all options. This approach is commonly referred to as weight-based random or
-weighted random.</p>
-<p>A Dual Utility Reasoner combines both of these approaches. It assigns two
+weighted random.</p><p>A Dual Utility Reasoner combines both of these approaches. It assigns two
 utility values to each option: a rank (absolute utility) and a weight
 (relative utility). Conceptually, rank is used to divide the options into
 categories, where we only select options that are in the best category. Weight
 is used to evaluate options within the context of their category. Thus the
 weight of an option is only meaningful relative to the weights of other
 options within the same rank category – and only the weights of the options in
-the best category truly matter</p>
-        </section>
+the best category truly matter</p>        </section>
 
 
       <footer class="footer">
         <p>
           <span class="line">
             Built using
-            <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener">ExDoc</a> (v0.21.3),
+            <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener">ExDoc</a> (v0.22.1),
           </span>
           <span class="line">
             designed by
