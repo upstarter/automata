@@ -170,8 +170,8 @@ defmodule Automata do
   Begins update of Behavior Tree. More agent types to come.
   TODO: remove test env, get from config
   """
-  @spec begin() :: agent_result()
-  def begin do
+  @spec spawn() :: agent_result()
+  def spawn do
     if Mix.env() == :test do
       send(TestMockSeq1Server, :update)
     else

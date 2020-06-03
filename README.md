@@ -7,7 +7,7 @@
 ![](./docs/assets/particles.gif)
 
 ## Project Mission
-The Automata Project combines the state-of-the-art AI control techniques with the latest research in autonomous decentralized systems, providing AI designers a flexible framework for creating valuable emergent properties in product ecosystems.
+The Automata Project combines the state-of-the-art AI control techniques with the latest research in autonomous decentralized systems, providing AI designers a flexible framework for creating valuable emergent properties in production systems.
 
 ##### This project is in the Alpha stage and not ready for production systems. We need Contributors to get to 1.0. We are eager for your contributions and very happy you found yourself here! Please join the [slack channel](https://join.slack.com/t/automata-project/shared_invite/zt-e4fqrmo4-7ujuZwzXHNCGVrZb1aVZmA) and/or reach out to [ericsteen1@gmail.com](mailto:ericsteen1@gmail.com) if interested or with any questions. Here are our [contributing guidelines](https://github.com/upstarter/automata/blob/master/CONTRIBUTING.md) and get up to speed on the [wiki](https://github.com/upstarter/automata/wiki).
 
@@ -19,19 +19,19 @@ See the current milestones [here](https://github.com/upstarter/automata/mileston
 
 ## Usage
 
-Testing is currently happening using the mock sequence in `world/mock_world_1/mock_automata/mock_seq_1.ex`. This is currently our canonical example of how to design a behavior tree (one type of `Automaton`), and *eventually* communicates with other heterogeneous agents that you define in `world/<mock_world>/<mock_automata>/<mock_automaton>`.
+Testing is currently happening using the mock sequence in `world/mock_world/mock_automata/mock_seq_1.ex`. This is currently our canonical example of how to design a behavior tree (one type of `Automaton`), and *eventually* communicates with other heterogeneous agents that you define in `world/<mock_world>/<mock_automata>/<mock_automaton>`.
 
 Currently, you can run the mock sequence in an iex shell as follows:
 
 ```elixir
 iex -S mix
-iex(1)> send(MockSeq1Server, :update)
+iex(1)> Automata.spawn()
 ```
 
 and tests can be run with debugging capabilities as follows:
 
 ```bash
-MIX_ENV=test iex -S mix test test/unit/core/automaton/automaton_test.exs:23
+MIX_ENV=test iex -S mix test test/unit/automaton/automaton_test.exs:23
 ```
 
 where you are running a specific context/it block containing line 23.
@@ -43,11 +43,11 @@ where you are running a specific context/it block containing line 23.
 ### Technologies
   - [Elixir](https://elixir-lang.org/) & [OTP](https://en.wikipedia.org/wiki/Open_Telecom_Platform) provide the
   primitives for robust concurrent, fault-tolerant, highly available,
-  self-healing distributed systems. The main point of the Erlang model is an application that can be expected to run forever, as stated by the language designer. Talk about unstoppable software! [Read more](https://github.com/upstarter/automata/wiki/Features) about the many other benefits of Elixir and OTP.
+  self-healing distributed systems. The main point of the Erlang model is an application that can be expected to run forever, as stated by the language designer. Talk about unstoppable agents! [Read more](https://github.com/upstarter/automata/wiki/Automata-Features) about the many benefits of Elixir and OTP.
 
-  - Heterogeneous agent types equipped with environment and reasoning components provide scientists and analysts a selection of *graphical*, *reinforcement learning*, and *percept* based agent constellations for a variety of real world environments.
+  - Heterogeneous agents equipped with environment and reasoning components provide scientists and analysts a selection of *graphical*, *reinforcement learning*, and *percept* based orchestrated agent constellations for a variety of real world environments.
 
-  - How Elixir? Elixir for world class control fault tolerance and distribution, while leveraging inter-operability to compensate for lack of high dimensional function approximation (linear solver) performance without NIF's:
+  - How Elixir? Elixir for world class control fault tolerance and distribution, while leveraging inter-operability to compensate for lack of high dimensional function approximation (linear solver) performance (sans NIF's):
     - [erlport](http://erlport.org) (python)
     - [julia + python](http://web.mit.edu/18.06/www/Spring17/Julia-intro.pdf)
     - [rust](https://github.com/rusterlium/rustler) + [python](https://github.com/PyO3/pyo3)
@@ -56,7 +56,7 @@ where you are running a specific context/it block containing line 23.
 
 ##### **Environment** *(State Space Representations)*
 
-These are the maps of the territory. Without a good map, any explorer could easily get lost. To fit the information available to the problem at hand, we separate representations into distinct layers with well defined boundaries.
+The maps of the territory. Without good maps, any explorer could easily get lost. To fit the information available to the problem at hand, we separate representations into distinct layers with well defined boundaries.
 
 ##### **Reasoning** *(Decision Making, Action Selection)*
 
@@ -67,13 +67,13 @@ All agents have some formulation of action selection, otherwise they would never
 Interchangeable memory modules across short term working memory, blackboards, and knowledge bases.
 
 
-##### [Read the wiki](https://github.com/upstarter/automata/wiki/Underlying-Technology) and/or the [docs](https://upstarter.github.io/automata/) for more about the technologies underlying `Automata`.
+##### [Read the wiki](https://github.com/upstarter/automata/wiki/Automata-Technology) and/or the [docs](https://upstarter.github.io/automata/) for more about the technologies underlying `Automata`.
 
 ### Requirements
 
 #### Autonomy is the capacity of agent(s) to achieve a set of coordinated goals by their own means (without human intervention) adapting to environment variations.
 
-It combines five complementary  aspects:
+It combines five complementary aspects:
   1. Perception e.g. interpretation of stimuli, removing ambiguity/vagueness from complex input data and determining relevant information based on context/strata/motif specific communications
   2. Reflection e.g. building/updating a faithful environment run-time model
   3. Goal management e.g. choosing among possible goals the most appropriate ones for a given configuration of the environment model
@@ -99,17 +99,17 @@ Note that the five aspects are orthogonal. The first two aspects deal with
 Planned builtin and/or custom third-party agent types include:
 
   - Graphical Model Based
-    - *Behavior Trees*
+    - *[Behavior Trees](https://github.com/upstarter/automata/wiki/Behavior-Tree)*
     - *Informed Search*
     - *Generalized Probabilistic Models*
     - *Bayesian Networks*
     - *Markov Models* (*pomdp*, *dec-pomdp*)
 
 
-  - Reinforcement Learning Based
-    - *td-learning*, *q-learning*
-    - *predictive-learning*
-    - *deep learning*
+  - Predictive & Representation Reinforcement Learning (RL) Based
+    - *Bandits*
+    - *td-learning*, *q-learning*, *actor-critic*
+    - *Deep Learning*, *Gann*
 
 
   - Cognitive / Percept Based
@@ -129,7 +129,7 @@ Planned builtin and/or custom third-party agent types include:
   -  potentially bringing the code to the data rather than the other way around.
 
 ### Performance Features
-  - [Learn more](https://github.com/upstarter/automata/wiki/Features) about the performance features of `Automata`
+  - [Learn more](https://github.com/upstarter/automata/wiki/Automata-Features) about the performance features of `Automata`
 
 ### Applications
 - Trading Systems

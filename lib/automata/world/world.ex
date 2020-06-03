@@ -22,8 +22,9 @@ defmodule Automata.World do
   ## Usage
   ```elixir
   use Automata.World,
-    # An **Ontology** is for highest level meta representations for a **World**. It
-    # gives us a way to provide shared goals, beliefs, features. Ontological
+    # An **Ontology** is for highest level meta representations for a **World**.
+    # It gives us a way to provide shared propositions, statistics, plans,
+    # stories, histories, goals, beliefs, features. Ontological
     # working memory can be used to describe inter-relations in terms of
     # perspectives, constraints, environs, stratified classes of objects/agents and
     # their types, objective predictive representations
@@ -34,10 +35,10 @@ defmodule Automata.World do
     environs: [],
 
     # the Automata configured to operate in this world, given the environs
-    # TODO: match (or automatch) the automata to an environ or all environs
-    # perhaps like: `automata: [MockAgent1: :psr, MockRobot1: :dec_pomdp]`
-    # or inferred at automata level policies
-    automata: [MockSeq1]
+    # TODO: match the automata to an environ or all environs
+    # perhaps like: `automata: [MockAgent1: :psr, MockRobot5: :dec_pomdp]`
+    # or inferred at automata level world policies
+    automata: [MockAgent1, MockRobot5]
   ```
   """
 

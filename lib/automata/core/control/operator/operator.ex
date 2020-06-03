@@ -30,18 +30,17 @@ defmodule Automata.Operator do
     result
   end
 
-  defp configure(opts, manager, runner_pid, stats_pid) do
+  defp configure(opts, manager, operator_pid, stats_pid) do
     %{
       timeout: opts[:timeout],
       trace: opts[:trace],
-      runner_pid: runner_pid,
+      operator_pid: operator_pid,
       stats_pid: stats_pid,
       manager: manager,
       world: config()
     }
   end
 
-  # TODO: handle spawning multi world, for now just singular case
   defp spawn_world(config) do
     EM.world_started(config.manager, config.world)
 
@@ -51,7 +50,7 @@ defmodule Automata.Operator do
 
     EM.world_finished(config.manager, config.world)
 
-    send(config.runner_pid, {self(), :automata_finished})
+    send(config.operator_pid, {self(), :automata_finished})
     {:ok, pid}
   end
 
@@ -63,15 +62,11 @@ defmodule Automata.Operator do
     end
   end
 
-  # TODO quick testing hack, fix by autoloading from user-defined modules
   defp config() do
     if Mix.env() == :test do
       %WorldConfig{
         world: [name: "TestMockWorld1", mfa: {TestMockWorld1, :start_link, []}],
         automata: [
-          # these lists end up as `automaton_config` from  `Automata.Server` on in
-          # the supervision tree (past the `Automata` Control Boundary Layer and
-          # into the `Automaton` Control Boundary)
           [name: "TestMockSeq1", mfa: {TestMockSeq1, :start_link, []}]
           # [name: "TestMockSel1", mfa: {TestMockSel1, :start_link, []}]
         ]
@@ -80,9 +75,6 @@ defmodule Automata.Operator do
       %WorldConfig{
         world: [name: "MockWorld1", mfa: {MockWorld1, :start_link, []}],
         automata: [
-          # these lists end up as `automaton_config` from  `Automata.Server` on in
-          # the supervision tree (past the `Automata` Control Boundary Layer and
-          # into the `Automaton` Control Boundary)
           [name: "MockSeq1", mfa: {MockSeq1, :start_link, []}]
           # [name: "MockSel1", mfa: {MockSel1, :start_link, []}]
         ]
