@@ -100,15 +100,13 @@ Planned builtin and/or custom third-party agent types include:
 
   - Graphical Model Based
     - *[Behavior Trees](https://github.com/upstarter/automata/wiki/Behavior-Tree)*
-    - *Informed Search*
-    - *Generalized Probabilistic Models*
-    - *Bayesian Networks*
-    - *Markov Models* (*pomdp*, *dec-pomdp*)
+    - *Generalized Probabilistic Models*, *Bayesian Networks*
+    - *Markov Models* (*dec-pomdp*)
 
 
   - Predictive & Representation Reinforcement Learning (RL) Based
     - *Bandits*
-    - *td-learning*, *q-learning*, *actor-critic*
+    - *q-learning*, *actor-critic*
     - *Deep Learning*, *Gann*
 
 
