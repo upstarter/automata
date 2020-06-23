@@ -11,6 +11,6 @@ defmodule Automaton.Types.BT.Config do
   end
 
   def new(data) do
-    struct(WorldConfig, data)
+    struct(__MODULE__, data)
   end
 end

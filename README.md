@@ -45,9 +45,9 @@ where you are running a specific context/it block containing line 23.
   primitives for robust concurrent, fault-tolerant, highly available,
   self-healing distributed systems. The main point of the Erlang model is an application that can be expected to run forever, as stated by the language designer. Talk about unstoppable agents! [Read more](https://github.com/upstarter/automata/wiki/Automata-Features) about the many benefits of Elixir and OTP.
 
-  - Heterogeneous agents equipped with environment and reasoning components provide scientists and analysts a selection of *graphical*, *reinforcement learning*, and *percept* based orchestrated agent constellations for a variety of real world environments.
+  - Heterogeneous agents equipped with environment and reasoning components provide scientists and analysts a selection of *graphical* and *reinforcement learning* based orchestrated agent constellations for a variety of real world environments.
 
-  - How Elixir? Elixir for world class control fault tolerance and distribution, while leveraging inter-operability to compensate for lack of high dimensional function approximation (linear solver) performance (sans NIF's):
+  - How Elixir? Elixir for world class communication & control fault tolerance and distribution, while leveraging inter-operability to compensate for lack of high dimensional function approximation (linear solver) performance (sans NIF's):
     - [erlport](http://erlport.org) (python)
     - [julia + python](http://web.mit.edu/18.06/www/Spring17/Julia-intro.pdf)
     - [rust](https://github.com/rusterlium/rustler) + [python](https://github.com/PyO3/pyo3)
@@ -100,20 +100,16 @@ Planned builtin and/or custom third-party agent types include:
 
   - Graphical Model Based
     - *[Behavior Trees](https://github.com/upstarter/automata/wiki/Behavior-Tree)*
-    - *Informed Search*
     - *Generalized Probabilistic Models*
-    - *Bayesian Networks*
-    - *Markov Models* (*pomdp*, *dec-pomdp*)
+    - *Markov Models* (*dec-pomdp*)
 
 
   - Predictive & Representation Reinforcement Learning (RL) Based
     - *Bandits*
     - *td-learning*, *q-learning*, *actor-critic*
     - *Deep Learning*, *Gann*
+    - *neuroevolutionary*
 
-
-  - Cognitive / Percept Based
-    - *[c4](http://www.naimadgames.com/publications/gdc01/gdc01.pdf) style percepts*
 
 #### A Concurrent, Scalable Blackboard Knowledge System
   > The central problem of artificial intelligence is how to express the knowledge needed in order to create intelligent behavior. — John McCarthy, M.I.T/Stanford Professor, Creator of Lisp
