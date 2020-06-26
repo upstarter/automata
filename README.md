@@ -47,10 +47,7 @@ where you are running a specific context/it block containing line 23.
 
   - Heterogeneous agents equipped with environment and reasoning components provide scientists and analysts a selection of *graphical* and *reinforcement learning* based orchestrated agent constellations for a variety of real world environments.
 
-  - How Elixir? Elixir for world class communication & control fault tolerance and distribution, while leveraging inter-operability to compensate for lack of high dimensional function approximation (linear solver) performance (sans NIF's):
-    - [erlport](http://erlport.org) (python)
-    - [julia + python](http://web.mit.edu/18.06/www/Spring17/Julia-intro.pdf)
-    - [rust](https://github.com/rusterlium/rustler) + [python](https://github.com/PyO3/pyo3)
+  - How Elixir? Elixir for world class communication & control fault tolerance and distribution, and a focus on TWEAN neuroevolution, a promising new direction in RL for evolving populations of neural networks. Also, as needed, leverage Julia lang inter-operability for high dimensional function approximation.
 
 #### The `Automata` framework has three abstract semantic layers:
 
@@ -101,14 +98,17 @@ Planned builtin and/or custom third-party agent types include:
   - Graphical Model Based
     - *[Behavior Trees](https://github.com/upstarter/automata/wiki/Behavior-Tree)*
     - *Generalized Probabilistic Models*
-    - *Markov Models* (*dec-pomdp*)
 
 
-  - Predictive & Representation Reinforcement Learning (RL) Based
+  - Reinforcement Learning (RL) Based
     - *Bandits*
     - *td-learning*, *q-learning*, *actor-critic*
     - *Deep Learning*, *Gann*
-    - *neuroevolutionary*
+    - *DEC-POMDP* (Decentralized Partially Observable Markov Decision Process)
+
+
+  - Neuroevolution
+    - *TWEANN* (Typology and Weight Evolving Neural Network)
 
 
 #### A Concurrent, Scalable Blackboard Knowledge System
