@@ -1,4 +1,4 @@
-defmodule TestMockWorld1 do
+defmodule TestWorldTweann do
   @moduledoc """
   Used for experimentation and QA testing until testing strategy devised.
   """
@@ -17,5 +17,5 @@ defmodule TestMockWorld1 do
     # TODO: match (or automatch) the automata to an environ or all environs
     # perhaps like: `automata: [MockAgent1: :psr, MockRobot1: :dec_pomdp]`
     # or inferred at automata level policies
-    automata: [TestMockSeq1]
+    automata: [TestMockTweann]
 end

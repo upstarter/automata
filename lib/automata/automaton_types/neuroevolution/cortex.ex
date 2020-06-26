@@ -9,7 +9,7 @@ defmodule Automaton.Types.NE.Cortex do
   in the NN system.
 
   Cortex's are represented by the tuple: { id, sensor_ids, actuator_ids, nids}
-    • id, a unique id (useful for `Ecto.Schema`)
+    • id, a unique id (useful for datastores)
     • sensor_ids, ids of the sensors that produce and pass the sensory signals to the
       neurons in the input layer.
     • actuator_ids, list of acuator ids that the neural output layer is connected to.

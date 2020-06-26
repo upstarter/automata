@@ -6,7 +6,7 @@ defmodule Automaton.Types.NE.Neuron do
   connected to.
 
   Nuerons's are represented with the tuple: { id, cx_id, af, input_ids, output_ids}
-    • id, a unique id (useful for `Ecto.Schema`)
+    • id, a unique id (useful for datastores)
     • cx_id, id of the cortex for this neuron
     • af, name of function the neuron uses on the extended dot product (dot product + bias).
     • input_ids, [{id1, Weights}...{idN, Weights},{bias, Val}]

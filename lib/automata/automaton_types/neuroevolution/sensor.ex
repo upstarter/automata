@@ -6,7 +6,7 @@ defmodule Automaton.Types.NE.Sensor do
 
 
   Sensor's can be defined with the tuple: { id, cortex_id, name, vector_len, fanout_ids}
-    • id, a unique id (useful for `Ecto.Schema`)
+    • id, a unique id (useful for datastores)
     • cortex_id, id of the cortex for this sensor
     • name, name of function the sensor executes to generate or aquire the sensory data.
     • vector_len, vector length of produces sensory signal

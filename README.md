@@ -7,7 +7,7 @@
 ![](./docs/assets/particles.gif)
 
 ## Project Mission
-The Automata Project combines the state-of-the-art AI control techniques with the latest research in autonomous decentralized systems, providing AI designers a flexible framework for creating valuable emergent properties in production systems.
+The Automata Project combines the state-of-the-art AI control techniques with the latest research in autonomous decentralized systems, providing AI designers a flexible framework for creating valuable emergent properties in real world systems. The goal is to exhibit maximal Creativity & [Open-Endedness](https://www.oreilly.com/radar/open-endedness-the-last-grand-challenge-youve-never-heard-of/) for evolving new forms of useful intelligence. Natural Evolution took billions of years, so [no rush](https://www.businessinsider.com/clay-christensen-our-obsession-with-efficiency-is-killing-innovation-2012-12).
 
 ##### This project is in the Alpha stage and not ready for production systems. We need Contributors to get to 1.0. We are eager for your contributions and very happy you found yourself here! Please join the [slack channel](https://join.slack.com/t/automata-project/shared_invite/zt-e4fqrmo4-7ujuZwzXHNCGVrZb1aVZmA) and/or reach out to [ericsteen1@gmail.com](mailto:ericsteen1@gmail.com) if interested or with any questions. Here are our [contributing guidelines](https://github.com/upstarter/automata/blob/master/CONTRIBUTING.md) and get up to speed on the [wiki](https://github.com/upstarter/automata/wiki).
 
@@ -177,7 +177,7 @@ defmodule MyAutomaton do
 
     ## Reactively and Proactively Change the World
       > ie.. effect the current environment in phases using
-        either *effectors* or via *communication* with
+        either actuator *effectors* or via *communication* with
         other agents and/or internal/external systems
     """
     def update do

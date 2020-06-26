@@ -5,7 +5,7 @@ defmodule Automaton.Types.NE.Actuator do
   function that acts on the environ or even the NN itself.
 
   Actuator's are represented with the tuple: { id, cortex_id, name, vector_len, fanin_ids}
-    • id, a unique id (useful for `Ecto.Schema`)
+    • id, a unique id (useful for datastores)
     • cortex_id, id of the cortex for this sensor
     • name, name of function the sensor executes to act upon the environment, with
       the function parameter being the vector it accumulates from the incoming neural signals.
