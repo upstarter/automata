@@ -21,7 +21,7 @@ defmodule AutomataTest do
     end
 
     assert capture_io(fn ->
-             Automata.begin()
+             Automata.spawn()
            end) =~ "update #\d+"
   end
 
@@ -38,7 +38,7 @@ defmodule AutomataTest do
       end
     end
 
-    output = capture_io(fn -> Automata.begin() end)
+    output = capture_io(fn -> Automata.spawn() end)
     assert output =~ "** (Automata.TimeoutError) automaton timed out after 10ms"
     assert output =~ ~r"\(elixir #{System.version()}\) lib/process\.ex:\d+: Process\.sleep/1"
   end
@@ -57,7 +57,7 @@ defmodule AutomataTest do
     end
 
     Automata.configure(timeout: 5)
-    output = capture_io(fn -> Automata.begin() end)
+    output = capture_io(fn -> Automata.spawn() end)
     assert output =~ "** (Automata.TimeoutError) automaton timed out after 5ms"
   after
     Automata.configure(timeout: 60000)
