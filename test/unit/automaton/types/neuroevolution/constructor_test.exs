@@ -5,7 +5,7 @@ defmodule NEConstructorTest do
     tmp_path = Temp.mkdir!("ConstructorTest")
     genome_path = Path.join(tmp_path, "neuroevol.terms")
 
-    assert Automaton.Types.NE.Constructor.construct_genotype(genome_path, :rng, :pts, [1, 3]) ==
+    assert Automaton.Types.TWEANN.Constructor.construct_genotype(genome_path, :rng, :pts, [1, 3]) ==
              :ok
 
     assert File.exists?(genome_path)

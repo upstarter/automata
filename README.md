@@ -45,7 +45,7 @@ where you are running a specific context/it block containing line 23.
   primitives for robust concurrent, fault-tolerant, highly available,
   self-healing distributed systems. The main point of the Erlang model is an application that can be expected to run forever, as stated by the language designer. Talk about unstoppable agents! [Read more](https://github.com/upstarter/automata/wiki/Automata-Features) about the many benefits of Elixir and OTP.
 
-  - Heterogeneous agents equipped with environment and reasoning components provide scientists and analysts a selection of *graphical* and *reinforcement learning* based orchestrated agent constellations for a variety of real world environments.
+  - Heterogeneous agents equipped with environment and reasoning components provide scientists and analysts a selection of *graphical*, *reinforcement learning*, and *neuroevolution* based orchestrated agent constellations for a variety of real world environments.
 
   - How Elixir? Elixir for world class communication & control fault tolerance and distribution, and a focus on TWEAN neuroevolution, a promising new direction in RL for evolving populations of neural networks. Also, as needed, leverage Julia lang inter-operability for high dimensional function approximation.
 
@@ -108,7 +108,7 @@ Planned builtin and/or custom third-party agent types include:
 
 
   - Neuroevolution
-    - *TWEANN* (Typology and Weight Evolving Neural Network)
+    - *TWEANN* (Typology and Weight Evolving Artificial Neural Network)
 
 
 #### A Concurrent, Scalable Blackboard Knowledge System

@@ -77,9 +77,11 @@ defmodule Automaton.AgentServer do
         state = %{automaton_sup: automaton_sup, name: name, mfa: mfa}
       ) do
     spec = {Automaton.AgentSupervisor, [[self(), mfa, name]]}
+
     {:ok, agent_sup} = Supervisor.start_child(automaton_sup, spec)
 
     automaton = spawn_automaton(agent_sup, mfa, name)
+
     {:noreply, %{state | agent_sup: agent_sup, automaton: automaton}}
   end
 
@@ -154,6 +156,7 @@ defmodule Automaton.AgentServer do
   defp spawn_automaton(agent_sup, {m, _f, _a} = mfa, _name) do
     spec = {m, [[agent_sup, mfa, m]]}
     {:ok, automaton} = DynamicSupervisor.start_child(agent_sup, spec)
+
     true = Process.link(automaton)
     automaton
   end

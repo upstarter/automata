@@ -1,8 +1,8 @@
 defmodule Automaton.Types.DECPOMDP do
   @moduledoc """
-  Implements the Decentralized Partially Observable Markov Decision Process (DEC-POMDP) state space representation.
-  Each agent is goal-oriented, i.e. associated with a distinct, high-level goal
-  which it attempts to achieve.
+  Implements the Decentralized Partially Observable Markov Decision Process
+  (DEC-POMDP) state space representation. Each agent is goal-oriented, i.e.
+  associated with a distinct, high-level goal which it attempts to achieve.
 
   At each stage, each agent takes an action and receives:
     • A local observation for local decision making
@@ -22,8 +22,8 @@ defmodule Automaton.Types.DECPOMDP do
     • considers outcome, sensory, and communication uncertainty in a single
   framework
     • Can model any multi-agent coordination problem
-    • Macro-actions provide an sbstraction to improve scalability
-    • Learning methods can remove the need to generate a details multi-agent model
+    • Macro-actions provide an abstraction to improve scalability
+    • Learning methods can remove the need to generate a detailed multi-agent model
     • Methods also apply when less uncertainty
     • Begun demonstrating scalability and quality in a number of domains, but a lot
     of great open questions to solve

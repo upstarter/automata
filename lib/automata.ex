@@ -175,7 +175,7 @@ defmodule Automata do
     if Mix.env() == :test do
       send(TestMockSeq1Server, :update)
     else
-      send(MockSeq1Server, :update)
+      send(MockMAB1Server, :tick)
     end
   end
 

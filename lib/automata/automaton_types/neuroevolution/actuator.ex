@@ -1,4 +1,4 @@
-defmodule Automaton.Types.NE.Actuator do
+defmodule Automaton.Types.TWEANN.Actuator do
   @moduledoc """
   An actuator is a process that accepts signals from the neurons in the output
   layer, orders them into a vector, and then uses this vector to control some

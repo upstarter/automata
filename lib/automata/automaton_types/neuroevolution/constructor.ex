@@ -1,8 +1,8 @@
-defmodule Automaton.Types.NE.Constructor do
-  alias Automaton.Types.NE.Sensor
-  alias Automaton.Types.NE.Actuator
-  alias Automaton.Types.NE.Cortex
-  alias Automaton.Types.NE.Neuron
+defmodule Automaton.Types.TWEANN.Constructor do
+  alias Automaton.Types.TWEANN.Sensor
+  alias Automaton.Types.TWEANN.Actuator
+  alias Automaton.Types.TWEANN.Cortex
+  alias Automaton.Types.TWEANN.Neuron
 
   @doc """
   The `construct_genotype` function accepts the name of the file to which we'll

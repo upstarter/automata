@@ -75,7 +75,7 @@ defmodule Automata.Operator do
       %WorldConfig{
         world: [name: "MockWorld1", mfa: {MockWorld1, :start_link, []}],
         automata: [
-          [name: "MockSeq1", mfa: {MockSeq1, :start_link, []}]
+          [name: "MockMAB1", mfa: {MockMAB1, :start_link, []}]
           # [name: "MockSel1", mfa: {MockSel1, :start_link, []}]
         ]
       }

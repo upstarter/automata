@@ -1,5 +1,5 @@
 
-#{'__struct__' => 'Elixir.Automaton.Types.NE.Cortex',
+#{'__struct__' => 'Elixir.Automaton.Types.TWEANN.Cortex',
 actuator_ids => [{actuator,<<"0wb2iIs2P8lrAZmUup4wIttUMWX">>}],
 id => {cortex,<<"0wb2iEY1IPAqDLpg9YKMfz1jDKL">>},
 n_ids =>
@@ -9,17 +9,17 @@ n_ids =>
      {neuron,{2,<<"0wb2iH1YuLs9ze7Dj4qqI0ZDt3b">>}},
      {neuron,{3,<<"0wb2iLZyye7eXodOKh3wpQXRvK7">>}}],
 sensor_ids => [{sensor,<<"0wb2iEgdXSINDKYKrPKQltEzFmy">>}]}.
-#{'__struct__' => 'Elixir.Automaton.Types.NE.Sensor',
+#{'__struct__' => 'Elixir.Automaton.Types.TWEANN.Sensor',
 cx_id => {cortex,<<"0wb2iEY1IPAqDLpg9YKMfz1jDKL">>},
 fanout_ids => [{neuron,{1,<<"0wb2iI24bp8AoRKP3A47DRYVlhT">>}}],
 id => {sensor,<<"0wb2iEgdXSINDKYKrPKQltEzFmy">>},
 name => rng,vl => 2}.
-#{'__struct__' => 'Elixir.Automaton.Types.NE.Actuator',
+#{'__struct__' => 'Elixir.Automaton.Types.TWEANN.Actuator',
 cx_id => {cortex,<<"0wb2iEY1IPAqDLpg9YKMfz1jDKL">>},
 fanin_ids => [{neuron,{3,<<"0wb2iLZyye7eXodOKh3wpQXRvK7">>}}],
 id => {actuator,<<"0wb2iIs2P8lrAZmUup4wIttUMWX">>},
 name => pts,vl => 1}.
-#{'__struct__' => 'Elixir.Automaton.Types.NE.Neuron',af => tanh,
+#{'__struct__' => 'Elixir.Automaton.Types.TWEANN.Neuron',af => tanh,
 cx_id => {cortex,<<"0wb2iEY1IPAqDLpg9YKMfz1jDKL">>},
 id => {neuron,{1,<<"0wb2iI24bp8AoRKP3A47DRYVlhT">>}},
 input_id_ps =>
@@ -30,28 +30,28 @@ output_ids =>
     [{neuron,{2,<<"0wb2iH1YuLs9ze7Dj4qqI0ZDt3b">>}},
      {neuron,{2,<<"0wb2iG0L0qrCUM5e0X1ZyjlCmhi">>}},
      {neuron,{2,<<"0wb2iLzGPZN4CfCpJcAYDIoSk8D">>}}]}.
-#{'__struct__' => 'Elixir.Automaton.Types.NE.Neuron',af => tanh,
+#{'__struct__' => 'Elixir.Automaton.Types.TWEANN.Neuron',af => tanh,
 cx_id => {cortex,<<"0wb2iEY1IPAqDLpg9YKMfz1jDKL">>},
 id => {neuron,{2,<<"0wb2iLzGPZN4CfCpJcAYDIoSk8D">>}},
 input_id_ps =>
     [{{neuron,{1,<<"0wb2iI24bp8AoRKP3A47DRYVlhT">>}},[0.34317117014747645]},
      {bias,0.14192089401414976}],
 output_ids => [{neuron,{3,<<"0wb2iLZyye7eXodOKh3wpQXRvK7">>}}]}.
-#{'__struct__' => 'Elixir.Automaton.Types.NE.Neuron',af => tanh,
+#{'__struct__' => 'Elixir.Automaton.Types.TWEANN.Neuron',af => tanh,
 cx_id => {cortex,<<"0wb2iEY1IPAqDLpg9YKMfz1jDKL">>},
 id => {neuron,{2,<<"0wb2iG0L0qrCUM5e0X1ZyjlCmhi">>}},
 input_id_ps =>
     [{{neuron,{1,<<"0wb2iI24bp8AoRKP3A47DRYVlhT">>}},[-0.3114894811702784]},
      {bias,-0.01136113872524025}],
 output_ids => [{neuron,{3,<<"0wb2iLZyye7eXodOKh3wpQXRvK7">>}}]}.
-#{'__struct__' => 'Elixir.Automaton.Types.NE.Neuron',af => tanh,
+#{'__struct__' => 'Elixir.Automaton.Types.TWEANN.Neuron',af => tanh,
 cx_id => {cortex,<<"0wb2iEY1IPAqDLpg9YKMfz1jDKL">>},
 id => {neuron,{2,<<"0wb2iH1YuLs9ze7Dj4qqI0ZDt3b">>}},
 input_id_ps =>
     [{{neuron,{1,<<"0wb2iI24bp8AoRKP3A47DRYVlhT">>}},[-0.25054527918670055]},
      {bias,0.18466905124197674}],
 output_ids => [{neuron,{3,<<"0wb2iLZyye7eXodOKh3wpQXRvK7">>}}]}.
-#{'__struct__' => 'Elixir.Automaton.Types.NE.Neuron',af => tanh,
+#{'__struct__' => 'Elixir.Automaton.Types.TWEANN.Neuron',af => tanh,
 cx_id => {cortex,<<"0wb2iEY1IPAqDLpg9YKMfz1jDKL">>},
 id => {neuron,{3,<<"0wb2iLZyye7eXodOKh3wpQXRvK7">>}},
 input_id_ps =>

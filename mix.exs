@@ -76,7 +76,8 @@ defmodule Automata.MixProject do
       {:ex_doc, "~> 0.21", only: :dev, runtime: false},
       {:ecto, "~> 3.0"},
       {:ksuid, "~> 0.1.2"},
-      {:temp, "~> 0.4"}
+      {:temp, "~> 0.4"},
+      {:matrex, "~> 0.6"}
     ]
   end
 end

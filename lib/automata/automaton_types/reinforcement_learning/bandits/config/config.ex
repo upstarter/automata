@@ -1,4 +1,4 @@
-defmodule Automaton.Types.TWEANN.Config do
+defmodule Automaton.Types.MAB.Config do
   use Ecto.Schema
 
   alias AtomType
@@ -8,6 +8,6 @@ defmodule Automaton.Types.TWEANN.Config do
   end
 
   def new(data) do
-    struct(__MODULE__, data)
+    struct(WorldConfig, data)
   end
 end

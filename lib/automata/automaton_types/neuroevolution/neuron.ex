@@ -1,4 +1,4 @@
-defmodule Automaton.Types.NE.Neuron do
+defmodule Automaton.Types.TWEANN.Neuron do
   @moduledoc """
   A signal processing element. It accepts signals, accumulates them
   into an ordered vectorr, then processes this input vector to produce

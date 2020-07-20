@@ -1,4 +1,4 @@
-defmodule Automaton.Types.NE.Sensor do
+defmodule Automaton.Types.TWEANN.Sensor do
   @moduledoc """
   A sensor is any process which produces a vector signal that the NN then processes.
   The signal can come from interacting with environ, or the Sensor can be a program that generates

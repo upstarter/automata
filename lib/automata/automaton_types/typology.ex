@@ -7,6 +7,8 @@ defmodule Automaton.Types.Typology do
   config parsing and interpretation specific to its domain.
   """
   alias Automaton.Types.BT
+  alias Automaton.Types.TWEANN
+  alias Automaton.Types.MAB
 
   @types [:behavior_tree]
   def types, do: @types
@@ -18,6 +20,12 @@ defmodule Automaton.Types.Typology do
       |> case do
         :behavior_tree ->
           quote do: use(BT, automaton_config: unquote(automaton_config))
+
+        :tweann ->
+          quote do: use(TWEANN, automaton_config: unquote(automaton_config))
+
+        :epsilon_greedy_bandit ->
+          quote do: use(MAB, automaton_config: unquote(automaton_config))
 
         # TODO: need this for children.
         # use parent type? raise error?

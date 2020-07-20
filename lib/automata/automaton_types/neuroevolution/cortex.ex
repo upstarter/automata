@@ -1,4 +1,4 @@
-defmodule Automaton.Types.NE.Cortex do
+defmodule Automaton.Types.TWEANN.Cortex do
   @moduledoc """
   A NN synchronizing element. It knows the PID of every sensor and
   actuator, so that it will know when all the actuators have received their

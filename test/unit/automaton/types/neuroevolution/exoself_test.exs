@@ -5,6 +5,6 @@ defmodule NEExoSelfTest do
     tmp_path = Temp.mkdir!("ExoselfTest")
     genome_path = Path.join(tmp_path, "neuro.terms")
     File.cp(Path.join(__DIR__, "output.terms"), genome_path)
-    assert Automaton.Types.NE.ExoSelf.map(genome_path) == :ok
+    assert Automaton.Types.TWEANN.ExoSelf.map(genome_path) == :ok
   end
 end
