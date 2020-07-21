@@ -40,6 +40,7 @@ defmodule Automaton.Types.MAB do
                     epsilon: :rand.uniform(),
                     # optional: apriori known ground truth action probability distribution as list
                     action_prob: unquote(action_prob),
+                    optimal_action: nil,
                     num_arms: unquote(num_arms) || 12,
                     num_ep: unquote(num_ep) || 20,
                     num_iter: unquote(num_iter) || 1000,
@@ -86,13 +87,11 @@ defmodule Automaton.Types.MAB do
 
     control =
       quote bind_quoted: [automaton_config: automaton_config] do
-        # c.e. greedy
         def update(
               %{
                 num_ep: num_ep,
                 num_arms: num_arms,
                 num_iter: num_iter,
-                action_prob: action_prob,
                 epsilon: epsilon,
                 c_action_tally: c_action_tally,
                 c_estimation: c_estimation,
@@ -112,49 +111,38 @@ defmodule Automaton.Types.MAB do
           IO.inspect(['Best Choice: ', optimal_action, Matrex.at(action_prob, 1, optimal_action)])
 
           # Run Episodes to converge to optimal action
-          episodic_state = run_episodes(action_prob, optimal_action, state)
+          episodic_state =
+            run_episodes(%{
+              state
+              | action_prob: action_prob,
+                optimal_action: optimal_action
+            })
 
           print_result(action_prob, episodic_state)
 
           {:ok, episodic_state}
         end
 
-        def print_result(action_prob, %{c_estimation: c_estimation} = episodic_state) do
-          IO.puts("Ground Truth")
-          IO.inspect(action_prob)
-
-          IO.puts("Expected")
-          c_est = Matrex.to_list_of_lists(Matrex.transpose(c_estimation))
-
-          arr =
-            c_est
-            |> Stream.with_index()
-            |> Enum.reduce([], fn {row, idx}, acc ->
-              sum = Enum.sum(row)
-              avg = sum / length(row)
-              [avg | acc]
-            end)
-
-          IO.inspect(Enum.reverse(arr))
-        end
-
         def run_episodes(
-              action_prob,
-              optimal_action,
-              %{num_iter: num_iter, num_ep: num_ep} = state
+              %{
+                num_iter: num_iter,
+                num_ep: num_ep,
+                action_prob: action_prob,
+                optimal_action: optimal_action
+              } = state
             ) do
           Enum.reduce(
             Range.new(1, num_ep),
-            %State{} = %{state | action_prob: action_prob},
-            fn episode, ep_state ->
+            %State{} = state,
+            fn episode, state ->
               # Explore Actions of episode
-              explorer_state = explore_episode(num_iter, episode, optimal_action, ep_state)
+              explorer_state = explore_episode(num_iter, episode, state)
             end
           )
         end
 
-        def explore_episode(num_iter, episode, optimal_action, ep_state) do
-          Enum.reduce(Range.new(1, num_iter), %State{} = ep_state, fn iter, action_state ->
+        def explore_episode(num_iter, episode, %{optimal_action: optimal_action} = state) do
+          Enum.reduce(Range.new(1, num_iter), %State{} = state, fn iter, action_state ->
             # select action & update action tally
             {curr_action, temp_action_tally, temp_optimal_action} =
               select_action(iter, optimal_action, action_state)
@@ -218,35 +206,6 @@ defmodule Automaton.Types.MAB do
           end)
         end
 
-        def compute_regret(iter, curr_action, optimal_action, %{
-              action_prob: action_prob,
-              temp_regret: temp_regret
-            }) do
-          regret_diff =
-            Matrex.at(action_prob, 1, optimal_action) -
-              Matrex.at(action_prob, 1, curr_action)
-
-          regret =
-            if iter == 1 do
-              regret_diff
-            else
-              Matrex.at(temp_regret, 1, iter - 1) + regret_diff
-            end
-
-          Matrex.set(temp_regret, 1, iter, regret)
-        end
-
-        def select_optimum(%{action_prob: action_prob, num_arms: num_arms}) do
-          action_prob =
-            if action_prob do
-              Matrex.new(action_prob)
-            else
-              Matrex.random(1, num_arms)
-            end
-
-          {action_prob, Matrex.argmax(action_prob)}
-        end
-
         def update_reward(
               iter,
               curr_action,
@@ -268,14 +227,14 @@ defmodule Automaton.Types.MAB do
             end
 
           reward_delta = curr_reward - reward_estimate
-
-          weight = 1 / (Matrex.at(temp_action_tally, 1, curr_action) + 1)
-          value = reward_estimate + weight * reward_delta
+          hist_action_count = Matrex.at(temp_action_tally, 1, curr_action)
+          weight = 1 / (hist_action_count + 1)
+          action_value = reward_estimate + weight * reward_delta
 
           # keeps running average of rewards
-          tmp_estimation = Matrex.set(temp_estimation, 1, curr_action, value)
+          tmp_estimation = Matrex.set(temp_estimation, 1, curr_action, action_value)
 
-          # update reward and optimal choice
+          # update reward
           reward =
             if iter == 1 do
               curr_reward
@@ -308,7 +267,6 @@ defmodule Automaton.Types.MAB do
             end
 
           action_count = Matrex.at(temp_action_tally, 1, curr_action)
-
           tmp_action_count = Matrex.set(temp_action_tally, 1, curr_action, action_count + 1)
 
           action =
@@ -318,8 +276,62 @@ defmodule Automaton.Types.MAB do
               0
             end
 
+          # update optimal choice of action
           tmp_optimal_action = Matrex.set(temp_optimal_action, 1, iter, action)
           {curr_action, tmp_action_count, tmp_optimal_action}
+        end
+
+        # The regret of the learner relative to a policy π (not necessarily
+        # that followed by the learner) is the difference between the total expected reward
+        # using policy π for n rounds and the total expected reward collected by the learner
+        # over n rounds. The regret relative to a set of policies Π is the maximum regret
+        # relative to any policy π ∈ Π in the set.
+        def compute_regret(iter, curr_action, optimal_action, %{
+              action_prob: action_prob,
+              temp_regret: temp_regret
+            }) do
+          regret_diff =
+            Matrex.at(action_prob, 1, optimal_action) -
+              Matrex.at(action_prob, 1, curr_action)
+
+          regret =
+            if iter == 1 do
+              regret_diff
+            else
+              Matrex.at(temp_regret, 1, iter - 1) + regret_diff
+            end
+
+          Matrex.set(temp_regret, 1, iter, regret)
+        end
+
+        def select_optimum(%{action_prob: action_prob, num_arms: num_arms}) do
+          action_prob =
+            if action_prob do
+              Matrex.new(action_prob)
+            else
+              Matrex.random(1, num_arms)
+            end
+
+          {action_prob, Matrex.argmax(action_prob)}
+        end
+
+        def print_result(action_prob, %{c_estimation: c_estimation} = episodic_state) do
+          IO.puts("Ground Truth")
+          IO.inspect(action_prob)
+
+          IO.puts("Expected")
+          c_est = Matrex.to_list_of_lists(Matrex.transpose(c_estimation))
+
+          arr =
+            c_est
+            |> Stream.with_index()
+            |> Enum.reduce([], fn {row, idx}, acc ->
+              sum = Enum.sum(row)
+              avg = sum / length(row)
+              [avg | acc]
+            end)
+
+          IO.inspect(Enum.reverse(arr))
         end
 
         def tick(state) do
