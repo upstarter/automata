@@ -1,7 +1,7 @@
-# <<i1::unsigned-integer-32, i2::unsigned-integer-32, i3::unsigned-integer-32>> =
-#   :crypto.strong_rand_bytes(12)
-#
-# :rand.seed(:exsplus, {i1, i2, i3})
+<<i1::unsigned-integer-32, i2::unsigned-integer-32, i3::unsigned-integer-32>> =
+  :crypto.strong_rand_bytes(12)
+
+:rand.seed(:exsplus, {i1, i2, i3})
 
 defmodule Automaton.Types.MAB do
   @moduledoc """
@@ -12,7 +12,7 @@ defmodule Automaton.Types.MAB do
   MDP - many states, many actions
   Bandit - one state, many actions
 
-  At each stage, an agent takes X actions in parallel and receives:
+  At each episode, an agent takes X actions in parallel and receives:
     • X local observations for decision making
   """
 
@@ -24,6 +24,7 @@ defmodule Automaton.Types.MAB do
     num_ep = automaton_config[:num_ep]
     num_iter = automaton_config[:num_iter]
     tick_freq = automaton_config[:tick_freq]
+    action_prob = automaton_config[:action_prob]
 
     prepend =
       quote do
@@ -34,20 +35,21 @@ defmodule Automaton.Types.MAB do
                     status: :mab_fresh,
                     agent_sup: nil,
                     control: 0,
+                    tick_freq: unquote(tick_freq) || 50,
+                    mfa: nil,
+                    epsilon: :rand.uniform(),
+                    # optional: apriori known ground truth action probability distribution as list
+                    action_prob: unquote(action_prob),
                     num_arms: unquote(num_arms) || 12,
                     num_ep: unquote(num_ep) || 20,
                     num_iter: unquote(num_iter) || 1000,
-                    tick_freq: unquote(tick_freq) || 50,
-                    mfa: nil,
-                    c_action_count: Matrex.zeros(unquote(num_ep), unquote(num_arms)),
+                    c_action_tally: Matrex.zeros(unquote(num_ep), unquote(num_arms)),
                     c_estimation: Matrex.zeros(unquote(num_ep), unquote(num_arms)),
                     c_reward: Matrex.zeros(unquote(num_ep), unquote(num_iter)),
                     c_optimal_action: Matrex.zeros(unquote(num_ep), unquote(num_iter)),
                     c_regret_total: Matrex.zeros(unquote(num_ep), unquote(num_iter)),
-                    epsilon: :rand.uniform(),
-                    gt_prob: Matrex.random(1, unquote(num_arms)),
                     temp_expect: Matrex.zeros(1, unquote(num_arms)),
-                    temp_action_count: Matrex.zeros(1, unquote(num_arms)),
+                    temp_action_tally: Matrex.zeros(1, unquote(num_arms)),
                     temp_estimation: Matrex.zeros(1, unquote(num_arms)),
                     temp_reward: Matrex.zeros(1, unquote(num_iter)),
                     temp_optimal_action: Matrex.zeros(1, unquote(num_iter)),
@@ -84,169 +86,45 @@ defmodule Automaton.Types.MAB do
 
     control =
       quote bind_quoted: [automaton_config: automaton_config] do
+        # c.e. greedy
         def update(
               %{
                 num_ep: num_ep,
                 num_arms: num_arms,
                 num_iter: num_iter,
+                action_prob: action_prob,
                 epsilon: epsilon,
-                # ground truth probability
-                gt_prob: gt_prob,
-                c_action_count: c_action_count,
+                c_action_tally: c_action_tally,
                 c_estimation: c_estimation,
                 c_reward: c_reward,
                 c_optimal_action: c_optimal_action,
                 c_regret_total: c_regret_total,
                 temp_expect: temp_expect,
-                temp_action_count: temp_action_count,
+                temp_action_tally: temp_action_tally,
                 temp_estimation: temp_estimation,
                 temp_reward: temp_reward,
                 temp_optimal_action: temp_optimal_action,
                 temp_regret: temp_regret
               } = state
             ) do
-          # c.e. greedy
-          optimal_choice = Matrex.argmax(gt_prob)
+          {action_prob, optimal_action} = select_optimum(state)
 
-          IO.inspect(['Best Choice: ', optimal_choice, Matrex.at(gt_prob, 1, optimal_choice)])
+          IO.inspect(['Best Choice: ', optimal_action, Matrex.at(action_prob, 1, optimal_action)])
 
-          epoch_state =
-            Enum.reduce(Range.new(1, num_ep), %State{} = state, fn episode, ep_state ->
-              explored_state =
-                Enum.reduce(Range.new(1, num_iter), %State{} = ep_state, fn iter, arm_state ->
-                  # select bandit / get reward / increase count / update reward_estimate
-                  curr_arm =
-                    if epsilon < :rand.uniform() do
-                      Matrex.argmax(arm_state.temp_expect)
-                    else
-                      :rand.uniform(num_arms)
-                    end
+          # Run Episodes to converge to optimal action
+          episodic_state = run_episodes(action_prob, optimal_action, state)
 
-                  curr_reward =
-                    if(:rand.uniform() < Matrex.at(gt_prob, 1, curr_arm)) do
-                      1
-                    else
-                      0
-                    end
+          print_result(action_prob, episodic_state)
 
-                  action_count = Matrex.at(arm_state.temp_action_count, 1, curr_arm)
+          {:ok, episodic_state}
+        end
 
-                  temp_action_count =
-                    Matrex.set(arm_state.temp_action_count, 1, curr_arm, action_count + 1)
-
-                  reward_estimate = Matrex.at(arm_state.temp_estimation, 1, curr_arm)
-                  reward_delta = curr_reward - reward_estimate
-
-                  weight = 1 / (Matrex.at(arm_state.temp_action_count, 1, curr_arm) + 1)
-                  value = reward_estimate + weight * reward_delta
-
-                  temp_estimation = Matrex.set(arm_state.temp_estimation, 1, curr_arm, value)
-
-                  # update reward and optimal choice
-                  reward =
-                    if iter == 1 do
-                      curr_reward
-                    else
-                      Matrex.at(arm_state.temp_reward, 1, iter - 1) + curr_reward
-                    end
-
-                  # IO.inspect([
-                  #   "reward",
-                  #   iter,
-                  #   curr_reward,
-                  #   reward_estimate,
-                  #   temp_action_count,
-                  #   temp_estimation,
-                  #   reward_delta,
-                  #   value,
-                  #   curr_arm,
-                  #   reward
-                  # ])
-
-                  temp_reward = Matrex.set(arm_state.temp_reward, 1, iter, reward)
-
-                  action =
-                    if curr_arm == optimal_choice do
-                      1
-                    else
-                      0
-                    end
-
-                  temp_optimal_action = Matrex.set(arm_state.temp_optimal_action, 1, iter, action)
-
-                  regret_diff =
-                    Matrex.at(gt_prob, 1, optimal_choice) - Matrex.at(gt_prob, 1, curr_arm)
-
-                  regret =
-                    if iter == 1 do
-                      regret_diff
-                    else
-                      Matrex.at(arm_state.temp_regret, 1, iter - 1) + regret_diff
-                    end
-
-                  temp_regret = Matrex.set(arm_state.temp_regret, 1, iter, regret)
-
-                  %{
-                    arm_state
-                    | temp_action_count: temp_action_count,
-                      temp_estimation: temp_estimation,
-                      temp_reward: temp_reward,
-                      temp_optimal_action: temp_optimal_action,
-                      temp_regret: temp_regret,
-                      temp_expect: Matrex.add(arm_state.temp_expect, curr_reward)
-                  }
-                end)
-
-              %{
-                explored_state
-                | c_action_count:
-                    Matrex.transpose(
-                      Matrex.set_column(
-                        Matrex.transpose(explored_state.c_action_count),
-                        episode,
-                        Matrex.transpose(explored_state.temp_action_count)
-                      )
-                    ),
-                  c_estimation:
-                    Matrex.transpose(
-                      Matrex.set_column(
-                        Matrex.transpose(explored_state.c_estimation),
-                        episode,
-                        Matrex.transpose(explored_state.temp_estimation)
-                      )
-                    ),
-                  c_reward:
-                    Matrex.transpose(
-                      Matrex.set_column(
-                        Matrex.transpose(explored_state.c_reward),
-                        episode,
-                        Matrex.transpose(explored_state.temp_reward)
-                      )
-                    ),
-                  c_optimal_action:
-                    Matrex.transpose(
-                      Matrex.set_column(
-                        Matrex.transpose(explored_state.c_optimal_action),
-                        episode,
-                        Matrex.transpose(explored_state.temp_optimal_action)
-                      )
-                    ),
-                  c_regret_total:
-                    Matrex.transpose(
-                      Matrex.set_column(
-                        Matrex.transpose(explored_state.c_regret_total),
-                        episode,
-                        Matrex.transpose(explored_state.temp_regret)
-                      )
-                    ),
-                  status: :mab_running
-              }
-            end)
-
+        def print_result(action_prob, %{c_estimation: c_estimation} = episodic_state) do
           IO.puts("Ground Truth")
-          IO.inspect(gt_prob)
+          IO.inspect(action_prob)
+
           IO.puts("Expected")
-          c_est = Matrex.to_list_of_lists(Matrex.transpose(epoch_state.c_estimation))
+          c_est = Matrex.to_list_of_lists(Matrex.transpose(c_estimation))
 
           arr =
             c_est
@@ -258,8 +136,190 @@ defmodule Automaton.Types.MAB do
             end)
 
           IO.inspect(Enum.reverse(arr))
+        end
 
-          {:ok, epoch_state}
+        def run_episodes(
+              action_prob,
+              optimal_action,
+              %{num_iter: num_iter, num_ep: num_ep} = state
+            ) do
+          Enum.reduce(
+            Range.new(1, num_ep),
+            %State{} = %{state | action_prob: action_prob},
+            fn episode, ep_state ->
+              # Explore Actions of episode
+              explorer_state = explore_episode(num_iter, episode, optimal_action, ep_state)
+            end
+          )
+        end
+
+        def explore_episode(num_iter, episode, optimal_action, ep_state) do
+          Enum.reduce(Range.new(1, num_iter), %State{} = ep_state, fn iter, action_state ->
+            # select action & update action tally
+            {curr_action, temp_action_tally, temp_optimal_action} =
+              select_action(iter, optimal_action, action_state)
+
+            # update reward & episodic reward estimate
+            {temp_estimation, temp_reward, temp_expect} =
+              update_reward(iter, curr_action, action_state)
+
+            temp_regret = compute_regret(iter, curr_action, optimal_action, action_state)
+
+            %{
+              action_state
+              | temp_action_tally: temp_action_tally,
+                temp_estimation: temp_estimation,
+                temp_reward: temp_reward,
+                temp_optimal_action: temp_optimal_action,
+                temp_regret: temp_regret,
+                temp_expect: temp_expect,
+                c_action_tally:
+                  Matrex.transpose(
+                    Matrex.set_column(
+                      Matrex.transpose(action_state.c_action_tally),
+                      episode,
+                      Matrex.transpose(action_state.temp_action_tally)
+                    )
+                  ),
+                c_estimation:
+                  Matrex.transpose(
+                    Matrex.set_column(
+                      Matrex.transpose(action_state.c_estimation),
+                      episode,
+                      Matrex.transpose(action_state.temp_estimation)
+                    )
+                  ),
+                c_reward:
+                  Matrex.transpose(
+                    Matrex.set_column(
+                      Matrex.transpose(action_state.c_reward),
+                      episode,
+                      Matrex.transpose(action_state.temp_reward)
+                    )
+                  ),
+                c_optimal_action:
+                  Matrex.transpose(
+                    Matrex.set_column(
+                      Matrex.transpose(action_state.c_optimal_action),
+                      episode,
+                      Matrex.transpose(action_state.temp_optimal_action)
+                    )
+                  ),
+                c_regret_total:
+                  Matrex.transpose(
+                    Matrex.set_column(
+                      Matrex.transpose(action_state.c_regret_total),
+                      episode,
+                      Matrex.transpose(action_state.temp_regret)
+                    )
+                  ),
+                status: :mab_running
+            }
+          end)
+        end
+
+        def compute_regret(iter, curr_action, optimal_action, %{
+              action_prob: action_prob,
+              temp_regret: temp_regret
+            }) do
+          regret_diff =
+            Matrex.at(action_prob, 1, optimal_action) -
+              Matrex.at(action_prob, 1, curr_action)
+
+          regret =
+            if iter == 1 do
+              regret_diff
+            else
+              Matrex.at(temp_regret, 1, iter - 1) + regret_diff
+            end
+
+          Matrex.set(temp_regret, 1, iter, regret)
+        end
+
+        def select_optimum(%{action_prob: action_prob, num_arms: num_arms}) do
+          action_prob =
+            if action_prob do
+              Matrex.new(action_prob)
+            else
+              Matrex.random(1, num_arms)
+            end
+
+          {action_prob, Matrex.argmax(action_prob)}
+        end
+
+        def update_reward(
+              iter,
+              curr_action,
+              %{
+                action_prob: action_prob,
+                temp_estimation: temp_estimation,
+                temp_action_tally: temp_action_tally,
+                temp_reward: temp_reward,
+                temp_expect: temp_expect
+              } = action_state
+            ) do
+          reward_estimate = Matrex.at(temp_estimation, 1, curr_action)
+
+          curr_reward =
+            if(:rand.uniform() < Matrex.at(action_prob, 1, curr_action)) do
+              1
+            else
+              0
+            end
+
+          reward_delta = curr_reward - reward_estimate
+
+          weight = 1 / (Matrex.at(temp_action_tally, 1, curr_action) + 1)
+          value = reward_estimate + weight * reward_delta
+
+          # keeps running average of rewards
+          tmp_estimation = Matrex.set(temp_estimation, 1, curr_action, value)
+
+          # update reward and optimal choice
+          reward =
+            if iter == 1 do
+              curr_reward
+            else
+              Matrex.at(temp_reward, 1, iter - 1) + curr_reward
+            end
+
+          tmp_reward = Matrex.set(temp_reward, 1, iter, reward)
+          tmp_expect = Matrex.add(temp_expect, curr_reward)
+
+          {tmp_estimation, tmp_reward, tmp_expect}
+        end
+
+        def select_action(
+              iter,
+              optimal_action,
+              %{
+                num_arms: num_arms,
+                epsilon: epsilon,
+                temp_expect: temp_expect,
+                temp_action_tally: temp_action_tally,
+                temp_optimal_action: temp_optimal_action
+              } = action_state
+            ) do
+          curr_action =
+            if epsilon < :rand.uniform() do
+              Matrex.argmax(temp_expect)
+            else
+              :rand.uniform(num_arms)
+            end
+
+          action_count = Matrex.at(temp_action_tally, 1, curr_action)
+
+          tmp_action_count = Matrex.set(temp_action_tally, 1, curr_action, action_count + 1)
+
+          action =
+            if curr_action == optimal_action do
+              1
+            else
+              0
+            end
+
+          tmp_optimal_action = Matrex.set(temp_optimal_action, 1, iter, action)
+          {curr_action, tmp_action_count, tmp_optimal_action}
         end
 
         def tick(state) do

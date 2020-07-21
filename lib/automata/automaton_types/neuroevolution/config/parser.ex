@@ -1,4 +1,4 @@
-defmodule Automaton.Types.NE.Config.Parser do
+defmodule Automaton.Types.TWEANN.Config.Parser do
   @moduledoc """
   High level automaton_config parsing policy for NE specific user configs.
   """
@@ -16,10 +16,6 @@ defmodule Automaton.Types.NE.Config.Parser do
 
   @spec call(type: atom, node_type: atom) :: tuple
   def call(automaton_config) do
-    # config = %Config{
-    #   state_spaces: automaton_config[:state_spaces]
-    # }
-
     automaton_config
   end
 end

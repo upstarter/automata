@@ -6,7 +6,7 @@
 
 ##### We are eager for your contributions and very happy you found yourself here! Here are our current needs:
 
-- Elixir Alchemists & Mad Scientists with Design, Architecture, Scalable OTP Best Practices Expertise
+- Elixir Alchemists with Design, Architecture, Scalable OTP Best Practices Expertise
 - AI, Cognitive Architecture & Behavior Tree Expertise
 - ETS, Reinforcement Learning, BlackBoard Systems, & Utility AI Expertise
 - Test Coverage
@@ -50,11 +50,9 @@ Check the #dev or #testing channels on [slack]((https://join.slack.com/t/automat
 
 ### PR Review Standards
 
-1. Code Reviews by core team members are required before merging and must be escalated if there is even the slightest concern of a design/logic flaw or incomplete testing. Imagine your building a rocket to mars and putting you and your family on it. Would you commmit that spaghetti code now?
+1. Code Reviews by core team members are required before merging and must be escalated if there is concern of a design/logic flaw or incomplete testing. Imagine your building a rocket to mars and putting you and your family on it. Would you commmit that spaghetti code now?
 4. Every PR should have test coverage unless it is a trivial change or is approved by 2 core team members or designated reviewers.
-5. The [BD](https://en.wikipedia.org/wiki/Benevolent_dictator_for_life) — [upstarter](https://github.com/upstarter), is a [stickler](https://dictionary.cambridge.org/us/dictionary/english/stickler) when it comes to architecture, design, code quality, accuracy, comprehensiveness. Be warned the project has very high standards as it must, and feel entirely free to keep him informed of his failures to follow the strict quality requirements. 😉 Don't take it personally if you receive a communication similar to this when a PR is not up to standards:
-
-    > Apologies, but this work cannot be accepted as it is. Perhaps there is a way it can be improved upon, but as it stands it will not be merged.
+5. The [BD](https://en.wikipedia.org/wiki/Benevolent_dictator_for_life) — [upstarter](https://github.com/upstarter), is a [stickler](https://dictionary.cambridge.org/us/dictionary/english/stickler) when it comes to architecture, design, code quality, accuracy, comprehensiveness.
 
 ### Testing Standards
 In Progress. Property Testing? Permutation Testing? Join the conversation on [The Automata Project Slack Channel](https://join.slack.com/t/automata-project/shared_invite/zt-e4fqrmo4-7ujuZwzXHNCGVrZb1aVZmA)
