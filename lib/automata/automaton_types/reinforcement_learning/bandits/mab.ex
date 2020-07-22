@@ -54,6 +54,8 @@ defmodule Automaton.Types.MAB do
                     num_ep: unquote(num_ep) || 20,
                     num_iter: unquote(num_iter) || 1000,
                     ep_num: nil,
+                    iter: nil,
+                    curr_action: nil,
                     c_action_tally: Matrex.zeros(unquote(num_ep), unquote(num_arms)),
                     c_estimation: Matrex.zeros(unquote(num_ep), unquote(num_arms)),
                     c_reward: Matrex.zeros(unquote(num_ep), unquote(num_iter)),
@@ -120,14 +122,14 @@ defmodule Automaton.Types.MAB do
         end
 
         def select_action(
-              iter,
               %{
                 num_arms: num_arms,
                 epsilon: epsilon,
                 optimal_action: optimal_action,
                 temp_reward_expect: temp_reward_expect,
                 temp_action_tally: temp_action_tally,
-                temp_optimal_action: temp_optimal_action
+                temp_optimal_action: temp_optimal_action,
+                iter: iter
               } = state
             ) do
           # explore or exploit? (epsilon decays by .01 each iteration,
@@ -142,7 +144,7 @@ defmodule Automaton.Types.MAB do
 
           # update num times action has been taken
           action_count = Matrex.at(temp_action_tally, 1, curr_action)
-          tmp_times_action_taken = Matrex.set(temp_action_tally, 1, curr_action, action_count + 1)
+          temp_action_tally = Matrex.set(temp_action_tally, 1, curr_action, action_count + 1)
 
           # is curr_action optimal?
           policy_action =
@@ -153,19 +155,25 @@ defmodule Automaton.Types.MAB do
             end
 
           # mark col in vector corresponding to action as 1 or 0 (optimal or not)
-          tmp_optimal_action = Matrex.set(temp_optimal_action, 1, iter, policy_action)
-          {curr_action, tmp_times_action_taken, tmp_optimal_action}
+          temp_optimal_action = Matrex.set(temp_optimal_action, 1, iter, policy_action)
+
+          %{
+            state
+            | curr_action: curr_action,
+              temp_action_tally: temp_action_tally,
+              temp_optimal_action: temp_optimal_action
+          }
         end
 
         def update_reward(
-              iter,
-              curr_action,
               %{
                 action_probs: action_probs,
                 temp_estimation: temp_estimation,
                 temp_action_tally: temp_action_tally,
                 temp_reward_hist: temp_reward_hist,
-                temp_reward_expect: temp_reward_expect
+                temp_reward_expect: temp_reward_expect,
+                curr_action: curr_action,
+                iter: iter
               } = state
             ) do
           # pursuit algorithm for value estimates
@@ -204,7 +212,12 @@ defmodule Automaton.Types.MAB do
           temp_reward_expect =
             Matrex.set(temp_reward_expect, 1, curr_action, reward_expect + curr_reward)
 
-          {temp_estimation, temp_reward_hist, temp_reward_expect}
+          %{
+            state
+            | temp_estimation: temp_estimation,
+              temp_reward_hist: temp_reward_hist,
+              temp_reward_expect: temp_reward_expect
+          }
         end
 
         def reward_function(curr_action, %{action_probs: action_probs}) do
@@ -233,24 +246,19 @@ defmodule Automaton.Types.MAB do
             ) do
           Enum.reduce(Range.new(1, num_iter), %State{} = state, fn iter, state ->
             # select action & update action tally
-            {curr_action, temp_action_tally, temp_optimal_action} = select_action(iter, state)
+            state =
+              %{state | iter: iter}
+              |> select_action()
 
-            # update reward & episodic reward estimate
-            {temp_estimation, temp_reward_hist, temp_reward_expect} =
-              update_reward(iter, curr_action, state)
-
-            temp_regret = compute_regret(iter, curr_action, optimal_action, state)
+              # update reward & episodic reward estimate
+              |> update_reward
+              |> compute_regret
 
             # update state for this episode
             %{
               state
               | epsilon: 0.99 * epsilon,
-                temp_action_tally: temp_action_tally,
-                temp_estimation: temp_estimation,
-                temp_reward_hist: temp_reward_hist,
-                temp_optimal_action: temp_optimal_action,
-                temp_regret: temp_regret,
-                temp_reward_expect: temp_reward_expect,
+                temp_regret: state.temp_regret,
                 c_action_tally:
                   Matrex.transpose(
                     Matrex.set_column(
@@ -299,10 +307,15 @@ defmodule Automaton.Types.MAB do
         # regret: the deficit suffered relative to the optimal policy
         # i.e. how much worse this action was compared to how the
         # best-possible action would have performed in hindsight
-        def compute_regret(iter, curr_action, optimal_action, %{
-              action_probs: action_probs,
-              temp_regret: temp_regret
-            }) do
+        def compute_regret(
+              %{
+                action_probs: action_probs,
+                temp_regret: temp_regret,
+                iter: iter,
+                curr_action: curr_action,
+                optimal_action: optimal_action
+              } = state
+            ) do
           regret_deficit =
             Matrex.at(action_probs, 1, optimal_action) -
               Matrex.at(action_probs, 1, curr_action)
@@ -314,7 +327,7 @@ defmodule Automaton.Types.MAB do
               Matrex.at(temp_regret, 1, iter - 1) + regret_deficit
             end
 
-          Matrex.set(temp_regret, 1, iter, regret)
+          %{state | temp_regret: Matrex.set(temp_regret, 1, iter, regret)}
         end
 
         def assign_prob(%{action_probs: action_probs, num_arms: num_arms}) do
