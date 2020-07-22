@@ -62,7 +62,7 @@ defmodule Automaton.Types.BT.CompositeServer do
       quote bind_quoted: [automaton_config: opts[:automaton_config]] do
         # Client API
         def start_link([agent_sup, {_, _, _} = mfa, name]) do
-          new_name = to_string(name) <> "Server"
+          new_name = name(name)
 
           GenServer.start_link(__MODULE__, [agent_sup, mfa, %State{}, new_name],
             name: String.to_atom(new_name)
@@ -232,13 +232,13 @@ defmodule Automaton.Types.BT.CompositeServer do
         # Private Functions #
         #####################
 
-        defp name(tree_name) do
-          :"#{tree_name}Server"
+        defp name(name) do
+          "#{name}Server"
         end
 
         def child_spec([[agent_sup, {m, _f, a}, name]] = args) do
           %{
-            id: to_string(name) <> "Server",
+            id: name(name),
             start: {__MODULE__, :start_link, args},
             shutdown: 10_000,
             restart: :temporary,
