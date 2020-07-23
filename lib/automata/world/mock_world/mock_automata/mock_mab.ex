@@ -15,7 +15,7 @@ defmodule MockMAB1 do
     num_arms: 12,
     # required
     # number of episodes
-    num_ep: 8,
+    num_ep: 3,
     # required
-    num_iter: 3000
+    num_iter: 13_000
 end
