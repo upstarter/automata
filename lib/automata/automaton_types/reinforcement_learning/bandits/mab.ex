@@ -18,11 +18,10 @@ defmodule Automaton.Types.MAB do
   At each episode, an agent takes X actions in parallel and receives:
     • X local observations for decision making
 
-  We distinguish three types of feedback:
-    - bandit feedback, when the algorithm observes the reward for the chosen arm, and no other feedback
-    - full feedback, when the algorithm observes the rewards for all arms that could have been chosen
-    - partial feedback, when some information is revealed, in addition to the
-      reward of the chosen arm, but it does not always amount to full feedback.
+  Greedy with optimistic initialization: We initialize the values of the actions
+  to a highly optimistic value and assume that everything is good until proven
+  otherwise. In the end, we suppress each action value to its realistic value.
+
   """
 
   # alias Automaton.Types.MAB.Config.Parser
@@ -57,14 +56,14 @@ defmodule Automaton.Types.MAB do
                     iter: nil,
                     curr_action: nil,
                     c_action_tally: Matrex.zeros(unquote(num_ep), unquote(num_arms)),
-                    c_estimation: Matrex.zeros(unquote(num_ep), unquote(num_arms)),
-                    c_reward: Matrex.zeros(unquote(num_ep), unquote(num_iter)),
+                    c_Q: Matrex.zeros(unquote(num_ep), unquote(num_arms)),
+                    c_reward_hist: Matrex.zeros(unquote(num_ep), unquote(num_iter)),
                     c_optimal_action: Matrex.zeros(unquote(num_ep), unquote(num_iter)),
                     c_regret_total: Matrex.zeros(unquote(num_ep), unquote(num_iter)),
-                    temp_reward_expect: Matrex.zeros(1, unquote(num_arms)),
+                    temp_q_star: Matrex.zeros(1, unquote(num_arms)),
                     temp_action_tally: Matrex.zeros(1, unquote(num_arms)),
-                    temp_estimation: Matrex.zeros(1, unquote(num_arms)),
-                    temp_reward_hist: Matrex.zeros(1, unquote(num_iter)),
+                    temp_Q: Matrex.zeros(1, unquote(num_arms)),
+                    temp_cumulative_R: Matrex.zeros(1, unquote(num_iter)),
                     temp_optimal_action: Matrex.zeros(1, unquote(num_iter)),
                     temp_regret: Matrex.zeros(1, unquote(num_iter))
         end
@@ -126,7 +125,7 @@ defmodule Automaton.Types.MAB do
                 num_arms: num_arms,
                 epsilon: epsilon,
                 optimal_action: optimal_action,
-                temp_reward_expect: temp_reward_expect,
+                temp_q_star: temp_q_star,
                 temp_action_tally: temp_action_tally,
                 temp_optimal_action: temp_optimal_action,
                 iter: iter
@@ -137,7 +136,7 @@ defmodule Automaton.Types.MAB do
           curr_action =
             if epsilon < :rand.uniform() do
               # e-greedy
-              Matrex.argmax(temp_reward_expect)
+              Matrex.argmax(temp_q_star)
             else
               :rand.uniform(num_arms)
             end
@@ -146,7 +145,6 @@ defmodule Automaton.Types.MAB do
           action_count = Matrex.at(temp_action_tally, 1, curr_action)
           temp_action_tally = Matrex.set(temp_action_tally, 1, curr_action, action_count + 1)
 
-          # is curr_action optimal?
           policy_action =
             if curr_action == optimal_action do
               1
@@ -168,55 +166,58 @@ defmodule Automaton.Types.MAB do
         def update_reward(
               %{
                 action_probs: action_probs,
-                temp_estimation: temp_estimation,
+                temp_Q: temp_Q,
                 temp_action_tally: temp_action_tally,
-                temp_reward_hist: temp_reward_hist,
-                temp_reward_expect: temp_reward_expect,
+                temp_cumulative_R: temp_cumulative_R,
+                temp_q_star: temp_q_star,
                 curr_action: curr_action,
                 iter: iter
               } = state
             ) do
-          # pursuit algorithm for value estimates
-          # reward assignment count
-          k = Matrex.at(temp_action_tally, 1, curr_action)
+          # action count
+          action_count = Matrex.at(temp_action_tally, 1, curr_action)
 
-          # q is an action value estimate based on avg reward for k
+          # q is an action value estimate based on avg reward for curr_action
           # i.e. a sample avg of first k rewards for curr_action
-          # sample avg not appropriate for non-stationarity
-          # use exponential, recency-weighted average for non-stationarity
-          q = Matrex.at(temp_estimation, 1, curr_action)
+          q = Matrex.at(temp_Q, 1, curr_action)
 
           # curr_reward is 1 or 0
           curr_reward = reward_function(curr_action, state)
-          step_size = 1 / (k + 1)
-          reward_delta = curr_reward - q
-          # NewEstimate = OldEstimate + StepSize[Target – OldEstimate]
-          new_q = q + step_size * reward_delta
 
-          # keeps running average of reward probability
-          temp_estimation = Matrex.set(temp_estimation, 1, curr_action, new_q)
+          # incrementally compute sample average. step size varies each step.
+          # sample avg is not appropriate for non-stationarity. Use exponential,
+          # recency-weighted average for non-stationarity One of the most
+          # popular ways of doing this is to use a constant step-size
+          # parameter.
+          step_size = 1 / (action_count + 1)
+          reward_gap = curr_reward - q
+          # NewEstimate = OldEstimate + StepSize[Target – OldEstimate]
+          new_q = q + step_size * reward_gap
+
+          # update running average of reward probability
+          # converges to q* over time
+          temp_Q = Matrex.set(temp_Q, 1, curr_action, new_q)
 
           # update reward history
           reward =
             if iter == 1 do
               curr_reward
             else
-              Matrex.at(temp_reward_hist, 1, iter - 1) + curr_reward
+              Matrex.at(temp_cumulative_R, 1, iter - 1) + curr_reward
             end
 
-          temp_reward_hist = Matrex.set(temp_reward_hist, 1, iter, reward)
+          temp_cumulative_R = Matrex.set(temp_cumulative_R, 1, iter, reward)
 
           # update expected reward for this action
-          reward_expect = Matrex.at(temp_reward_expect, 1, curr_action)
+          prev_q_star = Matrex.at(temp_q_star, 1, curr_action)
 
-          temp_reward_expect =
-            Matrex.set(temp_reward_expect, 1, curr_action, reward_expect + curr_reward)
+          temp_q_star = Matrex.set(temp_q_star, 1, curr_action, prev_q_star + curr_reward)
 
           %{
             state
-            | temp_estimation: temp_estimation,
-              temp_reward_hist: temp_reward_hist,
-              temp_reward_expect: temp_reward_expect
+            | temp_Q: temp_Q,
+              temp_cumulative_R: temp_cumulative_R,
+              temp_q_star: temp_q_star
           }
         end
 
@@ -245,16 +246,12 @@ defmodule Automaton.Types.MAB do
               } = state
             ) do
           Enum.reduce(Range.new(1, num_iter), %State{} = state, fn iter, state ->
-            # select action & update action tally
             state =
               %{state | iter: iter}
               |> select_action()
-
-              # update reward & episodic reward estimate
               |> update_reward
               |> compute_regret
 
-            # update state for this episode
             %{
               state
               | epsilon: 0.99 * epsilon,
@@ -267,20 +264,20 @@ defmodule Automaton.Types.MAB do
                       Matrex.transpose(state.temp_action_tally)
                     )
                   ),
-                c_estimation:
+                c_Q:
                   Matrex.transpose(
                     Matrex.set_column(
-                      Matrex.transpose(state.c_estimation),
+                      Matrex.transpose(state.c_Q),
                       ep_num,
-                      Matrex.transpose(state.temp_estimation)
+                      Matrex.transpose(state.temp_Q)
                     )
                   ),
-                c_reward:
+                c_reward_hist:
                   Matrex.transpose(
                     Matrex.set_column(
-                      Matrex.transpose(state.c_reward),
+                      Matrex.transpose(state.c_reward_hist),
                       ep_num,
-                      Matrex.transpose(state.temp_reward_hist)
+                      Matrex.transpose(state.temp_cumulative_R)
                     )
                   ),
                 c_optimal_action:
@@ -316,15 +313,15 @@ defmodule Automaton.Types.MAB do
                 optimal_action: optimal_action
               } = state
             ) do
-          regret_deficit =
+          opportunity_loss =
             Matrex.at(action_probs, 1, optimal_action) -
               Matrex.at(action_probs, 1, curr_action)
 
           regret =
             if iter == 1 do
-              regret_deficit
+              opportunity_loss
             else
-              Matrex.at(temp_regret, 1, iter - 1) + regret_deficit
+              Matrex.at(temp_regret, 1, iter - 1) + opportunity_loss
             end
 
           %{state | temp_regret: Matrex.set(temp_regret, 1, iter, regret)}
@@ -338,15 +335,15 @@ defmodule Automaton.Types.MAB do
               Matrex.random(1, num_arms)
             end
 
-          {action_probs, Matrex.argmax(action_probs)}
+          {action_probs, optimal_action = Matrex.argmax(action_probs)}
         end
 
-        def print_result(action_probs, %{c_estimation: c_estimation} = episodic_state) do
+        def print_result(action_probs, %{c_Q: c_Q} = episodic_state) do
           IO.puts("Ground Truth")
           IO.inspect(action_probs)
 
           IO.puts("Expected")
-          c_est = Matrex.to_list_of_lists(Matrex.transpose(c_estimation))
+          c_est = Matrex.to_list_of_lists(Matrex.transpose(c_Q))
 
           arr =
             c_est
@@ -457,7 +454,6 @@ defmodule Automaton.Types.MAB do
         end
       end
 
-    #
     [prepend, control, append]
   end
 end
