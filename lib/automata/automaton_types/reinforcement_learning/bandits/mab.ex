@@ -46,7 +46,7 @@ defmodule Automaton.Types.MAB do
                     tick_freq: unquote(tick_freq) || 50,
                     mfa: nil,
                     epsilon: 1.0,
-                    # optional: apriori known ground truth action probability distribution as list
+                    decay: 0.99,
                     action_probs: unquote(action_probs),
                     optimal_action: nil,
                     num_arms: unquote(num_arms) || 12,
@@ -105,15 +105,19 @@ defmodule Automaton.Types.MAB do
         def update(state) do
           {action_probs, optimal_action} = assign_prob(state)
 
-          IO.inspect(['Best Choice: ', optimal_action, Matrex.at(action_probs, 1, optimal_action)])
+          IO.inspect([
+            'Best Choice: ',
+            optimal_action,
+            Matrex.at(action_probs, 1, optimal_action)
+          ])
 
-          # Run Episodes to converge to optimal action
-          state =
-            run_episodes(%{
-              state
-              | action_probs: action_probs,
-                optimal_action: optimal_action
-            })
+          state = %{
+            state
+            | action_probs: action_probs,
+              optimal_action: optimal_action
+          }
+
+          state = run_episodes(state)
 
           print_result(action_probs, state)
 
@@ -232,7 +236,7 @@ defmodule Automaton.Types.MAB do
         end
 
         def run_episodes(%{num_ep: num_ep} = state) do
-          Enum.reduce(Range.new(1, num_ep), %State{} = state, fn ep_num, state ->
+          Enum.reduce(1..num_ep, %State{} = state, fn ep_num, state ->
             run_episode(%{state | ep_num: ep_num})
           end)
         end
@@ -242,10 +246,11 @@ defmodule Automaton.Types.MAB do
                 num_iter: num_iter,
                 ep_num: ep_num,
                 optimal_action: optimal_action,
-                epsilon: epsilon
+                epsilon: epsilon,
+                decay: decay
               } = state
             ) do
-          Enum.reduce(Range.new(1, num_iter), %State{} = state, fn iter, state ->
+          Enum.reduce(1..num_iter, %State{} = state, fn iter, state ->
             state =
               %{state | iter: iter}
               |> select_action()
@@ -254,7 +259,7 @@ defmodule Automaton.Types.MAB do
 
             %{
               state
-              | epsilon: 0.99 * epsilon,
+              | epsilon: decay * epsilon,
                 temp_regret: state.temp_regret,
                 c_action_tally:
                   Matrex.transpose(
