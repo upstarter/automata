@@ -12,8 +12,8 @@ defmodule Automaton.Types.MAB do
   between a fixed number of choices, maximizing cumulative rewards over time by
   learning an efficient explore vs. exploit policy.
 
-  Bandit - one state, many actions
-  MDP - many states, many actions
+  Bandit - one state, many actions, non-sequential
+  MDP - many states, many actions, sequential
 
   At each episode, an agent takes X actions in parallel and receives:
     • X local observations for decision making
@@ -124,117 +124,6 @@ defmodule Automaton.Types.MAB do
           {:ok, state}
         end
 
-        def select_action(
-              %{
-                num_arms: num_arms,
-                epsilon: epsilon,
-                optimal_action: optimal_action,
-                temp_q_star: temp_q_star,
-                temp_action_tally: temp_action_tally,
-                temp_optimal_action: temp_optimal_action,
-                iter: iter
-              } = state
-            ) do
-          # explore or exploit? (epsilon decays by .01 each iteration,
-          # starting with lots of exploration but less so on each episode).
-          curr_action =
-            if epsilon < :rand.uniform() do
-              # e-greedy
-              Matrex.argmax(temp_q_star)
-            else
-              :rand.uniform(num_arms)
-            end
-
-          # update num times action has been taken
-          action_count = Matrex.at(temp_action_tally, 1, curr_action)
-          temp_action_tally = Matrex.set(temp_action_tally, 1, curr_action, action_count + 1)
-
-          policy_action =
-            if curr_action == optimal_action do
-              1
-            else
-              0
-            end
-
-          # mark col in vector corresponding to action as 1 or 0 (optimal or not)
-          temp_optimal_action = Matrex.set(temp_optimal_action, 1, iter, policy_action)
-
-          %{
-            state
-            | curr_action: curr_action,
-              temp_action_tally: temp_action_tally,
-              temp_optimal_action: temp_optimal_action
-          }
-        end
-
-        def update_reward(
-              %{
-                action_probs: action_probs,
-                temp_Q: temp_Q,
-                temp_action_tally: temp_action_tally,
-                temp_cumulative_R: temp_cumulative_R,
-                temp_q_star: temp_q_star,
-                curr_action: curr_action,
-                iter: iter
-              } = state
-            ) do
-          # action count
-          action_count = Matrex.at(temp_action_tally, 1, curr_action)
-
-          # q is an action value estimate based on avg reward for curr_action
-          # i.e. a sample avg of first k rewards for curr_action
-          q = Matrex.at(temp_Q, 1, curr_action)
-
-          # curr_reward is 1 or 0
-          curr_reward = reward_function(curr_action, state)
-
-          # incrementally compute sample average. step size varies each step.
-          # sample avg is not appropriate for non-stationarity. Use exponential,
-          # recency-weighted average for non-stationarity One of the most
-          # popular ways of doing this is to use a constant step-size
-          # parameter.
-          step_size = 1 / (action_count + 1)
-          reward_gap = curr_reward - q
-          # NewEstimate = OldEstimate + StepSize[Target – OldEstimate]
-          new_q = q + step_size * reward_gap
-
-          # update running average of reward probability
-          # converges to q* over time
-          temp_Q = Matrex.set(temp_Q, 1, curr_action, new_q)
-
-          # update reward history
-          reward =
-            if iter == 1 do
-              curr_reward
-            else
-              Matrex.at(temp_cumulative_R, 1, iter - 1) + curr_reward
-            end
-
-          temp_cumulative_R = Matrex.set(temp_cumulative_R, 1, iter, reward)
-
-          # update expected reward for this action
-          prev_q_star = Matrex.at(temp_q_star, 1, curr_action)
-
-          temp_q_star = Matrex.set(temp_q_star, 1, curr_action, prev_q_star + curr_reward)
-
-          %{
-            state
-            | temp_Q: temp_Q,
-              temp_cumulative_R: temp_cumulative_R,
-              temp_q_star: temp_q_star
-          }
-        end
-
-        def reward_function(curr_action, %{action_probs: action_probs}) do
-          action_prob = Matrex.at(action_probs, 1, curr_action)
-
-          if(:rand.uniform() < action_prob) do
-            1
-          else
-            0
-          end
-        end
-
         def run_episodes(%{num_ep: num_ep} = state) do
           Enum.reduce(1..num_ep, %State{} = state, fn ep_num, state ->
             run_episode(%{state | ep_num: ep_num})
@@ -306,6 +195,93 @@ defmodule Automaton.Types.MAB do
           end)
         end
 
+        def select_action(
+              %{
+                num_arms: num_arms,
+                epsilon: epsilon,
+                optimal_action: optimal_action,
+                temp_q_star: temp_q_star,
+                temp_action_tally: temp_action_tally,
+                temp_optimal_action: temp_optimal_action,
+                iter: iter
+              } = state
+            ) do
+          state = determine_curr_action(state)
+
+          # increment num times curr_action has been taken by 1
+          state = incr_action_count(state)
+
+          optimal_action_check(state)
+        end
+
+        def update_reward(
+              %{
+                action_probs: action_probs,
+                temp_Q: temp_Q,
+                temp_action_tally: temp_action_tally,
+                temp_cumulative_R: temp_cumulative_R,
+                temp_q_star: temp_q_star,
+                curr_action: curr_action,
+                iter: iter
+              } = state
+            ) do
+          # action count
+          action_count = Matrex.at(temp_action_tally, 1, curr_action)
+
+          # q is an action value estimate based on avg reward for curr_action
+          # i.e. a sample avg of first k rewards for curr_action
+          q = Matrex.at(temp_Q, 1, curr_action)
+
+          # curr_reward is 1 or 0
+          curr_reward = reward_function(curr_action, state)
+
+          # incrementally compute sample average. step size varies each step.
+          # sample avg is not appropriate for non-stationarity. Use exponential,
+          # recency-weighted average for non-stationarity One of the most
+          # popular ways of doing this is to use a constant step-size
+          # parameter.
+          step_size = 1 / (action_count + 1)
+          reward_gap = curr_reward - q
+          # NewEstimate = OldEstimate + StepSize[Target – OldEstimate]
+          new_q = q + step_size * reward_gap
+
+          # update running average of reward probability
+          # converges to q* over time
+          temp_Q = Matrex.set(temp_Q, 1, curr_action, new_q)
+
+          # update reward history
+          reward =
+            if iter == 1 do
+              curr_reward
+            else
+              Matrex.at(temp_cumulative_R, 1, iter - 1) + curr_reward
+            end
+
+          temp_cumulative_R = Matrex.set(temp_cumulative_R, 1, iter, reward)
+
+          # update expected reward for this action
+          prev_q_star = Matrex.at(temp_q_star, 1, curr_action)
+
+          temp_q_star = Matrex.set(temp_q_star, 1, curr_action, prev_q_star + curr_reward)
+
+          %{
+            state
+            | temp_Q: temp_Q,
+              temp_cumulative_R: temp_cumulative_R,
+              temp_q_star: temp_q_star
+          }
+        end
+
+        def reward_function(curr_action, %{action_probs: action_probs}) do
+          action_prob = Matrex.at(action_probs, 1, curr_action)
+
+          if(:rand.uniform() < action_prob) do
+            1
+          else
+            0
+          end
+        end
+
         # regret: the deficit suffered relative to the optimal policy
         # i.e. how much worse this action was compared to how the
         # best-possible action would have performed in hindsight
@@ -341,6 +317,52 @@ defmodule Automaton.Types.MAB do
             end
 
           {action_probs, optimal_action = Matrex.argmax(action_probs)}
+        end
+
+        def incr_action_count(
+              %{curr_action: curr_action, temp_action_tally: temp_action_tally} = state
+            ) do
+          action_count = Matrex.at(temp_action_tally, 1, curr_action)
+          temp_action_tally = Matrex.set(temp_action_tally, 1, curr_action, action_count + 1)
+
+          %{state | temp_action_tally: temp_action_tally}
+        end
+
+        def determine_curr_action(
+              %{epsilon: epsilon, temp_q_star: temp_q_star, num_arms: num_arms} = state
+            ) do
+          # explore or exploit? (epsilon decays by .01 each iteration,
+          # starting with lots of exploration but less so on each episode).
+          curr_action =
+            if epsilon < :rand.uniform() do
+              # e-greedy
+              Matrex.argmax(temp_q_star)
+            else
+              :rand.uniform(num_arms)
+            end
+
+          %{state | curr_action: curr_action}
+        end
+
+        def optimal_action_check(
+              %{
+                curr_action: curr_action,
+                optimal_action: optimal_action,
+                temp_optimal_action: temp_optimal_action,
+                iter: iter
+              } = state
+            ) do
+          policy_action =
+            if curr_action == optimal_action do
+              1
+            else
+              0
+            end
+
+          # mark col in vector corresponding to action as 1 or 0 (optimal or not)
+          temp_optimal_action = Matrex.set(temp_optimal_action, 1, iter, policy_action)
+
+          %{state | temp_optimal_action: temp_optimal_action}
         end
 
         def print_result(action_probs, %{c_Q: c_Q} = episodic_state) do

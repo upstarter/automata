@@ -47,7 +47,7 @@ where you are running a specific context/it block containing line 23.
 
   - Heterogeneous agents equipped with environment and reasoning components provide scientists and analysts a selection of *graphical*, *reinforcement learning*, and *neuroevolution* based orchestrated agent constellations for a variety of real world environments.
 
-  - How Elixir? Elixir for world class communication & control fault tolerance and distribution, and a focus on TWEAN neuroevolution, a promising new direction in RL for evolving populations of neural networks. Also, as needed, leverage Julia lang inter-operability for high dimensional function approximation.
+  - How Elixir? Elixir for world class communication & control fault tolerance and distribution, and a focus on TWEANN neuroevolution, a promising new direction in RL for evolving populations of neural networks. Also, as needed, leverage Python/Julia lang inter-operability for high dimensional function approximation.
 
 #### The `Automata` framework has three abstract semantic layers:
 
@@ -139,7 +139,7 @@ Planned builtin and/or custom third-party agent types include:
 - A Mega-constellation of satellites
 - 3D Printing and Factory Automation
 - Product Automation & Analytics
-- Augmented, Virtual, Mixed Reality
+- Augmented, Virtual, Mixed Reality Backends
 - Smart Home / IOT Systems
 - High-Speed Rail Systems (Japan has an ADS railway that learns)
 - Chatbot & Game AI's (esp. MMOG user/npc backends)
