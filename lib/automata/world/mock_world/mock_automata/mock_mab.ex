@@ -8,14 +8,14 @@
 defmodule MockMAB1 do
   use Automaton,
     # required
-    type: :epsilon_greedy_bandit,
+    type: :bandit,
     # optional
     # num_epochs: 20,
     # required
     num_arms: 12,
     # required
     # number of episodes
-    num_ep: 20,
+    num_ep: 10,
     # required
-    num_iter: 1000
+    num_iter: 2000
 end

@@ -24,7 +24,7 @@ defmodule Automaton.Types.Typology do
         :tweann ->
           quote do: use(TWEANN, automaton_config: unquote(automaton_config))
 
-        :epsilon_greedy_bandit ->
+        :bandit ->
           quote do: use(MAB, automaton_config: unquote(automaton_config))
 
         # TODO: need this for children.

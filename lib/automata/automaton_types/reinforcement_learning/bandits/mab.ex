@@ -5,12 +5,12 @@
 
 defmodule Automaton.Types.MAB do
   @moduledoc """
-  Implements the Multi-Armed Bandit (MAB) state space representation (One State,
-  many possible actions). Each bandit is goal-oriented, i.e. associated with a
-  distinct, high-level goal which it attempts to achieve. A multi-armed bandit
-  algorithm is designed to learn an optimal balance for allocating resources
-  between a fixed number of choices, maximizing cumulative rewards over time by
-  learning an efficient explore vs. exploit policy.
+  Implements the Multi-Armed Bandit (MAB) state space representation. Each
+  bandit is goal-oriented, i.e. associated with a distinct, high-level goal
+  which it attempts to achieve. A multi-armed bandit algorithm is designed to
+  learn an optimal balance for allocating resources between a fixed number of
+  choices, maximizing cumulative rewards over time by learning an efficient
+  explore vs. exploit policy.
 
   Bandit - one state, many actions, non-sequential
   MDP - many states, many actions, sequential
@@ -57,11 +57,11 @@ defmodule Automaton.Types.MAB do
                     curr_action: nil,
                     c_action_tally: Matrex.zeros(unquote(num_ep), unquote(num_arms)),
                     c_Q: Matrex.zeros(unquote(num_ep), unquote(num_arms)),
-                    c_reward_hist: Matrex.zeros(unquote(num_ep), unquote(num_iter)),
+                    c_cumulative_R: Matrex.zeros(unquote(num_ep), unquote(num_iter)),
                     c_optimal_action: Matrex.zeros(unquote(num_ep), unquote(num_iter)),
                     c_regret_total: Matrex.zeros(unquote(num_ep), unquote(num_iter)),
                     temp_q_star: Matrex.zeros(1, unquote(num_arms)),
-                    temp_action_tally: Matrex.zeros(1, unquote(num_arms)),
+                    temp_action_count: Matrex.zeros(1, unquote(num_arms)),
                     temp_Q: Matrex.zeros(1, unquote(num_arms)),
                     temp_cumulative_R: Matrex.zeros(1, unquote(num_iter)),
                     temp_optimal_action: Matrex.zeros(1, unquote(num_iter)),
@@ -117,9 +117,10 @@ defmodule Automaton.Types.MAB do
               optimal_action: optimal_action
           }
 
-          state = run_episodes(state)
-
-          print_result(action_probs, state)
+          state =
+            state
+            |> run_episodes
+            |> print_result(action_probs)
 
           {:ok, state}
         end
@@ -142,7 +143,7 @@ defmodule Automaton.Types.MAB do
           Enum.reduce(1..num_iter, %State{} = state, fn iter, state ->
             state =
               %{state | iter: iter}
-              |> select_action()
+              |> select_action
               |> update_reward
               |> compute_regret
 
@@ -155,7 +156,7 @@ defmodule Automaton.Types.MAB do
                     Matrex.set_column(
                       Matrex.transpose(state.c_action_tally),
                       ep_num,
-                      Matrex.transpose(state.temp_action_tally)
+                      Matrex.transpose(state.temp_action_count)
                     )
                   ),
                 c_Q:
@@ -166,10 +167,10 @@ defmodule Automaton.Types.MAB do
                       Matrex.transpose(state.temp_Q)
                     )
                   ),
-                c_reward_hist:
+                c_cumulative_R:
                   Matrex.transpose(
                     Matrex.set_column(
-                      Matrex.transpose(state.c_reward_hist),
+                      Matrex.transpose(state.c_cumulative_R),
                       ep_num,
                       Matrex.transpose(state.temp_cumulative_R)
                     )
@@ -201,46 +202,42 @@ defmodule Automaton.Types.MAB do
                 epsilon: epsilon,
                 optimal_action: optimal_action,
                 temp_q_star: temp_q_star,
-                temp_action_tally: temp_action_tally,
+                temp_action_count: temp_action_count,
                 temp_optimal_action: temp_optimal_action,
                 iter: iter
               } = state
             ) do
-          state = determine_curr_action(state)
-
-          # increment num times curr_action has been taken by 1
-          state = incr_action_count(state)
-
-          optimal_action_check(state)
+          state
+          |> follow_policy
+          |> incr_action_count
+          |> optimal_action_check
         end
 
         def update_reward(
               %{
                 action_probs: action_probs,
                 temp_Q: temp_Q,
-                temp_action_tally: temp_action_tally,
+                temp_action_count: temp_action_count,
                 temp_cumulative_R: temp_cumulative_R,
                 temp_q_star: temp_q_star,
                 curr_action: curr_action,
                 iter: iter
               } = state
             ) do
-          # action count
-          action_count = Matrex.at(temp_action_tally, 1, curr_action)
-
-          # q is an action value estimate based on avg reward for curr_action
-          # i.e. a sample avg of first k rewards for curr_action
-          q = Matrex.at(temp_Q, 1, curr_action)
-
-          # curr_reward is 1 or 0
-          curr_reward = reward_function(curr_action, state)
-
           # incrementally compute sample average. step size varies each step.
           # sample avg is not appropriate for non-stationarity. Use exponential,
           # recency-weighted average for non-stationarity One of the most
           # popular ways of doing this is to use a constant step-size
           # parameter.
+          action_count = Matrex.at(temp_action_count, 1, curr_action)
+
           step_size = 1 / (action_count + 1)
+
+          # q is an action value estimate based on avg reward for curr_action
+          # i.e. a sample avg of first k rewards for curr_action
+          # curr_reward is 1 or 0
+          q = Matrex.at(temp_Q, 1, curr_action)
+          curr_reward = reward_function(curr_action, state)
           reward_gap = curr_reward - q
           # NewEstimate = OldEstimate + StepSize[Target – OldEstimate]
           new_q = q + step_size * reward_gap
@@ -261,7 +258,6 @@ defmodule Automaton.Types.MAB do
 
           # update expected reward for this action
           prev_q_star = Matrex.at(temp_q_star, 1, curr_action)
-
           temp_q_star = Matrex.set(temp_q_star, 1, curr_action, prev_q_star + curr_reward)
 
           %{
@@ -320,15 +316,15 @@ defmodule Automaton.Types.MAB do
         end
 
         def incr_action_count(
-              %{curr_action: curr_action, temp_action_tally: temp_action_tally} = state
+              %{curr_action: curr_action, temp_action_count: temp_action_count} = state
             ) do
-          action_count = Matrex.at(temp_action_tally, 1, curr_action)
-          temp_action_tally = Matrex.set(temp_action_tally, 1, curr_action, action_count + 1)
+          action_count = Matrex.at(temp_action_count, 1, curr_action)
+          temp_action_count = Matrex.set(temp_action_count, 1, curr_action, action_count + 1)
 
-          %{state | temp_action_tally: temp_action_tally}
+          %{state | temp_action_count: temp_action_count}
         end
 
-        def determine_curr_action(
+        def follow_policy(
               %{epsilon: epsilon, temp_q_star: temp_q_star, num_arms: num_arms} = state
             ) do
           # explore or exploit? (epsilon decays by .01 each iteration,
@@ -365,7 +361,7 @@ defmodule Automaton.Types.MAB do
           %{state | temp_optimal_action: temp_optimal_action}
         end
 
-        def print_result(action_probs, %{c_Q: c_Q} = episodic_state) do
+        def print_result(%{c_Q: c_Q} = state, action_probs) do
           IO.puts("Ground Truth")
           IO.inspect(action_probs)
 
@@ -382,6 +378,7 @@ defmodule Automaton.Types.MAB do
             end)
 
           IO.inspect(Enum.reverse(arr))
+          state
         end
 
         def tick(state) do
@@ -393,7 +390,7 @@ defmodule Automaton.Types.MAB do
           if status != :mab_running do
             on_terminate(updated_state)
           else
-            if unquote(automaton_config[:episodic]) do
+            if unquote(automaton_config[:num_epochs]) do
               schedule_next_tick(updated_state.tick_freq)
             end
           end
@@ -406,7 +403,7 @@ defmodule Automaton.Types.MAB do
         end
 
         def handle_info(:scheduled_tick, state) do
-          [status, new_state] = tick(state)
+          {status, new_state} = tick(state)
           {:noreply, %{new_state | status: status}}
         end
 
@@ -421,7 +418,7 @@ defmodule Automaton.Types.MAB do
       quote do
         def on_init(state) do
           case state.status do
-            :mab_success ->
+            :mab_fresh ->
               nil
 
             _ ->
