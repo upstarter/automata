@@ -1,4 +1,4 @@
-defmodule Automaton.Types.DECPOMDP.Config.Parser do
+defmodule Automata.Types.DECPOMDP.Config.Parser do
   @moduledoc """
   High level automaton_config parsing policy for BT specific user configs.
   """

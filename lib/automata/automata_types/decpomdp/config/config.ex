@@ -1,4 +1,4 @@
-defmodule Automaton.Types.DECPOMDP.Config do
+defmodule Automata.Types.DECPOMDP.Config do
   use Ecto.Schema
 
   alias AtomType

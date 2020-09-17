@@ -361,7 +361,7 @@ defmodule Automaton.Types.MAB do
           %{state | temp_optimal_action: temp_optimal_action}
         end
 
-        def print_result(%{c_Q: c_Q} = state, action_probs) do
+        def print_result(%{c_Q: c_Q} = episodic_state, action_probs) do
           IO.puts("Ground Truth")
           IO.inspect(action_probs)
 
@@ -378,7 +378,7 @@ defmodule Automaton.Types.MAB do
             end)
 
           IO.inspect(Enum.reverse(arr))
-          state
+          episodic_state
         end
 
         def tick(state) do

@@ -1,4 +1,4 @@
-defmodule Automata.Types.MCSIM do
+defmodule Automaton.Types.MCSIM do
   @moduledoc """
   Implements a multi-agent state space representation to infer outcome
   possibilies using *Monte Carlo Simulation* for global optimal sequential

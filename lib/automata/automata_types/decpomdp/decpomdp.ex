@@ -1,4 +1,4 @@
-defmodule Automaton.Types.DECPOMDP do
+defmodule Automata.Types.DECPOMDP do
   @moduledoc """
   Implements the Decentralized Partially Observable Markov Decision Process
   (DEC-POMDP) state space representation. Each agent is goal-oriented, i.e.
