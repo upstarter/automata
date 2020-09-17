@@ -18,4 +18,6 @@ defmodule MockMAB1 do
     num_ep: 10,
     # required
     num_iter: 2000
+
+  # action_probs: [for(_ <- 1..12, do: 5)]
 end
