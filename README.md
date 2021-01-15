@@ -2,7 +2,7 @@
 #  ⦿	| Automata | ⦿	⦿ 	⦿	⦿
 
 <!-- ![](./docs/assets/particle-background.gif) -->
-<img src="./docs/assets/particle-background.gif" width="100%" height="200">
+<img src="./docs/assets/particles.gif" width="100%" height="200">
 
 
  Spawn a [system](http://web.stanford.edu/class/ee380/Abstracts/190123.html) of concurrent, distributed, fault tolerant, and highly available intelligent agents for coordinated and/or uncoordinated action in one or many environments with no central point of failure. This project is Open Source. [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
