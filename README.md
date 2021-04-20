@@ -48,7 +48,7 @@ where you are running a specific context/it block containing line 23.
 
   - Heterogeneous agents equipped with reasoning and knowledge components provide AI architects a selection of *graphical*, *reinforcement learning*, and *neuroevolution* based orchestrated agent constellations for a variety of real world environments.
 
-  - Why and How Elixir? Elixir for world class communication & control fault tolerance and distribution. To overcome high dimensional function approximation limitations, we primarily focus on unsupervised learning and architecture search. Evolutionary architecture search (EAS?) evolves populations of feed-forward neural networks without computationally expensive backpropagation. However, Mixture of Experts (MoE) Deep Learning is on the roadmap and will be accomplished by leveraging Python, Julia, or Rust inter-operability or microservices.
+  - Why and How Elixir? Elixir for world class communication & control fault tolerance and distribution. Nx is used perform numerical computation. We primarily focus on unsupervised learning and architecture search. Evolutionary architecture search (EAS?) evolves populations of feed-forward neural networks without computationally expensive backpropagation. However, Mixture of Experts (MoE) Deep Learning is on the roadmap.
 
 #### The `Automata` framework has three abstract semantic layers:
 
