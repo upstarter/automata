@@ -48,7 +48,7 @@ where you are running a specific context/it block containing line 23.
 
   - Heterogeneous agents equipped with reasoning and knowledge components provide AI architects a selection of *graphical*, *reinforcement learning*, and *neuroevolution* based orchestrated agent constellations for a variety of real world environments.
 
-  - Why and How Elixir? Elixir for world class communication & control fault tolerance and distribution. [Nx](https://github.com/elixir-nx/nx) is used for numerical computation. We primarily focus on unsupervised learning and architecture search. Evolutionary architecture search (EAS) evolves populations of feed-forward neural networks without computationally expensive backpropagation. Mixture of Experts (MoE) Deep Learning is on the roadmap.
+  - Why and How Elixir? Elixir for world class communication & control fault tolerance and distribution. [Nx](https://github.com/elixir-nx/nx) is used for numerical computation. We primarily focus on unsupervised learning and architecture search. Evolutionary architecture novelty search (EANS) evolves populations of feed-forward neural networks without computationally expensive backpropagation and uses novelty to explore the search space. Mixture of Experts (MoE) Deep Learning is on the roadmap.
 
 #### The `Automata` framework has three abstract semantic layers:
 
@@ -135,7 +135,7 @@ Planned builtin and/or custom third-party agent types include:
 - Swarm Intelligence / Distributed Robotics
 - Intelligent agents with soft realtime multi-dimensional sensory, perception, intuition, and action capabilities
 - Multi-Agent Reinforcement Learning (MARL)
-- Mixture of Experts (MoE) Deep Learning Control Systems (python inter-op with [erlport](http://erlport.org/))
+- Mixture of Experts (MoE) Deep Learning Control Systems
 - Blockchain Smart Contract Systems
 - A Mega-constellation of satellites
 - 3D Printing and Factory Automation
