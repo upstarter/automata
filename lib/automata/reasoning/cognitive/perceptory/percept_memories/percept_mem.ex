@@ -1,119 +1,165 @@
-defmodule PerceptMem do
+defmodule Automata.Perceptory.PercepMem do
   @moduledoc """
   When a DataRecord enters the Perception System, a new PerceptMemory is
   created, and as the DataRecord is pushed through the Percept Tree, each
   percept that registers a positive match adds its data to the new
   PerceptMemory.
 
-  PerceptMemory can be thought of as Beliefs about the world ( individually and
-  in aggregagte(histories of memories) ) Percepts are organized hierarchically
-  in terms of their specificity. For example, a ShapePercept will activate on
-  the presence of any kind of shape whereas one of its children may activate
-  only on a specific type of shape (e.g. a CircleShapePercept). The children
-  of a percept will receive only the data that was extracted by its parent to
-  process. This hierarchical structure is primarily an efficiency mechanism
-  (no point in testing whether an event is the spoken word “sit” if it has
-  already been determined that the event was not an acoustic one) and is very
-  similar to previous hierarchy-of-sensors approaches. Many percepts are
-  plastic, using statistical models to characterize and refine their response
-  properties.
-
-  Percepts can modulate their “receptive fields” (the space of inputs to which
-  they will respond positively), and, in concert with the Action System, can
-  modify the topology of the tree itself, dynamically growing a hierarchy of
-  children in a process called innovation.
-
-  The process of innovation is reward-driven, with only percepts that are
-  believed to be correlated with increasing the reliability of an action in
-  producing a desirable outcome being prompted to innovate. Both the
-  confidence and the extracted data of every percept are cached in a
-  PerceptMemory object.
-
+  PerceptMemory can be thought of as Beliefs about the world (individually and
+  in aggregate - histories of memories). Percepts are organized hierarchically
+  in terms of their specificity.
+  
   Both the confidence and the extracted data of every percept are cached in a
   PerceptMemory object. When a DataRecord enters the Perception System, a new
   PerceptMemory is created, and as the DataRecord is pushed through the
   Percept Tree, each percept that registers a positive match adds its
   data to the new PerceptMemory. Thus, given a sensory stimulus,
   the PerceptMemory represents all the agent can know about that stimulus.
-
-  Thus, given a sensory stimulus, the PerceptMemory represents all the agent
-  can know about that stimulus.
-
-  Working Memory
-
-  Like other agent-control architectures, we use a Working Memory structure
-  whose function mirrors that of the pyschological conception of Working Memory –
-  an object-based memory that contains information about the immediate task or
-  context. The ultimate goal of Working Memory is to provide a sensory history
-  of objects in the world.
-
-  It is on the basis of these histories that action-decisions will be made,
-  internal credit for reward assigned, motor-movements modulated, etc. Working
-  Memory is a repository for persistent PerceptMemory objects. Taken together,
-  they constitute the agent's “view” of the world.
-
-  The PerceptMemory is itself a useful structure. By caching
-  together the various perceptual impressions made by a world event (“the
-  thing that was in front of me was also blue,” blueness and relative location
-  being separate Percepts) they solve (or perhaps avoid) the infamous
-  perceptual binding problem ([Treisman 1998]). They also allow us to submit
-  complex queries to WorkingMemory: “which is the bird that is nearest me?”
-
+  
   PerceptMemory objects become even more useful when they incorporate a time
   dimension with the data they contain. On any one timestep, the PerceptMemory
   objects that come out of the Perception System will by necessity only
   contain information gathered in that timestep. However, as events often
   extend through time, it is possible to match PerceptMemory objects from
-  previous timesteps. Thus a recent visual event may represent only the latest
-  sighting of an object that we have been tracking for some time.
-
-  A DataRecord representing the utterance comes in from the world, causing
-  certain Percepts in the Percept Tree to activate. The Perception System caches
-  the confidences and data corresponding to these Percepts in a PerceptMemory
-  object. This object then matches itself with the most similar existing
-  PerceptMemory in Working Memory, and adds its data onto the history of data
-  that it maintains.
-
-  The Working Memory structure is meant to mirror this psychological conception
-  of Working Memory. The Working Memory maintains a list of persistent
-  PerceptMemory objects that together constitute the agent’s “view” of the
-  current context. That “view,” however, is informed by more than just direct
-  perception. Instead, it is a patchwork of perceptions, predictions and
-  hypotheses. Any component of Automata that has something to say about how the
-  world is (or might be) can modify PerceptMemory objects or post new ones. It
-  is on the basis of these objects, whether directly perceived or not, that
-  action-decisions will be made, internal credit for reward will be assigned,
-  motor-movements will be modulated, and so on.
-
-  When a new DataRecord is pushed through the Percept Tree, each Percept that
-  registers a positive match caches its confidence and data in a table in the
-  PerceptMemory. This PerceptMemory is then passed off to Working Memory. It
-  is then “matched” against existing PerceptMemory objects stored there to
-  determine if it is truly novel, or rather a continuation of an existing
-  PerceptMemory (for example, is it the same red ball as the red ball that we
-  saw an instant ago in the same place).
-
-  In the case of visual events, matching is done on the basis of shape, or on
-  the basis of location when shape is not enough to disambiguate incoming visual
-  events (as is often the case with two nearby bird). This matching mechanism
-  also allows events of differing modalities to be combined. If there is good
-  indication that an acoustic event and a visual one belong together (for
-  example, they originate in more or less the same region of space) then they
-  may be matched together in Working Memory, presenting both sight and sound
-  information through a single PerceptMemory and thus giving the impression
-  that, for example, it was the shepherd who said, “sit.” In either case, if a
-  match is found, the data from the new PerceptMemory is added to the history
-  being kept in the old one. The new confidence is also added to a history of
-  confidences. On timesteps in which new information for a given Percept is not
-  observed, its confidence level is decayed. The rate of decay is determined in
-  part by the Percept itself (confidence in another agent’s location might decay
-  rapidly without observation, but confidence in its shape probably would not.)
+  previous timesteps.
   """
-
-  @callback match(any()) :: any()
-
-  defmacro __using__(_opts) do
-    # @impl PerceptMem
-    # def match(args)
+  
+  @type t :: %__MODULE__{
+    sensory_input: any(),             # The original sensory input
+    matches: map(),                   # Map of percept_id => {confidence, data}
+    history: list({integer(), map()}), # List of {timestamp, matches} tuples
+    created_at: integer(),            # Creation timestamp in milliseconds
+    updated_at: integer(),            # Last update timestamp in milliseconds
+    activation: float(),              # Current activation level (0.0-1.0)
+    metadata: map()                   # Additional metadata
+  }
+  
+  defstruct [
+    sensory_input: nil,
+    matches: %{},
+    history: [],
+    created_at: 0,
+    updated_at: 0,
+    activation: 1.0,
+    metadata: %{}
+  ]
+  
+  @doc """
+  Creates a new perception memory.
+  """
+  def new(sensory_input, matches, timestamp \\ nil) do
+    now = timestamp || :os.system_time(:millisecond)
+    
+    %__MODULE__{
+      sensory_input: sensory_input,
+      matches: matches,
+      history: [{now, matches}],
+      created_at: now,
+      updated_at: now
+    }
+  end
+  
+  @doc """
+  Merges a new memory with an existing one.
+  """
+  def merge(existing_memory, new_memory) do
+    # Add the new matches to the history
+    history = [{new_memory.updated_at, new_memory.matches} | existing_memory.history]
+    
+    # Merge the matches (taking the newer ones)
+    merged_matches = Map.merge(existing_memory.matches, new_memory.matches)
+    
+    # Set the activation to full
+    %{existing_memory |
+      matches: merged_matches,
+      history: history,
+      updated_at: new_memory.updated_at,
+      activation: 1.0
+    }
+  end
+  
+  @doc """
+  Returns the timestamp of the last update to this memory.
+  """
+  def last_updated(memory), do: memory.updated_at
+  
+  @doc """
+  Determines if two memories match (refer to the same entity/event).
+  
+  The default implementation checks for:
+  1. Temporal proximity - memories close in time are more likely to match
+  2. Perceptual similarity - memories with similar percepts are more likely to match
+  3. Spatial similarity (if location data is available)
+  
+  The matching algorithm can be customized or extended based on specific needs.
+  """
+  def match(memory1, memory2, opts \\ []) do
+    # Extract options
+    temporal_threshold = Keyword.get(opts, :temporal_threshold, 2000) # milliseconds
+    similarity_threshold = Keyword.get(opts, :similarity_threshold, 0.7) # 0.0-1.0
+    
+    # Check temporal proximity
+    temporal_match = abs(memory1.updated_at - memory2.updated_at) < temporal_threshold
+    
+    # Only proceed if temporally close
+    if temporal_match do
+      # Calculate similarity between the matches
+      similarity = calculate_similarity(memory1.matches, memory2.matches)
+      
+      # Check if similarity exceeds threshold
+      similarity >= similarity_threshold
+    else
+      false
+    end
+  end
+  
+  @doc """
+  Reduces the activation level of the memory by the given decay factor.
+  """
+  def decay(memory, decay_factor \\ 0.05) do
+    new_activation = max(0.0, memory.activation - decay_factor)
+    %{memory | activation: new_activation}
+  end
+  
+  @doc """
+  Adds metadata to the memory.
+  """
+  def add_metadata(memory, key, value) do
+    new_metadata = Map.put(memory.metadata, key, value)
+    %{memory | metadata: new_metadata}
+  end
+  
+  @doc """
+  Gets a value from the memory metadata.
+  """
+  def get_metadata(memory, key) do
+    Map.get(memory.metadata, key)
+  end
+  
+  # Private helpers
+  
+  # Calculate similarity between two sets of matches
+  defp calculate_similarity(matches1, matches2) do
+    # Get all percept IDs
+    all_percepts = Map.keys(matches1) ++ Map.keys(matches2) |> Enum.uniq()
+    
+    if all_percepts == [] do
+      0.0 # No percepts to compare
+    else
+      # Count matching percepts
+      num_matches = Enum.count(all_percepts, fn percept_id ->
+        case {Map.get(matches1, percept_id), Map.get(matches2, percept_id)} do
+          {nil, nil} -> false
+          {nil, _} -> false
+          {_, nil} -> false
+          {{conf1, _}, {conf2, _}} -> 
+            # Both confidences need to be reasonably high
+            conf1 > 0.5 && conf2 > 0.5
+        end
+      end)
+      
+      # Calculate similarity ratio
+      num_matches / length(all_percepts)
+    end
   end
 end

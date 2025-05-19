@@ -71,13 +71,24 @@ defmodule Automata.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:dialyxir, "~> 1.0.0-rc.7", only: [:dev], runtime: false},
-      {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
-      {:ex_doc, "~> 0.21", only: :dev, runtime: false},
-      {:ecto, "~> 3.0"},
+      # Dev dependencies - commented out to avoid Erlang package issues
+      # {:dialyxir, "~> 1.0.0-rc.7", only: [:dev], runtime: false},
+      # {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
+      # {:ex_doc, "~> 0.21", only: :dev, runtime: false},
+      
+      # Core dependencies
+      {:ecto, "~> 3.9", override: true},
       {:ksuid, "~> 0.1.2"},
       {:temp, "~> 0.4"},
-      {:matrex, "~> 0.6"}
+      {:matrex, "~> 0.6"},
+      
+      # Distribution and clustering
+      {:libcluster, "~> 3.3"},
+      {:horde, "~> 0.9.0"},
+      {:delta_crdt, "~> 0.6.2"},
+      
+      # Telemetry for metrics - using compatible version with ecto
+      {:telemetry, "~> 0.4.3"}
     ]
   end
 end

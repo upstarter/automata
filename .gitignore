@@ -28,3 +28,5 @@ priv/plts/*.plt
 priv/plts/*.plt.hash
 
 .DS_Store
+
+**/.claude/settings.local.json
